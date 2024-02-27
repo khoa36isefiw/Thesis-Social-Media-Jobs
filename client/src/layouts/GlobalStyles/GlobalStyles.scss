@@ -1,0 +1,39 @@
+@import 'normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    // default color:
+    --primary: #f3f3f3;
+    --background-page: #f4f2ee;
+
+    // default layout
+}
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+    // background-color: var(--background-page);
+}
+
+// bỏ đi hành vi mặc định
+button,
+input,
+[tabindex] {
+    outline: none;
+    border: none;
+}
+
+a[href] {
+    text-decoration: none;
+}
