@@ -1,17 +1,5 @@
 import React, { useState } from 'react';
-import {
-    Box,
-    Container,
-    Typography,
-    TextField,
-    IconButton,
-    Button,
-    Avatar,
-    Divider,
-    Modal,
-} from '@mui/material';
-import Mountain from '../../assets/images/MountainClouds.jpeg';
-import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
+import { Box, Container, Typography, Avatar, Divider, Modal } from '@mui/material';
 import Liked from '../../assets/images/like.png';
 import Comment from '../../assets/images/comment.png';
 import Send from '../../assets/images/send.png';
@@ -19,6 +7,7 @@ import Like from '../../assets/images/like-no-color.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import CommentModal from './CommentModal';
+
 // definde button action
 export const ActionButton = ({ src, alt, text }) => (
     <Box
@@ -125,72 +114,41 @@ function Post({
                         </Typography>
                     </Box>
                 </Box>
-                {/* {contentArray.map((paragraph, index) => (
-                    <Typography
-                        key={index}
-                        variant="body1"
-                        sx={{ fontSize: '12.5px', mt: 1, textAlign: 'justify' }}
-                    >
-                        {paragraph}
-                    </Typography>
-                ))} */}
-                {/* <Box sx={{ mb: 2 }}>
-                    {contentArray.map((paragraph, index) => (
-                        <Box key={index}>
-                            <Typography
-                                variant="body1"
-                                sx={{ fontSize: '12.5px', mt: 1, textAlign: 'justify' }}
-                            >
-                                {expanded || paragraph.length < 500
-                                    ? paragraph
-                                    : `${paragraph.slice(0, 500)}...`}
-                                {!expanded && index === contentArray.length - 1 ? (
-                                    <Button variant="text" color="primary" onClick={toggleExpanded}>
-                                        <Typography>See More</Typography>
-                                    </Button>
-                                ) : (
-                                    <>
-                                        <Button
-                                            variant="text"
-                                            color="primary"
-                                            onClick={toggleExpanded}
-                                        >
-                                            <Typography>See Less</Typography>
-                                        </Button>
-                                    </>
-                                )}
-                            </Typography>
-                        </Box>
-                    ))}
-                </Box> */}
-                <Box sx={{ mb: 2 }}>
-                    {contentArray.map((paragraph, index) => (
-                        <Box key={index} sx={{ mb: 2 }}>
-                            <Typography
-                                key={index}
-                                variant="body1"
-                                component="div" // Set component to "div" for line breaks
-                                sx={{ fontSize: '12.5px', mt: 1, textAlign: 'justify' }}
-                            >
-                                {expanded || paragraph.length < 250
-                                    ? paragraph
-                                    : `${paragraph.slice(0, 250)}...`}
-                            </Typography>
-                            {!expanded && index === contentArray.length - 1 && (
-                                <Button variant="text" color="primary" onClick={toggleExpanded}>
-                                    <Typography>See More</Typography>
-                                </Button>
-                            )}
-                        </Box>
-                    ))}
-                    {expanded && (
-                        <Button variant="text" color="primary" onClick={toggleExpanded}>
-                            <Typography>See Less</Typography>
-                        </Button>
-                    )}
-                </Box>
 
-                {/* <Typography sx={{ fontSize: '12.5px' }}>{content}</Typography> */}
+                {/* show post content */}
+                <Box>
+                    <Box sx={{ mb: 2 }}>
+                        {contentArray.map((paragraph, index) => (
+                            <Box key={index} sx={{ mb: 2 }}>
+                                <Typography
+                                    variant="body1"
+                                    component="div" // Set component to "div" for line breaks
+                                    sx={{ fontSize: '12.5px', mt: 1, textAlign: 'justify' }}
+                                >
+                                    {index < 2 || expanded ? paragraph : ''}
+                                </Typography>
+                                {/* show more content of this post */}
+                            </Box>
+                        ))}
+                        {/* show more content of this post */}
+                        {!expanded && contentArray.length > 2 && (
+                            <Typography
+                                onClick={toggleExpanded}
+                                sx={{
+                                    fontSize: '12.5px',
+                                    '&:hover': {
+                                        cursor: 'pointer',
+                                        textDecoration: 'underline',
+                                        fontWeight: 'bold',
+                                        color: 'blue',
+                                    },
+                                }}
+                            >
+                                ...Show More
+                            </Typography>
+                        )}
+                    </Box>
+                </Box>
             </Box>
 
             {/* Doesn't have image */}
@@ -210,6 +168,7 @@ function Post({
                 />
             )}
 
+            {/* region for: reaction, comment and share */}
             <Box sx={{ p: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', my: '8px' }}>
                     <Box sx={{ mb: '2px', display: 'flex', alignItems: 'center', flexGrow: 1 }}>

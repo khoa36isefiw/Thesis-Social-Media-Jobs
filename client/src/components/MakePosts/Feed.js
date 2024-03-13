@@ -1,5 +1,6 @@
 import React from 'react';
 import Post from './Post';
+import { Typography } from '@mui/material';
 import Mountain from '../../assets/images/MountainClouds.jpeg';
 // import Beach from '../../assets/images/BeachSunset.jpeg';
 
@@ -11,7 +12,8 @@ const posts = [
         followers: '14,123',
         time: '1d',
         content: [
-            '✨✨✨ Happy New Year of the Dragon!!!!FPT IS sincerely wishes you a peaceful and happy new year,',
+            '✨✨✨ Happy New Year of the Dragon!!!!',
+            'FPT IS sincerely wishes you a peaceful and happy new year.',
 
             // '✨✨✨ Happy New Year of the Dragon!!!!',
             // 'FPT IS sincerely wishes you a peaceful and happy new year.',
@@ -49,17 +51,23 @@ const posts = [
     {
         id: 4,
         avatarSrc:
-            'https://scontent.fsgn17-1.fna.fbcdn.net/v/t39.30808-1/377496239_684688313698964_4653308919296360364_n.jpg?stp=dst-jpg_p720x720&_nc_cat=106&ccb=1-7&_nc_sid=596444&_nc_eui2=AeGKs1rA23qQH3dO_7RYdOKByvVSf6iuZz_K9VJ_qK5nP8rNe9OUxoEPOZFDmDL8k5KUQyxBpuD3coBtPa-DSgmU&_nc_ohc=Hqps_8B_YGAAX-zb9WR&_nc_ht=scontent.fsgn17-1.fna&oh=00_AfAo8rAv3NKemZsS_TqVTtPOGbLGfr1UCTeYIEmzjSswCw&oe=65E163DB',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4M9ivjYIFvfc8ZdvJRB9yfO5rLd9DuS4I1g&usqp=CAU',
         displayName: `Vanvietbooks' Page`,
         followers: '285,010',
         time: '12h',
         content: [
-            '#quote_of_the_day #365ngayhanhphuc Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t. Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t. Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
+            '#quote_of_the_day #365ngayhanhphuc',
+            'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
+            'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
+            'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
+            'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
+            'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
+            'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
         ],
         numberOfReaction: 122,
         numberOfComment: 0,
         imageUrl:
-            'https://scontent.fsgn17-1.fna.fbcdn.net/v/t39.30808-6/429641182_787224670111994_1002286359636087093_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=3635dc&_nc_eui2=AeGdbA6VLSOV0mMA4rc2y89BP7FYLFQLpVg_sVgsVAulWAenjqqX65BXnVF5xJqcxI1muzLyjqPY0IHPYnvmGNPy&_nc_ohc=k6PtNXyrkqYAX_1ODkh&_nc_ht=scontent.fsgn17-1.fna&oh=00_AfCf83Dbo3mHAp1YwPGeoVuJA4rSV7FMEtMF4-3wNFQmUg&oe=65E2234E',
+            'https://lightingequipmentsales.com/wp-content/uploads/2018/03/Daylight-Illuminance-740x416.jpg',
     },
 ];
 
@@ -77,7 +85,14 @@ function Feed() {
                     numberOfReaction={post.numberOfReaction}
                     numberOfComment={post.numberOfComment}
                     imageUrl={post.imageUrl}
-                />
+                >
+                    {/* Tách nội dung thành các đoạn văn */}
+                    {Array.isArray(post.content) ? (
+                        post.content.map((paragraph, index) => <p key={index}>{paragraph}</p>)
+                    ) : (
+                        <Typography>{post.content}</Typography>
+                    )}
+                </Post>
             ))}
         </div>
     );

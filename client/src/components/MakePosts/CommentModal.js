@@ -6,6 +6,7 @@ import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import { ActionButton, PostActionButton } from './Post';
+import Picker from 'emoji-picker-react';
 
 function CommentModal({
     imageUrl,
