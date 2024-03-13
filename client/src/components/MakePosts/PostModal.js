@@ -262,21 +262,21 @@ const LightTooltip = styled(({ className, ...props }) => (
 //                 </Box>
 //             )}
 
-//             <Divider sx={{ mt: 2, mb: 2 }} />
-//             <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
-//                 <Button
-//                     variant="contained"
-//                     disabled={!editorText.trim()}
-//                     sx={{
-//                         fontSize: '14px',
-//                         borderRadius: '24px',
-//                         padding: '8px 32px',
-//                     }}
-//                 >
-//                     Post
-//                 </Button>
-//             </Box>
-//         </Box>
+//     <Divider sx={{ mt: 2, mb: 2 }} />
+//     <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+//         <Button
+//             variant="contained"
+//             disabled={!editorText.trim()}
+//             sx={{
+//                 fontSize: '14px',
+//                 borderRadius: '24px',
+//                 padding: '8px 32px',
+//             }}
+//         >
+//             Post
+//         </Button>
+//     </Box>
+// </Box>
 //     );
 // }
 
@@ -346,8 +346,10 @@ function PostModal({ closeModal }) {
                         position: 'absolute',
                         top: '0',
                         right: '0',
+                        opacity: '0.65',
                         '&:hover': {
                             backgroundColor: 'transparent',
+                            opacity: '1',
                         },
                     }}
                     onClick={closeModal}
@@ -362,7 +364,7 @@ function PostModal({ closeModal }) {
                         alignItems: 'center',
                         justifyContent: 'start',
                         borderRadius: '12px',
-                        p: 2,
+                        py: 2,
                         '&:hover': {
                             cursor: 'pointer',
                             backgroundColor: '#d3d3d3',
@@ -447,8 +449,8 @@ function PostModal({ closeModal }) {
                         <Box
                             sx={{
                                 position: 'absolute',
-                                top: '-50px',
-                                left: '20%',
+                                top: '10px',
+                                left: '5%',
                             }}
                         >
                             <Picker
@@ -476,6 +478,20 @@ function PostModal({ closeModal }) {
                     </video>
                 </div>
             )}
+            <Divider sx={{ mt: 2, mb: 2 }} />
+            <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+                <Button
+                    variant="contained"
+                    disabled={!editorText.trim()}
+                    sx={{
+                        fontSize: '14px',
+                        borderRadius: '24px',
+                        padding: '8px 32px',
+                    }}
+                >
+                    Post
+                </Button>
+            </Box>
         </div>
     );
 }
