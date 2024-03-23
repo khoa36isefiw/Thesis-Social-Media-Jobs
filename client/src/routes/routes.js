@@ -1,7 +1,9 @@
 import ForgotPassword from '../components/Guest/ForgotPassword/ForgotPassword';
 import SignIn from '../components/Guest/SignIn/SignIn';
+import UserProfile from '../components/User/UserProfile/UserProfile';
 import DefaultLayout from '../layouts/DefaultLayouts/DefaultLayouts';
 import GuestLayouts from '../layouts/GuestLayouts/GuestLayouts';
+import UserProfileLayout from '../layouts/UserProfileLayout/UserProfileLayout';
 
 import GuestHomePage from '../pages/GuestHomePage';
 import LoginPage from '../pages/LoginPage';
@@ -16,7 +18,10 @@ const publicRoutes = [
 ];
 
 // must signed into
-const privateRoutes = [{ path: '/signed-in', component: UserHomePage, layout: DefaultLayout }];
+const privateRoutes = [
+    { path: '/signed-in', component: UserHomePage, layout: DefaultLayout },
+    { path: '/user-profile', component: UserProfile, layout: UserProfileLayout },
+];
 const userRoutes = [];
 
 export { publicRoutes, privateRoutes };
