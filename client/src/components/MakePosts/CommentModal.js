@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, IconButton, Avatar, Divider } from '@mui/material';
+import {
+    Box,
+    Typography,
+    TextField,
+    Button,
+    IconButton,
+    Avatar,
+    Divider,
+    styled,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Liked from '../../assets/images/like.png';
 import Love from '../../assets/images/love.png';
@@ -7,6 +16,13 @@ import Laugh from '../../assets/images/laughing.png';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import { ActionButton, PostActionButton } from './Post';
 import Picker from 'emoji-picker-react';
+
+// Customize styles for Typography in this Component
+const ActionsTypography = styled(Typography)(({}) => ({
+    color: 'gray',
+    fontSize: '13px',
+    fontWeight: 'bold',
+}));
 
 function CommentModal({
     imageUrl,
@@ -226,7 +242,7 @@ function CommentModal({
                             <Avatar
                                 src={UserAvatar}
                                 alt="User Image"
-                                sx={{ height: '48px', width: '48px', objectFit: 'cover' }}
+                                sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
                             />
                             <TextField
                                 id="comment"
@@ -253,10 +269,152 @@ function CommentModal({
                         </Box>
 
                         {/* Submit Button */}
-                        <Button variant="contained" color="primary" fullWidth>
+                        {/* <Button variant="contained" color="primary" fullWidth>
                             Comment
-                        </Button>
-                    </Box>{' '}
+                        </Button> */}
+
+                        {/* Another User Comment in Posts */}
+                        <Box sx={{ display: 'flex' }}>
+                            <Avatar
+                                src={'https://cdn.mos.cms.futurecdn.net/xaycNDmeyxpHDrPqU6LmaD.jpg'}
+                                alt="User Image"
+                                sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
+                            />
+                            <Box
+                                sx={{
+                                    border: '1px solid #f2f2f2',
+                                    maxHeight: '150px',
+                                    width: '100%',
+                                    p: 1,
+                                    borderRadius: '10px',
+                                    backgroundColor: '#f2f2f2',
+                                    ml: 1,
+                                }}
+                            >
+                                <Typography sx={{ fontSize: '16px', fontWeight: 'bold' }}>
+                                    Tim Tran
+                                </Typography>
+                                <Typography sx={{ fontSize: '14px' }}>
+                                    Where did you go? Please share with me the information about
+                                    your journey. What should I need to prepare for this trip?
+                                </Typography>
+                            </Box>
+                        </Box>
+                        {/* Like, Reply actions */}
+
+                        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', mt: 1, ml: 1 }}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <ActionsTypography sx={{ ml: 1 }}>Like</ActionsTypography>
+                                <ActionsTypography sx={{ ml: 1 }}>-</ActionsTypography>
+                                <Avatar
+                                    src={Liked}
+                                    sx={{
+                                        height: '16px',
+                                        width: '16px',
+                                        borderRadius: '0',
+                                        zIndex: 10,
+                                        ml: 1,
+                                    }}
+                                    alt="Liked a Post"
+                                />
+                            </Box>
+                            <Box
+                                sx={{
+                                    width: '1px',
+                                    bgcolor: 'gray',
+                                }}
+                            />
+                            <ActionsTypography>Reply</ActionsTypography>
+                            {/* The number of responses */}
+                            <ActionsTypography>-</ActionsTypography>
+                            <Typography fontSize="13px" color="gray">
+                                1 Reply
+                            </Typography>
+                        </Box>
+
+                        {/* responses */}
+                        {/* <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
+                            <Avatar
+                                src={
+                                    'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
+                                }
+                                alt="User Image"
+                                sx={{ height: '32px', width: '32px', objectFit: 'cover' }}
+                            />
+                            <Box
+                                sx={{
+                                    border: '1px solid #f2f2f2',
+                                    maxHeight: '150px',
+                                    width: '100%',
+                                    p: 1,
+                                    borderRadius: '10px',
+                                    backgroundColor: '#f2f2f2',
+                                    ml: 1,
+                                }}
+                            >
+                                <Typography sx={{ fontSize: '16px', fontWeight: 'bold' }}>
+                                    October
+                                </Typography>
+                                <Typography sx={{ fontSize: '14px' }}>
+                                    Depends on the trip you take
+                                </Typography>
+                            </Box>
+                        </Box> */}
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
+                                <Avatar
+                                    src={
+                                        'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
+                                    }
+                                    alt="User Image"
+                                    sx={{ height: '32px', width: '32px', objectFit: 'cover' }}
+                                />
+                                <Box
+                                    sx={{
+                                        border: '1px solid #f2f2f2',
+                                        maxHeight: '150px',
+                                        width: '100%',
+                                        p: 1,
+                                        borderRadius: '10px',
+                                        backgroundColor: '#f2f2f2',
+                                        ml: 1,
+                                    }}
+                                >
+                                    <Typography sx={{ fontSize: '16px', fontWeight: 'bold' }}>
+                                        October
+                                    </Typography>
+                                    <Typography sx={{ fontSize: '14px' }}>
+                                        Depends on the trip you take
+                                    </Typography>
+                                </Box>
+                            </Box>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    ml: 11,
+                                    mt: 1,
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <ActionsTypography sx={{ ml: 1 }}>Like</ActionsTypography>
+                                <Box
+                                    sx={{
+                                        width: '1px',
+                                        height: '21px',
+                                        bgcolor: 'gray',
+                                        ml: 2,
+                                    }}
+                                />
+                                <ActionsTypography sx={{ ml: 2 }}>Reply</ActionsTypography>
+                            </Box>
+                        </Box>
+                    </Box>
                 </Box>
             </Box>
         </Box>
