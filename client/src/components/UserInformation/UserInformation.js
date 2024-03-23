@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, Divider, Avatar } from '@mui/material';
+import { Link } from 'react-router-dom';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 function UserInformation() {
     return (
@@ -10,9 +11,21 @@ function UserInformation() {
                     alt="User Avatar"
                     sx={{ m: 'auto', mb: 2, height: '64px', width: '64px' }}
                 />
-                <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mt: '4px' }}>
-                    Huynh Dang Khoa
-                </Typography>
+                <Link to="/user-profile">
+                    <Typography
+                        sx={{
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            mt: '4px',
+                            '&:hover': {
+                                cursor: 'pointer',
+                                textDecoration: 'underline',
+                            },
+                        }}
+                    >
+                        Huynh Dang Khoa
+                    </Typography>
+                </Link>
                 <Typography sx={{ fontSize: '14px', mb: '8px' }}>Student at HCMUTE</Typography>
                 <Divider />
             </Box>
