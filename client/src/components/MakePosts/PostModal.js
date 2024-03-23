@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     Avatar,
     Box,
@@ -286,43 +286,53 @@ function PostModal({ closeModal }) {
     const [editorText, setEditorText] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [videoUrl, setVideoUrl] = useState('');
-    const [showPicker, setShowPicker] = useState(false); // show emoij table
+    // show emoij table
+    const [showPicker, setShowPicker] = useState(false);
+    const editorRef = useRef(null);
 
     const handleUploadImage = (event) => {
         const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImageUrl(reader.result);
-            setEditorText(
-                (prevText) =>
-                    prevText +
-                    `<img src="${reader.result}" alt="Uploaded Image" style="max-width: 100%; max-height: 300px;"/>`,
-            );
-        };
-        reader.readAsDataURL(file);
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImageUrl(reader.result);
+                const img = `<img src="${reader.result}" alt="Uploaded Image" style="max-width: 100%; max-height: 300px; objectFit: cover;"/>`;
+                setEditorText(editorText + img);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            console.error('No file selected.');
+        }
     };
 
     const handleUploadVideo = (event) => {
         const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setVideoUrl(reader.result);
-            setEditorText(
-                (prevText) =>
-                    prevText +
-                    `<video controls style="max-width: 100%; max-height: 300px;"><source src="${reader.result}" type="${file.type}" /></video>`,
-            );
-        };
-        reader.readAsDataURL(file);
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setVideoUrl(reader.result);
+                setEditorText(
+                    (prevText) =>
+                        prevText +
+                        `<video controls style="max-width: 100%; max-height: 300px;"><source src="${reader.result}" type="${file.type}" /></video>`,
+                );
+            };
+            reader.readAsDataURL(file);
+        } else {
+            console.error('No file Selected!');
+        }
     };
 
     // pick emoji
     const handleEmojiClick = (event, emojiObject) => {
-        // const emoji = emojiObject.emoji;
+        const emoji = emojiObject.emoji;
         // // console.log('Ahihi: ', emoji);
-        setEditorText((prevInput) => prevInput + event.emoji);
+        // setEditorText((prevInput) => prevInput + event.emoji);
+        setEditorText(editorText + event.emoji);
         setShowPicker(false);
     };
+
     const handleChange = (event) => {
         setEditorText(event.target.value);
     };
@@ -395,19 +405,52 @@ function PostModal({ closeModal }) {
                         <ArrowDropDownIcon fontSize="large" />
                     </Box>
                 </Box>
-                <textarea
-                    id="editor"
-                    style={{
-                        border: '1px solid #ccc',
+
+                <Box
+                    sx={{
                         borderRadius: '4px',
                         padding: '8px',
                         minHeight: '300px',
                         width: '100%',
                         overflowY: 'auto',
+                        border: '1px solid #333',
+                    }}
+                    contentEditable={true}
+                    onFocus={(e) => {
+                        e.target.style.border = 'none';
+                    }}
+                    onBlur={(e) => {
+                        e.target.style.border = 'none';
+                    }}
+                    onChange={handleChange}
+                >
+                    {imageUrl && (
+                        <img
+                            src={imageUrl}
+                            alt="Uploaded Image"
+                            style={{ maxWidth: '100%', maxHeight: '300px' }}
+                        />
+                    )}
+                    {videoUrl && (
+                        <video controls style={{ maxWidth: '100%', maxHeight: '300px' }}>
+                            <source src={videoUrl} type="video/mp4" />
+                        </video>
+                    )}
+                </Box>
+                <textarea
+                    id="editor"
+                    style={{
+                        borderRadius: '4px',
+                        padding: '8px',
+                        minHeight: '300px',
+                        width: '100%',
+                        overflowY: 'auto',
+                        border: '1px solid #333',
                     }}
                     value={editorText}
                     onChange={handleChange}
                 />
+
                 <Box>
                     {imageUrl && (
                         <Box sx={{ postion: 'absolute' }}>
@@ -416,7 +459,7 @@ function PostModal({ closeModal }) {
                                     postion: 'absolute',
                                     top: '-99px',
                                     right: 0,
-                                    zIndex: '1', // Đảm bảo nút nằm trên cùng
+                                    zIndex: '1',
                                 }}
                                 // onClick={handleDeleteImage}
                             >
@@ -426,7 +469,7 @@ function PostModal({ closeModal }) {
                                 sx={{
                                     top: '4px',
                                     left: '4px',
-                                    zIndex: '1', // Đảm bảo nút nằm trên cùng
+                                    zIndex: '1',
                                 }}
                                 // onClick={handleEditImage}
                             >
@@ -440,7 +483,7 @@ function PostModal({ closeModal }) {
             <div>
                 <input type="file" accept="image/*" onChange={handleUploadImage} />
                 <input type="file" accept="video/*" onChange={handleUploadVideo} />
-                {/* <Picker onEmojiClick={handleEmojiClick} /> */}
+
                 <Box>
                     <IconButton onClick={() => setShowPicker((val) => !val)}>
                         <SentimentSatisfiedAltIcon fontSize="large" />
@@ -460,9 +503,10 @@ function PostModal({ closeModal }) {
                         </Box>
                     )}
                 </Box>
-                {/* <Picker pickerStyle={{ width: '100%' }} onEmojiClick={handleEmojiClick} /> */}
             </div>
-            {imageUrl && (
+
+            {/* show image and video just uploaded but not in textbox */}
+            {/* {imageUrl && (
                 <div>
                     <img
                         src={imageUrl}
@@ -477,11 +521,12 @@ function PostModal({ closeModal }) {
                         <source src={videoUrl} type="video/mp4" />
                     </video>
                 </div>
-            )}
+            )} */}
             <Divider sx={{ mt: 2, mb: 2 }} />
             <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
                 <Button
                     variant="contained"
+                    // check if editor is empty --> disabled this Button
                     disabled={!editorText.trim()}
                     sx={{
                         fontSize: '14px',
