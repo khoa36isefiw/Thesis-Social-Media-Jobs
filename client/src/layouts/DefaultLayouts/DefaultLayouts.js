@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+
 import { Box } from '@mui/material';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
@@ -18,28 +18,16 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function DefaultLayout({ children }) {
-    const location = useLocation();
-
-    const is404Page = location.pathname === '/404';
-
     return (
         <Box sx={{ backgroundColor: '#f3f2f0' }}>
-            {/* if path is 404 show only component not found */}
-            {/* {is404Page ? (
-                <PageNotFound />
-            ) : ( */}
             <Header />
-            {/* <Container sx={{ width: '100%', mt: 12 }}> */}
             <Container sx={{ mt: 12 }}>
                 <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid item xs={3}>
-                        <Item>
-                            <UserInformation />
-                        </Item>
+                        <UserInformation />
+
                         <Box sx={{ mt: 2 }}>
-                            <Item>
-                                <UserGroup />
-                            </Item>
+                            <UserGroup />
                         </Box>
                     </Grid>
                     <Grid item xs={6}>
