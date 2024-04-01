@@ -4,15 +4,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
-import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-
-import { styled } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import UserAvatar from '../../../assets/images/avatar.jpeg';
 import {
     Container,
     Box,
@@ -21,12 +16,11 @@ import {
     IconButton,
     Typography,
     Badge,
-    AppBar,
+    ListItemText,
 } from '@mui/material';
 import logoWeb from '../../../assets/images/aikotoba-job.png';
 import './Header.scss';
-
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
@@ -34,6 +28,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import SmsIcon from '@mui/icons-material/Sms';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+
 const styles = (TextField) => ({
     notchedOutline: {
         borderWidth: '1px',
@@ -42,6 +37,7 @@ const styles = (TextField) => ({
 });
 
 function Header() {
+    const navigate = useNavigate();
     const [isTextFieldFocused, setIsTextFieldFocused] = React.useState(false);
     const textFieldRef = React.useRef(null);
 
@@ -130,15 +126,35 @@ function Header() {
                         flexGrow: 1,
                     }}
                 >
-                    <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
+                    <Box
+                        className="nav__dir"
+                        sx={{ '&:hover': { fontWeight: 'bold' } }}
+                        onClick={() => navigate('/signed-in')}
+                    >
                         <IconButton className="icon__btn" disableTouchRipple>
-                            <HomeIcon sx={{ fontSize: '28px', color: '#666' }} />
+                            <HomeIcon
+                                sx={{
+                                    fontSize: '28px',
+                                    color: '#666',
+                                    '&:hover': {
+                                        color: '#191919',
+                                    },
+                                }}
+                            />
                         </IconButton>
                         <Typography sx={{ fontSize: '12px' }}>Home</Typography>
                     </Box>
                     <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
                         <IconButton className="icon__btn" disableTouchRipple>
-                            <PeopleAltIcon sx={{ fontSize: '28px', color: '#666' }} />
+                            <PeopleAltIcon
+                                sx={{
+                                    fontSize: '28px',
+                                    color: '#666',
+                                    '&:hover': {
+                                        color: '#191919',
+                                    },
+                                }}
+                            />
                         </IconButton>
                         <Typography sx={{ fontSize: '12px' }}>My Network</Typography>
                     </Box>
@@ -173,6 +189,9 @@ function Header() {
                                         sx={{
                                             fontSize: '28px',
                                             color: '#666',
+                                            '&:hover': {
+                                                color: '#191919',
+                                            },
                                         }}
                                     />
                                 </IconButton>
@@ -182,7 +201,15 @@ function Header() {
                     </Box>
                     <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
                         <IconButton className="icon__btn" disableTouchRipple>
-                            <WorkIcon sx={{ fontSize: '28px', color: '#666' }} />
+                            <WorkIcon
+                                sx={{
+                                    fontSize: '28px',
+                                    color: '#666',
+                                    '&:hover': {
+                                        color: '#191919',
+                                    },
+                                }}
+                            />
                         </IconButton>
                         <Typography sx={{ fontSize: '12px' }}>Jobs</Typography>
                     </Box>
@@ -212,11 +239,15 @@ function Header() {
                                             backgroundColor: 'transparent',
                                         },
                                     }}
+                                    onClick={() => navigate('/notifications')}
                                 >
                                     <NotificationsIcon
                                         sx={{
                                             fontSize: '28px',
                                             color: '#666',
+                                            '&:hover': {
+                                                color: '#191919',
+                                            },
                                         }}
                                     />
                                 </IconButton>
@@ -233,14 +264,38 @@ function Header() {
 
 export default Header;
 
+const authenticatedActions = [
+    {
+        icon: <AccountBoxIcon sx={{ fontSize: '20px' }} />,
+        actionText: 'View Profile',
+        navigateTo: '/user-profile',
+    },
+    {
+        icon: <PostAddIcon sx={{ fontSize: '20px' }} />,
+        actionText: 'Post & Activity',
+        navigateTo: '/user/recent-activity/all',
+    },
+    {
+        icon: <Logout sx={{ fontSize: '20px' }} />,
+        actionText: 'Sign Out',
+        navigateTo: '/',
+    },
+];
+
 function AccountMenu() {
+    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState(null);
+
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleNavigateTo = (destination) => {
+        navigate(destination);
     };
     return (
         // https://e1.pxfuel.com/desktop-wallpaper/502/361/desktop-wallpaper-rengoku-smile-rengoku-death.jpg
@@ -257,35 +312,28 @@ function AccountMenu() {
                     // justifyContent: 'center',
                 }}
             >
-                <Box>
-                    <Tooltip title="Account settings">
-                        <IconButton
-                            onClick={handleClick}
-                            size="small"
-                            sx={{ ml: 2 }}
-                            aria-controls={open ? 'account-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                        >
-                            <Avatar sx={{ width: '36px', height: '36px' }}>
-                                <img
-                                    src="https://e1.pxfuel.com/desktop-wallpaper/502/361/desktop-wallpaper-rengoku-smile-rengoku-death.jpg"
-                                    className="authenticated_user"
-                                />
-                            </Avatar>
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-                <Box>
+                <Box onClick={handleClick}>
+                    <IconButton
+                        size="small"
+                        sx={{ ml: 2 }}
+                        aria-controls={open ? 'account-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                    >
+                        <Avatar sx={{ width: '36px', height: '36px' }}>
+                            <img src={UserAvatar} className="authenticated_user" />
+                        </Avatar>
+                    </IconButton>
+
                     <Box
                         sx={{
                             display: 'flex',
                             ml: '25px',
-                            opacity: '0.65',
+                            opacity: '0.85',
                             color: '#666666',
-                            '&:hover': { cursor: 'pointer', opacity: 1 },
+                            '&:hover': { cursor: 'pointer', opacity: 1, fontWeight: 'bold' },
                         }}
-                        onClick={handleClick}
+                        // onClick={handleClick}
                     >
                         <Typography>Me</Typography>
                         <IconButton
@@ -320,44 +368,71 @@ function AccountMenu() {
                     sx: {
                         overflow: 'visible',
                         filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                        mt: 1.5,
+                        mt: 1,
+                        ml: 2,
+                        border: '1px solid #f2f2f2',
                         '& .MuiAvatar-root': {
-                            width: 32,
-                            height: 32,
+                            width: 48,
+                            height: 48,
                             ml: -0.5,
-                            mr: 1,
-                        },
-                        '&::before': {
-                            content: '""',
-                            display: 'block',
-                            position: 'absolute',
-                            top: 0,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            bgcolor: 'background.paper',
-                            transform: 'translateY(-50%) rotate(45deg)',
-                            zIndex: 0,
+                            mr: 2,
                         },
                     },
                 }}
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem onClick={handleClose}>
-                    <Avatar /> Profile
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <Avatar /> My account
+                <MenuItem
+                    onClick={handleClose}
+                    sx={{
+                        '&:hover': {
+                            backgroundColor: 'transparent',
+                        },
+                    }}
+                >
+                    <Box
+                        sx={{ display: 'flex', alignItems: 'center' }}
+                        onClick={() => navigate('/user-profile')}
+                    >
+                        <Avatar
+                            src={UserAvatar}
+                            alt="User Avatar"
+                            sx={{
+                                zIndex: 4,
+                                border: '4px solid #fff',
+                                '&:hover': {
+                                    cursor: 'pointer',
+                                },
+                            }}
+                        />
+                        <Box>
+                            <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                                Huynh Dang Khoa
+                            </Typography>
+                            <Typography sx={{ fontSize: '12px' }}>Student at HCMUT</Typography>
+                        </Box>
+                    </Box>
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <PersonAdd fontSize="small" />
-                    </ListItemIcon>
-                    Add another account
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
+                {authenticatedActions.map((action, index) => (
+                    <MenuItem
+                        onClick={() => handleNavigateTo(action.navigateTo)}
+                        key={index}
+                        sx={{
+                            '&:hover': {
+                                backgroundColor: 'transparent',
+                                transform: 'scale(1.05)',
+                            },
+                        }}
+                    >
+                        <ListItemIcon>{action.icon}</ListItemIcon>
+                        <ListItemText>
+                            <Typography sx={{ fontSize: '12.5px' }}>{action.actionText}</Typography>
+                        </ListItemText>
+                    </MenuItem>
+                ))}
+
+                {/* <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <Settings fontSize="small" />
                     </ListItemIcon>
@@ -368,7 +443,7 @@ function AccountMenu() {
                         <Logout fontSize="small" />
                     </ListItemIcon>
                     Logout
-                </MenuItem>
+                </MenuItem> */}
             </Menu>
         </React.Fragment>
     );
