@@ -52,11 +52,11 @@ function CommentModal({
                 transform: 'translate(-50%, -50%)',
                 backgroundColor: '#fff',
                 borderRadius: '8px',
-                boxShadow: 24,
+                // boxShadow: 24,
+                boxShadow: '0 8px 4px #333',
                 width: '1100px',
                 maxHeight: '650px',
-
-                mt: '36px',
+                // mt: '36px',
             }}
         >
             {/* Close Button */}
@@ -75,7 +75,16 @@ function CommentModal({
 
             <Box sx={{ display: 'flex' }}>
                 {/* Image */}
-                <Box sx={{ backgroundColor: '#333', width: '700px', height: '650px' }}>
+                <Box
+                    sx={{
+                        backgroundColor: 'black',
+                        // backgroundColor: '#333',
+                        width: '700px',
+                        height: '650px',
+                        borderTopLeftRadius: '8px',
+                        borderBottomLeftRadius: '8px',
+                    }}
+                >
                     {imageUrl && (
                         <Box sx={{ textAlign: 'center', mb: 2 }}>
                             <img
@@ -235,7 +244,7 @@ function CommentModal({
                             </Box>
                         </Box>
                         <Divider />
-                        <Box sx={{ mb: 2 }}>
+                        <Box sx={{ mb: 2, mt: '-4px' }}>
                             <PostActionButton />
                         </Box>
                         <Box sx={{ display: 'flex' }}>
