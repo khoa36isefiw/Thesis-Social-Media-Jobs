@@ -1,5 +1,6 @@
+// this layout for another user
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
     Box,
     Avatar,
@@ -9,25 +10,28 @@ import {
     Button,
     Menu,
     MenuItem,
-    Paper,
     MenuList,
     ListItemIcon,
     ListItemText,
     Tabs,
     Tab,
     Divider,
+    Modal,
 } from '@mui/material';
 
 import { blue } from '@mui/material/colors';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import SendIcon from '@mui/icons-material/Send';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AddIcon from '@mui/icons-material/Add';
+
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import UserAvatar from '../../../assets/images/avatar.jpeg';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import UserAvatar from '../../../assets/images/avatar.jpeg';
 import FPTCop from '../../../assets/images/fpt_logo.png';
 import HCMUTELogo from '../../../assets/images/hcmute.jpeg';
+import BackgroundImageModal from '../../BackgroundImageModal/BackgroundImageModal';
+import EditUserBackgroundImage from '../../EditUserBackgroundImage/EditUserBackgroundImage';
 
 const CustomizeTypography = styled(Typography)(({ fontSize, isBold = false }) => ({
     fontSize: fontSize || '16px',
@@ -41,6 +45,30 @@ const CustomizeButton = styled(Button)(({}) => ({
     textTransform: 'capitalize',
     fontWeight: 'bold',
 }));
+
+// define button following by schools and companies
+
+const FollowButton = () => {
+    return (
+        <Button
+            variant="outlined"
+            sx={{ borderRadius: '24px', mt: '2px', mt: 1 }}
+            startIcon={<AddIcon sx={{ color: '#808080' }} />}
+        >
+            <Typography
+                sx={{
+                    fontSize: '12.5px',
+                    textTransform: 'capitalize',
+                    fontWeight: 'bold',
+                    color: 'gray',
+                    px: 1,
+                }}
+            >
+                Follow
+            </Typography>
+        </Button>
+    );
+};
 
 function UserProfile() {
     return (
@@ -60,15 +88,33 @@ const moreActionLists = [
     { icon: <SaveAltIcon sx={{ fontSize: '20px' }} />, actionText: 'Save to PDF' },
 ];
 
+// User information section
 function ProfileRegion() {
     const navigate = useNavigate();
+    const [activeModal, setActiveModal] = useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
+
+    // const [openModal, setOpenModal] = useState(false);
+    // const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleImageClick = () => {
+        // setOpenModal(true);
+    };
+
+    const handleOpenModal = (modalType) => {
+        setActiveModal(modalType);
+    };
+
+    const handleCloseModal = () => {
+        // setOpenModal(false);
+        setActiveModal(null);
     };
 
     return (
@@ -84,6 +130,7 @@ function ProfileRegion() {
             <Box sx={{ position: 'relative' }}>
                 {/* Background Image */}
                 <Avatar
+                    onClick={() => handleOpenModal('userBackground')}
                     // src={UserBackgroundImage}
                     src={
                         'https://media.istockphoto.com/id/835370890/photo/sunset-sunrise-with-clouds-light-rays-and-other-atmospheric-effect.jpg?s=612x612&w=0&k=20&c=zGDOBYVFY74wX2gUgkonYGtNl1zenev5mPotAqUlJbM='
@@ -98,10 +145,16 @@ function ProfileRegion() {
                         height: '200px',
                         objectFit: 'contain',
                         zIndex: 2,
+                        '&:hover': {
+                            cursor: 'pointer',
+                        },
                     }}
                 />
                 {/* Camera Icon */}
-                <Box sx={{ position: 'absolute', top: 0, right: 0, zIndex: 3, p: 2 }}>
+                <Box
+                    sx={{ position: 'absolute', top: 0, right: 0, zIndex: 3, p: 2 }}
+                    onClick={() => handleOpenModal('editUserBackground')}
+                >
                     <Avatar sx={{ backgroundColor: '#fff' }}>
                         <IconButton
                             disableTouchRipple
@@ -114,7 +167,9 @@ function ProfileRegion() {
                             <PhotoCameraIcon
                                 sx={{
                                     fontSize: '24px',
-                                    color: blue[500],
+                                    // color: blue[700],
+                                    color: '#0b66c2',
+                                    '&:hover': { color: blue[900] },
                                 }}
                             />
                         </IconButton>
@@ -173,10 +228,52 @@ function ProfileRegion() {
                     </CustomizeTypography>
                     {/* studied at */}
                     <CustomizeTypography>Student at HCMUT</CustomizeTypography>
-                    {/* Address contact */}
-                    <CustomizeTypography fontSize="14px" sx={{ mt: 1 }}>
-                        Thủ Đức, Ho Chi Minh City, Vietnam
-                    </CustomizeTypography>
+
+                    {/* Address contact and Contact user Information*/}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <CustomizeTypography
+                            fontSize="14px"
+                            sx={{
+                                mt: 1,
+                            }}
+                        >
+                            Thủ Đức, Ho Chi Minh City, Vietnam
+                        </CustomizeTypography>
+                        <Box
+                            sx={{
+                                mt: 1,
+                                width: '2px',
+                                height: '2px',
+                                bgcolor: '#333',
+                                borderRadius: '50%',
+                                ml: 1,
+                            }}
+                        />
+                        {/* not yet --> must add a modal to show user contact information */}
+                        <CustomizeTypography
+                            fontSize={'14px'}
+                            sx={{
+                                mt: 1,
+                                ml: 1,
+                                color: blue[500],
+
+                                '&:hover': {
+                                    color: blue[700],
+                                    cursor: 'pointer',
+                                    textDecoration: 'underline',
+                                    fontWeight: 'bold',
+                                },
+                            }}
+                        >
+                            Contact info
+                        </CustomizeTypography>
+                    </Box>
+
                     {/* connections --> Link to network tab */}
                     {/* <Link to="/network">
                         <CustomizeTypography fontSize="14px" sx={{ mt: 1 }}>
@@ -274,6 +371,21 @@ function ProfileRegion() {
                     </MenuList>
                 </Menu>
             </Box>
+
+            {/* Open user background image - show the backgroud image of user */}
+            <Modal open={activeModal === 'userBackground'} onClose={handleCloseModal}>
+                <BackgroundImageModal
+                    imgUrl={
+                        'https://media.istockphoto.com/id/835370890/photo/sunset-sunrise-with-clouds-light-rays-and-other-atmospheric-effect.jpg?s=612x612&w=0&k=20&c=zGDOBYVFY74wX2gUgkonYGtNl1zenev5mPotAqUlJbM='
+                    }
+                    handleClose={handleCloseModal}
+                />
+            </Modal>
+
+            {/* edit user background image */}
+            <Modal open={activeModal === 'editUserBackground'} onClose={handleCloseModal}>
+                <EditUserBackgroundImage handleClose={handleCloseModal} />
+            </Modal>
         </Box>
     );
 }
@@ -447,7 +559,7 @@ function InterestRegion() {
 
 function FollowCompany() {
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', my: 1, mt: 2, mx: 2 }}>
             <img src={FPTCop} style={{ height: '30px', width: '30px', objectFit: 'contain' }} />
             <Box sx={{ ml: 2 }}>
                 <Typography
@@ -458,7 +570,7 @@ function FollowCompany() {
                 <Typography sx={{ color: 'text.secondary', fontSize: '12.5px' }}>
                     6,969,696 followers
                 </Typography>
-                <Button variant="outlined" sx={{ borderRadius: '24px', p: '4px', mt: '2px' }}>
+                {/* <Button variant="outlined" sx={{ borderRadius: '24px', p: '4px', mt: '2px' }}>
                     <PersonAddIcon />
                     <Typography
                         sx={{
@@ -470,7 +582,8 @@ function FollowCompany() {
                     >
                         Follow
                     </Typography>
-                </Button>
+                </Button> */}
+                <FollowButton />
             </Box>
         </Box>
     );
@@ -503,7 +616,7 @@ function FollowSchool() {
                     justifyContent: 'space-between',
                     cursor: 'pointer',
                     my: 1,
-                    mt: 4,
+                    mt: 2,
                     mx: 2,
                 }}
             >
@@ -534,7 +647,7 @@ function FollowSchool() {
                             <Typography sx={{ color: 'text.secondary', fontSize: '13px' }}>
                                 {school.schoolFollowers} followers
                             </Typography>
-                            <Button
+                            {/* <Button
                                 variant="outlined"
                                 sx={{ borderRadius: '24px', p: '4px', mt: '2px' }}
                             >
@@ -549,7 +662,27 @@ function FollowSchool() {
                                 >
                                     Follow
                                 </Typography>
-                            </Button>
+                            </Button> */}
+
+                            {/* follower button */}
+                            {/* <Button
+                                variant="outlined"
+                                sx={{ borderRadius: '24px', mt: '2px' }}
+                                startIcon={<AddIcon sx={{ color: '#808080' }} />}
+                            >
+                                <Typography
+                                    sx={{
+                                        fontSize: '12.5px',
+                                        textTransform: 'capitalize',
+                                        fontWeight: 'bold',
+                                        color: 'gray',
+                                        px: 1,
+                                    }}
+                                >
+                                    Follow
+                                </Typography>
+                            </Button> */}
+                            <FollowButton />
                         </Box>
                     </Box>
                 ))}
