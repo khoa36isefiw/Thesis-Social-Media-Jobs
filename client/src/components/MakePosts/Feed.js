@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 import Mountain from '../../assets/images/MountainClouds.jpeg';
 // import Beach from '../../assets/images/BeachSunset.jpeg';
 
-const posts = [
+export const posts = [
     {
         id: 1,
         avatarSrc: Mountain,
