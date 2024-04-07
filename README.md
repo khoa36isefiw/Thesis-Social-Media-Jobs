@@ -5,4 +5,4 @@
 ### Link to access website
 
 Website is deployed into vercal app
-https://career-social-app.vercel.app/
+https://career-social-website.vercel.app/
