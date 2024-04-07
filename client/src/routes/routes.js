@@ -10,9 +10,12 @@ import UserProfileLayout from '../layouts/UserProfileLayout/UserProfileLayout';
 
 import GuestHomePage from '../pages/GuestHomePage';
 import LoginPage from '../pages/LoginPage';
-import UserActivity from '../pages/UserActivity';
+import ShowUserActivity from '../pages/ShowUserActivity';
 import UserHomePage from '../pages/UserHomePage';
 import UserNotifications from '../pages/UserNotifications';
+import UserProfilePage from '../pages/UserProfilePage';
+import UserEducationDetails from '../pages/UserEducationDetails';
+import UserInterestPage from '../pages/UserInterestPage';
 
 // not sign into this website
 const publicRoutes = [
@@ -25,8 +28,18 @@ const publicRoutes = [
 // must signed into
 const privateRoutes = [
     { path: '/signed-in', component: UserHomePage, layout: DefaultLayout },
-    { path: '/user-profile', component: UserProfile, layout: UserProfileLayout },
-    { path: '/user/recent-activity/all', component: UserActivity, layout: UserActivityLayout },
+    { path: '/user-profile', component: UserProfilePage, layout: UserProfileLayout },
+    {
+        path: '/user-profile/details/education',
+        component: UserEducationDetails,
+        layout: UserProfileLayout,
+    },
+    {
+        path: '/user/details/interests',
+        component: UserInterestPage,
+        layout: UserProfileLayout,
+    },
+    { path: '/user/recent-activity/all', component: ShowUserActivity, layout: UserActivityLayout },
 
     { path: '/notifications', component: UserNotifications, layout: NotificationLayout },
 ];

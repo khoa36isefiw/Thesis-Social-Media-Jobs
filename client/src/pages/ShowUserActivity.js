@@ -42,7 +42,7 @@ const authenticatedActionsWithPost = [
 ];
 const filterButton = ['Posts', 'Reactions'];
 
-function UserActivity() {
+function ShowUserActivity() {
     const [activeButton, setActiveButton] = useState('Posts');
 
     const handleButtonClick = (label) => {
@@ -80,7 +80,7 @@ function UserActivity() {
                 >
                     {posts ? (
                         // content of user post
-                        <Box>   
+                        <Box>
                             <ShowUserActivityReactions typeOfPost={'posts'} />
                         </Box>
                     ) : (
@@ -109,7 +109,7 @@ function UserActivity() {
     );
 }
 
-export default UserActivity;
+export default ShowUserActivity;
 
 const FilterButton = ({ label, active, onClick }) => {
     return (

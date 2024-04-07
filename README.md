@@ -2,7 +2,7 @@
 
 #### Developing a webiste like Linkedin
 
-
 ### Link to access website
-Website is deployed into vercal app 
+
+Website is deployed into vercal app
 https://career-social-app.vercel.app/

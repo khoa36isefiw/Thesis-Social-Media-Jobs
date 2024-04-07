@@ -1,50 +1,9 @@
-// import React from 'react';
-// import { Box, Button } from '@mui/material';
-// import { green } from '@mui/material/colors';
-
-// const CustomFilterNotifications = () => {
-//     return (
-//         <Box>
-//             <FilterButton label="All" bgcolor={green[800]} color="white" />
-//             <FilterButton label="My posts" bgcolor="#fff" color="#333" ml={2} />
-//         </Box>
-//     );
-// };
-
-// const FilterButton = ({ label, bgcolor, color, ml }) => {
-//     return (
-//         <Button
-//             variant="text"
-//             sx={{
-//                 textTransform: 'capitalize',
-//                 fontSize: '14px',
-//                 px: 2,
-//                 py: 0,
-//                 bgcolor: bgcolor,
-//                 color: color,
-//                 '&:hover': {
-//                     border: '2px solid #333',
-//                     py: 0,
-//                     opacity: 1,
-//                     bgcolor: bgcolor === '#fff' ? '' : bgcolor,
-//                 },
-//                 border: '1px solid #b2b2b2',
-//                 borderRadius: '24px',
-//                 marginLeft: ml || 0,
-//             }}
-//         >
-//             {label}
-//         </Button>
-//     );
-// };
-
-// export default CustomFilterNotifications;
-
 import React, { useState } from 'react';
 import { Avatar, Box, Grid, Typography, Button, styled } from '@mui/material';
 import { green } from '@mui/material/colors';
 import ShowNotifications from './ShowNotifications';
 import NoActivity from '../../assets/images/tele-removebg-preview.png';
+import { useNavigate } from 'react-router-dom';
 
 const CustomFilterNotifications = () => {
     const [activeButton, setActiveButton] = useState('All');
@@ -94,6 +53,7 @@ const FilterButton = ({ label, active, onClick }) => {
                 border: '1px solid #b2b2b2',
                 borderRadius: '24px',
                 marginLeft: '2px',
+                marginRight: '8px',
                 cursor: 'pointer',
             }}
         >
@@ -103,6 +63,7 @@ const FilterButton = ({ label, active, onClick }) => {
 };
 
 const MyPostsLayout = () => {
+    const navigate = useNavigate();
     return (
         <Box
             sx={{
@@ -126,7 +87,11 @@ const MyPostsLayout = () => {
                 No new post activities
             </CustomizeText>
             <CustomizeText>View your previous post activity on your profile</CustomizeText>
-            <Button variant="outlined" sx={{ borderRadius: '24px', mt: 2, mb: 2 }}>
+            <Button
+                variant="outlined"
+                sx={{ borderRadius: '24px', mt: 2, mb: 2 }}
+                onClick={() => navigate('/user-profile')}
+            >
                 <CustomizeText sx={{ textTransform: 'initial', px: 2 }} fw={true}>
                     View previous activity
                 </CustomizeText>
