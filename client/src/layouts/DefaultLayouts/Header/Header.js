@@ -1,13 +1,4 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import Logout from '@mui/icons-material/Logout';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import UserAvatar from '../../../assets/images/avatar.jpeg';
 import {
     Container,
     Box,
@@ -17,10 +8,18 @@ import {
     Typography,
     Badge,
     ListItemText,
+    Menu,
+    MenuItem,
+    ListItemIcon,
+    Divider,
+    Avatar,
 } from '@mui/material';
-import logoWeb from '../../../assets/images/aikotoba-job.png';
 import './Header.scss';
 import { Link, useNavigate } from 'react-router-dom';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import UserAvatar from '../../../assets/images/avatar.jpeg';
+import logoWeb from '../../../assets/images/aikotoba-job.png';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
@@ -28,6 +27,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import SmsIcon from '@mui/icons-material/Sms';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import Logout from '@mui/icons-material/Logout';
 
 const styles = (TextField) => ({
     notchedOutline: {
@@ -36,12 +36,94 @@ const styles = (TextField) => ({
     },
 });
 
+// define some constant icon button
+const HeaderIconButton = ({ icon, text, destination, isActive, onClick }) => {
+    const navigate = useNavigate();
+    return (
+        <Box
+            className={`nav__dir ${isActive ? 'active' : ''}`}
+            sx={{ '&:hover': { fontWeight: 'bold' } }}
+            onClick={() => {
+                onClick();
+                navigate(destination);
+            }}
+        >
+            {/* <IconButton className="icon__btn" disableTouchRipple>
+                {icon}
+            </IconButton> */}
+            <IconButton
+                className="icon__btn"
+                disableTouchRipple
+                sx={isActive ? { ...iconStyles, color: 'green' } : iconStyles}
+            >
+                {icon}
+            </IconButton>
+
+            <Typography className="text__btn" sx={{ fontSize: '12px' }}>
+                {text}
+            </Typography>
+        </Box>
+    );
+};
+
+const HeaderIconNotification = ({ icon, text, maxNotifications, numberOfNotifications }) => {
+    return (
+        <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold', position: 'relative' } }}>
+            <IconButton
+                disableTouchRipple
+                sx={{
+                    '&:hover': {
+                        backgroundColor: 'transparent',
+                    },
+                }}
+            >
+                {icon}
+                <Badge
+                    badgeContent={numberOfNotifications}
+                    max={maxNotifications}
+                    color="error"
+                    className="active"
+                    sx={{
+                        position: 'absolute',
+                        top: '20%',
+                        right: '20%',
+                        '.MuiBadge-badge': {
+                            // mt: '8px',
+                            height: '20px',
+                            width: '20px',
+                            borderRadius: '50%',
+                            fontSize: '8px',
+                            fontWeight: 'bold',
+                        },
+                    }}
+                />
+            </IconButton>
+            <Typography className="text__btn" sx={{ fontSize: '12px' }}>
+                {text}
+            </Typography>
+        </Box>
+    );
+};
+// define icon styles
+const iconStyles = {
+    fontSize: '28px',
+    color: '#666',
+    '&:hover': {
+        color: '#191919',
+    },
+};
+
+// Define a variable for the media query condition
+const mobileScreen = '@media only screen and (max-width: 48.1875em)';
+const tabletScreen = '@media only screen between (min-width: 46.25em) and (max-width:63.9375em)';
+const desktopScreen = '@media only screen and (min-width: 64em)';
 function Header() {
     const navigate = useNavigate();
     const [isTextFieldFocused, setIsTextFieldFocused] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [activeIcon, setActiveIcon] = React.useState(false);
     const textFieldRef = React.useRef(null);
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -64,12 +146,16 @@ function Header() {
         setIsTextFieldFocused(false);
     };
 
+    const handleIconClick = () => {
+        setActiveIcon(true);
+    };
+
     return (
         <Box className={`header ${isTextFieldFocused ? 'focused' : ''} `}>
             <Container
                 sx={{
                     display: 'flex',
-                    justifyContent: 'space-around',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
                 }}
             >
@@ -77,7 +163,7 @@ function Header() {
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'space-between',
+                        justifyContent: 'center',
                         flexGrow: 1,
                     }}
                 >
@@ -89,6 +175,7 @@ function Header() {
 
                     <TextField
                         id="outlined-basic"
+                        className="search__field"
                         variant="outlined"
                         inputRef={textFieldRef}
                         onFocus={handleTextFieldFocus}
@@ -113,8 +200,6 @@ function Header() {
                             classes: {
                                 notchedOutline: styles.notchedOutline,
                             },
-
-                            // cssOutlinedInput: { borderColor: 'red !important' },
                         }}
                     />
                 </Box>
@@ -126,136 +211,68 @@ function Header() {
                         flexGrow: 1,
                     }}
                 >
-                    <Box
-                        className="nav__dir"
-                        sx={{ '&:hover': { fontWeight: 'bold' } }}
-                        onClick={() => navigate('/signed-in')}
-                    >
-                        <IconButton className="icon__btn" disableTouchRipple>
+                    <HeaderIconButton
+                        icon={
                             <HomeIcon
-                                sx={{
-                                    fontSize: '28px',
-                                    color: '#666',
-                                    '&:hover': {
-                                        color: '#191919',
-                                    },
-                                }}
+                                sx={activeIcon ? { ...iconStyles, color: '#191919' } : iconStyles}
                             />
-                        </IconButton>
-                        <Typography sx={{ fontSize: '12px' }}>Home</Typography>
-                    </Box>
-                    <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
-                        <IconButton className="icon__btn" disableTouchRipple>
+                        }
+                        text={'Home'}
+                        destination={'/signed-in'}
+                        isActive={activeIcon}
+                        onClick={handleIconClick}
+                    />
+
+                    <HeaderIconButton
+                        icon={
                             <PeopleAltIcon
-                                sx={{
-                                    fontSize: '28px',
-                                    color: '#666',
-                                    '&:hover': {
-                                        color: '#191919',
-                                    },
-                                }}
+                                sx={activeIcon ? { ...iconStyles, color: '#191919' } : iconStyles}
                             />
-                        </IconButton>
-                        <Typography sx={{ fontSize: '12px' }}>My Network</Typography>
-                    </Box>
-                    <Box>
-                        <Badge
-                            badgeContent={10}
-                            max={9}
-                            color="error"
-                            className="active"
-                            sx={{
-                                '.MuiBadge-badge': {
-                                    mt: '12px',
-                                    mr: '22px',
-                                    height: '20px',
-                                    width: '20px',
-                                    borderRadius: '50%',
-                                    fontSize: '8px',
-                                    fontWeight: 'bold',
-                                },
-                            }}
-                        >
-                            <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
-                                <IconButton
-                                    disableTouchRipple
-                                    sx={{
-                                        '&:hover': {
-                                            backgroundColor: 'transparent',
-                                        },
-                                    }}
-                                >
-                                    <SmsIcon
-                                        sx={{
-                                            fontSize: '28px',
-                                            color: '#666',
-                                            '&:hover': {
-                                                color: '#191919',
-                                            },
-                                        }}
-                                    />
-                                </IconButton>
-                                <Typography sx={{ fontSize: '12px' }}>Messages</Typography>
-                            </Box>
-                        </Badge>
-                    </Box>
-                    <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
-                        <IconButton className="icon__btn" disableTouchRipple>
+                        }
+                        text={'My Network'}
+                        destination={'/my-network'}
+                        isActive={activeIcon}
+                        onClick={handleIconClick}
+                    />
+                    <HeaderIconNotification
+                        text={'Message'}
+                        icon={<SmsIcon sx={iconStyles} />}
+                        numberOfNotifications={10}
+                        maxNotifications={9}
+                        isActive={activeIcon}
+                        onClick={handleIconClick}
+                    />
+
+                    <HeaderIconButton
+                        icon={
                             <WorkIcon
-                                sx={{
-                                    fontSize: '28px',
-                                    color: '#666',
-                                    '&:hover': {
-                                        color: '#191919',
-                                    },
-                                }}
+                                sx={activeIcon ? { ...iconStyles, color: '#191919' } : iconStyles}
                             />
-                        </IconButton>
-                        <Typography sx={{ fontSize: '12px' }}>Jobs</Typography>
+                        }
+                        text={'Jobs'}
+                        destination={''}
+                        isActive={activeIcon}
+                        onClick={handleIconClick}
+                    />
+
+                    <HeaderIconNotification
+                        text={'Notifications'}
+                        icon={<NotificationsIcon sx={iconStyles} />}
+                        numberOfNotifications={100}
+                        maxNotifications={99}
+                        isActive={activeIcon}
+                        onClick={handleIconClick}
+                    />
+
+                    <Box
+                        sx={{
+                            [mobileScreen]: {
+                                display: 'none',
+                            },
+                        }}
+                    >
+                        <AccountMenu />
                     </Box>
-                    <Box>
-                        <Badge
-                            badgeContent={100}
-                            max={99}
-                            color="error"
-                            className="active"
-                            sx={{
-                                '.MuiBadge-badge': {
-                                    mt: '12px',
-                                    mr: '22px',
-                                    height: '20px',
-                                    width: '20px',
-                                    borderRadius: '50%',
-                                    fontSize: '8px',
-                                    fontWeight: 'bold',
-                                },
-                            }}
-                        >
-                            <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
-                                <IconButton
-                                    disableTouchRipple
-                                    sx={{
-                                        '&:hover': {
-                                            backgroundColor: 'transparent',
-                                        },
-                                    }}
-                                    onClick={() => navigate('/notifications')}
-                                >
-                                    <NotificationsIcon
-                                        sx={{
-                                            fontSize: '28px',
-                                            color: '#666',
-                                            '&:hover': {
-                                                color: '#191919',
-                                            },
-                                        }}
-                                    />
-                                </IconButton>
-                                <Typography sx={{ fontSize: '12px' }}>Notifications</Typography>
-                            </Box>
-                        </Badge>
-                    </Box>
-                    <AccountMenu />
                 </Box>
             </Container>
         </Box>
@@ -307,9 +324,6 @@ function AccountMenu() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     mb: '18px',
-                    // flexDirection: 'column',
-                    // alignItems: 'center',
-                    // justifyContent: 'center',
                 }}
             >
                 <Box onClick={handleClick}>
@@ -431,19 +445,6 @@ function AccountMenu() {
                         </ListItemText>
                     </MenuItem>
                 ))}
-
-                {/* <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <Settings fontSize="small" />
-                    </ListItemIcon>
-                    Settings
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                </MenuItem> */}
             </Menu>
         </React.Fragment>
     );

@@ -16,6 +16,8 @@ import UserNotifications from '../pages/UserNotifications';
 import UserProfilePage from '../pages/UserProfilePage';
 import UserEducationDetails from '../pages/UserEducationDetails';
 import UserInterestPage from '../pages/UserInterestPage';
+import NetworkLayout from '../layouts/NetworkLayout/NetworkLayout';
+import MyNetwork from '../components/MyNetwork/MyNetwork';
 
 // not sign into this website
 const publicRoutes = [
@@ -38,6 +40,11 @@ const privateRoutes = [
         path: '/user/details/interests',
         component: UserInterestPage,
         layout: UserProfileLayout,
+    },
+    {
+        path: '/my-network/',
+        component: MyNetwork,
+        layout: NetworkLayout,
     },
     { path: '/user/recent-activity/all', component: ShowUserActivity, layout: UserActivityLayout },
 

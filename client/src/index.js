@@ -4,7 +4,21 @@ import App from './App';
 import GlobalStyles from './layouts/GlobalStyles/GlobalStyles';
 import reportWebVitals from './reportWebVitals';
 
+// import { theme } from './components/Theme/Theme';
+import { ThemeProvider } from '@mui/material';
+import { unstable_createMuiStrictModeTheme } from '@mui/material/styles';
+import { theme as customTheme } from './components/Theme/Theme';
+
+// Merge the custom theme with the Material-UI theme
+const mergedTheme = {
+    ...unstable_createMuiStrictModeTheme(),
+    ...customTheme,
+};
+
+// const theme = unstable_createMuiStrictModeTheme();
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
     <React.StrictMode>
         <GlobalStyles>
