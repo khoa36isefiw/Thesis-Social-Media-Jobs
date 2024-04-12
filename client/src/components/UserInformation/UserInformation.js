@@ -45,7 +45,7 @@ function UserInformation() {
                         width: '80px',
                         mt: '-40px',
                         border: '4px solid #fff',
-                        zIndex: 99,
+                        zIndex: 7,
                     }}
                 />
 

@@ -15,11 +15,16 @@
 
 .nav__dir {
     width: 70px;
-    height: 80px;
+    height: 70px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     opacity: 0.95;
+}
+.nav__dir.active {
+    // background-color: aqua;
+    text-decoration: underline;
 }
 
 .active .MuiBadge-badge {
@@ -49,4 +54,30 @@
     width: 36px;
     height: 36px;
     object-fit: cover;
+}
+
+// resposive for mobile device
+@media only screen and (max-width: 48.1875em) {
+    .text__btn {
+        display: none;
+    }
+    .nav__dir {
+        justify-content: center;
+    }
+
+    .header .search__field {
+        display: none;
+    }
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+    .nav__dir {
+        width: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.95;
+    }
 }

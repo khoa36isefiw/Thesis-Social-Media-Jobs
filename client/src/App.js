@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { privateRoutes, publicRoutes } from './routes/routes';
+import { ThemeProvider } from '@mui/material';
+import { theme } from './components/Theme/Theme';
 
 function App() {
     return (
