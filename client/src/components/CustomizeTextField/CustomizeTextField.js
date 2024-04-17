@@ -2,10 +2,7 @@ import { styled, TextField } from '@mui/material';
 
 export const CustomizeTextField = styled(TextField)(
     ({ id, label, mt, wd, variant, inputFontSize, labelFontSize }) => ({
-        // fullWidth: fullWidth || true,
-        // width: fullWidth ? '100%' : 'auto',
         width: 400,
-        // width: wd || '100%',
         id: id || 'outlined-basic',
         marginTop: mt || '1px',
         '& label': {
