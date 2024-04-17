@@ -37,7 +37,7 @@ const listNetworks = [
         iconBtn: <PeopleAltIcon sx={{ fontSize: '24px' }} />,
         pageName: 'Connections',
         numberOf: '2',
-        targetTo: '/my-network/connections/',
+        targetTo: '/my-network/connections',
     },
     {
         iconBtn: <PersonIcon sx={{ fontSize: '24px' }} />,
@@ -91,9 +91,9 @@ function NestedList() {
                     }
                 />
                 {open ? (
-                    <ExpandLess sx={{ fontSize: '24px' }} />
-                ) : (
                     <ExpandMore sx={{ fontSize: '24px' }} />
+                ) : (
+                    <ExpandLess sx={{ fontSize: '24px' }} />
                 )}
             </ListItemButton>
 
