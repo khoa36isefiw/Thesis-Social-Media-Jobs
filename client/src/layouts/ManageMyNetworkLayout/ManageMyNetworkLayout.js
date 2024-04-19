@@ -4,19 +4,27 @@ import { Container } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Advertising from '../../components/Advertising/Advertising';
 import Header from '../DefaultLayouts/Header/Header';
+import { mobileScreen } from '../../components/Theme/Theme';
 
 function ManageMyNetworkLayout({ children }) {
     return (
         <Box sx={{ backgroundColor: '#f3f2f0', minHeight: '100vh' }}>
             <Header />
-            <Container sx={{ mt: 12 }}>
+            <Container
+                sx={{
+                    mt: 12,
+                    [mobileScreen]: {
+                        px: 0,
+                    },
+                }}
+            >
                 <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                    <Grid item xs={7} md={8}>
+                    <Grid item xs={12} md={8}>
                         <Box sx={{ minHeight: '10vh', borderRadius: '24px' }}>
                             <Box>{children}</Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={5} md={4}>
+                    <Grid item xs={12} md={4}>
                         {/* Manage my network */}
                         <Box sx={{ position: 'relative' }}>
                             <Advertising />
