@@ -19,6 +19,7 @@ import FPTCop from '../../../assets/images/fpt_logo.png';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import CloseIcon from '@mui/icons-material/Close';
+import { mobileScreen } from '../../../components/Theme/Theme';
 
 function Footer() {
     const listFooterLink = ['About', 'accessbility', 'help center', 'Privacy and Terms'];
@@ -34,6 +35,10 @@ function Footer() {
                     boxShadow: '4px 8px 4px #d9d9d9',
                     mb: 2,
                     p: 1,
+
+                    [mobileScreen]: {
+                        borderRadius: 0,
+                    },
                 }}
             >
                 <Box
