@@ -20,13 +20,44 @@ import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { blue } from '@mui/material/colors';
 
 const sortLists = ['Recently added', 'First name', 'Last name'];
+const listConnections = [
+    {
+        userConnectionImage: 'https://cdn.mos.cms.futurecdn.net/FRdq8ZbPetwNDRV9R3hYpP-1200-80.jpg',
+        userConnectionName: 'Candy Blue',
+        userConnectionPosition: 'Producer',
+        connectionTime: 'Connected 2 months ago',
+    },
+    {
+        userConnectionImage:
+            'https://static.wixstatic.com/media/ef92aa_f122790bd7e54ec4b378debe6b8907ba~mv2.jpg/v1/fill/w_980,h_545,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/ef92aa_f122790bd7e54ec4b378debe6b8907ba~mv2.jpg',
+        userConnectionName: 'Tiffany',
+        userConnectionPosition: 'Front-end Developer',
+        connectionTime: 'Connected 3 months ago',
+    },
+    {
+        userConnectionImage:
+            'https://images.saymedia-content.com/.image/ar_4:3%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:eco%2Cw_1200/MTk2NzAyNjMyNjI1MDU1MjU3/pros-and-cons-of-owning-siberian-huskies.jpg',
+        userConnectionName: 'Siberian Huskies',
+        userConnectionPosition: 'Tester',
+        connectionTime: 'Connected 3 months ago',
+    },
+    {
+        userConnectionImage:
+            '    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9VjOpCi54d6luijP_fFpWQstePYMKMZT00OvBnUiM-P7rnLqnuymklLU6PZinN2vlmq4&usqp=CAU',
+        userConnectionName: 'Husky Sakhalin',
+        userConnectionPosition: 'Back-end Developer',
+        connectionTime: 'Connected 3 months ago',
+    },
+];
 
 function MyConnections() {
     const [sortMenuAnchorEl, setSortMenuAnchorEl] = React.useState(null);
     const [moreMenuAnchorEl, setMoreMenuAnchorEl] = React.useState(null);
-    const [selectedSortItem, setSelectedSortItem] = React.useState(sortLists[0]); // Default to the first item
+    // Default to the first item
+    const [selectedSortItem, setSelectedSortItem] = React.useState(sortLists[0]);
 
     const openSortMenu = Boolean(sortMenuAnchorEl);
     const openMoreMenu = Boolean(moreMenuAnchorEl);
@@ -48,6 +79,7 @@ function MyConnections() {
         setSelectedSortItem(item);
         setSortMenuAnchorEl(null);
     };
+
     return (
         <ThemeProvider theme={theme}>
             <CustomizeBox sx={{ padding: 0 }}>
@@ -99,7 +131,7 @@ function MyConnections() {
                                 >
                                     {/* Recently added */}
                                     {/* get sort item just selected */}
-                                    {selectedSortItem} 
+                                    {selectedSortItem}
                                 </Typography>
                             </Button>
                             <Menu
@@ -138,125 +170,193 @@ function MyConnections() {
                             </Menu>
                         </Box>
 
-                        <TextField
-                            placeholder="Search by name..."
+                        <Box
                             sx={{
-                                '.MuiInputBase-root': {
-                                    height: '35px',
-                                    fontSize: '12.5px',
-                                },
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
                             }}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                    </Box>
-                </Box>
-                <Divider />
-                <Box
-                    padding={2}
-                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-                >
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Avatar
-                            src={
-                                'https://cdn.mos.cms.futurecdn.net/FRdq8ZbPetwNDRV9R3hYpP-1200-80.jpg'
-                            }
-                            alt="User Avatar"
-                            sx={{
-                                height: '80px',
-                                width: '80px',
-                                zIndex: 4,
-                                '&:hover': {
-                                    cursor: 'pointer',
-                                },
-                            }}
-                        />
-                        {/* information */}
-                        <Box sx={{ marginLeft: 1 }}>
-                            {/* name */}
+                        >
+                            <TextField
+                                placeholder="Search by name..."
+                                sx={{
+                                    '.MuiInputBase-root': {
+                                        height: '35px',
+                                        fontSize: '12.5px',
+                                    },
+                                }}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <SearchIcon />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
                             <Typography
                                 sx={{
-                                    color: theme.palette.headingTextColor,
-                                    fontSize: '18px',
+                                    ml: 1,
+                                    fontSize: '13px',
+                                    color: blue[700],
                                     fontWeight: 'bold',
+                                    '&:hover': {
+                                        textDecoration: 'underline',
+                                        cursor: 'pointer',
+                                    },
                                 }}
                             >
-                                Candy Blue
-                            </Typography>
-                            {/* job position */}
-                            <Typography
-                                sx={{
-                                    color: theme.palette.headerTextColor,
-                                    fontSize: '13px',
-                                }}
-                            >
-                                Producer
-                            </Typography>
-                            {/* time connect to them */}
-                            <Typography
-                                sx={{
-                                    color: theme.palette.headerTextColor,
-                                    fontSize: '13px',
-                                }}
-                            >
-                                Connected 2 months ago
+                                Search with filters
                             </Typography>
                         </Box>
                     </Box>
+                </Box>
+                <Divider />
+                {listConnections.map((user, index) => (
                     <Box>
-                        <Button
-                            variant="outlined"
+                        <Box
+                            key={index}
+                            padding={2}
                             sx={{
-                                textTransform: 'initial',
-                                fontSize: '14px',
-                                borderRadius: '24px',
-                                px: 3,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
                             }}
                         >
-                            Message
-                        </Button>
-                        <IconButton onClick={handleMoreMenuClick}>
-                            <MoreHorizIcon sx={{ fontSize: '24px' }} />
-                        </IconButton>
-                        <Menu
-                            anchorEl={moreMenuAnchorEl}
-                            open={openMoreMenu}
-                            onClose={handleMoreMenuClose}
-                            sx={{
-                                '.MuiList-root': { p: 0 },
-                                '.MuiPaper-rounded': { borderRadius: '12px' },
-                                '.MuiPaper-root': {
-                                    boxShadow: '2px 4px 4px #b3b3b3',
-                                },
-                            }}
-                        >
-                            <MenuItem onClick={handleMoreMenuClose}>
-                                <DeleteForeverIcon sx={{ fontSize: '24px' }} />
-                                <ListItemText>
-                                    <Typography
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Box sx={{ height: '80px', width: '80px', position: 'relative' }}>
+                                    <Avatar
+                                        src={user.userConnectionImage}
+                                        alt={user.userConnectionName}
                                         sx={{
-                                            ml: 1,
-                                            fontSize: '13px',
-                                            color: theme.palette.headerTextColor,
+                                            width: '100%',
+                                            height: '100%',
+                                            zIndex: 2,
+                                            '&:hover': {
+                                                cursor: 'pointer',
+                                            },
+                                            objectFit: 'cover',
+                                            // position: 'relative',
+                                        }}
+                                    />
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            height: '20px',
+                                            width: '20px',
+                                            backgroundColor: 'green',
+                                            right: 0,
+                                            bottom: 0,
+                                            borderRadius: '50%',
+                                            border: '2px solid white',
+                                            zIndex: 3,
                                         }}
                                     >
-                                        Remove connections
+                                        <Box
+                                            sx={{
+                                                position: 'absolute',
+                                                left: '50%',
+                                                top: '50%',
+                                                transform: 'translate(-50%, -50%)',
+                                                height: '8px',
+                                                width: '8px',
+                                                backgroundColor: 'white',
+                                                borderRadius: '50%',
+                                                zIndex: 4,
+                                            }}
+                                        />
+                                    </Box>
+                                </Box>
+                                {/* information */}
+                                <Box sx={{ marginLeft: 1 }}>
+                                    {/* name */}
+                                    <Typography
+                                        sx={{
+                                            color: theme.palette.headingTextColor,
+                                            fontSize: '18px',
+                                            fontWeight: 'bold',
+                                        }}
+                                    >
+                                        {user.userConnectionName}
                                     </Typography>
-                                </ListItemText>
-                            </MenuItem>
-                        </Menu>
+                                    {/* job position */}
+                                    <Typography
+                                        sx={{
+                                            color: theme.palette.headerTextColor,
+                                            fontSize: '13px',
+                                        }}
+                                    >
+                                        {user.userConnectionPosition}
+                                    </Typography>
+                                    {/* time connect to them */}
+                                    <Typography
+                                        sx={{
+                                            color: theme.palette.headerTextColor,
+                                            fontSize: '13px',
+                                        }}
+                                    >
+                                        {user.connectionTime}
+                                    </Typography>
+                                </Box>
+                            </Box>
+
+                            <Box>
+                                <Button
+                                    variant="outlined"
+                                    sx={{
+                                        textTransform: 'initial',
+                                        fontSize: '14px',
+                                        borderRadius: '24px',
+                                        px: 3,
+                                    }}
+                                >
+                                    Message
+                                </Button>
+                                <IconButton onClick={handleMoreMenuClick}>
+                                    <MoreHorizIcon sx={{ fontSize: '24px' }} />
+                                </IconButton>
+                                <Menu
+                                    anchorEl={moreMenuAnchorEl}
+                                    open={openMoreMenu}
+                                    onClose={handleMoreMenuClose}
+                                    sx={{
+                                        '.MuiList-root': { p: 0 },
+                                        '.MuiPaper-rounded': { borderRadius: '12px' },
+                                        '.MuiPaper-root': {
+                                            boxShadow: '2px 4px 4px #b3b3b3',
+                                        },
+                                    }}
+                                >
+                                    <MenuItem onClick={handleMoreMenuClose}>
+                                        <DeleteForeverIcon sx={{ fontSize: '24px' }} />
+                                        <ListItemText>
+                                            <Typography
+                                                sx={{
+                                                    ml: 1,
+                                                    fontSize: '13px',
+                                                    color: theme.palette.headerTextColor,
+                                                }}
+                                            >
+                                                Remove connections
+                                            </Typography>
+                                        </ListItemText>
+                                    </MenuItem>
+                                </Menu>
+                            </Box>
+                        </Box>
+                        {index === listConnections.length - 1 ? (
+                            ''
+                        ) : (
+                            <Box sx={{ ml: 13 }}>
+                                <Divider />
+                            </Box>
+                        )}
                     </Box>
-                </Box>
+                ))}
             </CustomizeBox>
         </ThemeProvider>
     );

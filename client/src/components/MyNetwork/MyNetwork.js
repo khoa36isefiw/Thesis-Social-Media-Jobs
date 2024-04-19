@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { theme } from '../Theme/Theme';
+import { desktopScreen, ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 const suggestedLists = [
     {
         userImage:
@@ -49,26 +49,47 @@ const suggestedLists = [
         userName: 'Đường Tình',
         userPosition: 'Blockchain',
     },
+    // {
+    //     userImage:
+    //         'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
+    //     userName: 'Trộm Choá',
+    //     userPosition: 'Blockchain',
+    // },
+    // {
+    //     userImage:
+    //         'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
+    //     userName: 'Trộm Choá',
+    //     userPosition: 'Blockchain',
+    // },
 ];
-
-// Make Responsive component
-const Responsive = styled(Box)(({ theme }) => ({
-    [theme.breakpoints.up('mobile')]: {},
-    [theme.breakpoints.between('740px', '1023px')]: {
-        width: '200px',
-    },
-    [theme.breakpoints.up('ipadPro')]: {},
-    [theme.breakpoints.up('desktop')]: {},
-}));
 
 function MyNetwork() {
     return (
         <ThemeProvider theme={theme}>
-            <CustomizeBox>
+            <CustomizeBox
+                sx={{
+                    [mobileScreen]: {
+                        borderRadius: 0,
+                    },
+                }}
+            >
                 <Box
                     sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                 >
-                    <Typography sx={{ fontSize: '15px', color: theme.palette.headingTextColor }}>
+                    <Typography
+                        sx={{
+                            fontSize: '15px',
+                            color: theme.palette.headingTextColor,
+                            [mobileScreen]: {
+                                maxWidth: '250px',
+                                mb: 2,
+                            },
+                            [tabletScreen]: {
+                                width: '250px',
+                                mb: 2,
+                            },
+                        }}
+                    >
                         People you may know based on your recent activity
                     </Typography>
                     <Button
@@ -90,6 +111,16 @@ function MyNetwork() {
                         display: 'flex',
                         flexWrap: 'wrap',
                         justifyContent: 'flex-start',
+                        [mobileScreen]: {
+                            justifyContent: 'space-between',
+                        },
+                        [tabletScreen]: {
+                            justifyContent: 'space-between',
+                        },
+                        [ipadProScreen]: {
+                            justifyContent: 'space-between',
+                        },
+                        alignItems: 'center',
                     }}
                 >
                     {suggestedLists.map((user, index) => (
@@ -102,6 +133,18 @@ function MyNetwork() {
                                 textAlign: 'center',
                                 m: 1,
                                 cursor: 'pointer',
+                                [mobileScreen]: {
+                                    width: '170px',
+                                    m: '1px',
+                                    mb: 1,
+                                },
+                                [tabletScreen]: {
+                                    width: '180px',
+                                    mx: '1px',
+                                },
+                                [ipadProScreen]: {
+                                    mx: '1px',
+                                },
                             }}
                         >
                             {/* default background image */}

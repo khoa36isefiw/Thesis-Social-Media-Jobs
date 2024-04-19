@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import { blue } from '@mui/material/colors';
 import { scrollToTop } from '../ScrollToTop/ScrollToTop';
+import { mobileScreen } from '../Theme/Theme';
 function UserInformation() {
     const navigate = useNavigate();
     const handleNavigateToProfile = () => {
@@ -11,14 +12,16 @@ function UserInformation() {
         scrollToTop();
     };
     return (
-        <Box sx={{ border: '1px solid #d9d9d9', backgroundColor: '#fff', borderRadius: '12px' }}>
-            {/* <Box>
-                <Avatar
-                    src={UserAvatar}
-                    alt="User Avatar"
-                    sx={{ m: 'auto', mb: 2, height: '64px', width: '64px' }}
-                /> */}
-
+        <Box
+            sx={{
+                border: '1px solid #d9d9d9',
+                backgroundColor: '#fff',
+                borderRadius: '12px',
+                [mobileScreen]: {
+                    borderRadius: 0,
+                },
+            }}
+        >
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Avatar
                     // src={UserBackgroundImage}
@@ -35,6 +38,9 @@ function UserInformation() {
                         height: '80px',
                         objectFit: 'contain',
                         zIndex: 2,
+                        [mobileScreen]: {
+                            borderRadius: 0,
+                        },
                     }}
                 />
                 <Avatar
