@@ -20,11 +20,19 @@ import TagIcon from '@mui/icons-material/Tag';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import HubIcon from '@mui/icons-material/Hub';
 import { useNavigate } from 'react-router-dom';
+import { mobileScreen, theme } from '../../components/Theme/Theme';
 
 function ManageMyNetwork() {
     return (
         <Box sx={{ backgroundColor: '#f3f2f0' }}>
-            <CustomizeBox sx={{ padding: 0 }}>
+            <CustomizeBox
+                sx={{
+                    padding: 0,
+                    [mobileScreen]: {
+                        borderRadius: 0,
+                    },
+                }}
+            >
                 <NestedList />
             </CustomizeBox>
         </Box>
@@ -73,10 +81,12 @@ function NestedList() {
         <List
             sx={{
                 width: '100%',
-                maxWidth: 360,
                 bgcolor: 'background.paper',
                 borderRadius: '12px',
                 py: 0,
+                [mobileScreen]: {
+                    borderRadius: 0,
+                },
             }}
         >
             <ListItemButton onClick={handleClick}>

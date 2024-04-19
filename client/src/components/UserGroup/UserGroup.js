@@ -3,10 +3,18 @@ import { Box, Typography, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { CustomizeBox } from '../CustomizeBox/CustomizeBox';
+import { mobileScreen } from '../Theme/Theme';
 
 function UserGroup() {
     return (
-        <Box sx={{ border: '1px solid #d9d9d9', bgcolor: '#fff', borderRadius: '12px' }}>
+        <Box
+            sx={{
+                border: '1px solid #d9d9d9',
+                bgcolor: '#fff',
+                borderRadius: '12px',
+                [mobileScreen]: { borderRadius: 0 },
+            }}
+        >
             <Box p={2}>
                 <Typography
                     sx={{
