@@ -15,7 +15,7 @@ import {
     Avatar,
 } from '@mui/material';
 import './Header.scss';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import UserAvatar from '../../../assets/images/avatar.jpeg';
@@ -29,46 +29,71 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Logout from '@mui/icons-material/Logout';
 
-const styles = (TextField) => ({
-    notchedOutline: {
-        borderWidth: '1px',
-        borderColor: 'yellow !important',
+// Define a variable for the media query condition
+const mobileScreen = '@media only screen and (max-width: 46.1875em)';
+const tabletScreen = '@media only screen between (min-width: 46.25em) and (max-width:63.9375em)';
+const desktopScreen = '@media only screen and (min-width: 64em)';
+
+// define icon styles
+const iconStyles = {
+    fontSize: '28px',
+    color: '#666',
+    '&:hover': {
+        color: '#191919',
     },
-});
+};
 
 // define some constant icon button
-const HeaderIconButton = ({ icon, text, destination, isActive, onClick }) => {
+const HeaderIconButton = ({ icon, text, destination, isActive }) => {
     const navigate = useNavigate();
     return (
         <Box
             className={`nav__dir ${isActive ? 'active' : ''}`}
-            sx={{ '&:hover': { fontWeight: 'bold' } }}
-            onClick={() => {
-                onClick();
-                navigate(destination);
+            sx={{
+                [mobileScreen]: {
+                    borderBottom: 0,
+                },
+                borderBottom: isActive ? '2px solid #333' : null,
+                '&:hover': { fontWeight: 'bold' },
             }}
         >
-            {/* <IconButton className="icon__btn" disableTouchRipple>
-                {icon}
-            </IconButton> */}
             <IconButton
                 className="icon__btn"
                 disableTouchRipple
-                sx={isActive ? { ...iconStyles, color: 'green' } : iconStyles}
+                onClick={() => {
+                    navigate(destination);
+                }}
             >
                 {icon}
             </IconButton>
 
-            <Typography className="text__btn" sx={{ fontSize: '12px' }}>
+            <Typography className="text__btn" sx={{ fontSize: '12px', mt: -1 }}>
                 {text}
             </Typography>
         </Box>
     );
 };
 
-const HeaderIconNotification = ({ icon, text, maxNotifications, numberOfNotifications }) => {
+const HeaderIconNotification = ({
+    icon,
+    text,
+    maxNotifications,
+    numberOfNotifications,
+    destination,
+    isActive,
+}) => {
+    const navigate = useNavigate();
     return (
-        <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold', position: 'relative' } }}>
+        <Box
+            className={`nav__dir ${isActive ? 'active' : ''}`}
+            sx={{
+                borderBottom: isActive ? '2px solid #333' : null,
+                '&:hover': { position: 'relative' },
+                [mobileScreen]: {
+                    borderBottom: '',
+                },
+            }}
+        >
             <IconButton
                 disableTouchRipple
                 sx={{
@@ -76,6 +101,7 @@ const HeaderIconNotification = ({ icon, text, maxNotifications, numberOfNotifica
                         backgroundColor: 'transparent',
                     },
                 }}
+                onClick={() => navigate(destination)}
             >
                 {icon}
                 <Badge
@@ -88,7 +114,6 @@ const HeaderIconNotification = ({ icon, text, maxNotifications, numberOfNotifica
                         top: '20%',
                         right: '20%',
                         '.MuiBadge-badge': {
-                            // mt: '8px',
                             height: '20px',
                             width: '20px',
                             borderRadius: '50%',
@@ -98,39 +123,20 @@ const HeaderIconNotification = ({ icon, text, maxNotifications, numberOfNotifica
                     }}
                 />
             </IconButton>
-            <Typography className="text__btn" sx={{ fontSize: '12px' }}>
+            <Typography className="text__btn" sx={{ fontSize: '12px', mt: -1 }}>
                 {text}
             </Typography>
         </Box>
     );
 };
-// define icon styles
-const iconStyles = {
-    fontSize: '28px',
-    color: '#666',
-    '&:hover': {
-        color: '#191919',
-    },
-};
 
-// Define a variable for the media query condition
-const mobileScreen = '@media only screen and (max-width: 48.1875em)';
-const tabletScreen = '@media only screen between (min-width: 46.25em) and (max-width:63.9375em)';
-const desktopScreen = '@media only screen and (min-width: 64em)';
 function Header() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [isTextFieldFocused, setIsTextFieldFocused] = React.useState(false);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [activeIcon, setActiveIcon] = React.useState(false);
-    const textFieldRef = React.useRef(null);
+    const [activeIcon, setActiveIcon] = React.useState('');
 
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const textFieldRef = React.useRef(null);
 
     const handleSearchIconClick = () => {
         if (textFieldRef.current) {
@@ -146,9 +152,9 @@ function Header() {
         setIsTextFieldFocused(false);
     };
 
-    const handleIconClick = () => {
-        setActiveIcon(true);
-    };
+    React.useEffect(() => {
+        setActiveIcon(location.pathname); // Update active icon based on current URL path
+    }, [location.pathname]);
 
     return (
         <Box className={`header ${isTextFieldFocused ? 'focused' : ''} `}>
@@ -197,9 +203,6 @@ function Header() {
                                     <SearchIcon onClick={handleSearchIconClick} />
                                 </InputAdornment>
                             ),
-                            classes: {
-                                notchedOutline: styles.notchedOutline,
-                            },
                         }}
                     />
                 </Box>
@@ -214,35 +217,47 @@ function Header() {
                     <HeaderIconButton
                         icon={
                             <HomeIcon
-                                sx={activeIcon ? { ...iconStyles, color: '#191919' } : iconStyles}
+                                sx={
+                                    activeIcon === '/signed-in'
+                                        ? { ...iconStyles, color: '#191919' }
+                                        : iconStyles
+                                }
                             />
                         }
                         text={'Home'}
                         destination={'/signed-in'}
-                        isActive={activeIcon}
-                        onClick={handleIconClick}
+                        isActive={activeIcon === '/signed-in'}
                     />
-
                     <HeaderIconButton
                         icon={
                             <PeopleAltIcon
-                                sx={activeIcon ? { ...iconStyles, color: '#191919' } : iconStyles}
+                                sx={
+                                    activeIcon === '/my-network'
+                                        ? { ...iconStyles, color: '#191919' }
+                                        : iconStyles
+                                }
                             />
                         }
                         text={'My Network'}
                         destination={'/my-network'}
-                        isActive={activeIcon}
-                        onClick={handleIconClick}
+                        isActive={activeIcon === '/my-network'}
                     />
                     <HeaderIconNotification
                         text={'Message'}
-                        icon={<SmsIcon sx={iconStyles} />}
+                        icon={
+                            <SmsIcon
+                                sx={
+                                    activeIcon === '/messages'
+                                        ? { ...iconStyles, color: '#191919' }
+                                        : iconStyles
+                                }
+                            />
+                        }
                         numberOfNotifications={10}
                         maxNotifications={9}
-                        isActive={activeIcon}
-                        onClick={handleIconClick}
+                        destination={'/messages'}
+                        isActive={activeIcon === '/messages'}
                     />
-
                     <HeaderIconButton
                         icon={
                             <WorkIcon
@@ -252,18 +267,23 @@ function Header() {
                         text={'Jobs'}
                         destination={''}
                         isActive={activeIcon}
-                        onClick={handleIconClick}
                     />
-
                     <HeaderIconNotification
                         text={'Notifications'}
-                        icon={<NotificationsIcon sx={iconStyles} />}
+                        icon={
+                            <NotificationsIcon
+                                sx={
+                                    activeIcon === '/notifications'
+                                        ? { ...iconStyles, color: '#191919' }
+                                        : iconStyles
+                                }
+                            />
+                        }
                         numberOfNotifications={100}
                         maxNotifications={99}
-                        isActive={activeIcon}
-                        onClick={handleIconClick}
+                        destination={'/notifications'}
+                        isActive={activeIcon === '/notifications'}
                     />
-
                     <Box
                         sx={{
                             [mobileScreen]: {

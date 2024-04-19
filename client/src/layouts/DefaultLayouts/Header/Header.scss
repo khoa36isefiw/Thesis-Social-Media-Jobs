@@ -1,7 +1,7 @@
 .header {
     position: fixed;
     top: 0;
-    height: 70px;
+    height: 80px;
     background: #fff;
     box-shadow: 4px 2px 1px rgba(0, 0, 0, 0.06);
     width: 100%;
@@ -22,10 +22,10 @@
     align-items: center;
     opacity: 0.95;
 }
-.nav__dir.active {
-    // background-color: aqua;
-    text-decoration: underline;
-}
+// .nav__dir.active {
+//     // background-color: aqua;
+//     text-decoration: underline;
+// }
 
 .active .MuiBadge-badge {
     opacity: 1;
@@ -56,8 +56,16 @@
     object-fit: cover;
 }
 
+.nav__dir .active {
+    border-bottom: 1px solid #333;
+}
+
+.active .text__btn {
+    font-weight: bold;
+}
+
 // resposive for mobile device
-@media only screen and (max-width: 48.1875em) {
+@media only screen and (max-width: 46.1875em) {
     .text__btn {
         display: none;
     }
