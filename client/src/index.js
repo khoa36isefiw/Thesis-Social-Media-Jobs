@@ -7,23 +7,23 @@ import reportWebVitals from './reportWebVitals';
 // import { theme } from './components/Theme/Theme';
 import { ThemeProvider } from '@mui/material';
 import { unstable_createMuiStrictModeTheme } from '@mui/material/styles';
-import { theme as customTheme } from './components/Theme/Theme';
-
-// Merge the custom theme with the Material-UI theme
-const mergedTheme = {
-    ...unstable_createMuiStrictModeTheme(),
-    ...customTheme,
-};
+import { theme } from './components/Theme/Theme';
 
 // const theme = unstable_createMuiStrictModeTheme();
+const mergeTheme = {
+    theme,
+    ...unstable_createMuiStrictModeTheme(),
+};
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
     <React.StrictMode>
-        <GlobalStyles>
-            <App />
-        </GlobalStyles>
+        <ThemeProvider theme={mergeTheme}>
+            <GlobalStyles>
+                <App />
+            </GlobalStyles>
+        </ThemeProvider>
     </React.StrictMode>,
 );
 
