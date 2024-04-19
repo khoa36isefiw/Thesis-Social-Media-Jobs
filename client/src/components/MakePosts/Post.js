@@ -7,6 +7,7 @@ import Like from '../../assets/images/like-no-color.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import CommentModal from './CommentModal';
+import { mobileScreen } from '../Theme/Theme';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -62,6 +63,10 @@ function Post({
                 borderRadius: '12px',
                 minHeight: '10vh',
                 mb: 2,
+                [mobileScreen]: {
+                    borderRadius: 0,
+                    mb: 1,
+                },
             }}
         >
             <Box sx={{ p: 2 }}>
