@@ -1,31 +1,38 @@
-import React, { useState } from 'react';
-import { Box, Button, Divider, IconButton, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, ThemeProvider, Typography } from '@mui/material';
 import { Container } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Advertising from '../../components/Advertising/Advertising';
 import Header from '../DefaultLayouts/Header/Header';
-import HiringCareer from '../../components/Advertising/HiringCareer';
-import { CustomizeBox } from '../../components/CustomizeBox/CustomizeBox';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
 import ManageMyNetwork from '../../components/ManageMyNetwork/ManageMyNetwork';
+import { mobileScreen, tabletScreen, theme } from '../../components/Theme/Theme';
+// const mobileScreen = '@media only screen and (max-width: 46.1875em)';
 
 function NetworkLayout({ children }) {
-    const [isExpended, setIsExpended] = useState(false);
-    const handleExpendMore = () => {
-        setIsExpended(!isExpended);
-    };
     return (
         <Box sx={{ backgroundColor: '#f3f2f0', minHeight: '100vh' }}>
             <Header />
-            <Container sx={{ mt: 12 }}>
+            <Container
+                sx={{
+                    mt: 12,
+                    [mobileScreen]: {
+                        px: 0,
+                    },
+                }}
+            >
                 <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                    <Grid item xs={5} md={3}>
+                    <Grid item xs={12} sm={5} md={4} lg={3}>
                         {/* Manage my network */}
                         <Box>
                             <ManageMyNetwork />
                         </Box>
-                        <Box sx={{ position: 'relative', mt: 2 }}>
+                        <Box
+                            sx={{
+                                position: 'relative',
+                                mt: 2,
+                            }}
+                        >
                             <Advertising />
                             <Typography
                                 sx={{
@@ -36,20 +43,22 @@ function NetworkLayout({ children }) {
                                     position: 'absolute',
                                     // top: '50%',
                                     width: '100%',
+                                    [mobileScreen]: {
+                                        py: 0,
+                                        mb: 4,
+                                    },
                                 }}
                             >
                                 Aikotoba Corporation &copy; 2023
                             </Typography>
                         </Box>
                     </Grid>
-                    <Grid item xs={7} md={9}>
+                    <Grid item xs={12} sm={7} md={8} lg={9}>
                         <Box sx={{ minHeight: '10vh', borderRadius: '24px' }}>
                             <Box>{children}</Box>
                         </Box>
                     </Grid>
                 </Grid>
-
-                {/* </Container> */}
             </Container>
         </Box>
     );
