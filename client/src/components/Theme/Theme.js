@@ -35,7 +35,8 @@ export const theme = createTheme({
 // const tabletScreen = '@media only screen between (min-width: 46.25em) and (max-width:63.9375em)';
 // const desktopScreen = '@media only screen and (min-width: 64em)';
 
-export const mobileScreen = `@media only screen and (max-width: ${theme.breakpoints.values.sm}px)`;
+// export const mobileScreen = `@media only screen and (max-width: ${theme.breakpoints.values.sm}px)`;
+export const mobileScreen = `@media only screen and (max-width: ${46.1875}em)`;
 export const tabletScreen = `@media only screen and (min-width: ${theme.breakpoints.values.md}px) and (max-width: ${theme.breakpoints.values.lg}px)`;
 export const ipadProScreen = `@media only screen and (max-width: ${theme.breakpoints.values.xl}px)`;
 export const desktopScreen = ` @media only screen and (min-width: ${theme.breakpoints.values.xl}px)`;
