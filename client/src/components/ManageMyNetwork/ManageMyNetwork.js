@@ -51,7 +51,7 @@ const listNetworks = [
         iconBtn: <PersonIcon sx={{ fontSize: '24px' }} />,
         pageName: 'Following & followers',
         numberOf: null,
-        targetTo: '#',
+        targetTo: '/my-network/people-follow/following',
     },
     {
         iconBtn: <ContactPageIcon sx={{ fontSize: '24px' }} />,
