@@ -22,7 +22,7 @@ function NetworkLayout({ children }) {
                 }}
             >
                 <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                    <Grid item xs={12} sm={5} md={4} lg={3}>
+                    <Grid item xs={12} sm={5} md={4} xl={3} lg={3}>
                         {/* Manage my network */}
                         <Box>
                             <ManageMyNetwork />
@@ -53,7 +53,7 @@ function NetworkLayout({ children }) {
                             </Typography>
                         </Box>
                     </Grid>
-                    <Grid item xs={12} sm={7} md={8} lg={9}>
+                    <Grid item xs={12} sm={7} md={8} xl={9} lg={9}>
                         <Box sx={{ minHeight: '10vh', borderRadius: '24px' }}>
                             <Box>{children}</Box>
                         </Box>

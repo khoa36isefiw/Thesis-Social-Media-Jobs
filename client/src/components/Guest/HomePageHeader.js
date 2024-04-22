@@ -1,136 +1,40 @@
-// import * as React from 'react';
-// import Divider from '@mui/material/Divider';
-// import { styled } from '@mui/material/styles';
-
-// import { Container, Box, IconButton, Typography, Button } from '@mui/material';
-// import logoWeb from '../../assets/images/aikotoba-job.png';
-// import { Link, useNavigate } from 'react-router-dom';
-// import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-// import WorkIcon from '@mui/icons-material/Work';
-// import ArticleIcon from '@mui/icons-material/Article';
-
-// function HomePageHeader() {
-//     const navigate = useNavigate();
-
-//     return (
-//         <Box className={`header_home`} sx={{ height: '40px' }}>
-//             <Container
-//                 sx={{
-//                     display: 'flex',
-//                     justifyContent: 'space-around',
-//                     alignItems: 'center',
-//                 }}
-//             >
-//                 <Box
-//                     sx={{
-//                         display: 'flex',
-//                         alignItems: 'center',
-//                         justifyContent: 'space-between',
-//                         flexGrow: 1,
-//                     }}
-//                 >
-//                     <Box sx={{ flexGrow: 1 }}>
-//                         <Link to="/">
-//                             <img src={logoWeb} alt="Logo Web" className="logo" />
-//                         </Link>
-//                     </Box>
-
-//                     {/* <TextField
-//                         id="outlined-basic"
-//                         variant="outlined"
-//                         inputRef={textFieldRef}
-//                         onFocus={handleTextFieldFocus}
-//                         onBlur={handleTextFieldBlur}
-//                         sx={{
-//                             color: 'black',
-//                             flexGrow: 2,
-//                             '.MuiInputBase-root': {
-//                                 fontSize: '16px',
-//                                 height: '40px',
-//                                 transition: 'width 0.3s',
-//                                 // expand with when textfield is clicked
-//                                 width: isTextFieldFocused ? '300px' : '200px',
-//                             },
-//                         }}
-//                         InputProps={{
-//                             startAdornment: (
-//                                 <InputAdornment position="start">
-//                                     <SearchIcon onClick={handleSearchIconClick} />
-//                                 </InputAdornment>
-//                             ),
-//                             classes: {
-//                                 notchedOutline: styles.notchedOutline,
-//                             },
-//                         }}
-//                     /> */}
-//                 </Box>
-//                 <Box
-//                     sx={{
-//                         display: 'flex',
-//                         justifyContent: 'space-between',
-//                         alignItems: 'center',
-//                         flexGrow: 1,
-//                     }}
-//                 >
-//                     <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
-//                         <IconButton className="icon__btn" disableTouchRipple>
-//                             <PeopleAltIcon sx={{ fontSize: '28px', color: '#666' }} />
-//                         </IconButton>
-//                         <Typography sx={{ fontSize: '12px' }}>My Network</Typography>
-//                     </Box>
-//                     <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
-//                         <IconButton className="icon__btn" disableTouchRipple>
-//                             <WorkIcon sx={{ fontSize: '28px', color: '#666' }} />
-//                         </IconButton>
-//                         <Typography sx={{ fontSize: '12px' }}>Jobs</Typography>
-//                     </Box>
-//                     <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
-//                         <IconButton className="icon__btn" disableTouchRipple>
-//                             <ArticleIcon sx={{ fontSize: '28px', color: '#666' }} />
-//                         </IconButton>
-//                         <Typography sx={{ fontSize: '12px' }}>Articles</Typography>
-//                     </Box>
-//                     <Divider
-//                         sx={{ height: '44px', width: '2px', mb: 1 }}
-//                         orientation="vertical"
-//                         color="#333"
-//                     />
-//                     <Link to="/sign-up" component="button">
-//                         <Typography sx={{ fontSize: '14px', color: '#333', fontWeight: 'bold' }}>
-//                             Join Now
-//                         </Typography>
-//                     </Link>
-//                     <Button variant="outlined" onClick={() => navigate('/sign-in')}>
-//                         <Typography
-//                             sx={{
-//                                 fontSize: '14px',
-//                                 color: 'blue',
-//                                 textTransform: 'capitalize',
-//                                 fontWeight: 'bold',
-//                             }}
-//                         >
-//                             Sign in
-//                         </Typography>
-//                     </Button>
-//                 </Box>
-//             </Container>
-//         </Box>
-//     );
-// }
-
-// export default HomePageHeader;
-
 import * as React from 'react';
 import Divider from '@mui/material/Divider';
-import { styled } from '@mui/material/styles';
 
-import { Container, Box, IconButton, Typography, Button } from '@mui/material';
+import { Container, Box, IconButton, Typography, Button, Avatar } from '@mui/material';
 import logoWeb from '../../assets/images/aikotoba-job.png';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import WorkIcon from '@mui/icons-material/Work';
 import ArticleIcon from '@mui/icons-material/Article';
+import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 
+const iconStyles = {
+    fontSize: '28px',
+    color: '#666',
+};
+const GuestHeaderIcon = ({ icon, content }) => {
+    return (
+        <Box
+            className="nav__dir"
+            sx={{
+                '&:hover': { fontWeight: 'bold' },
+                [mobileScreen]: { display: 'none' },
+                // [tabletScreen]: {
+                //     display: 'none',
+                // },
+                // [ipadProScreen]: {
+                //     display: 'none',
+                // },
+            }}
+        >
+            <IconButton className="icon__btn" disableTouchRipple>
+                {icon}
+            </IconButton>
+            <Typography sx={{ fontSize: '12px' }}>{content}</Typography>
+        </Box>
+    );
+};
 function HomePageHeader() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -145,6 +49,15 @@ function HomePageHeader() {
                     justifyContent: 'space-around',
                     alignItems: 'center',
                     mb: 4,
+                    [mobileScreen]: {
+                        mt: 2,
+                    },
+                    [tabletScreen]: {
+                        mt: 2,
+                    },
+                    [ipadProScreen]: {
+                        mt: 2,
+                    },
                 }}
             >
                 <Box
@@ -153,11 +66,27 @@ function HomePageHeader() {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         flexGrow: 1,
+                        [mobileScreen]: {
+                            width: '100%',
+                        },
                     }}
                 >
                     <Box sx={{ flexGrow: 1 }}>
                         <Link to="/">
-                            <img src={logoWeb} alt="Logo Web" className="logo" />
+                            <Avatar
+                                src={logoWeb}
+                                alt="Logo Web"
+                                className="logo"
+                                sx={{
+                                    borderRadius: 0,
+                                    width: '60px',
+                                    height: '60px',
+                                    [mobileScreen]: {
+                                        width: '50px',
+                                        height: '50px',
+                                    },
+                                }}
+                            />
                         </Link>
                     </Box>
                 </Box>
@@ -169,48 +98,89 @@ function HomePageHeader() {
                         flexGrow: 1,
                     }}
                 >
-                    <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
-                        <IconButton className="icon__btn" disableTouchRipple>
-                            <PeopleAltIcon sx={{ fontSize: '28px', color: '#666' }} />
-                        </IconButton>
-                        <Typography sx={{ fontSize: '12px' }}>My Network</Typography>
-                    </Box>
-                    <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
+                    {/* <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
                         <IconButton className="icon__btn" disableTouchRipple>
                             <WorkIcon sx={{ fontSize: '28px', color: '#666' }} />
                         </IconButton>
                         <Typography sx={{ fontSize: '12px' }}>Jobs</Typography>
-                    </Box>
-                    <Box className="nav__dir" sx={{ '&:hover': { fontWeight: 'bold' } }}>
-                        <IconButton className="icon__btn" disableTouchRipple>
-                            <ArticleIcon sx={{ fontSize: '28px', color: '#666' }} />
-                        </IconButton>
-                        <Typography sx={{ fontSize: '12px' }}>Articles</Typography>
-                    </Box>
+                    </Box> */}
+                    <GuestHeaderIcon
+                        icon={<PeopleAltIcon sx={{ ...iconStyles }} />}
+                        content="My Network"
+                    />
+
+                    <GuestHeaderIcon icon={<WorkIcon sx={{ ...iconStyles }} />} content="Jobs" />
+                    <GuestHeaderIcon
+                        icon={<ArticleIcon sx={{ ...iconStyles }} />}
+                        content="Articles"
+                    />
+
                     <Divider
-                        sx={{ height: '44px', width: '2px', mb: 1 }}
+                        sx={{
+                            height: '44px',
+                            width: '2px',
+                            mb: 1,
+                            [mobileScreen]: {
+                                display: 'none',
+                            },
+                            // [tabletScreen]: {
+                            //     display: 'none',
+                            // },
+                            // [ipadProScreen]: {
+                            //     display: 'none',
+                            // },
+                        }}
                         orientation="vertical"
                         color="#333"
                     />
-                    <Link to="/sign-up" component="button">
-                        <Typography sx={{ fontSize: '14px', color: '#333', fontWeight: 'bold' }}>
-                            Join Now
-                        </Typography>
-                    </Link>
-                    {/* <Button variant="outlined" onClick={() => navigate('/sign-in')}>
-                     */}
-                    <Button variant="outlined" onClick={() => navigate('/signed-in')}>
-                        <Typography
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Link to="/sign-up" component="button">
+                            <Typography
+                                sx={{
+                                    fontSize: '16px',
+                                    color: '#333',
+                                    fontWeight: 'bold',
+                                    width: '100px',
+                                }}
+                            >
+                                Join Now
+                            </Typography>
+                        </Link>
+                        {/* <Button variant="outlined" onClick={() => navigate('/sign-in')}>
+                         */}
+                        <Button
+                            variant="outlined"
+                            onClick={() => navigate('/signed-in')}
                             sx={{
-                                fontSize: '14px',
-                                color: 'blue',
-                                textTransform: 'capitalize',
-                                fontWeight: 'bold',
+                                [mobileScreen]: {
+                                    borderRadius: '24px',
+                                    width: '100px',
+                                },
+                                [tabletScreen]: {
+                                    borderRadius: '24px',
+                                },
+                                [ipadProScreen]: {
+                                    borderRadius: '24px',
+                                },
                             }}
                         >
-                            Sign in
-                        </Typography>
-                    </Button>
+                            <Typography
+                                sx={{
+                                    fontSize: '16px',
+                                    color: 'blue',
+                                    textTransform: 'capitalize',
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                Sign in
+                            </Typography>
+                        </Button>
+                    </Box>
                 </Box>
             </Container>
         </Box>

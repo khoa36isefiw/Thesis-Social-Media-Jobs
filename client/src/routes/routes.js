@@ -20,6 +20,7 @@ import NetworkLayout from '../layouts/NetworkLayout/NetworkLayout';
 import MyNetwork from '../components/MyNetwork/MyNetwork';
 import MyConnections from '../components/MyConnections/MyConnections';
 import ManageMyNetworkLayout from '../layouts/ManageMyNetworkLayout/ManageMyNetworkLayout';
+import FollowingAndFollowers from '../components/FollowingAndFollowers/FollowingAndFollowers';
 
 // not sign into this website
 const publicRoutes = [
@@ -51,6 +52,11 @@ const privateRoutes = [
     {
         path: '/my-network/connections',
         component: MyConnections,
+        layout: ManageMyNetworkLayout,
+    },
+    {
+        path: '/my-network/people-follow/following',
+        component: FollowingAndFollowers,
         layout: ManageMyNetworkLayout,
     },
     { path: '/user/recent-activity/all', component: ShowUserActivity, layout: UserActivityLayout },
