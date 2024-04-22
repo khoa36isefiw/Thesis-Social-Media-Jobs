@@ -19,12 +19,12 @@ function ManageMyNetworkLayout({ children }) {
                 }}
             >
                 <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                    <Grid item xs={12} md={8}>
+                    <Grid item xs={12} sm={7} md={8}>
                         <Box sx={{ minHeight: '10vh', borderRadius: '24px' }}>
                             <Box>{children}</Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} sm={5} md={4}>
                         {/* Manage my network */}
                         <Box sx={{ position: 'relative' }}>
                             <Advertising />

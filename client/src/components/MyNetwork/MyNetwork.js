@@ -12,7 +12,17 @@ import {
 } from '@mui/material';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { desktopScreen, ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
+import {
+    desktopScreen,
+    extraSmallMobileScreenEm,
+    ipadProScreen,
+    ipadProScreenEm,
+    mobileScreen,
+    moblieScreenEm,
+    tabletScreen,
+    tabletScreenEm,
+    theme,
+} from '../Theme/Theme';
 const suggestedLists = [
     {
         userImage:
@@ -106,51 +116,20 @@ function MyNetwork() {
                         See More
                     </Button>
                 </Box>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        justifyContent: 'flex-start',
-                        [mobileScreen]: {
-                            justifyContent: 'space-between',
-                        },
-                        [tabletScreen]: {
-                            justifyContent: 'space-between',
-                        },
-                        [ipadProScreen]: {
-                            justifyContent: 'space-between',
-                        },
-                        alignItems: 'center',
-                    }}
-                >
+                <Grid container spacing={2}>
                     {suggestedLists.map((user, index) => (
-                        <Box
-                            sx={{
-                                height: '290px',
-                                width: '190px',
-                                border: '1px solid #d9d9d9',
-                                borderRadius: '8px',
-                                textAlign: 'center',
-                                m: 1,
-                                cursor: 'pointer',
-                                [mobileScreen]: {
-                                    width: '170px',
-                                    m: '1px',
-                                    mb: 1,
-                                },
-                                [tabletScreen]: {
-                                    width: '180px',
-                                    mx: '1px',
-                                },
-                                [ipadProScreen]: {
-                                    mx: '1px',
-                                },
-                            }}
-                        >
-                            {/* default background image */}
-                            <Box>
+                        <Grid item key={index} xs={6} sm={6} md={6} lg={4} xl={3}>
+                            <Box
+                                sx={{
+                                    height: '290px',
+                                    border: '1px solid #d9d9d9',
+                                    borderRadius: '8px',
+                                    textAlign: 'center',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                {/* default background image */}
                                 <Avatar
-                                    key={index}
                                     src={DefaultBackgroundImage}
                                     alt="Default User Background Image"
                                     sx={{
@@ -163,7 +142,15 @@ function MyNetwork() {
                                         borderTopRightRadius: '8px',
                                     }}
                                 />
-                                <Box sx={{ mb: '50px', px: 2 }}>
+                                <Box
+                                    sx={{
+                                        mb: '50px',
+                                        px: 2,
+                                        [mobileScreen]: {
+                                            px: 0,
+                                        },
+                                    }}
+                                >
                                     <Avatar
                                         src={user.userImage}
                                         alt="Default User Background Image"
@@ -192,119 +179,43 @@ function MyNetwork() {
                                         {user.userName}
                                     </Typography>
                                     {/* position */}
-                                    <Typography sx={{ fontSize: '14px', color: '#0009' }}>
-                                        {/* Backend Developer */}
-                                        {user.userPosition}
-                                    </Typography>
-                                    <Typography sx={{ fontSize: '12px', color: '#0009' }}>
-                                        Based on your profile
-                                    </Typography>
-                                </Box>
-                                <Button
-                                    variant="outlined"
-                                    sx={{ padding: '8px 28px', borderRadius: '24px' }}
-                                    startIcon={<PersonAddIcon />}
-                                >
-                                    Connect
-                                </Button>
-                            </Box>
-                        </Box>
-                    ))}
-                </Box>
-
-                <Box
-                    sx={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(4, 4fr)',
-                        [mobileScreen]: {
-                            gridTemplateColumns: 'repeat(2, 4fr)',
-                        },
-                        [tabletScreen]: {},
-                        [ipadProScreen]: {},
-                    }}
-                >
-                    {suggestedLists.map((user, index) => (
-                        <Box
-                            key={index}
-                            sx={{
-                                [mobileScreen]: {
-                                    // gridTemplateColumns: 'repeat(2, 4fr)',
-                                    // width: '165px',
-                                },
-                                [tabletScreen]: {},
-                                [ipadProScreen]: {},
-                                height: '290px',
-                                width: '180px',
-                                border: '1px solid #d9d9d9',
-                                borderRadius: '8px',
-                                textAlign: 'center',
-                                cursor: 'pointer',
-                                my: 1,
-                            }}
-                        >
-                            {/* default background image */}
-                            <Box>
-                                <Avatar
-                                    src={DefaultBackgroundImage}
-                                    alt="Default User Background Image"
-                                    sx={{
-                                        height: '72px',
-                                        width: '100%',
-                                        borderRadius: 0,
-                                        objectFit: 'cover',
-                                        position: 'relative',
-                                        borderTopLeftRadius: '8px',
-                                        borderTopRightRadius: '8px',
-                                    }}
-                                />
-                                <Box sx={{ mb: '50px', px: 2 }}>
-                                    <Avatar
-                                        src={user.userImage}
-                                        alt="Default User Background Image"
-                                        sx={{
-                                            height: '96px',
-                                            width: '96px',
-                                            objectFit: 'cover',
-                                            border: '4px solid white',
-                                            mx: 'auto',
-                                            mt: '-42px',
-                                            zIndex: 2,
-                                        }}
-                                    />
-                                    {/* name */}
                                     <Typography
                                         sx={{
-                                            fontSize: '16px',
-                                            color: '#404040',
-                                            fontWeight: 'bold',
-                                            '&:hover': {
-                                                textDecoration: 'underline',
+                                            fontSize: '14px',
+                                            color: '#0009',
+                                            [mobileScreen]: {
+                                                fontSize: '12px',
                                             },
                                         }}
                                     >
-                                        {/* Luan Zoro */}
-                                        {user.userName}
-                                    </Typography>
-                                    {/* position */}
-                                    <Typography sx={{ fontSize: '14px', color: '#0009' }}>
                                         {/* Backend Developer */}
                                         {user.userPosition}
                                     </Typography>
-                                    <Typography sx={{ fontSize: '12px', color: '#0009' }}>
+                                </Box>
+                                <Box>
+                                    <Typography
+                                        sx={{
+                                            fontSize: '12px',
+                                            color: '#0009',
+                                            [mobileScreen]: {
+                                                fontSize: '10px',
+                                            },
+                                        }}
+                                    >
                                         Based on your profile
                                     </Typography>
+                                    <Button
+                                        variant="outlined"
+                                        sx={{ padding: '8px 28px', borderRadius: '24px', mt: 1 }}
+                                        startIcon={<PersonAddIcon />}
+                                    >
+                                        Connect
+                                    </Button>
                                 </Box>
-                                <Button
-                                    variant="outlined"
-                                    sx={{ padding: '8px 28px', borderRadius: '24px' }}
-                                    startIcon={<PersonAddIcon />}
-                                >
-                                    Connect
-                                </Button>
                             </Box>
-                        </Box>
+                        </Grid>
                     ))}
-                </Box>
+                </Grid>
             </CustomizeBox>
         </ThemeProvider>
     );

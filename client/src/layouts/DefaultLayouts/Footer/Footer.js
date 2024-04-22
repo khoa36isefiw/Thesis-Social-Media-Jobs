@@ -1,20 +1,6 @@
-import React, { useState } from 'react';
-import {
-    Box,
-    Typography,
-    Link,
-    Avatar,
-    Button,
-    IconButton,
-    Modal,
-    Popover,
-    Popper,
-    Paper,
-    Fade,
-} from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
+import React from 'react';
+import { Box, Typography, Link, Button, IconButton, Popper, Paper, Fade } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
-
 import FPTCop from '../../../assets/images/fpt_logo.png';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
@@ -27,7 +13,7 @@ function Footer() {
         <Box>
             <Box
                 sx={{
-                    miheight: '30vh',
+                    minHeight: '30vh',
                     width: '100%',
                     backgroundColor: '#fff',
                     borderRadius: '13px',
@@ -35,7 +21,6 @@ function Footer() {
                     boxShadow: '4px 8px 4px #d9d9d9',
                     mb: 2,
                     p: 1,
-
                     [mobileScreen]: {
                         borderRadius: 0,
                     },

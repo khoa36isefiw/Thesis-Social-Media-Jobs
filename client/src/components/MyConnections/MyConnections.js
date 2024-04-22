@@ -13,7 +13,7 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { mobileScreen, tabletScreen, theme } from '../Theme/Theme';
+import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import WestIcon from '@mui/icons-material/West';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -21,6 +21,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { blue } from '@mui/material/colors';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const sortLists = ['Recently added', 'First name', 'Last name'];
 const listConnections = [
@@ -68,7 +69,6 @@ function MyConnections() {
     };
     const handleMoreMenuClick = (event) => {
         setMoreMenuAnchorEl(event.currentTarget);
-        console.log('Test mobile: ', isMobile);
     };
     const handleSortMenuClose = () => {
         setSortMenuAnchorEl(null);
@@ -84,7 +84,7 @@ function MyConnections() {
 
     //choose the screen size
     const handleResize = () => {
-        if (window.innerWidth <= 739) {
+        if (window.innerWidth <= 599) {
             setIsMobile(true);
         } else {
             setIsMobile(false);
@@ -106,19 +106,35 @@ function MyConnections() {
                 },
             }}
         >
-            <Box sx={{ p: 2 }}>
+            <Box
+                sx={{
+                    p: 2,
+                }}
+            >
                 {/* Number of connections */}
 
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{}}>
                     {/* back to previous step */}
                     {isMobile ? (
-                        <IconButton>
-                            <WestIcon sx={{ fontSize: '24px' }} />
-                        </IconButton>
-                    ) : null}
-                    <Typography sx={{ color: theme.palette.normalText, fontSize: '16px' }}>
-                        2 connections
-                    </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', ml: -1 }}>
+                            <IconButton>
+                                <WestIcon sx={{ fontSize: '24px' }} />
+                            </IconButton>
+                            <Typography
+                                sx={{
+                                    color: theme.palette.normalText,
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                Connections
+                            </Typography>
+                        </Box>
+                    ) : (
+                        <Typography sx={{ color: theme.palette.normalText, fontSize: '16px' }}>
+                            2 connections
+                        </Typography>
+                    )}
                 </Box>
                 {/* sorted */}
                 <Box
@@ -128,6 +144,11 @@ function MyConnections() {
                             flexDirection: 'column',
                             alignItems: 'flex-start',
                         },
+                        [tabletScreen]: {
+                            flexDirection: 'column',
+                            alignItems: 'start',
+                        },
+
                         justifyContent: 'space-between',
                         alignItems: 'center',
                     }}
@@ -234,6 +255,11 @@ function MyConnections() {
                                     textDecoration: 'underline',
                                     cursor: 'pointer',
                                 },
+
+                                [mobileScreen]: {
+                                    ml: 2,
+                                    fontSize: '12.5px',
+                                },
                             }}
                         >
                             Search with filters
@@ -267,6 +293,14 @@ function MyConnections() {
                                     [mobileScreen]: {
                                         height: '50px',
                                         width: '50px',
+                                    },
+                                    [tabletScreen]: {
+                                        height: '60px',
+                                        width: '60px',
+                                    },
+                                    [ipadProScreen]: {
+                                        height: '70px',
+                                        width: '70px',
                                     },
                                 }}
                             >
@@ -371,6 +405,7 @@ function MyConnections() {
                             >
                                 Message
                             </Button>
+
                             <IconButton onClick={handleMoreMenuClick}>
                                 <MoreHorizIcon sx={{ fontSize: '24px' }} />
                             </IconButton>
