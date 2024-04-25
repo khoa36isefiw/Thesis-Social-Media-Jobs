@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Avatar, Box, Button, Container, Divider, Grid, Tab, Typography } from '@mui/material';
+import {
+    Avatar,
+    Box,
+    Button,
+    Container,
+    Divider,
+    Grid,
+    Tab,
+    Typography,
+    mobileStepperClasses,
+} from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -10,7 +20,14 @@ import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme
 
 function FollowingAndFollowers() {
     return (
-        <CustomizeBox sx={{ p: 0 }}>
+        <CustomizeBox
+            sx={{
+                padding: 0,
+                [mobileScreen]: {
+                    borderRadius: 0,
+                },
+            }}
+        >
             <CustomizeTypography sx={{ p: 2 }}>Your Name's Network</CustomizeTypography>
             <Divider />
             <LabTabs />
@@ -70,10 +87,10 @@ function LabTabs() {
                         />
                     </TabList>
                 </Box>
-                <TabPanel value="following">
+                <TabPanel value="following" sx={{ p: 2 }}>
                     <IsFollowing />
                 </TabPanel>
-                <TabPanel value="followers">
+                <TabPanel value="followers" sx={{ p: 2 }}>
                     <YourFollowers />
                 </TabPanel>
             </TabContext>
@@ -230,6 +247,22 @@ function IsFollowing() {
                     )}
                 </Box>
             ))}
+            <Button
+                variant="outlined"
+                fullWidth
+                sx={{
+                    textTransform: 'initial',
+                    borderRadius: '24px',
+                    borderColor: '#404040',
+                    color: '#404040',
+                    fontSize: '14px',
+                    [mobileScreen]: {
+                        fontSize: '12px',
+                    },
+                }}
+            >
+                Show more results
+            </Button>
         </Box>
     );
 }
@@ -379,3 +412,5 @@ function YourFollowers() {
         </Box>
     );
 }
+
+//dating many people doesn't mean you're beautiful. A cheap product attracts many customers

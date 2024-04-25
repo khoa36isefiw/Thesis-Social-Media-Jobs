@@ -37,6 +37,9 @@ function ManageMyNetworkLayout({ children }) {
                                     position: 'absolute',
                                     // top: '50%',
                                     width: '100%',
+                                    [mobileScreen]: {
+                                        mt: -2,
+                                    },
                                 }}
                             >
                                 Aikotoba Corporation &copy; 2023
