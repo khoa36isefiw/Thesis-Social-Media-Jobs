@@ -7,6 +7,7 @@ export const theme = createTheme({
         headerTextColor: '#0009',
         normalText: '#404040',
         detailTextColor: '#2196f3',
+        bgButtonHover: '#eeeeee',
     },
     breakpoints: {
         // values: {
@@ -44,8 +45,9 @@ export const mobileScreen = `@media only screen and (max-width: ${theme.breakpoi
 export const tabletScreen = `@media only screen and (min-width: ${theme.breakpoints.values.md}px) and (max-width: ${theme.breakpoints.values.lg}px)`;
 // const numForIpadPro = theme.breakpoints.values.lg - 1;
 // console.log('Ahiahi: ', numForTablet);
-console.log('tabletScreen: ', tabletScreen);
+// console.log('tabletScreen: ', tabletScreen);
 
+// put this size in the first when make responsive
 export const ipadProScreen = `@media only screen and (max-width: ${
     theme.breakpoints.values.xl - 1
 }px)`;
