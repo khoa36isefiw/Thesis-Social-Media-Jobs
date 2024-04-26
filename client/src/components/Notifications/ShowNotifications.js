@@ -18,6 +18,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 
 import NorthIcon from '@mui/icons-material/North';
+import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 
 // notifications were seen - old notifications
 const notificationsSeen = [
@@ -50,7 +51,7 @@ const notificationsSeen = [
         userImgUrl: 'https://cdn.mos.cms.futurecdn.net/FRdq8ZbPetwNDRV9R3hYpP-320-80.jpg',
         userName: 'Macbook',
         notificationTitle:
-            "I'm a new person. Which laptop should I choose to study? MacOS or Windows?",
+            "I'm a new person. Which laptop should I choose to study? MacOS or Windows?, I'm a new person. Which laptop should I choose to study? MacOS or Windows?I'm a MacOS or WindowsI'm a new person. Which laptop should I choose to study? MacOS or Windows?, I'm a new person. Which laptop should I choose to study? MacOS or Windows?I'm a MacOS or Windows ",
         userPosition: 'CEO of Marketing',
         timePosted: '1d',
         status: false,
@@ -62,9 +63,12 @@ const notificationsSeen = [
 // define constant
 
 const moreActions = [
-    { icon: <DeleteForeverIcon sx={{ fontSize: '20px' }} />, actionText: 'Delete notification' },
     {
-        icon: <NotificationsOffIcon sx={{ fontSize: '20px' }} />,
+        icon: <DeleteForeverIcon sx={{ fontSize: '20px', color: '#191919' }} />,
+        actionText: 'Delete notification',
+    },
+    {
+        icon: <NotificationsOffIcon sx={{ fontSize: '20px', color: '#191919' }} />,
         actionText: 'Turn off this notification',
     },
 ];
@@ -73,8 +77,12 @@ const CustomizeNotificationsTypography = styled(Typography)(({ fs, fw = false })
     fontSize: fs || '14px',
     fontWeight: fw ? 'bold' : 'normal',
     color: 'text.primary',
+    // maxWidth: '600px',
+    // textOverflow: 'ellipsis',
 }));
+
 function ShowNotifications() {
+    // console.log('Check Length of the String: ', TextString.length);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -93,6 +101,9 @@ function ShowNotifications() {
                     backgroundColor: '#fff',
                     width: '100%',
                     position: 'relative',
+                    [mobileScreen]: {
+                        borderRadius: 0,
+                    },
                 }}
             >
                 <Box sx={{ position: 'relative' }}>
@@ -113,6 +124,16 @@ function ShowNotifications() {
                                         '&:hover': {
                                             backgroundColor: blue[200],
                                         },
+                                        [ipadProScreen]: {
+                                            px: 1,
+                                        },
+                                        [mobileScreen]: {
+                                            borderRadius: 0,
+                                            px: 0,
+                                        },
+                                        [tabletScreen]: {
+                                            px: 1,
+                                        },
                                     }}
                                     key={index}
                                 >
@@ -123,8 +144,13 @@ function ShowNotifications() {
                                             borderRadius: '50%',
                                             bgcolor: blue[800],
                                             mr: 1,
+                                            [mobileScreen]: {
+                                                height: '10px',
+                                                width: '12px',
+                                                // borderRadius: '50%',
+                                            },
                                         }}
-                                    ></Box>
+                                    />
                                     <Avatar
                                         src={notification.userImgUrl}
                                         alt="User Avatar"
@@ -136,13 +162,39 @@ function ShowNotifications() {
                                             '&:hover': {
                                                 cursor: 'pointer',
                                             },
+                                            [mobileScreen]: {
+                                                width: 48,
+                                                height: 48,
+                                            },
                                         }}
                                     />
                                     <Box sx={{ flexGrow: 1, ml: 1 }}>
-                                        <CustomizeNotificationsTypography fs={16} fw={true}>
+                                        <CustomizeNotificationsTypography
+                                            fs={16}
+                                            fw={true}
+                                            sx={{
+                                                [ipadProScreen]: { fontSize: '15px' },
+                                                [mobileScreen]: {
+                                                    fontSize: '14px',
+                                                },
+                                                [tabletScreen]: {
+                                                    fontSize: '14px',
+                                                },
+                                            }}
+                                        >
                                             {notification.userName}
                                         </CustomizeNotificationsTypography>
-                                        <CustomizeNotificationsTypography>
+                                        <CustomizeNotificationsTypography
+                                            sx={{
+                                                [ipadProScreen]: { fontSize: '15px' },
+                                                [mobileScreen]: {
+                                                    fontSize: '14px',
+                                                },
+                                                [tabletScreen]: {
+                                                    fontSize: '14px',
+                                                },
+                                            }}
+                                        >
                                             {notification.notificationTitle}
                                         </CustomizeNotificationsTypography>
                                     </Box>
@@ -155,6 +207,13 @@ function ShowNotifications() {
                                             justifyContent: 'space-between',
                                             padding: '10px',
                                             mr: 2,
+                                            [ipadProScreen]: {
+                                                // mr: 1,
+                                            },
+                                            [mobileScreen]: {
+                                                mr: 1,
+                                            },
+                                            [tabletScreen]: { mr: 0 },
                                         }}
                                     >
                                         <Typography>{notification.timePosted}</Typography>
@@ -205,6 +264,15 @@ function ShowNotifications() {
                                                     ? '12px'
                                                     : '0',
                                         },
+                                        [ipadProScreen]: {
+                                            px: 3,
+                                        },
+                                        [mobileScreen]: {
+                                            px: 2,
+                                        },
+                                        [tabletScreen]: {
+                                            px: 3,
+                                        },
                                     }}
                                     key={index}
                                 >
@@ -213,21 +281,70 @@ function ShowNotifications() {
                                         alt="User Avatar"
                                         sx={{
                                             zIndex: 4,
-                                            border: '4px solid #fff',
+                                            // border: '4px solid #fff',
                                             width: 64,
                                             height: 64,
                                             '&:hover': {
                                                 cursor: 'pointer',
                                             },
+                                            [mobileScreen]: {
+                                                width: 48,
+                                                height: 48,
+                                            },
                                         }}
                                     />
-                                    <Box sx={{ flexGrow: 1, ml: 1 }}>
-                                        <CustomizeNotificationsTypography fs={16} fw={true}>
+                                    {/* <Box
+                                        sx={{
+                                            flexGrow: 1,
+                                            ml: 1,
+
+                                            textOverflow: 'ellipsis',
+                                            overflow: 'hidden',
+                                        }}
+                                    >
+                                        <CustomizeNotificationsTypography
+                                            fs={16}
+                                            fw={true}
+                                            sx={{
+                                                [mobileScreen]: {
+                                                    fontSize: '14px',
+                                                },
+                                            }}
+                                        >
                                             {notification.userName}
                                         </CustomizeNotificationsTypography>
-                                        <CustomizeNotificationsTypography>
+                                        <CustomizeNotificationsTypography
+                                        // sx={{ textOverflow: 'ellipsis' }}
+                                        >
                                             {notification.notificationTitle}
                                         </CustomizeNotificationsTypography>
+                                    </Box> */}
+                                    <Box
+                                        sx={{
+                                            flexGrow: 1,
+                                            ml: 1,
+                                            overflow: 'hidden',
+                                            // display: '-webkit-box',
+                                            // WebkitLineClamp: 2,
+                                            // WebkitBoxOrient: 'vertical',
+                                            whiteSpace: 'normal',
+                                        }}
+                                    >
+                                        <CustomizeNotificationsTypography
+                                            fs={16}
+                                            fw={true}
+                                            sx={{ [mobileScreen]: { fontSize: '14px' } }}
+                                        >
+                                            {notification.userName}
+                                        </CustomizeNotificationsTypography>
+                                        {/* <CustomizeNotificationsTypography>
+                                            {notification.notificationTitle}
+                                        </CustomizeNotificationsTypography> */}
+
+                                        <TruncateText
+                                            text={notification.notificationTitle}
+                                            maxLines={2}
+                                        />
                                     </Box>
 
                                     <Box
@@ -237,6 +354,8 @@ function ShowNotifications() {
                                             alignItems: 'center',
                                             justifyContent: 'space-between',
                                             padding: '10px',
+                                            [mobileScreen]: { mr: -1 },
+                                            [tabletScreen]: { mr: -2 },
                                         }}
                                     >
                                         <Typography>{notification.timePosted}</Typography>
@@ -299,14 +418,32 @@ function ShowNotifications() {
                 MenuListProps={{
                     'aria-labelledby': 'basic-button',
                 }}
-                sx={{ ml: -12 }}
+                sx={{
+                    ml: -18,
+                    [ipadProScreen]: {
+                        ml: 0,
+                    },
+                    [mobileScreen]: {
+                        ml: 0,
+                    },
+                    [tabletScreen]: {
+                        ml: 0,
+                    },
+                }}
             >
-                <MenuList>
+                <MenuList
+                    sx={{
+                        py: 0,
+                        [mobileScreen]: {
+                            py: 0,
+                        },
+                    }}
+                >
                     {moreActions.map((action, index) => (
                         <MenuItem key={index} onClick={handleClose}>
                             <ListItemIcon>{action.icon}</ListItemIcon>
                             <ListItemText>
-                                <Typography sx={{ fontSize: '13px' }}>
+                                <Typography sx={{ fontSize: '14px', color: '#191919' }}>
                                     {action.actionText}
                                 </Typography>
                             </ListItemText>
@@ -319,3 +456,48 @@ function ShowNotifications() {
 }
 
 export default ShowNotifications;
+
+// check lại chỗ này
+function TruncateText({ text, maxLines }) {
+    const truncateText = (text, maxLines) => {
+        const words = text.split(' ');
+        let truncatedText = '';
+        let lineCount = 0;
+        let maxStringLength = 60;
+        // maxLength for mobile and other device
+        if (window.innerWidth < 739) {
+            // for mobile device
+            maxStringLength = 60;
+        } else {
+            // for other devices
+            maxStringLength = 150;
+        }
+
+        console.log(maxStringLength);
+        for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            if (lineCount < maxLines) {
+                if (truncatedText.length + word.length <= maxStringLength) {
+                    // Điều chỉnh độ dài tối đa của văn bản
+                    truncatedText += word + ' ';
+                } else {
+                    truncatedText += '...';
+                    break;
+                }
+                if (word.includes('\n')) {
+                    lineCount++;
+                }
+            } else {
+                truncatedText += '...';
+                break;
+            }
+        }
+        return truncatedText;
+    };
+
+    return (
+        <CustomizeNotificationsTypography>
+            {truncateText(text, maxLines)}
+        </CustomizeNotificationsTypography>
+    );
+}

@@ -4,6 +4,7 @@ import { green } from '@mui/material/colors';
 import ShowNotifications from './ShowNotifications';
 import NoActivity from '../../assets/images/tele-removebg-preview.png';
 import { useNavigate } from 'react-router-dom';
+import { mobileScreen } from '../Theme/Theme';
 
 const CustomFilterNotifications = () => {
     const [activeButton, setActiveButton] = useState('All');
@@ -16,12 +17,19 @@ const CustomFilterNotifications = () => {
         <Box>
             <Box
                 sx={{
+                    display: 'flex',
+                    alignItems: 'center',
                     border: '1px solid #d9d9d9',
                     width: '100%',
                     p: 1,
                     borderRadius: '12px',
                     bgcolor: '#fff',
                     mb: 3,
+                    minHeight: '50px',
+                    [mobileScreen]: {
+                        borderRadius: 0,
+                        // p: 1,
+                    },
                 }}
             >
                 <FilterButton
@@ -76,23 +84,59 @@ const MyPostsLayout = () => {
                 alignItems: 'center',
                 border: '1px solid #d9d9d9',
                 p: 1,
+                [mobileScreen]: {
+                    borderRadius: 0,
+                    paddingLeft: 0,
+                },
             }}
         >
             <Avatar
                 src={NoActivity}
                 alt="No Activity"
-                sx={{ height: '400px', width: '400px', borderRadius: '0px' }}
+                sx={{
+                    height: '400px',
+                    width: '400px',
+                    borderRadius: '0px',
+                    [mobileScreen]: { objectFit: 'cover', with: '250px', height: '250px' },
+                }}
             />
-            <CustomizeText fs="24px" fw={true} sx={{ mt: '-20px' }}>
+            <CustomizeText
+                fs="24px"
+                fw={true}
+                sx={{
+                    mt: '-20px',
+                    [mobileScreen]: {
+                        fontSize: '16px',
+                        mt: 1,
+                    },
+                }}
+            >
                 No new post activities
             </CustomizeText>
-            <CustomizeText>View your previous post activity on your profile</CustomizeText>
+            <CustomizeText
+                sx={{
+                    [mobileScreen]: {
+                        fontSize: '14px',
+                    },
+                }}
+            >
+                View your previous post activity on your profile
+            </CustomizeText>
             <Button
                 variant="outlined"
                 sx={{ borderRadius: '24px', mt: 2, mb: 2 }}
                 onClick={() => navigate('/user-profile')}
             >
-                <CustomizeText sx={{ textTransform: 'initial', px: 2 }} fw={true}>
+                <CustomizeText
+                    sx={{
+                        textTransform: 'initial',
+                        px: 2,
+                        [mobileScreen]: {
+                            fontSize: '14px',
+                        },
+                    }}
+                    fw={true}
+                >
                     View previous activity
                 </CustomizeText>
             </Button>
