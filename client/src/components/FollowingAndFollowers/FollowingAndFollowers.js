@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Avatar,
     Box,
@@ -38,7 +38,7 @@ function FollowingAndFollowers() {
 export default FollowingAndFollowers;
 
 function LabTabs() {
-    const [value, setValue] = React.useState('following');
+    const [value, setValue] = useState('following');
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -52,7 +52,7 @@ function LabTabs() {
                         <Tab
                             sx={{
                                 '&:hover': {
-                                    backgroundColor: '#cecece',
+                                    backgroundColor: '#b7b5b5',
                                 },
                             }}
                             label={
@@ -87,10 +87,10 @@ function LabTabs() {
                         />
                     </TabList>
                 </Box>
-                <TabPanel value="following" sx={{ p: 2 }}>
+                <TabPanel value="following" sx={{ p: 2, [mobileScreen]: { p: 0 } }}>
                     <IsFollowing />
                 </TabPanel>
-                <TabPanel value="followers" sx={{ p: 2 }}>
+                <TabPanel value="followers" sx={{ p: 2, [mobileScreen]: { p: 0 } }}>
                     <YourFollowers />
                 </TabPanel>
             </TabContext>
@@ -120,9 +120,33 @@ const listIsFollowing = [
 ];
 
 function IsFollowing() {
+    // check the screen of device if it is mobile
+    // const [isMobile, setIsMobile] = useState(false);
+    // //choose the screen size
+    // const handleResize = () => {
+    //     if (window.innerWidth <= 599) {
+    //         setIsMobile(true);
+    //     } else {
+    //         setIsMobile(false);
+    //     }
+    // };
+
+    // // create an event listener
+    // useEffect(() => {
+    //     window.addEventListener('resize', handleResize);
+    // });
+
     return (
         <Box>
-            <CustomizeTypography fs="14px">
+            <CustomizeTypography
+                fs="14px"
+                sx={{
+                    [mobileScreen]: {
+                        px: 2,
+                        pt: 2,
+                    },
+                }}
+            >
                 You are following 3 people out of your network
             </CustomizeTypography>
             {/* image, name, position, buton is following */}
@@ -135,12 +159,16 @@ function IsFollowing() {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             py: 2,
+                            [mobileScreen]: {
+                                p: 2,
+                            },
                         }}
                     >
                         <Box
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
+                                justifyContent: 'center',
                             }}
                         >
                             <Box
@@ -148,6 +176,10 @@ function IsFollowing() {
                                     height: '60px',
                                     width: '60px',
                                     position: 'relative',
+                                    [ipadProScreen]: {
+                                        height: '70px',
+                                        width: '70px',
+                                    },
                                     [mobileScreen]: {
                                         height: '50px',
                                         width: '50px',
@@ -155,10 +187,6 @@ function IsFollowing() {
                                     [tabletScreen]: {
                                         height: '60px',
                                         width: '60px',
-                                    },
-                                    [ipadProScreen]: {
-                                        height: '70px',
-                                        width: '70px',
                                     },
                                 }}
                             >
@@ -173,12 +201,21 @@ function IsFollowing() {
                                             cursor: 'pointer',
                                         },
                                         objectFit: 'cover',
+                                        [mobileScreen]: {
+                                            height: '50px',
+                                            width: '50px',
+                                            // display: 'none',
+                                        },
                                         // position: 'relative',
                                     }}
                                 />
                             </Box>
                             {/* information */}
-                            <Box sx={{ marginLeft: 1 }}>
+                            <Box
+                                sx={{
+                                    marginLeft: 1,
+                                }}
+                            >
                                 {/* name */}
                                 <Typography
                                     sx={{
@@ -220,14 +257,22 @@ function IsFollowing() {
                             </Box>
                         </Box>
 
-                        <Box>
+                        {/* <Box>
                             <Button
                                 variant="outlined"
                                 sx={{
                                     textTransform: 'initial',
                                     fontSize: '14px',
                                     borderRadius: '24px',
+                                    color: theme.palette.headerTextColor,
+                                    fontWeight: 'bold',
                                     px: 3,
+                                    borderColor: theme.palette.headerTextColor,
+                                    '&:hover': {
+                                        borderColor: theme.palette.headerTextColor,
+                                        // backgroundColor: theme.palette.headerTextColor,
+                                        backgroundColor: '#eeeeee',
+                                    },
                                     [mobileScreen]: {
                                         fontSize: '12px',
                                         px: 2,
@@ -236,33 +281,57 @@ function IsFollowing() {
                             >
                                 Following
                             </Button>
-                        </Box>
+                        </Box> */}
+                        <ButtonFollowing />
                     </Box>
                     {index === listIsFollowing.length - 1 ? (
                         ''
                     ) : (
-                        <Box sx={{ ml: 9, [mobileScreen]: { ml: 9 } }}>
+                        <Box
+                            sx={{
+                                ml: 9,
+                                [mobileScreen]: {
+                                    ml: 0,
+                                },
+                            }}
+                        >
                             <Divider />
                         </Box>
                     )}
                 </Box>
             ))}
-            <Button
-                variant="outlined"
-                fullWidth
+            <Box
                 sx={{
-                    textTransform: 'initial',
-                    borderRadius: '24px',
-                    borderColor: '#404040',
-                    color: '#404040',
-                    fontSize: '14px',
                     [mobileScreen]: {
-                        fontSize: '12px',
+                        px: 2,
                     },
                 }}
             >
-                Show more results
-            </Button>
+                <Button
+                    variant="outlined"
+                    fullWidth
+                    sx={{
+                        textTransform: 'initial',
+                        borderRadius: '24px',
+                        borderColor: '#404040',
+                        color: '#404040',
+                        fontSize: '14px',
+                        '&:hover': {
+                            borderColor: theme.palette.headerTextColor,
+                            // backgroundColor: theme.palette.headerTextColor,
+                            backgroundColor: '#eeeeee',
+                            fontWeight: 'bold',
+                        },
+                        [mobileScreen]: {
+                            fontSize: '12px',
+                            fullWidth: false,
+                            mb: 3,
+                        },
+                    }}
+                >
+                    Show more results
+                </Button>
+            </Box>
         </Box>
     );
 }
@@ -286,7 +355,17 @@ const listFollowers = [
 function YourFollowers() {
     return (
         <Box>
-            <CustomizeTypography fs="14px">2 people are following you</CustomizeTypography>
+            <CustomizeTypography
+                fs="14px"
+                sx={{
+                    [mobileScreen]: {
+                        px: 2,
+                        pt: 2,
+                    },
+                }}
+            >
+                2 people are following you
+            </CustomizeTypography>
             {/* image, name, position, buton is following */}
             {listFollowers.map((user, index) => (
                 <Box>
@@ -297,6 +376,9 @@ function YourFollowers() {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             py: 2,
+                            [mobileScreen]: {
+                                p: 2,
+                            },
                         }}
                     >
                         <Box
@@ -310,6 +392,10 @@ function YourFollowers() {
                                     height: '60px',
                                     width: '60px',
                                     position: 'relative',
+                                    [ipadProScreen]: {
+                                        height: '70px',
+                                        width: '70px',
+                                    },
                                     [mobileScreen]: {
                                         height: '50px',
                                         width: '50px',
@@ -317,10 +403,6 @@ function YourFollowers() {
                                     [tabletScreen]: {
                                         height: '60px',
                                         width: '60px',
-                                    },
-                                    [ipadProScreen]: {
-                                        height: '70px',
-                                        width: '70px',
                                     },
                                 }}
                             >
@@ -336,6 +418,10 @@ function YourFollowers() {
                                         },
                                         objectFit: 'cover',
                                         // position: 'relative',
+                                        [mobileScreen]: {
+                                            height: '50px',
+                                            width: '50px',
+                                        },
                                     }}
                                 />
                             </Box>
@@ -382,7 +468,7 @@ function YourFollowers() {
                             </Box>
                         </Box>
 
-                        <Box>
+                        {/* <Box>
                             <Button
                                 variant="outlined"
                                 sx={{
@@ -398,12 +484,13 @@ function YourFollowers() {
                             >
                                 Following
                             </Button>
-                        </Box>
+                        </Box> */}
+                        <ButtonFollowing />
                     </Box>
                     {index === listFollowers.length - 1 ? (
                         ''
                     ) : (
-                        <Box sx={{ ml: 9, [mobileScreen]: { ml: 9 } }}>
+                        <Box sx={{ ml: 9, [mobileScreen]: { ml: 0 } }}>
                             <Divider />
                         </Box>
                     )}
@@ -414,3 +501,31 @@ function YourFollowers() {
 }
 
 //dating many people doesn't mean you're beautiful. A cheap product attracts many customers
+// define button following
+const ButtonFollowing = () => {
+    return (
+        <Button
+            variant="outlined"
+            sx={{
+                textTransform: 'initial',
+                fontSize: '14px',
+                borderRadius: '24px',
+                color: theme.palette.headerTextColor,
+                fontWeight: 'bold',
+                px: 3,
+                borderColor: theme.palette.headerTextColor,
+                '&:hover': {
+                    borderColor: theme.palette.headerTextColor,
+                    // backgroundColor: theme.palette.headerTextColor,
+                    backgroundColor: '#eeeeee',
+                },
+                [mobileScreen]: {
+                    fontSize: '12px',
+                    px: 2,
+                },
+            }}
+        >
+            Following
+        </Button>
+    );
+};
