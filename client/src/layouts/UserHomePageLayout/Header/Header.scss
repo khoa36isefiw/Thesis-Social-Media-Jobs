@@ -1,0 +1,92 @@
+.header {
+    position: fixed;
+    top: 0;
+    height: 80px;
+    background: #fff;
+    box-shadow: 4px 2px 1px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    z-index: 9;
+}
+.logo {
+    height: 60px;
+    width: 60px;
+    cursor: pointer;
+}
+
+.nav__dir {
+    width: 70px;
+    // height: 70px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.95;
+}
+// .nav__dir.active {
+//     // background-color: aqua;
+//     text-decoration: underline;
+// }
+
+.active .MuiBadge-badge {
+    opacity: 1;
+}
+
+.nav__dir .active {
+    opacity: 1;
+}
+
+.nav__dir:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.icon__btn:hover {
+    background-color: transparent !important;
+}
+
+.MuiInputBase-root {
+    // background-color: #b6f0dc;
+
+    border: 0px;
+}
+
+.authenticated_user {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+}
+
+.nav__dir .active {
+    border-bottom: 1px solid #333;
+}
+
+.active .text__btn {
+    font-weight: bold;
+}
+
+// resposive for mobile device
+@media only screen and (max-width: 46.1875em) {
+    .text__btn {
+        display: none;
+    }
+    .nav__dir {
+        justify-content: center;
+    }
+
+    .header .search__field {
+        display: none;
+    }
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+    .nav__dir {
+        width: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.95;
+    }
+}
