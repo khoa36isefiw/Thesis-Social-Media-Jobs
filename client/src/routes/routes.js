@@ -2,8 +2,8 @@ import ForgotPassword from '../components/Guest/ForgotPassword/ForgotPassword';
 import SignIn from '../components/Guest/SignIn/SignIn';
 import UserProfile from '../components/User/UserProfile/UserProfile';
 import UserActivityLayout from '../layouts/UserActivityLayout/UserActivityLayout';
-import DefaultLayout from '../layouts/DefaultLayouts/DefaultLayouts';
-import Header from '../layouts/DefaultLayouts/Header/Header';
+import DefaultLayout from '../layouts/UserHomePageLayout/UserHomePageLayout';
+import Header from '../layouts/UserHomePageLayout/Header/Header';
 import GuestLayouts from '../layouts/GuestLayouts/GuestLayouts';
 import NotificationLayout from '../layouts/NotificationLayout/NotificationLayout';
 import UserProfileLayout from '../layouts/UserProfileLayout/UserProfileLayout';
@@ -21,6 +21,8 @@ import MyNetwork from '../components/MyNetwork/MyNetwork';
 import MyConnections from '../components/MyConnections/MyConnections';
 import ManageMyNetworkLayout from '../layouts/ManageMyNetworkLayout/ManageMyNetworkLayout';
 import FollowingAndFollowers from '../components/FollowingAndFollowers/FollowingAndFollowers';
+import PageIsFollowing from '../components/PageIsFollowing/PageIsFollowing';
+import MyHashtags from '../components/MyHashtags/MyHashtags';
 
 // not sign into this website
 const publicRoutes = [
@@ -59,6 +61,17 @@ const privateRoutes = [
         component: FollowingAndFollowers,
         layout: ManageMyNetworkLayout,
     },
+    {
+        path: '/my-network/page-is-following',
+        component: PageIsFollowing,
+        layout: ManageMyNetworkLayout,
+    },
+    {
+        path: 'my-network/my-hashtag-manager',
+        component: MyHashtags,
+        layout: ManageMyNetworkLayout,
+    },
+
     { path: '/user/recent-activity/all', component: ShowUserActivity, layout: UserActivityLayout },
 
     { path: '/notifications', component: UserNotifications, layout: NotificationLayout },
