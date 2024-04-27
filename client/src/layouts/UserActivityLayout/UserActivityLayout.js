@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../DefaultLayouts/Header/Header';
+import Header from '../UserHomePageLayout/Header/Header';
 import { Box, Typography, Container, Avatar, styled, Button } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { blue } from '@mui/material/colors';

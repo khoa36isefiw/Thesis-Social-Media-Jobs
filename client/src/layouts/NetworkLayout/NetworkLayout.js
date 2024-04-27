@@ -3,7 +3,7 @@ import { Box, ThemeProvider, Typography } from '@mui/material';
 import { Container } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Advertising from '../../components/Advertising/Advertising';
-import Header from '../DefaultLayouts/Header/Header';
+import Header from '../UserHomePageLayout/Header/Header';
 
 import ManageMyNetwork from '../../components/ManageMyNetwork/ManageMyNetwork';
 import { mobileScreen, tabletScreen, theme } from '../../components/Theme/Theme';
