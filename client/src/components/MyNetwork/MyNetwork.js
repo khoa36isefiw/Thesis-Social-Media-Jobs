@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CustomizeBox } from '../CustomizeBox/CustomizeBox';
 import {
     Avatar,
@@ -6,24 +6,16 @@ import {
     Button,
     ThemeProvider,
     Typography,
-    styled,
-    useTheme,
     Grid,
+    Modal,
+    IconButton,
 } from '@mui/material';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import {
-    desktopScreen,
-    extraSmallMobileScreenEm,
-    ipadProScreen,
-    ipadProScreenEm,
-    mobileScreen,
-    moblieScreenEm,
-    tabletScreen,
-    tabletScreenEm,
-    theme,
-} from '../Theme/Theme';
-const suggestedLists = [
+import { mobileScreen, tabletScreen, theme } from '../Theme/Theme';
+import MoreConnectionsModal from '../MoreConnectionsModal/MoreConnectionsModal';
+import CloseIcon from '@mui/icons-material/Close';
+export const suggestedLists = [
     {
         userImage:
             'https://preview.redd.it/if-zoro-got-lost-and-ended-up-in-the-back-rooms-do-you-v0-404t0gtyebcb1.png?width=640&crop=smart&auto=webp&s=a102db19e4adb7807318f61c492c91d693142d68',
@@ -59,21 +51,42 @@ const suggestedLists = [
         userName: 'Đường Tình',
         userPosition: 'Blockchain',
     },
-    // {
-    //     userImage:
-    //         'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-    //     userName: 'Trộm Choá',
-    //     userPosition: 'Blockchain',
-    // },
-    // {
-    //     userImage:
-    //         'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-    //     userName: 'Trộm Choá',
-    //     userPosition: 'Blockchain',
-    // },
+    {
+        userImage:
+            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
+        userName: 'Trộm Choá',
+        userPosition: 'Blockchain',
+    },
+    {
+        userImage:
+            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
+        userName: 'Trộm Choá',
+        userPosition: 'Blockchain',
+    },
+    {
+        userImage:
+            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
+        userName: 'Trộm Choá',
+        userPosition: 'Blockchain',
+    },
+    {
+        userImage:
+            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
+        userName: 'Trộm Choá',
+        userPosition: 'Blockchain',
+    },
 ];
 
 function MyNetwork() {
+    const [isOpenModalConnections, setIsOpenModalConnections] = useState(false);
+    const handleOpenConnectionsModal = () => {
+        setIsOpenModalConnections(!isOpenModalConnections);
+    };
+    const handleCloseConnectionsModal = () => {
+        setIsOpenModalConnections(false);
+    };
+    // only get 8 items from suggestedLists
+    const displayedUsers = suggestedLists.slice(0, 8);
     return (
         <ThemeProvider theme={theme}>
             <CustomizeBox
@@ -84,7 +97,12 @@ function MyNetwork() {
                 }}
             >
                 <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        mb: 1,
+                    }}
                 >
                     <Typography
                         sx={{
@@ -112,12 +130,13 @@ function MyNetwork() {
                                 backgroundColor: '#d9d9d9',
                             },
                         }}
+                        onClick={handleOpenConnectionsModal}
                     >
                         See More
                     </Button>
                 </Box>
                 <Grid container spacing={2}>
-                    {suggestedLists.map((user, index) => (
+                    {displayedUsers.map((user, index) => (
                         <Grid item key={index} xs={6} sm={6} md={6} lg={4} xl={3}>
                             <Box
                                 sx={{
@@ -126,6 +145,7 @@ function MyNetwork() {
                                     borderRadius: '8px',
                                     textAlign: 'center',
                                     cursor: 'pointer',
+                                    position: 'relative',
                                 }}
                             >
                                 {/* default background image */}
@@ -142,9 +162,24 @@ function MyNetwork() {
                                         borderTopRightRadius: '8px',
                                     }}
                                 />
+                                <Avatar
+                                    sx={{
+                                        position: 'absolute',
+                                        zIndex: 2,
+                                        top: 4,
+                                        right: 4,
+                                        width: '32px',
+                                        height: '32px',
+                                        backgroundColor: '#0a66c2',
+                                    }}
+                                >
+                                    <IconButton>
+                                        <CloseIcon sx={{ color: 'white', fontSize: '24px' }} />
+                                    </IconButton>
+                                </Avatar>
                                 <Box
                                     sx={{
-                                        mb: '50px',
+                                        mb: '40px',
                                         px: 2,
                                         [mobileScreen]: {
                                             px: 0,
@@ -217,6 +252,9 @@ function MyNetwork() {
                     ))}
                 </Grid>
             </CustomizeBox>
+            <Modal open={isOpenModalConnections} onClose={handleCloseConnectionsModal}>
+                <MoreConnectionsModal handleClose={handleCloseConnectionsModal} />
+            </Modal>
         </ThemeProvider>
     );
 }
