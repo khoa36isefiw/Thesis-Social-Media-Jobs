@@ -25,6 +25,7 @@ import UserAvatar from '../../../assets/images/avatar.jpeg';
 import BackgroundImageModal from '../../BackgroundImageModal/BackgroundImageModal';
 import EditUserBackgroundImage from '../../EditUserBackgroundImage/EditUserBackgroundImage';
 import EditUserProfile from '../../EditUserProfile/EditUserProfile';
+import { mobileScreen, theme } from '../../Theme/Theme';
 
 // define
 const CustomizeTypography = styled(Typography)(({ fontSize, isBold = false }) => ({
@@ -86,6 +87,9 @@ export function UserProfile() {
                 borderRadius: '12px',
                 border: '1px solid #d9d9d9',
                 backgroundColor: '#fff',
+                [mobileScreen]: {
+                    borderRadius: 0,
+                },
             }}
         >
             <Box sx={{ position: 'relative' }}>
@@ -109,6 +113,10 @@ export function UserProfile() {
                         '&:hover': {
                             cursor: 'pointer',
                         },
+                        [mobileScreen]: {
+                            borderRadius: 0,
+                            height: '120px',
+                        },
                     }}
                 />
                 {/* Camera Icon */}
@@ -116,7 +124,11 @@ export function UserProfile() {
                     sx={{ position: 'absolute', top: 0, right: 0, zIndex: 3, p: 2 }}
                     onClick={() => handleOpenModal('editUserBackground')}
                 >
-                    <Avatar sx={{ backgroundColor: '#fff' }}>
+                    <Avatar
+                        sx={{
+                            backgroundColor: '#fff',
+                        }}
+                    >
                         <IconButton
                             disableTouchRipple
                             sx={{
@@ -131,6 +143,9 @@ export function UserProfile() {
                                     // color: blue[700],
                                     color: '#0b66c2',
                                     '&:hover': { color: blue[900] },
+                                    [mobileScreen]: {
+                                        fontSize: '20px',
+                                    },
                                 }}
                             />
                         </IconButton>
@@ -153,6 +168,11 @@ export function UserProfile() {
                         '&:hover': {
                             cursor: 'pointer',
                         },
+                        [mobileScreen]: {
+                            height: '120px',
+                            width: '120px',
+                            mt: -8,
+                        },
                     }}
                 />
 
@@ -162,6 +182,9 @@ export function UserProfile() {
                         mr: 3,
                         '&:hover': {
                             backgroundColor: 'transparent',
+                        },
+                        [mobileScreen]: {
+                            mr: 1,
                         },
                     }}
                     // onClick={() => handleOpenModal('editUserProfile')}
@@ -180,13 +203,24 @@ export function UserProfile() {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
-                    mt: 3,
+                    mt: 2,
+                    [mobileScreen]: {
+                        flexDirection: 'column',
+                    },
                 }}
             >
                 {/* User Information */}
                 <Box sx={{ px: 3 }}>
                     {/* Name */}
-                    <CustomizeTypography fontSize="20px" isBold={true}>
+                    <CustomizeTypography
+                        fontSize="20px"
+                        isBold={true}
+                        sx={{
+                            [mobileScreen]: {
+                                mt: -1,
+                            },
+                        }}
+                    >
                         Huynh Dang Khoa
                     </CustomizeTypography>
                     {/* studied at */}
@@ -255,7 +289,13 @@ export function UserProfile() {
                     </CustomizeTypography>
                 </Box>
                 {/* about Education */}
-                <Box sx={{ display: 'flex', px: 3, alignItems: 'center' }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        px: 3,
+                        alignItems: 'center',
+                    }}
+                >
                     <Avatar
                         // src={UserBackgroundImage}
                         src={
@@ -268,16 +308,32 @@ export function UserProfile() {
                             height: '40px',
                             objectFit: 'contain',
                             zIndex: 2,
+                            [mobileScreen]: {
+                                display: 'none',
+                            },
                         }}
                     />
 
-                    <Box sx={{ width: '200px', ml: 1 }}>
+                    <Box
+                        sx={{
+                            width: '200px',
+                            ml: 1,
+                            [mobileScreen]: {
+                                width: '100%',
+                                ml: 0,
+                            },
+                        }}
+                    >
                         <CustomizeTypography
                             sx={{
                                 fontWeight: '600',
                                 '&:hover': {
                                     cursor: 'pointer',
                                     textDecoration: 'underline',
+                                },
+                                [mobileScreen]: {
+                                    fontWeight: 'normal',
+                                    color: theme.palette.primaryText,
                                 },
                             }}
                             fontSize={'14px'}
