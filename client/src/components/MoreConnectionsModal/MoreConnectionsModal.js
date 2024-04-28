@@ -1,151 +1,126 @@
-import React, { useState } from 'react';
-import { CustomizeBox } from '../CustomizeBox/CustomizeBox';
-import {
-    Avatar,
-    Box,
-    Button,
-    ThemeProvider,
-    Typography,
-    Grid,
-    Modal,
-    IconButton,
-} from '@mui/material';
-import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { mobileScreen, tabletScreen, theme } from '../Theme/Theme';
-import MoreConnectionsModal from '../MoreConnectionsModal/MoreConnectionsModal';
+import React from 'react';
+import { Box, IconButton, Typography, Button, Divider, Avatar, Grid } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-export const suggestedLists = [
-    {
-        userImage:
-            'https://preview.redd.it/if-zoro-got-lost-and-ended-up-in-the-back-rooms-do-you-v0-404t0gtyebcb1.png?width=640&crop=smart&auto=webp&s=a102db19e4adb7807318f61c492c91d693142d68',
-        userName: 'Luân Zoro',
-        userPosition: 'Backend Developer',
-    },
-    {
-        userImage:
-            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-        userName: 'Trộm Choá',
-        userPosition: 'Blockchain',
-    },
-    {
-        userImage:
-            'https://cdn.abphotos.link/photos/resized/x/2023/06/20/1687225666_l2UnGjJK5TBftN8v_1687226997-phpmmmrgc.png',
-        userName: 'Chiến Thắng',
-        userPosition: 'Blockchain',
-    },
-    {
-        userImage:
-            'https://images2.thanhnien.vn/528068263637045248/2023/10/29/edit-honda-winner-x-1-1698557766334886782328.jpeg',
-        userName: 'Đường Đua',
-        userPosition: 'Blockchain',
-    },
-    {
-        userImage: 'https://hondadoanhthu.com.vn/wp-content/uploads/2024/02/Db-Do-Den.png',
-        userName: 'Thua',
-        userPosition: 'Blockchain',
-    },
-    {
-        userImage:
-            'https://hondathanhbinhan.com/wp-content/uploads/2024/01/winner-x-2024-dac-biet-den.png',
-        userName: 'Đường Tình',
-        userPosition: 'Blockchain',
-    },
-    {
-        userImage:
-            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-        userName: 'Trộm Choá',
-        userPosition: 'Blockchain',
-    },
-    {
-        userImage:
-            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-        userName: 'Trộm Choá',
-        userPosition: 'Blockchain',
-    },
-    {
-        userImage:
-            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-        userName: 'Trộm Choá',
-        userPosition: 'Blockchain',
-    },
-    {
-        userImage:
-            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-        userName: 'Trộm Choá',
-        userPosition: 'Blockchain',
-    },
-];
+import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
+import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
+import { suggestedLists } from '../MyNetwork/MyNetwork';
 
-function MyNetwork() {
-    const [isOpenModalConnections, setIsOpenModalConnections] = useState(false);
-    const handleOpenConnectionsModal = () => {
-        setIsOpenModalConnections(!isOpenModalConnections);
-    };
-    const handleCloseConnectionsModal = () => {
-        setIsOpenModalConnections(false);
-    };
-    // only get 8 items from suggestedLists
-    const displayedUsers = suggestedLists.slice(0, 8);
+function MoreConnectionsModal({ handleClose }) {
     return (
-        <ThemeProvider theme={theme}>
-            <CustomizeBox
+        <Box
+            sx={{
+                position: 'relative',
+                backgroundColor: '#fff',
+                width: '800px',
+                minHeight: '50px',
+                margin: 'auto',
+                mt: '32px',
+                borderRadius: '8px',
+                boxShadow: '0 4px 4px #333',
+                //  close icon doesn't overflow
+
+                // responsive
+                [ipadProScreen]: {
+                    mt: '96px',
+                    width: '70%',
+                },
+                [mobileScreen]: {
+                    width: '100%',
+                },
+                [tabletScreen]: {
+                    width: '96%',
+                },
+            }}
+        >
+            <Box
                 sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    p: 2,
                     [mobileScreen]: {
-                        borderRadius: 0,
+                        height: '80px',
+                    },
+                    [tabletScreen]: {
+                        height: '60px',
+                    },
+                    [ipadProScreen]: {
+                        height: '60px',
                     },
                 }}
             >
-                <Box
+                <CustomizeTypography
+                    fs={'20px'}
+                    fw={true}
                     sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        mb: 1,
+                        [mobileScreen]: {
+                            fontSize: '16px',
+                            maxWidth: '360px',
+                        },
                     }}
                 >
-                    <Typography
-                        sx={{
-                            fontSize: '15px',
-                            color: theme.palette.headingTextColor,
-                            [mobileScreen]: {
-                                maxWidth: '250px',
-                                mb: 2,
-                            },
-                            [tabletScreen]: {
-                                width: '250px',
-                                mb: 2,
-                            },
-                        }}
-                    >
-                        People you may know based on your recent activity
-                    </Typography>
-                    <Button
-                        sx={{
-                            fontSize: '13px',
-                            color: '#404040',
-                            textTransform: 'initial',
-                            fontWeight: 'bold',
-                            '&:hover': {
-                                backgroundColor: '#d9d9d9',
-                            },
-                        }}
-                        onClick={handleOpenConnectionsModal}
-                    >
-                        See More
-                    </Button>
-                </Box>
-                <Grid container spacing={2}>
-                    {displayedUsers.map((user, index) => (
+                    People you may know based on your recent activity
+                </CustomizeTypography>
+                <IconButton
+                    disableFocusRipple
+                    sx={{
+                        '&:hover': {
+                            backgroundColor: '#d9d9d9',
+                        },
+                        [ipadProScreen]: {},
+                    }}
+                    onClick={handleClose}
+                >
+                    <CloseIcon fontSize="large" />
+                </IconButton>
+            </Box>
+
+            <Divider sx={{ mb: 2 }} />
+            <Box
+                sx={{
+                    overflow: 'scroll',
+                    height: '600px',
+                    [ipadProScreen]: {
+                        height: '750px',
+                        // overflow: 'scroll',
+                    },
+                    [mobileScreen]: {
+                        height: '700px',
+                        // overflow: 'scroll',
+                    },
+                    [tabletScreen]: {
+                        height: '700px',
+                        // overflow: 'scroll',
+                    },
+                }}
+            >
+                <Grid
+                    container
+                    spacing={2}
+                    sx={{
+                        px: 2,
+                        mb: 4,
+                    }}
+                >
+                    {suggestedLists.map((user, index) => (
                         <Grid item key={index} xs={6} sm={6} md={6} lg={4} xl={3}>
                             <Box
                                 sx={{
-                                    height: '290px',
+                                    position: 'relative',
+                                    height: '280px',
+                                    // width: '160px',
                                     border: '1px solid #d9d9d9',
                                     borderRadius: '8px',
                                     textAlign: 'center',
                                     cursor: 'pointer',
-                                    position: 'relative',
+                                    '&:hover': {
+                                        boxShadow: '0 4px 4px #d9d9d9',
+                                    },
+                                    [mobileScreen]: {
+                                        // width: '170px',
+                                    },
                                 }}
                             >
                                 {/* default background image */}
@@ -179,7 +154,7 @@ function MyNetwork() {
                                 </Avatar>
                                 <Box
                                     sx={{
-                                        mb: '40px',
+                                        mb: '30px',
                                         px: 2,
                                         [mobileScreen]: {
                                             px: 0,
@@ -199,6 +174,7 @@ function MyNetwork() {
                                             zIndex: 2,
                                         }}
                                     />
+
                                     {/* name */}
                                     <Typography
                                         sx={{
@@ -251,12 +227,9 @@ function MyNetwork() {
                         </Grid>
                     ))}
                 </Grid>
-            </CustomizeBox>
-            <Modal open={isOpenModalConnections} onClose={handleCloseConnectionsModal}>
-                <MoreConnectionsModal handleClose={handleCloseConnectionsModal} />
-            </Modal>
-        </ThemeProvider>
+            </Box>
+        </Box>
     );
 }
 
-export default MyNetwork;
+export default MoreConnectionsModal;

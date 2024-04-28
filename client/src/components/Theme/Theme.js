@@ -6,6 +6,7 @@ export const theme = createTheme({
         headingTextColor: '#000000e6',
         headerTextColor: '#0009',
         normalText: '#404040',
+        primaryText: '#00000099',
         detailTextColor: '#2196f3',
         bgButtonHover: '#eeeeee',
     },
@@ -20,7 +21,7 @@ export const theme = createTheme({
             // đang xài. Nhưng show lên trên vài thiết bị còn bị lỗi
             // xs: 0,
             // sm: 739,
-            // md: 740,
+            // md: 740,x
             // lg: 1023,
             // xl: 1024,
 

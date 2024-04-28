@@ -9,7 +9,6 @@ import {
     Box,
     IconButton,
     Divider,
-    Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 

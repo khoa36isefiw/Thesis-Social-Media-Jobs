@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { styled, Paper, Container } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Advertising from '../../components/Advertising/Advertising';
-import Header from '../DefaultLayouts/Header/Header';
+import Header from '../UserHomePageLayout/Header/Header';
 import SimilarFollowers from './SimilarFollowers/SimilarFollowers';
 import HiringCareer from '../../components/Advertising/HiringCareer';
 

@@ -57,13 +57,14 @@ const listNetworks = [
         iconBtn: <ContactPageIcon sx={{ fontSize: '24px' }} />,
         pageName: 'Pages',
         numberOf: '8',
-        targetTo: '#',
+        targetTo: '/my-network/page-is-following',
     },
     {
         iconBtn: <TagIcon sx={{ fontSize: '24px' }} />,
         pageName: 'Hashtags',
         numberOf: '2',
-        targetTo: '#',
+
+        targetTo: '/my-network/my-hashtag-manager',
     },
 ];
 function NestedList() {

@@ -146,7 +146,7 @@ const MyPostsLayout = () => {
 
 export default CustomFilterNotifications;
 
-const CustomizeText = styled(Typography)(({ fs, fw = false }) => ({
+export const CustomizeText = styled(Typography)(({ fs, fw = false }) => ({
     fontSize: fs || '16px',
     fontWeight: fw ? 'bold' : 'normal',
 }));
