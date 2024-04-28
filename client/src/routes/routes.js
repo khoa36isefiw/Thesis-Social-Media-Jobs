@@ -2,7 +2,7 @@ import ForgotPassword from '../components/Guest/ForgotPassword/ForgotPassword';
 import SignIn from '../components/Guest/SignIn/SignIn';
 import UserProfile from '../components/User/UserProfile/UserProfile';
 import UserActivityLayout from '../layouts/UserActivityLayout/UserActivityLayout';
-import DefaultLayout from '../layouts/UserHomePageLayout/UserHomePageLayout';
+import UserHomePageLayout from '../layouts/UserHomePageLayout/UserHomePageLayout';
 import Header from '../layouts/UserHomePageLayout/Header/Header';
 import GuestLayouts from '../layouts/GuestLayouts/GuestLayouts';
 import NotificationLayout from '../layouts/NotificationLayout/NotificationLayout';
@@ -34,7 +34,7 @@ const publicRoutes = [
 
 // must signed into
 const privateRoutes = [
-    { path: '/signed-in', component: UserHomePage, layout: DefaultLayout },
+    { path: '/signed-in', component: UserHomePage, layout: UserHomePageLayout },
     { path: '/user-profile', component: UserProfilePage, layout: UserProfileLayout },
     {
         path: '/user-profile/details/education',
