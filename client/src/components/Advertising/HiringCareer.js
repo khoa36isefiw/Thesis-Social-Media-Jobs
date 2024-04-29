@@ -1,18 +1,23 @@
 import React from 'react';
 import Hiring from '../../assets/images/hiring.jpeg';
-import { Box } from '@mui/material';
+import { Avatar, Box } from '@mui/material';
+import { mobileScreen } from '../Theme/Theme';
 function HiringCareer() {
     return (
         <Box>
-            <img
+            <Avatar
                 src={Hiring}
                 alt="Finding Suitable Jobs"
-                style={{
+                sx={{
                     height: '100%',
                     width: '100%',
                     objectFit: 'cover',
                     borderRadius: '14px',
                     border: '1px solid #d3d3d3',
+                    mb: 1,
+                    [mobileScreen]: {
+                        borderRadius: 0,
+                    },
                 }}
             />
         </Box>
