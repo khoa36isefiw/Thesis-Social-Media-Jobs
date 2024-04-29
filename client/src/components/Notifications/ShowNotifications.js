@@ -457,8 +457,7 @@ function ShowNotifications() {
 
 export default ShowNotifications;
 
-// check lại chỗ này
-function TruncateText({ text, maxLines }) {
+export function TruncateText({ text, maxLines }) {
     const truncateText = (text, maxLines) => {
         const words = text.split(' ');
         let truncatedText = '';

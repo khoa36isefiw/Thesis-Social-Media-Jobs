@@ -18,7 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function UserProfileLayout({ children }) {
     return (
-        <Box sx={{ backgroundColor: '#f3f2f0' }}>
+        <Box sx={{ backgroundColor: '#f3f2f0', minHeight: '100vh', position: 'relative' }}>
             <Header />
             <Container
                 sx={{
@@ -30,23 +30,37 @@ function UserProfileLayout({ children }) {
             >
                 <Box>
                     <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                        <Grid item xs={12} lg={9}>
+                        <Grid item xs={12} sm={8} lg={9}>
                             <Box sx={{ minHeight: '10vh', borderRadius: '24px' }}>
                                 <Box>{children}</Box>
                             </Box>
                         </Grid>
-                        <Grid item xs={12} lg={3}>
+                        <Grid item xs={12} sm={4} lg={3}>
                             <HiringCareer />
                             <SimilarFollowers />
                             <Advertising />
                         </Grid>
                     </Grid>
-                    <Typography sx={{ fontSize: '14px', py: 2, color: 'text.secondary' }}>
-                        Aikotoba Corporation &copy; 2023
-                    </Typography>
-                    {/* </Container> */}
                 </Box>
             </Container>
+            <Typography
+                sx={{
+                    // position: 'absolute',
+                    fontSize: '14px',
+                    py: 2,
+                    color: 'text.secondary',
+                    [mobileScreen]: {
+                        textAlign: 'center',
+                    },
+
+                    bottom: 0,
+                    textAlign: 'center',
+
+                    left: '25%',
+                }}
+            >
+                Aikotoba Corporation &copy; 2023
+            </Typography>
         </Box>
     );
 }

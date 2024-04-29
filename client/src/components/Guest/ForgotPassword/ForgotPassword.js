@@ -13,6 +13,7 @@ import Logo from '../../../assets/images/aikotoba-job.png';
 import { useNavigate } from 'react-router-dom';
 import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypography';
 import { CustomizeTextField } from '../../CustomizeTextField/CustomizeTextField';
+import { mobileScreen } from '../../Theme/Theme';
 function ForgotPassword() {
     const [isShow, setIsShow] = useState(true);
 
@@ -35,9 +36,13 @@ function ForgotPassword() {
                         backgroundColor: '#ffffff',
                         borderRadius: '6px',
                         p: 2,
+                        [mobileScreen]: {
+                            width: '100%',
+                            height: '100%',
+                        },
                     }}
                 >
-                    <Box sx={{ mt: 2 }}>
+                    <Box>
                         <CustomizeTypography sx={{ fontWeight: 'bold', mb: '2px' }}>
                             Email
                         </CustomizeTypography>
@@ -55,7 +60,7 @@ function ForgotPassword() {
                             }}
                         />
                     </Box>
-                    <Typography sx={{ fontSize: '14px', textAlign: 'center', mt: 2 }}>
+                    <Typography sx={{ fontSize: '16px', textAlign: 'center', mt: 2 }}>
                         We'll send a verification code to this email or phone number if it matches
                         an existing Aikotoba account.
                     </Typography>
@@ -75,7 +80,7 @@ function ForgotPassword() {
                     <Button
                         variant="outlined"
                         sx={{
-                            mt: 4,
+                            mt: 2,
                             fontWeight: 'bold',
                             fontSize: '14px',
                             textTransform: 'capitalize',

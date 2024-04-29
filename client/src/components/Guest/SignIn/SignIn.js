@@ -11,6 +11,7 @@ import {
 import Logo from '../../../assets/images/aikotoba-job.png';
 import { useNavigate } from 'react-router-dom';
 import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypography';
+import { ipadProScreen, mobileScreen, tabletScreen } from '../../Theme/Theme';
 function SignIn() {
     const [isShow, setIsShow] = useState(true);
 
@@ -33,13 +34,17 @@ function SignIn() {
                         borderRadius: '6px',
                         p: 2,
                         mt: 8,
+                        [mobileScreen]: {
+                            width: '100%',
+                            height: '100%',
+                        },
                     }}
                 >
-                    <Box sx={{ mt: 2 }}>
+                    <Box>
                         <Typography sx={{ fontSize: '26px', fontWeight: 'bold' }}>
                             Sign In
                         </Typography>
-                        <Typography sx={{ fontSize: '14px', mb: 2 }}>
+                        <Typography sx={{ fontSize: '16px', mb: 2 }}>
                             Stay updated on your professional world
                         </Typography>
                         <CustomizeTypography sx={{ fontWeight: 'bold', mb: '2px' }}>

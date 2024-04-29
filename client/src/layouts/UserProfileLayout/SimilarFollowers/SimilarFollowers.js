@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography, Avatar, Button, Divider } from '@mui/material';
 
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import { mobileScreen, theme } from '../../../components/Theme/Theme';
 
 function SimilarFollowers() {
     return (
@@ -13,9 +14,12 @@ function SimilarFollowers() {
                     backgroundColor: '#fff',
                     borderRadius: '13px',
                     border: '1px solid #d3d3d3',
-                    boxShadow: '4px 8px 4px #d9d9d9',
+                    // boxShadow: '4px 8px 4px #d9d9d9',
                     mb: 2,
-                    p: 1,
+                    // p: 1,
+                    [mobileScreen]: {
+                        borderRadius: 0,
+                    },
                 }}
             >
                 <Box
@@ -24,6 +28,7 @@ function SimilarFollowers() {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         mt: 1,
+                        p: 1,
                     }}
                 >
                     <Typography
@@ -71,17 +76,20 @@ function PeopleMayKnow() {
     return (
         // only show 4 people --> and show button show more --> show modal
         <Box>
-            <Box>
+            <Box sx={{ p: 1 }}>
                 {connectPeople.map((person, index) => (
-                    <Box>
+                    <Box key={index}>
                         <Box
                             sx={{
                                 display: 'flex',
                                 // justifyContent: 'space-between',
-                                alignItems: 'center',
+                                alignItems: 'flex-start',
                                 mt: 1,
-                                mb: 2,
                                 cursor: 'pointer',
+                                // flexGrow: 1,
+                                [mobileScreen]: {
+                                    alignItems: 'center',
+                                },
                             }}
                         >
                             <Avatar
@@ -93,28 +101,53 @@ function PeopleMayKnow() {
                                     zIndex: 4,
                                 }}
                             />
-                            <Box sx={{ ml: 2 }}>
-                                <Typography
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        color: 'text.primary',
-                                        fontSize: '14.5px',
-                                        '&:hover': {
-                                            textDecoration: 'underline',
-                                            cursor: 'pointer',
-                                        },
-                                    }}
-                                >
-                                    {/* FPT Information System */}
-                                    {person.userName}
-                                </Typography>
-                                <Typography sx={{ color: 'text.secondary', fontSize: '12.5px' }}>
-                                    {/* Accompany your digital transformation */}
-                                    {person.userPosition}
-                                </Typography>
+                            <Box
+                                sx={{
+                                    ml: 2,
+                                    flexGrow: 1,
+                                    [mobileScreen]: {
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    },
+                                }}
+                            >
+                                <Box>
+                                    <Typography
+                                        sx={{
+                                            fontWeight: 'bold',
+                                            color: 'text.primary',
+                                            fontSize: '14.5px',
+                                            '&:hover': {
+                                                textDecoration: 'underline',
+                                                cursor: 'pointer',
+                                            },
+                                        }}
+                                    >
+                                        {/* FPT Information System */}
+                                        {person.userName}
+                                    </Typography>
+                                    <Typography
+                                        sx={{ color: 'text.secondary', fontSize: '12.5px' }}
+                                    >
+                                        {/* Accompany your digital transformation */}
+                                        {person.userPosition}
+                                    </Typography>
+                                </Box>
                                 <Button
                                     variant="outlined"
-                                    sx={{ borderRadius: '24px', mt: '2px' }}
+                                    sx={{
+                                        borderRadius: '24px',
+                                        mt: '2px',
+                                        borderColor: theme.palette.primaryText,
+                                        '&:hover': {
+                                            borderColor: theme.palette.primaryText,
+                                            backgroundColor: theme.palette.bgButtonHover,
+                                        },
+                                        [mobileScreen]: {
+                                            // ml: 9,
+                                        },
+                                    }}
                                     startIcon={<PersonAddAlt1Icon sx={{ color: '#808080' }} />}
                                 >
                                     <Typography
@@ -131,12 +164,13 @@ function PeopleMayKnow() {
                                 </Button>
                             </Box>
                         </Box>
-                        <Box>
-                            <Divider />
-                        </Box>
+                        {index !== connectPeople.length - 1 ? (
+                            <Divider sx={{ mb: 3, mt: 1 }} />
+                        ) : null}
                     </Box>
                 ))}
             </Box>
+            <Divider sx={{ p: 0, mt: 1 }} />
             <Box
                 sx={{
                     display: 'flex',
