@@ -42,22 +42,19 @@ function HomePageHeader() {
     const backgroundColor = location.pathname !== '/' ? 'inherit' : '#fff';
 
     return (
-        <Box sx={{ backgroundColor, height: '40px', mb: 4 }}>
+        <Box
+            sx={{
+                backgroundColor,
+                height: '40px',
+                mb: 4,
+            }}
+        >
             <Container
                 sx={{
                     display: 'flex',
                     justifyContent: 'space-around',
                     alignItems: 'center',
                     mb: 4,
-                    [mobileScreen]: {
-                        mt: 2,
-                    },
-                    [tabletScreen]: {
-                        mt: 2,
-                    },
-                    [ipadProScreen]: {
-                        mt: 2,
-                    },
                 }}
             >
                 <Box

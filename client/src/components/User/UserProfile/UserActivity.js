@@ -7,6 +7,7 @@ import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypograp
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { blue } from '@mui/material/colors';
 import StartOutlinedIcon from '@mui/icons-material/StartOutlined';
+import { mobileScreen } from '../../Theme/Theme';
 function UserActivity() {
     const navigate = useNavigate();
     const handleNavigateToActivity = () => {
@@ -21,41 +22,75 @@ function UserActivity() {
                 borderRadius: '12px',
                 border: '1px solid #d9d9d9',
                 backgroundColor: '#fff',
+                [mobileScreen]: {
+                    borderRadius: 0,
+                },
             }}
         >
-            <Box sx={{ p: 3, mb: 2 }}>
+            <Box
+                sx={{
+                    p: 3,
+                    mb: 2,
+                    [mobileScreen]: {
+                        mb: 0,
+                    },
+                }}
+            >
                 <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        [mobileScreen]: {
+                            alignItems: 'flex-start',
+                        },
+                    }}
                 >
-                    <Box>
-                        <CustomizeTypography fs="20px" fw={true}>
-                            Activity
-                        </CustomizeTypography>
-                        <CustomizeTypography
-                            fs="14px"
-                            sx={{
-                                color: blue[800],
-                                fontWeight: 'bold',
-                                '&:hover': {
-                                    textDecoration: 'underline',
-                                },
-                            }}
-                        >
-                            2 followers
-                        </CustomizeTypography>
-                    </Box>
-                    <Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            flexGrow: 1,
+                            [mobileScreen]: {
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                            },
+                        }}
+                    >
+                        <Box>
+                            <CustomizeTypography fs="20px" fw={true}>
+                                Activity
+                            </CustomizeTypography>
+                            <CustomizeTypography
+                                fs="14px"
+                                sx={{
+                                    color: blue[800],
+                                    fontWeight: 'bold',
+                                    '&:hover': {
+                                        textDecoration: 'underline',
+                                    },
+                                }}
+                            >
+                                2 followers
+                            </CustomizeTypography>
+                        </Box>
                         <Button
                             sx={{
                                 textTransform: 'initial',
                                 fontSize: '16px',
                                 borderRadius: '24px',
                                 fontWeight: 'bold',
+                                [mobileScreen]: {
+                                    fontSize: '14px',
+                                },
                             }}
                             variant="outlined"
                         >
                             Create a post
                         </Button>
+                    </Box>
+                    <Box>
                         <IconButton
                         // onClick={() => handleNavigateEducation()}
                         >
@@ -66,9 +101,6 @@ function UserActivity() {
                 <Box
                     sx={{
                         mt: 1,
-                        // display: 'flex',
-                        // alignItems: 'flex-start',
-                        // justifyContent: 'flex-start',
                     }}
                 >
                     <CustomizeTypography fs="16px" fw={true} sx={{ color: '#404040' }}>
@@ -88,8 +120,11 @@ function UserActivity() {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    fontSize: '14px',
+                    fontSize: '16px',
                     fontWeight: 'bold',
+                    [mobileScreen]: {
+                        py: 0,
+                    },
                 }}
                 onClick={handleNavigateToActivity}
             >

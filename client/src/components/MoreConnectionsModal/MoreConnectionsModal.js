@@ -28,6 +28,7 @@ function MoreConnectionsModal({ handleClose }) {
                 },
                 [mobileScreen]: {
                     width: '100%',
+                    mt: '12px',
                 },
                 [tabletScreen]: {
                     width: '96%',
@@ -38,15 +39,15 @@ function MoreConnectionsModal({ handleClose }) {
                 sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center',
+                    alignItems: 'flex-start',
                     p: 2,
+                    [ipadProScreen]: {
+                        height: '60px',
+                    },
                     [mobileScreen]: {
                         height: '80px',
                     },
                     [tabletScreen]: {
-                        height: '60px',
-                    },
-                    [ipadProScreen]: {
                         height: '60px',
                     },
                 }}
@@ -70,6 +71,11 @@ function MoreConnectionsModal({ handleClose }) {
                             backgroundColor: '#d9d9d9',
                         },
                         [ipadProScreen]: {},
+                        [mobileScreen]: {
+                            position: 'absolute',
+                            top: '1%',
+                            right: '1%',
+                        },
                     }}
                     onClick={handleClose}
                 >
@@ -87,7 +93,7 @@ function MoreConnectionsModal({ handleClose }) {
                         // overflow: 'scroll',
                     },
                     [mobileScreen]: {
-                        height: '700px',
+                        height: '650px',
                         // overflow: 'scroll',
                     },
                     [tabletScreen]: {

@@ -4,6 +4,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypography';
 import { useNavigate } from 'react-router-dom';
 import { scrollToTop } from '../../ScrollToTop/ScrollToTop';
+import { mobileScreen, theme } from '../../Theme/Theme';
 function UserEducation() {
     const navigate = useNavigate();
     const handleNavigateEducation = () => {
@@ -21,6 +22,9 @@ function UserEducation() {
                 p: 3,
                 mt: 2,
                 mb: 2,
+                [mobileScreen]: {
+                    borderRadius: 0,
+                },
             }}
         >
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -67,8 +71,12 @@ function UserEducation() {
                     >
                         HCMC University of Technology and Education
                     </CustomizeTypography>
-                    <CustomizeTypography fs={'14px'}>Information Technology</CustomizeTypography>
-                    <CustomizeTypography fs={'14px'}>Grade: 3.06</CustomizeTypography>
+                    <CustomizeTypography fs={'14px'} sx={{ color: theme.palette.primaryText }}>
+                        Information Technology
+                    </CustomizeTypography>
+                    <CustomizeTypography fs={'14px'} sx={{ color: theme.palette.primaryText }}>
+                        Grade: 3.06
+                    </CustomizeTypography>
                 </Box>
             </Box>
         </Box>

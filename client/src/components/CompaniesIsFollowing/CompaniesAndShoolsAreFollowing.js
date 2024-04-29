@@ -3,6 +3,7 @@ import { Avatar, Box, Button, Divider, Typography } from '@mui/material';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { blue } from '@mui/material/colors';
+import { mobileScreen } from '../Theme/Theme';
 
 function CompaniesAndShoolsAreFollowing({ data }) {
     return (
@@ -25,6 +26,10 @@ function CompaniesAndShoolsAreFollowing({ data }) {
                                 width: '48px',
                                 borderRadius: 0,
                                 cursor: 'pointer',
+                                // [mobileScreen]: {
+                                //     height: '30px',
+                                //     width: '30px',
+                                // },
                             }}
                         />
                         <Box
@@ -33,11 +38,22 @@ function CompaniesAndShoolsAreFollowing({ data }) {
                                 flexDirection: 'column',
                                 justifyContent: 'center',
                                 ml: 2,
+                                // [mobileScreen]: {
+                                //     flexDirection: 'row',
+                                //     justifyContent: 'space-between',
+                                //     alignItems: 'center',
+                                //     flexGrow: 1,
+                                // },
                             }}
                         >
-                            <Box sx={{ mb: 1, cursor: 'pointer' }}>
+                            <Box
+                                sx={{
+                                    mb: 1,
+                                    cursor: 'pointer',
+                                }}
+                            >
                                 <CustomizeTypography
-                                    fs="14px"
+                                    fs="16px"
                                     fw={true}
                                     sx={{
                                         display: 'flex !important',
@@ -70,6 +86,10 @@ function CompaniesAndShoolsAreFollowing({ data }) {
                                     '&:hover': {
                                         borderColor: 'black',
                                         // backgroundColor: '#404040',
+                                    },
+                                    [mobileScreen]: {
+                                        width: '110px',
+                                        padding: '4px 8px',
                                     },
                                 }}
                             >

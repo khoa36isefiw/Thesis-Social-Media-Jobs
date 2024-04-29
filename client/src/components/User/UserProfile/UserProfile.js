@@ -25,7 +25,7 @@ import UserAvatar from '../../../assets/images/avatar.jpeg';
 import BackgroundImageModal from '../../BackgroundImageModal/BackgroundImageModal';
 import EditUserBackgroundImage from '../../EditUserBackgroundImage/EditUserBackgroundImage';
 import EditUserProfile from '../../EditUserProfile/EditUserProfile';
-import { mobileScreen, theme } from '../../Theme/Theme';
+import { mobileScreen, tabletScreen, theme } from '../../Theme/Theme';
 
 // define
 const CustomizeTypography = styled(Typography)(({ fontSize, isBold = false }) => ({
@@ -117,6 +117,9 @@ export function UserProfile() {
                             borderRadius: 0,
                             height: '120px',
                         },
+                        [tabletScreen]: {
+                            height: '120px',
+                        },
                     }}
                 />
                 {/* Camera Icon */}
@@ -152,7 +155,6 @@ export function UserProfile() {
                     </Avatar>
                 </Box>
             </Box>
-
             {/* User Avatar */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Avatar
@@ -173,6 +175,11 @@ export function UserProfile() {
                             width: '120px',
                             mt: -8,
                         },
+                        [tabletScreen]: {
+                            height: '120px',
+                            width: '120px',
+                            mt: -8,
+                        },
                     }}
                 />
 
@@ -187,8 +194,8 @@ export function UserProfile() {
                             mr: 1,
                         },
                     }}
-                    // onClick={() => handleOpenModal('editUserProfile')}
-                    onClick={handleOpenUserProfile}
+                    onClick={() => handleOpenModal('editUserProfile')}
+                    // onClick={handleOpenUserProfile}
                 >
                     <EditNoteIcon
                         sx={{
@@ -197,14 +204,17 @@ export function UserProfile() {
                     />
                 </IconButton>
             </Box>
-
             <Box
                 sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'flex-start',
+                    // alignItems: 'flex-start',
+                    flexDirection: 'column',
                     mt: 2,
                     [mobileScreen]: {
+                        flexDirection: 'column',
+                    },
+                    [tabletScreen]: {
                         flexDirection: 'column',
                     },
                 }}
@@ -212,20 +222,108 @@ export function UserProfile() {
                 {/* User Information */}
                 <Box sx={{ px: 3 }}>
                     {/* Name */}
-                    <CustomizeTypography
-                        fontSize="20px"
-                        isBold={true}
+                    <Box
                         sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
                             [mobileScreen]: {
-                                mt: -1,
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                            },
+                            [tabletScreen]: {
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
                             },
                         }}
                     >
-                        Huynh Dang Khoa
-                    </CustomizeTypography>
-                    {/* studied at */}
-                    <CustomizeTypography>Student at HCMUT</CustomizeTypography>
+                        <Box>
+                            <CustomizeTypography
+                                fontSize="20px"
+                                isBold={true}
+                                sx={{
+                                    [mobileScreen]: {
+                                        mt: -1,
+                                    },
+                                }}
+                            >
+                                Huynh Dang Khoa
+                            </CustomizeTypography>
+                            {/* studied at */}
+                            <CustomizeTypography sx={{ mt: '-4px' }}>
+                                Student at HCMUT
+                            </CustomizeTypography>
+                        </Box>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                px: 3,
+                                alignItems: 'center',
+                                [mobileScreen]: {
+                                    px: 0,
+                                },
+                            }}
+                        >
+                            <Avatar
+                                // src={UserBackgroundImage}
+                                src={
+                                    'https://media.istockphoto.com/id/835370890/photo/sunset-sunrise-with-clouds-light-rays-and-other-atmospheric-effect.jpg?s=612x612&w=0&k=20&c=zGDOBYVFY74wX2gUgkonYGtNl1zenev5mPotAqUlJbM='
+                                }
+                                alt="University Logo"
+                                sx={{
+                                    borderRadius: '0px',
+                                    width: '40px',
+                                    height: '40px',
+                                    objectFit: 'contain',
+                                    zIndex: 2,
+                                    [mobileScreen]: {
+                                        display: 'none',
+                                    },
+                                    [tabletScreen]: {
+                                        display: 'none',
+                                    },
+                                }}
+                            />
 
+                            <Box
+                                sx={{
+                                    width: '200px',
+                                    ml: 1,
+                                    [mobileScreen]: {
+                                        width: '100%',
+                                        ml: 0,
+                                    },
+                                    [tabletScreen]: {
+                                        width: '100%',
+                                        ml: 0,
+                                    },
+                                }}
+                            >
+                                <CustomizeTypography
+                                    sx={{
+                                        fontWeight: '600',
+                                        '&:hover': {
+                                            cursor: 'pointer',
+                                            textDecoration: 'underline',
+                                        },
+                                        [mobileScreen]: {
+                                            fontWeight: 'normal',
+                                            color: theme.palette.primaryText,
+                                            mt: '4px',
+                                        },
+                                        [tabletScreen]: {
+                                            fontWeight: 'normal',
+                                            color: theme.palette.primaryText,
+                                            mt: '4px',
+                                        },
+                                    }}
+                                    fontSize={'14px'}
+                                >
+                                    HCMC University of Technology and Education
+                                </CustomizeTypography>
+                            </Box>
+                        </Box>
+                    </Box>
                     {/* Address contact and Contact user Information*/}
                     <Box
                         sx={{
@@ -289,59 +387,6 @@ export function UserProfile() {
                     </CustomizeTypography>
                 </Box>
                 {/* about Education */}
-                <Box
-                    sx={{
-                        display: 'flex',
-                        px: 3,
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar
-                        // src={UserBackgroundImage}
-                        src={
-                            'https://media.istockphoto.com/id/835370890/photo/sunset-sunrise-with-clouds-light-rays-and-other-atmospheric-effect.jpg?s=612x612&w=0&k=20&c=zGDOBYVFY74wX2gUgkonYGtNl1zenev5mPotAqUlJbM='
-                        }
-                        alt="University Logo"
-                        sx={{
-                            borderRadius: '0px',
-                            width: '40px',
-                            height: '40px',
-                            objectFit: 'contain',
-                            zIndex: 2,
-                            [mobileScreen]: {
-                                display: 'none',
-                            },
-                        }}
-                    />
-
-                    <Box
-                        sx={{
-                            width: '200px',
-                            ml: 1,
-                            [mobileScreen]: {
-                                width: '100%',
-                                ml: 0,
-                            },
-                        }}
-                    >
-                        <CustomizeTypography
-                            sx={{
-                                fontWeight: '600',
-                                '&:hover': {
-                                    cursor: 'pointer',
-                                    textDecoration: 'underline',
-                                },
-                                [mobileScreen]: {
-                                    fontWeight: 'normal',
-                                    color: theme.palette.primaryText,
-                                },
-                            }}
-                            fontSize={'14px'}
-                        >
-                            HCMC University of Technology and Education
-                        </CustomizeTypography>
-                    </Box>
-                </Box>
             </Box>
             {/* Buttons section */}
             <Box sx={{ px: 3, my: 2 }}>
@@ -385,7 +430,6 @@ export function UserProfile() {
                     </MenuList>
                 </Menu>
             </Box>
-
             {/* Open user background image - show the backgroud image of user */}
             <Modal open={activeModal === 'userBackground'} onClose={handleCloseModal}>
                 <BackgroundImageModal
@@ -395,15 +439,18 @@ export function UserProfile() {
                     handleClose={handleCloseModal}
                 />
             </Modal>
-
             {/* edit user background image */}
             <Modal open={activeModal === 'editUserBackground'} onClose={handleCloseModal}>
                 <EditUserBackgroundImage handleClose={handleCloseModal} />
             </Modal>
-
             {/* Open modal to edit user profile/ information */}
 
-            <EditUserProfile isOpen={isUserProfileOpen} handleClose={handleCloseUserProfile} />
+            {/* onClose={handleCloseModal}: when we click outside of the modal.
+             It will close the modal*/}
+            {/* <Modal open={activeModal === 'editUserProfile'} onClose={handleCloseModal}> */}
+            <Modal open={activeModal === 'editUserProfile'}>
+                <EditUserProfile handleClose={handleCloseModal} />
+            </Modal>
         </Box>
     );
 }

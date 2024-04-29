@@ -13,6 +13,7 @@ import Logo from '../../../assets/images/aikotoba-job.png';
 import { useNavigate } from 'react-router-dom';
 import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypography';
 import { CustomizeTextField } from '../../CustomizeTextField/CustomizeTextField';
+import { mobileScreen } from '../../Theme/Theme';
 function GuestLogin() {
     const [isShow, setIsShow] = useState(true);
 
@@ -23,11 +24,17 @@ function GuestLogin() {
     return (
         <Box sx={{ minHeight: '100vh' }}>
             <Container>
-                {/* <Box onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
-                    <img src={Logo} alt="Logo" style={{ height: '100px', width: '100px' }} />
-                </Box> */}
                 <Typography
-                    sx={{ textAlign: 'center', fontSize: '26px', mb: 2, fontWeight: 'bold', mt: 8 }}
+                    sx={{
+                        textAlign: 'center',
+                        fontSize: '26px',
+                        mb: 2,
+                        fontWeight: 'bold',
+                        mt: 8,
+                        [mobileScreen]: {
+                            mt: 0,
+                        },
+                    }}
                 >
                     Make the most of your professional life
                 </Typography>
@@ -38,6 +45,10 @@ function GuestLogin() {
                         backgroundColor: '#f9f9f9',
                         borderRadius: '6px',
                         p: 2,
+                        [mobileScreen]: {
+                            width: '100%',
+                            height: '100%',
+                        },
                     }}
                 >
                     <Box sx={{ mt: 2 }}>

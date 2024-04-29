@@ -55,6 +55,7 @@ const HeaderIconButton = ({ icon, text, destination, isActive }) => {
                 },
                 borderBottom: isActive ? '2px solid #333' : null,
                 '&:hover': { fontWeight: 'bold' },
+                // mt: -1,
             }}
         >
             <IconButton
@@ -266,7 +267,7 @@ function Header() {
                         }
                         text={'Jobs'}
                         destination={''}
-                        isActive={activeIcon}
+                        isActive={activeIcon === '#'}
                     />
                     <HeaderIconNotification
                         text={'Notifications'}

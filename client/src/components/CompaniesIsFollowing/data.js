@@ -23,6 +23,11 @@ export const companiesData = [
 
 export const schoolData = [
     {
+        avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Logo_Hust.png/1200px-Logo_Hust.png',
+        name: 'Hanoi University of Science and Technology',
+        numberOfFollowers: '35,822',
+    },
+    {
         avatar: 'https://media.licdn.com/dms/image/C560BAQHGnx_4t6NIjw/company-logo_200_200/0/1631376203871?e=1720656000&v=beta&t=iKMWshTXLpWfQlT9cL3amkwcjoCWD13aXe7OpuQ_nCY',
         name: 'University of Information and Technology',
         numberOfFollowers: '20,678',

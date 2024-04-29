@@ -31,6 +31,7 @@ import HomeFooter from '../../components/Guest/HomeFooter/HomeFooter';
 function GuestLayouts({ children }) {
     const location = useLocation();
     const backgroundColor = location.pathname !== '/' ? '#f3f2f0' : '#fff';
+    // const backgroundColor = '#fff';
     return (
         <Box sx={{ backgroundColor }}>
             <HomePageHeader />

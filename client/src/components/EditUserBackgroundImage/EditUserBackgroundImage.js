@@ -3,6 +3,7 @@ import { Box, IconButton, Typography, Button, Divider, Avatar } from '@mui/mater
 import CloseIcon from '@mui/icons-material/Close';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
+import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 function EditUserBackgroundImage({ imgUrl, handleClose }) {
     return (
         <Box
@@ -17,6 +18,16 @@ function EditUserBackgroundImage({ imgUrl, handleClose }) {
                 boxShadow: '0 4px 4px #333',
                 //  close icon doesn't overflow
                 overflow: 'hidden',
+                [ipadProScreen]: {
+                    width: '70%',
+                },
+                [tabletScreen]: {
+                    width: '90%',
+                },
+                [mobileScreen]: {
+                    width: '100%',
+                    height: '460px',
+                },
             }}
         >
             <Box
@@ -55,9 +66,23 @@ function EditUserBackgroundImage({ imgUrl, handleClose }) {
                 <Avatar
                     src={DefaultBackgroundImage}
                     alt="Default User Background Image"
-                    sx={{ height: '256px', width: '256px' }}
+                    sx={{
+                        height: '256px',
+                        width: '256px',
+                        [mobileScreen]: {
+                            height: '200px',
+                            width: '200px',
+                        },
+                    }}
                 />
-                <Box sx={{ width: '60%', textAlign: 'center', p: 1 }}>
+                <Box
+                    sx={{
+                        width: '60%',
+                        textAlign: 'center',
+                        p: 1,
+                        [mobileScreen]: { textAlign: 'left', width: '90%' },
+                    }}
+                >
                     <CustomizeTypography fs="18px" sx={{ color: '#191919' }}>
                         Showcase your personality, interests, team moments or notable milestones
                     </CustomizeTypography>
