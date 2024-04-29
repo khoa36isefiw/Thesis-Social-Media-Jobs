@@ -12,14 +12,15 @@ import {
     FormGroup,
     FormControlLabel,
     Button,
-    Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
+    Dialog,
 } from '@mui/material';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import CloseIcon from '@mui/icons-material/Close';
 import { blue } from '@mui/material/colors';
+import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 
 const TextFieldConstant = ({ label, isRequired = false, content, maxHeight, mRows = false }) => {
     return (
@@ -34,6 +35,9 @@ const TextFieldConstant = ({ label, isRequired = false, content, maxHeight, mRow
                         height: maxHeight || '35px',
                         fontSize: '14px',
                     },
+                    [mobileScreen]: {
+                        // width: '30px',
+                    },
                 }}
                 // size="small"
                 defaultValue={content}
@@ -45,7 +49,7 @@ const TextFieldConstant = ({ label, isRequired = false, content, maxHeight, mRow
     );
 };
 
-function EditUserProfile({ isOpen, handleClose }) {
+function EditUserProfile({ handleClose }) {
     const [school, setSchool] = useState('');
     const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -63,21 +67,41 @@ function EditUserProfile({ isOpen, handleClose }) {
     };
 
     return (
-        <Dialog
-            open={isOpen}
-            onClose={handleModalClose}
+        <Box
             sx={{
-                '.MuiPaper-root': {
-                    borderRadius: '12px',
-                    boxShadow: '0 8px 4px #404040',
+                position: 'relative',
+                backgroundColor: '#fff',
+                width: '50%',
+                minHeight: '300px',
+                margin: 'auto',
+                mt: '64px',
+                borderRadius: '8px',
+                boxShadow: '0 4px 4px #333',
+                //  close icon doesn't overflow
+                overflow: 'hidden',
+                [ipadProScreen]: {
+                    width: '70%',
+                    // height: '800px',
+                },
+                [tabletScreen]: {
+                    width: '90%',
+                },
+                [mobileScreen]: {
+                    width: '100%',
+                    // height: '640px'
                 },
             }}
         >
             <DialogContent
                 sx={{
-                    width: '600px',
                     padding: 0,
                     borderRadius: '24px',
+                    [mobileScreen]: {
+                        width: '100%',
+                    },
+                    [tabletScreen]: {
+                        width: '100%',
+                    },
                 }}
             >
                 <Box
@@ -105,8 +129,33 @@ function EditUserProfile({ isOpen, handleClose }) {
                     </IconButton>
                 </Box>
                 <Divider />
-                <Box sx={{ p: 1, overflowY: 'scroll', maxHeight: '500px', mx: 2 }}>
-                    <Typography sx={{ color: '#404040' }}>* Indicates required</Typography>
+                <Box
+                    sx={{
+                        p: 1,
+                        overflowY: 'scroll',
+                        height: '500px',
+                        mx: 2,
+                        [ipadProScreen]: {
+                            height: '800px',
+                        },
+                        [mobileScreen]: {
+                            height: '400px',
+                        },
+                        [tabletScreen]: {
+                            height: '650px',
+                        },
+                    }}
+                >
+                    <CustomizeTypography
+                        sx={{
+                            color: '#404040',
+                            [mobileScreen]: {
+                                fontSize: '13px',
+                            },
+                        }}
+                    >
+                        * Indicates required
+                    </CustomizeTypography>
                     {/* First Name */}
                     {/* <Box sx={{ mt: 2 }}>
                         <Typography sx={{ fontSize: '14px', mb: '2px' }}>First Name*</Typography>
@@ -150,6 +199,9 @@ function EditUserProfile({ isOpen, handleClose }) {
                                     height: '35px',
                                     fontSize: '14px',
                                 },
+                                // [mobileScreen]: {
+                                //     width: '330px',
+                                // },
                             }}
                         >
                             <Select value={school} onChange={handleSelectSchool} displayEmpty>
@@ -254,7 +306,7 @@ function EditUserProfile({ isOpen, handleClose }) {
                     sx={{
                         '.MuiPaper-root': {
                             borderRadius: '12px',
-                            boxShadow: '0 8px 4px #404040',
+                            boxShadow: `0 4px 4px ${theme.palette.shadowColor}`,
                         },
                     }}
                 >
@@ -288,7 +340,14 @@ function EditUserProfile({ isOpen, handleClose }) {
                         </DialogTitle>
                     </Box>
                     <Divider />
-                    <DialogContent sx={{ width: '340px' }}>
+                    <DialogContent
+                        sx={{
+                            width: '340px',
+                            [mobileScreen]: {
+                                width: '300px',
+                            },
+                        }}
+                    >
                         <Typography sx={{ fontSize: '14px' }}>
                             Are you sure you want to discard the changes you made?
                         </Typography>
@@ -325,7 +384,7 @@ function EditUserProfile({ isOpen, handleClose }) {
                     </DialogActions>
                 </Dialog>
             </DialogContent>
-        </Dialog>
+        </Box>
     );
 }
 
