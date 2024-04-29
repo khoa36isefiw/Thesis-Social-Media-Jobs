@@ -7,6 +7,7 @@ import { backToPreviousPage } from '../components/BackToPreviousPage/BackToPrevi
 import { TabPanel } from '../components/TabPanel/TabPanel';
 import CompaniesAndShoolsAreFollowing from '../components/CompaniesIsFollowing/CompaniesAndShoolsAreFollowing';
 import { companiesData, schoolData } from '../components/CompaniesIsFollowing/data';
+import { mobileScreen } from '../components/Theme/Theme';
 
 const interestsData = ['Companies', 'Schools'];
 function UserInterestPage() {
@@ -18,7 +19,15 @@ function UserInterestPage() {
         setIsActive(!isActive);
     };
     return (
-        <CustomizeBox sx={{ padding: 0 }}>
+        <CustomizeBox
+            sx={{
+                mb: 2,
+                padding: 0,
+                [mobileScreen]: {
+                    borderRadius: 0,
+                },
+            }}
+        >
             <Box sx={{ display: 'flex', alignItems: 'center', padding: '12px 12px 0' }}>
                 <IconButton onClick={backToPreviousPage}>
                     <KeyboardBackspaceOutlinedIcon sx={{ fontSize: '28px' }} />
