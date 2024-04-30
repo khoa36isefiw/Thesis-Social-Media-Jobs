@@ -23,6 +23,8 @@ import ManageMyNetworkLayout from '../layouts/ManageMyNetworkLayout/ManageMyNetw
 import FollowingAndFollowers from '../components/FollowingAndFollowers/FollowingAndFollowers';
 import PageIsFollowing from '../components/PageIsFollowing/PageIsFollowing';
 import MyHashtags from '../components/MyHashtags/MyHashtags';
+import Messaging from '../components/Messaging/Messaging';
+import MessageLayout from '../layouts/MessageLayout/MessageLayout';
 
 // not sign into this website
 const publicRoutes = [
@@ -71,6 +73,8 @@ const privateRoutes = [
         component: MyHashtags,
         layout: ManageMyNetworkLayout,
     },
+
+    { path: '/messages', component: Messaging, layout: MessageLayout },
 
     { path: '/user/recent-activity/all', component: ShowUserActivity, layout: UserActivityLayout },
 
