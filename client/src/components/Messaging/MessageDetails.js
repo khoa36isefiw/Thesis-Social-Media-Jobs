@@ -15,7 +15,7 @@ const MessageDetails = () => {
                 flexGrow: 1,
                 [mobileScreen]: {
                     // height: 'calc(100vh - 330px)', // initial height
-                    height: 'calc(100vh - 350px)', // initial height
+                    height: 'calc(100vh - 360px)', // initial height
                 },
             }}
         >
