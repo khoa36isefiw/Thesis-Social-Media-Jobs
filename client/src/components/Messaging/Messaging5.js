@@ -98,7 +98,7 @@ function Messaging5() {
                 flexDirection: 'column',
                 [mobileScreen]: {
                     borderRadius: 0,
-                    height: 'calc(100vh - 140px)',
+                    height: 'calc(100vh - 150px)',
                 },
             }}
         >
