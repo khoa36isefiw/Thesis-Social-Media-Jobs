@@ -91,14 +91,14 @@ function Messaging5() {
                 borderRadius: '12px',
                 padding: '16px',
                 padding: 0,
-                // height: 'calc(100vh - 122px)', // initial height
+                height: 'calc(100vh - 122px)', // initial height
                 // height: 'calc(100vh - 130px)',
                 width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 [mobileScreen]: {
                     borderRadius: 0,
-                    height: 'calc(100vh - 130px)',
+                    height: 'calc(100vh - 140px)',
                 },
             }}
         >

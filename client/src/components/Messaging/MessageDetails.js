@@ -14,7 +14,8 @@ const MessageDetails = () => {
                 scrollBehavior: 'smooth',
                 flexGrow: 1,
                 [mobileScreen]: {
-                    height: 'calc(100vh - 330px)',
+                    // height: 'calc(100vh - 330px)', // initial height
+                    height: 'calc(100vh - 350px)', // initial height
                 },
             }}
         >
