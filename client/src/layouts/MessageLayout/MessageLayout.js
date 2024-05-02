@@ -1,31 +1,17 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { styled, Paper, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import Advertising from '../../components/Advertising/Advertising';
 import Header from '../UserHomePageLayout/Header/Header';
-import SimilarFollowers from './SimilarFollowers/SimilarFollowers';
 import HiringCareer from '../../components/Advertising/HiringCareer';
-import { ipadProScreen, mobileScreen } from '../../components/Theme/Theme';
-
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
-
+import { mobileScreen } from '../../components/Theme/Theme';
 function MessageLayout({ children }) {
     return (
         <Box
             sx={{
                 backgroundColor: '#f3f2f0',
-                height: '100vh',
+                minHeight: '100vh',
                 position: 'relative',
-                [ipadProScreen]: {
-                    height: '1366px',
-                },
             }}
         >
             <Header />
@@ -39,20 +25,18 @@ function MessageLayout({ children }) {
             >
                 <Box>
                     <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                        <Grid item xs={12} sm={8} lg={9}>
-                            <Box
-                                sx={{ minHeight: '10vh', borderRadius: '24px', position: 'static' }}
-                            >
+                        <Grid item xs={12} sm={12} md={9} lg={9}>
+                            <Box>
                                 <Box>{children}</Box>
                             </Box>
                         </Grid>
-                        <Grid item xs={12} sm={4} lg={3}>
+                        <Grid item xs={12} sm={12} md={3} lg={3}>
                             <HiringCareer />
                             <Typography
                                 sx={{
                                     // position: 'absolute',
                                     fontSize: '14px',
-                                    py: 2,
+                                    py: 1,
                                     color: 'text.secondary',
                                     [mobileScreen]: {
                                         textAlign: 'center',
