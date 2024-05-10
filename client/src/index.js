@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import GlobalStyles from './layouts/GlobalStyles/GlobalStyles';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
 
 // import { theme } from './components/Theme/Theme';
 import { ThemeProvider } from '@mui/material';
 import { unstable_createMuiStrictModeTheme } from '@mui/material/styles';
 import { theme } from './components/Theme/Theme';
+import store from './redux/Store/store';
 
 // const theme = unstable_createMuiStrictModeTheme();
 const mergeTheme = {
@@ -19,11 +21,13 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
     <React.StrictMode>
-        <ThemeProvider theme={mergeTheme}>
-            <GlobalStyles>
-                <App />
-            </GlobalStyles>
-        </ThemeProvider>
+        <Provider store={store}>
+            <ThemeProvider theme={mergeTheme}>
+                <GlobalStyles>
+                    <App />
+                </GlobalStyles>
+            </ThemeProvider>
+        </Provider>
     </React.StrictMode>,
 );
 

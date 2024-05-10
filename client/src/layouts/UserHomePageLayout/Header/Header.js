@@ -132,7 +132,6 @@ const HeaderIconNotification = ({
 };
 
 function Header() {
-    const navigate = useNavigate();
     const location = useLocation();
     const [isTextFieldFocused, setIsTextFieldFocused] = React.useState(false);
     const [activeIcon, setActiveIcon] = React.useState('');

@@ -15,7 +15,6 @@ import Media from '../../assets/images/picture.png';
 import Events from '../../assets/images/calendar.png';
 import PostModal from './PostModal';
 
-
 const CustomAvatarWithText = ({ src, alt, children }) => (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
         <Avatar
