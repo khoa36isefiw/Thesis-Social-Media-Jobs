@@ -6,19 +6,18 @@ import Laugh from '../../assets/images/laughing_reactions.png';
 import Reply from '../../assets/images/left_reactions.png';
 import MoreOption from '../../assets/images/option_reactions.png';
 
-const reactionsOnMessaging = [
-    { reactionsImage: Liked, reactionsName: 'Liked a Message' },
-    { reactionsImage: Love, reactionsName: 'Loved a Message' },
-    { reactionsImage: Laugh, reactionsName: 'Laugh a Message' },
-    { reactionsImage: Reply, reactionsName: 'Reply a Message' },
-];
+// const reactionsOnMessaging = [
+//     { reactionsImage: Liked, reactionsName: 'Liked a Message' },
+//     { reactionsImage: Love, reactionsName: 'Loved a Message' },
+//     { reactionsImage: Laugh, reactionsName: 'Laugh a Message' },
+//     { reactionsImage: Reply, reactionsName: 'Reply a Message' },
+// ];
 
 const moreActionsList = ['Forward', 'Delete', 'Edit'];
 
-function ReactionOnMessage({ handCloseReactions, onReactionSelect }) {
+function ReactionOnMessage({ listDataReactions, handCloseReactions, onReactionSelect, msgIndex }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
-    const [selectedReaction, setSelectedReaction] = useState(null);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -32,9 +31,8 @@ function ReactionOnMessage({ handCloseReactions, onReactionSelect }) {
     };
 
     const handleReactionSelection = (reaction) => {
-        setSelectedReaction(reaction);
         handCloseReactions(); // Đóng menu phản ứng sau khi đã chọn
-        onReactionSelect(reaction); // Truyền thông tin biểu tượng phản ứng đã chọn lên thành phần cha
+        onReactionSelect(reaction, msgIndex); // Truyền thông tin biểu tượng phản ứng đã chọn lên thành phần cha
     };
 
     return (
@@ -58,7 +56,7 @@ function ReactionOnMessage({ handCloseReactions, onReactionSelect }) {
                     px: '4px',
                 }}
             >
-                {reactionsOnMessaging.map((reaction, index) => (
+                {listDataReactions.map((reaction, index) => (
                     <Box
                         key={index}
                         sx={{
