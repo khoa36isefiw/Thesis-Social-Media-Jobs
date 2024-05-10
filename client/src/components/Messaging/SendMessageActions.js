@@ -26,7 +26,8 @@ function SendMessageActions({ handleSendButtonClick, isEmpty }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
     // selected item in menu
-    const [selectedOption, setSelectedOption] = useState(sendMessageActionsList[0]); // default value
+    // default là 0 do đang test, chưa có làm cái KeyEnter
+    const [selectedOption, setSelectedOption] = useState(sendMessageActionsList[1]); // default value
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
