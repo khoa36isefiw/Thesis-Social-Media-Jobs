@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { Container } from '@mui/material';
 import Grid from '@mui/material/Grid';
@@ -14,12 +14,21 @@ function MessageLayout({ children }) {
                 position: 'relative',
             }}
         >
-            <Header />
+            <Box
+                sx={{
+                    [mobileScreen]: {
+                        // display: 'none',
+                    },
+                }}
+            >
+                <Header />
+            </Box>
             <Container
                 sx={{
                     mt: 12,
                     [mobileScreen]: {
                         p: 0,
+                        // mt: 0,
                     },
                 }}
             >
@@ -59,3 +68,4 @@ function MessageLayout({ children }) {
 }
 
 export default MessageLayout;
+

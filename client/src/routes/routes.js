@@ -24,9 +24,6 @@ import FollowingAndFollowers from '../components/FollowingAndFollowers/Following
 import PageIsFollowing from '../components/PageIsFollowing/PageIsFollowing';
 import MyHashtags from '../components/MyHashtags/MyHashtags';
 import Messaging from '../components/Messaging/Messaging';
-import Messaging3 from '../components/Messaging/Messaging3';
-import Messaging4 from '../components/Messaging/Messaging4';
-import Messaging5 from '../components/Messaging/Messaging5';
 import MessageLayout from '../layouts/MessageLayout/MessageLayout';
 
 // not sign into this website
@@ -77,7 +74,7 @@ const privateRoutes = [
         layout: ManageMyNetworkLayout,
     },
 
-    { path: '/messages', component: Messaging5, layout: MessageLayout },
+    { path: '/messages', component: Messaging, layout: MessageLayout },
 
     { path: '/user/recent-activity/all', component: ShowUserActivity, layout: UserActivityLayout },
 
