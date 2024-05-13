@@ -31,6 +31,7 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import PDFImage from '../../assets/images/pdf-file.png';
 import DocxImage from '../../assets/images/doc-file.png';
 import SendMessageActions from './SendMessageActions';
+import MessageDetails2 from './MessageDetails2';
 
 function Messaging() {
     const textFieldRef = useRef(null);
@@ -111,7 +112,7 @@ function Messaging() {
         }
     };
 
-    // multiple images
+    // multiple images // initial
     const handleImageUpload = (event) => {
         //update status for progress bar
         setShowProgress(true);
@@ -216,12 +217,16 @@ function Messaging() {
         // temp variable to get value
         const newMessageSaved = [
             ...messageSaved,
-            {
-                msgSent: editorText,
-                imageSent: imageURL,
-                fileSent: listFilesUploaded,
-                timeSent: currentTime,
-            },
+            [editorText, imageURL, listFilesUploaded, currentTime],
+            // {
+            //     msgSent: editorText,
+
+            //     imageSent: imageURL,
+
+            //     fileSent: listFilesUploaded,
+
+            //     timeSent: currentTime,
+            // },
         ];
         // update setMessageSaved with newMessageSaved array
         setMessageSaved(newMessageSaved);
@@ -232,6 +237,7 @@ function Messaging() {
         setImageURL([]);
         setListFilesUploaded([]);
         setIsEmpty(true);
+        console.log('Message just sent include: ', newMessageSaved);
     };
     // console.log('Message just sent outside: ', messageSaved);
 
@@ -433,7 +439,7 @@ function Messaging() {
                         </Box>
 
                         {/* Show chat details */}
-                        <MessageDetails
+                        <MessageDetails2
                             dataMessage={messageSaved}
                             imageUploaded={imageURL}
                             setImageUploaded={setImageURL}
