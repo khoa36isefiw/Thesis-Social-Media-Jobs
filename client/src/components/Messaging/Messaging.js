@@ -55,6 +55,9 @@ function Messaging() {
     const [isClickSend, setIsClickSend] = useState(false);
     // save message just sent
     const [messageSaved, setMessageSaved] = useState([]);
+
+    // test list data just uploaded
+
     useEffect(() => {
         const handleResize = () => {
             // Set threshold width for mobile screen
@@ -430,11 +433,17 @@ function Messaging() {
                         </Box>
 
                         {/* Show chat details */}
-                        <MessageDetails dataMessage={messageSaved} />
+                        <MessageDetails
+                            dataMessage={messageSaved}
+                            imageUploaded={imageURL}
+                            setImageUploaded={setImageURL}
+                            fileUploaded={listFilesUploaded}
+                            setFileUploaded={setListFilesUploaded}
+                        />
 
                         {/* upload images */}
                         {/* <Box sx={{ maxHeight: '160px', overflow: 'scroll' }}> */}
-                        <Box sx={{ maxHeight: '60px', overflow: 'scroll' }}>
+                        {/* <Box sx={{ maxHeight: '60px', overflow: 'scroll' }}>
                             {imageURL.map((image, index) => (
                                 <Box
                                     key={index}
@@ -497,10 +506,10 @@ function Messaging() {
                                     </Avatar>
                                 </Box>
                             ))}
-                        </Box>
+                        </Box> */}
 
                         {/* file uploaded like: pdf, docx */}
-                        <Box sx={{ maxHeight: '160px', overflow: 'scroll' }}>
+                        {/* <Box sx={{ maxHeight: '160px', overflow: 'scroll' }}>
                             {listFilesUploaded.map((file, index) => (
                                 <Box
                                     key={index}
@@ -591,7 +600,7 @@ function Messaging() {
                                     </Avatar>
                                 </Box>
                             ))}
-                        </Box>
+                        </Box> */}
                         <Box>
                             <Box
                                 sx={{

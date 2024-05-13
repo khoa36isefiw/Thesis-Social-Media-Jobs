@@ -7,21 +7,28 @@ import ReactionOnMessage from './ReactionOnMessage';
 import ImageDetailInMessage from './ImageDetailInMessage';
 import PDFImage from '../../assets/images/pdf-file.png';
 import DocxImage from '../../assets/images/doc-file.png';
+// Icon
 import DownloadIcon from '@mui/icons-material/Download';
-
+import CloseIcon from '@mui/icons-material/Close';
 // reactions
 import Liked from '../../assets/images/like_reactions.png';
 import Love from '../../assets/images/heart_reactions.png';
 import Laugh from '../../assets/images/laughing_reactions.png';
 import Reply from '../../assets/images/left_reactions.png';
+import SouthIcon from '@mui/icons-material/South';
 
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 // Chat detail
-const MessageDetails = ({ dataMessage }) => {
+const MessageDetails = ({
+    dataMessage,
+    imageUploaded,
+    setImageUploaded,
+    fileUploaded,
+    setFileUploaded,
+}) => {
     const [isHoveredOnMessage, setIsHoveredOnMessage] = useState(false);
     const [hoveredFileIndex, setHoveredFileIndex] = useState(null);
     const [hoveredOnEachMessage, setHoveredOnEachMessage] = useState(null);
-    // which is image chose and opened modal?
+    // which image is chose and opened modal?
     const [openImageMessageModal, setOpenImageMessageModal] = useState(null);
     // icon scroll to bottom
     const [showButtonBackToBottom, setShowButtonBackToBottom] = useState(false);
@@ -33,7 +40,7 @@ const MessageDetails = ({ dataMessage }) => {
     useEffect(() => {
         // scroll at the end of the chat detail
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-    }, [dataMessage]); // listen for changes in the dataMessage prop
+    }, [dataMessage, imageUploaded, fileUploaded]); // listen for changes of dataMessage, imageUploaded, fileUploaded
 
     const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
@@ -67,20 +74,33 @@ const MessageDetails = ({ dataMessage }) => {
         setHoveredOnEachMessage({ messageIndex });
     };
 
-    // const handleReactionSelection = (reaction, msgIndex) => {
-    //     setSelectedReaction({ reaction, msgIndex });
-    //     setHoveredOnEachMessage(null); // Đóng menu phản ứng sau khi đã chọn
-    // };
     const handleReactionSelection = (reaction, messageIndex) => {
         setSelectedReactions({ ...selectedReactions, [messageIndex]: reaction });
         setHoveredOnEachMessage(null);
+        // console.log('List data just uploaded: ', imageUploaded);
+    };
+
+    // remove image just uploaded
+    // console.log('List image uploaded: ', imageUploaded);
+    const handleRemoveImage = (indexToRemove) => {
+        // get the others images in array
+        const filteredImages = imageUploaded.filter((_, index) => index !== indexToRemove);
+        // console.log('list after removing: ', filteredImages);
+        setImageUploaded(filteredImages); // update in Messaging data component
+    };
+
+    // remove image just uploaded
+    const handleRemoveFiles = (indexToRemove) => {
+        const filteredFiles = fileUploaded.filter((_, index) => index !== indexToRemove);
+
+        setFileUploaded(filteredFiles);
     };
 
     return (
         <Box
             ref={chatContainerRef}
             sx={{
-                p: 1,
+                // p: 1,
                 height: '370px',
                 overflow: 'scroll',
                 scrollBehavior: 'smooth',
@@ -104,6 +124,7 @@ const MessageDetails = ({ dataMessage }) => {
                     justifyContent: 'flex-end',
                     marginLeft: 'auto',
                     mt: 1,
+                    p: 1,
                 }}
             >
                 <CustomizeTypography
@@ -120,7 +141,7 @@ const MessageDetails = ({ dataMessage }) => {
                 </CustomizeTypography>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', p: 1 }}>
                 <Avatar
                     src={MissYou}
                     alt={'User Avatar'}
@@ -226,6 +247,7 @@ const MessageDetails = ({ dataMessage }) => {
                     marginLeft: 'auto',
                     maxWidth: '200px',
                     mt: 1,
+                    p: 1,
                     '&:hover': {
                         bgcolor: theme.palette.bgButtonHover,
                         boxShadow: `0 4px 4px ${theme.palette.primaryText}`,
@@ -271,7 +293,7 @@ const MessageDetails = ({ dataMessage }) => {
                     </Box>
                 </CustomizeTypography>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', p: 1 }}>
                 <Avatar
                     src={MissYou}
                     alt={'User Avatar'}
@@ -345,6 +367,7 @@ const MessageDetails = ({ dataMessage }) => {
                     justifyContent: 'flex-end',
                     marginLeft: 'auto',
                     mt: 1,
+                    p: 1,
                 }}
             >
                 <CustomizeTypography
@@ -367,7 +390,7 @@ const MessageDetails = ({ dataMessage }) => {
             </Box>
 
             {/* user we are chatting */}
-            <Box sx={{ display: 'flex', alignItems: 'flex-start', position: 'relative' }}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', position: 'relative', p: 1 }}>
                 <Avatar
                     src={MissYou}
                     alt={'User Avatar'}
@@ -432,15 +455,35 @@ const MessageDetails = ({ dataMessage }) => {
 
             {showButtonBackToBottom && (
                 <IconButton
-                    style={{
+                    sx={{
+                        // define animation
+                        '@keyframes fade-down': {
+                            from: {
+                                opacity: 0,
+                                bottom: '32%',
+                            },
+                            to: {
+                                opacity: 1,
+                                bottom: '40%',
+                            },
+                        },
+                        zIndex: 999,
                         position: 'fixed',
-                        bottom: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%,50%)',
+                        bottom: '40%',
+                        right: '32%',
+                        // transform: 'translate(-80%,50%)',
+                        bgcolor: '#0a66c2',
+                        width: '32px',
+                        height: '32px',
+
+                        animation: `fade-down 0.5s ease-in-out`,
+                        '&:hover': {
+                            bgcolor: '#306191',
+                        },
                     }}
                     onClick={scrollToBottom}
                 >
-                    <ArrowDownwardIcon sx={{ fontSize: '24px' }} />
+                    <SouthIcon sx={{ fontSize: '20px', color: '#fff' }} />
                 </IconButton>
             )}
 
@@ -457,8 +500,9 @@ const MessageDetails = ({ dataMessage }) => {
                         justifyContent: 'flex-end',
                         marginLeft: 'auto',
                         mt: 1,
+                        p: 1,
                         '&:hover': {
-                            bgcolor: '#f2f2f2',
+                            bgcolor: '#f2f2f2', 
                             // maxWidth: '200px',
                         },
                     }}
@@ -520,9 +564,10 @@ const MessageDetails = ({ dataMessage }) => {
                                                 key={imgIndex}
                                                 src={img.url}
                                                 alt={img.name}
-                                                sx={{
+                                                style={{
+                                                    borderRadius: '8px',
                                                     py: 1,
-                                                    borderRadius: 0,
+                                                    // borderRadius: 0,
                                                     width: '100%',
                                                     height: '100%',
                                                     objectFit: 'cover',
@@ -670,8 +715,140 @@ const MessageDetails = ({ dataMessage }) => {
 
                     {/* Hiển thị thời gian gửi */}
                     {/* <p>Time Sent: {message.timeSent.toLocaleString()}</p> */}
+                </Box>
+            ))}
 
-                    {/* Open image detail for chat */}
+            {/* load image just uploaded - preparing to send*/}
+            {imageUploaded.length > 0 &&
+                imageUploaded.map((image, index) => (
+                    <Box
+                        key={index}
+                        sx={{
+                            padding: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            borderTop: '1px solid #d0d0d0',
+                        }}
+                    >
+                        <Avatar
+                            src={image.url}
+                            alt="Uploaded Image"
+                            sx={{
+                                width: '32px',
+                                height: '32px',
+                                objectFit: 'cover',
+                                borderRadius: '12px',
+
+                                [mobileScreen]: {
+                                    width: '24px',
+                                    height: '24px',
+                                },
+                            }}
+                        />
+                        <Box>
+                            <CustomizeTypography sx={{ color: theme.palette.normalText }}>
+                                {image.name}
+                            </CustomizeTypography>
+
+                            {/* {showProgress ? (
+                                <LinearDeterminate showProgress={showProgress} />
+                            ) : (
+                                <CustomizeTypography
+                                    fs="12px"
+                                    sx={{ color: theme.palette.primaryText }}
+                                >
+                                    Attached File
+                                </CustomizeTypography>
+                            )} */}
+                        </Box>
+
+                        <Avatar
+                            sx={{
+                                width: '24px',
+                                height: '24px',
+                                bgcolor: '#fff',
+                                border: '1px solid #404040',
+                                '&:hover': {
+                                    cursor: 'pointer',
+                                },
+                            }}
+                            onClick={() => handleRemoveImage(index)}
+                        >
+                            <CloseIcon sx={{ color: 'black' }} />
+                        </Avatar>
+                    </Box>
+                ))}
+
+            {fileUploaded.map((file, index) => (
+                <Box
+                    key={index}
+                    sx={{
+                        padding: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+
+                        borderTop: '1px solid #333',
+                    }}
+                >
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Avatar
+                            src={file.name.endsWith('.pdf') ? PDFImage : DocxImage}
+                            alt={file.name.endsWith('.pdf') ? 'PDF File' : 'Docx File'}
+                            sx={{
+                                width: '48px',
+                                height: '48px',
+                                objectFit: 'contain',
+                                borderRadius: 0,
+                                mr: 1,
+                                '&:hover': {
+                                    cursor: 'pointer',
+                                },
+                                [mobileScreen]: {
+                                    width: '24px',
+                                    height: '24px',
+                                },
+                            }}
+                        />
+
+                        <Box>
+                            <CustomizeTypography
+                                fs="13px"
+                                sx={{
+                                    color: theme.palette.normalText,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                }}
+                            >
+                                {file.name}
+                            </CustomizeTypography>
+                            {/* {showProgress ? (
+                            <LinearDeterminate showProgress={showProgress} />
+                        ) : (
+                            <CustomizeTypography
+                                fs="12px"
+                                sx={{ color: theme.palette.primaryText }}
+                            >
+                                Attached File
+                            </CustomizeTypography>
+                        )} */}
+                        </Box>
+                    </Box>
+                    <Avatar
+                        sx={{
+                            width: '24px',
+                            height: '24px',
+                            bgcolor: '#fff',
+                            border: '1px solid #404040',
+                            '&:hover': {
+                                cursor: 'pointer',
+                            },
+                        }}
+                        onClick={() => handleRemoveFiles(index)}
+                    >
+                        <CloseIcon sx={{ color: 'black' }} />
+                    </Avatar>
                 </Box>
             ))}
         </Box>
