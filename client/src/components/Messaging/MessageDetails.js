@@ -502,7 +502,7 @@ const MessageDetails = ({
                         mt: 1,
                         p: 1,
                         '&:hover': {
-                            bgcolor: '#f2f2f2', 
+                            bgcolor: '#f2f2f2',
                             // maxWidth: '200px',
                         },
                     }}
