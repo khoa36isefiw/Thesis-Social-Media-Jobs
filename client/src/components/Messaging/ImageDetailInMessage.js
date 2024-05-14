@@ -1,18 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Avatar, Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+
 function ImageDetailInMessage({ imgUrl, handleClose }) {
+    const [originalWidth, setOriginalWidth] = useState(null);
+    const [originalHeight, setOriginalHeight] = useState(null);
+
+    useEffect(() => {
+        const img = new Image();
+        img.src = imgUrl;
+        img.onload = () => {
+            let newHeight = img.naturalHeight;
+            let newWidth = img.naturalWidth;
+            console.log('Original height and width for image: ', newHeight, newWidth);
+            if (newHeight >= 600) {
+                newHeight = 600;
+            }
+            if (newWidth >= 1125) {
+                newWidth = 1100;
+            }
+
+            setOriginalWidth(newWidth);
+            setOriginalHeight(newHeight);
+        };
+
+        // close modal when user press ESC
+        const handleKeydown = (e) => {
+            // ESC is 27
+            if (e.keyCode === 27) {
+                handleClose();
+            }
+        };
+        // add event
+        window.addEventListener('keydown', handleKeydown);
+
+        // clear function
+        return () => {
+            //unmount
+            window.removeEventListener('keydown', handleKeydown);
+        };
+    }, [imgUrl]);
+
     const closeModal = () => {
         handleClose();
-        console.log('Image URL is chose: ', imgUrl);
     };
+
+    console.log('New height and width for image: ', originalHeight, originalWidth);
     return (
         <Box
             sx={{
                 position: 'relative',
                 backgroundColor: '#fff',
-                // width: '80%',
-                // height: '80%',
+                //make center for box
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 width: '1150px',
                 height: '600px',
                 margin: 'auto',
@@ -39,27 +81,18 @@ function ImageDetailInMessage({ imgUrl, handleClose }) {
                 <CloseIcon fontSize="large" sx={{ color: '#404040' }} />
             </IconButton>
 
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            >
+            <Box>
                 {imgUrl && (
-                    // <Box sx={{ mb: 2, mt: '20px' }}>
-                    <Avatar
+                    <img
                         src={imgUrl}
                         alt="Posted Image"
-                        sx={{
-                            mt: '56px',
-                            width: '100%',
-                            height: '100%',
+                        style={{
+                            width: originalWidth,
+                            height: originalHeight,
                             objectFit: 'contain',
-                            borderRadius: 0,
+                            marginTop: '6px',
                         }}
                     />
-                    // </Box>
                 )}
             </Box>
         </Box>

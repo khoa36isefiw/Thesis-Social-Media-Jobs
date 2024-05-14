@@ -10,6 +10,8 @@ import {
     Avatar,
     Typography,
 } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendButtonClick, disabledKeyEnter } from '../../redux/ButtonSendMessage/sendAction';
 import ChatWithUser from './ChatWithUser';
 import MessageDetails from './MessageDetails';
 import EmojiPicker from 'emoji-picker-react';
@@ -27,12 +29,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import LinearProgress from '@mui/material/LinearProgress';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
-// image for upload file
-import PDFImage from '../../assets/images/pdf-file.png';
-import DocxImage from '../../assets/images/doc-file.png';
 import SendMessageActions from './SendMessageActions';
+import MessageDetails2 from './MessageDetails2';
 
 function Messaging() {
+    const dispatch = useDispatch();
     const textFieldRef = useRef(null);
     const [isTextFieldFocused, setIsTextFieldFocused] = useState(false);
     // const [isFocused, setIsFocused] = useState(false);
@@ -55,6 +56,12 @@ function Messaging() {
     const [isClickSend, setIsClickSend] = useState(false);
     // save message just sent
     const [messageSaved, setMessageSaved] = useState([]);
+
+    // redux
+    const isEnterKeyEnabled = useSelector((state) => state.buttonSendMessage.isEnterKeyEnabled);
+
+    // test list data just uploaded
+
     useEffect(() => {
         const handleResize = () => {
             // Set threshold width for mobile screen
@@ -101,14 +108,10 @@ function Messaging() {
 
     const handleTextFieldChange = (event) => {
         setEditorText(event.target.value);
-        if (event.target.value.trim() !== '') {
-            setIsEmpty(false);
-        } else {
-            setIsEmpty(true);
-        }
+        setIsEmpty(event.target.value.trim() === '');
     };
 
-    // multiple images
+    // multiple images // initial
     const handleImageUpload = (event) => {
         //update status for progress bar
         setShowProgress(true);
@@ -141,15 +144,6 @@ function Messaging() {
             }
         }
         console.log('Image array: ', uploadedImages);
-    };
-
-    // remove image just uploaded
-    const handleRemoveImage = (indexToRemove) => {
-        // get the others images in array
-        const filteredImages = imageURL.filter((_, index) => index !== indexToRemove);
-        setImageURL(filteredImages);
-        // Update isEmpty based on the length of imageURL
-        setIsEmpty(filteredImages.length === 0);
     };
 
     // upload file
@@ -189,17 +183,6 @@ function Messaging() {
         }
     };
 
-    // remove image just uploaded
-    const handleRemoveFiles = (indexToRemove) => {
-        // get the others files in array
-        // console.log('The position is removed: ', indexToRemove);
-        const filteredFiles = listFilesUploaded.filter((_, index) => index !== indexToRemove);
-        // /console.log('List Files after removing: ', filteredFiles);
-        setListFilesUploaded(filteredFiles);
-        // Update isEmpty based on the length of file uploaded
-        setIsEmpty(filteredFiles.length === 0);
-    };
-
     const handleEmojiClick = (event) => {
         setEditorText(editorText + event.emoji); //
         setIsEmpty(false);
@@ -213,12 +196,7 @@ function Messaging() {
         // temp variable to get value
         const newMessageSaved = [
             ...messageSaved,
-            {
-                msgSent: editorText,
-                imageSent: imageURL,
-                fileSent: listFilesUploaded,
-                timeSent: currentTime,
-            },
+            [editorText, imageURL, listFilesUploaded, currentTime],
         ];
         // update setMessageSaved with newMessageSaved array
         setMessageSaved(newMessageSaved);
@@ -229,10 +207,41 @@ function Messaging() {
         setImageURL([]);
         setListFilesUploaded([]);
         setIsEmpty(true);
+        console.log('Message just sent include: ', newMessageSaved);
     };
-    // console.log('Message just sent outside: ', messageSaved);
 
     // re-solve press enter to send the message and prevent re-render
+
+    const handleSendButtonClick2 = useCallback(() => {
+        // console.log('Before Sending message:', editorText);
+        // save message just sent
+        const currentTime = new Date(); // save the time the message was sent
+        // temp variable to get value
+        const newMessageSaved = [
+            ...messageSaved,
+            [editorText, imageURL, listFilesUploaded, currentTime],
+        ];
+        // update setMessageSaved with newMessageSaved array
+        setMessageSaved(newMessageSaved);
+        // console.log('After sending Message: ', newMessageSaved);
+
+        // Reset editor after sending message
+        setEditorText('');
+        setImageURL([]);
+        setListFilesUploaded([]);
+        setIsEmpty(true);
+        console.log('Message just sent include: ', newMessageSaved);
+    }, [editorText, imageURL, listFilesUploaded]);
+
+    const handleKeyDown = useCallback(
+        (e) => {
+            if (e.key === 'Enter' && isEnterKeyEnabled && !isEmpty) {
+                e.preventDefault();
+                handleSendButtonClick();
+            }
+        },
+        [isEnterKeyEnabled, handleSendButtonClick, isEmpty],
+    );
 
     return (
         <Box
@@ -430,168 +439,13 @@ function Messaging() {
                         </Box>
 
                         {/* Show chat details */}
-                        <MessageDetails dataMessage={messageSaved} />
-
-                        {/* upload images */}
-                        {/* <Box sx={{ maxHeight: '160px', overflow: 'scroll' }}> */}
-                        <Box sx={{ maxHeight: '60px', overflow: 'scroll' }}>
-                            {imageURL.map((image, index) => (
-                                <Box
-                                    key={index}
-                                    sx={{
-                                        padding: 1,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-
-                                        borderTop: '1px solid #333',
-                                    }}
-                                >
-                                    <Avatar
-                                        src={image.url}
-                                        alt="Uploaded Image"
-                                        sx={{
-                                            width: '32px',
-                                            height: '32px',
-                                            objectFit: 'cover',
-                                            borderRadius: '12px',
-
-                                            [mobileScreen]: {
-                                                width: '24px',
-                                                height: '24px',
-                                            },
-                                        }}
-                                    />
-                                    <Box>
-                                        <CustomizeTypography
-                                            sx={{ color: theme.palette.normalText }}
-                                        >
-                                            {image.name}
-                                        </CustomizeTypography>
-
-                                        {showProgress ? (
-                                            <LinearDeterminate showProgress={showProgress} />
-                                        ) : (
-                                            <CustomizeTypography
-                                                fs="12px"
-                                                sx={{ color: theme.palette.primaryText }}
-                                            >
-                                                Attached File
-                                            </CustomizeTypography>
-                                        )}
-                                    </Box>
-
-                                    <Avatar
-                                        sx={{
-                                            width: '24px',
-                                            height: '24px',
-                                            bgcolor: '#fff',
-                                            border: '1px solid #404040',
-                                            '&:hover': {
-                                                cursor: 'pointer',
-                                            },
-                                        }}
-                                        onClick={() => handleRemoveImage(index)}
-                                    >
-                                        <CloseIcon sx={{ color: 'black' }} />
-                                    </Avatar>
-                                </Box>
-                            ))}
-                        </Box>
-
-                        {/* file uploaded like: pdf, docx */}
-                        <Box sx={{ maxHeight: '160px', overflow: 'scroll' }}>
-                            {listFilesUploaded.map((file, index) => (
-                                <Box
-                                    key={index}
-                                    sx={{
-                                        padding: 1,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-
-                                        borderTop: '1px solid #333',
-                                    }}
-                                >
-                                    {file.name.endsWith('.pdf') && (
-                                        <Avatar
-                                            src={PDFImage}
-                                            alt={'PDF File'}
-                                            sx={{
-                                                width: '48px',
-                                                height: '48px',
-                                                objectFit: 'contain',
-                                                borderRadius: 0,
-                                                '&:hover': {
-                                                    cursor: 'pointer',
-                                                },
-                                                [mobileScreen]: {
-                                                    width: '24px',
-                                                    height: '24px',
-                                                },
-                                            }}
-                                        />
-                                    )}
-                                    {(file.name.endsWith('.docx') ||
-                                        file.name.endsWith('.doc')) && (
-                                        <Avatar
-                                            src={DocxImage}
-                                            alt={'Docx File'}
-                                            sx={{
-                                                width: '48px',
-                                                height: '48px',
-                                                objectFit: 'contain',
-                                                borderRadius: 0,
-                                                '&:hover': {
-                                                    cursor: 'pointer',
-                                                },
-                                                [mobileScreen]: {
-                                                    width: '24px',
-                                                    height: '24px',
-                                                },
-                                            }}
-                                        />
-                                    )}
-
-                                    <Box>
-                                        <CustomizeTypography
-                                            fs="13px"
-                                            sx={{
-                                                color: theme.palette.normalText,
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                            }}
-                                        >
-                                            {file.name}
-                                        </CustomizeTypography>
-                                        {showProgress ? (
-                                            <LinearDeterminate showProgress={showProgress} />
-                                        ) : (
-                                            <CustomizeTypography
-                                                fs="12px"
-                                                sx={{ color: theme.palette.primaryText }}
-                                            >
-                                                Attached File
-                                            </CustomizeTypography>
-                                        )}
-                                    </Box>
-                                    <Avatar
-                                        sx={{
-                                            width: '24px',
-                                            height: '24px',
-                                            bgcolor: '#fff',
-                                            border: '1px solid #404040',
-                                            '&:hover': {
-                                                cursor: 'pointer',
-                                            },
-                                        }}
-                                        onClick={() => handleRemoveFiles(index)}
-                                    >
-                                        <CloseIcon sx={{ color: 'black' }} />
-                                    </Avatar>
-                                </Box>
-                            ))}
-                        </Box>
+                        <MessageDetails
+                            dataMessage={messageSaved}
+                            imageUploaded={imageURL}
+                            setImageUploaded={setImageURL}
+                            fileUploaded={listFilesUploaded}
+                            setFileUploaded={setListFilesUploaded}
+                        />
                         <Box>
                             <Box
                                 sx={{
@@ -630,6 +484,7 @@ function Messaging() {
                                         onBlur={handleBlur} // unactive line
                                         onChange={handleTextFieldChange}
                                         placeholder={isEmpty ? 'Write a message...' : ''}
+                                        onKeyDown={handleKeyDown}
                                         style={{
                                             width: '100%',
                                             height: '100%',

@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import { ThemeProvider } from '@mui/material';
 import { unstable_createMuiStrictModeTheme } from '@mui/material/styles';
 import { theme } from './components/Theme/Theme';
-import store from './redux/Store/store';
+import store from './redux/store';
 
 // const theme = unstable_createMuiStrictModeTheme();
 const mergeTheme = {
