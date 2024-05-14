@@ -91,7 +91,6 @@ function ImageDetailInMessage({ imgUrl, handleClose }) {
                                 width: originalWidth,
                                 height: originalHeight,
                                 objectFit: 'contain',
-                                borderRadius: 0,
                             }}
                         />
                     </Box>

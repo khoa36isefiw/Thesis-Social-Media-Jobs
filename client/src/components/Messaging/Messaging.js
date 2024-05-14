@@ -439,7 +439,7 @@ function Messaging() {
                         </Box>
 
                         {/* Show chat details */}
-                        <MessageDetails2
+                        <MessageDetails
                             dataMessage={messageSaved}
                             imageUploaded={imageURL}
                             setImageUploaded={setImageURL}

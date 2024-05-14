@@ -26,7 +26,7 @@ const MessageDetails = ({
     setFileUploaded,
 }) => {
     const [isHoveredOnMessage, setIsHoveredOnMessage] = useState(false);
-    const [hoveredFileIndex, setHoveredFileIndex] = useState(null);
+    // const [hoveredFileIndex, setHoveredFileIndex] = useState(null); // download file
     const [hoveredOnEachMessage, setHoveredOnEachMessage] = useState(null);
     // which image is chose and opened modal?
     const [openImageMessageModal, setOpenImageMessageModal] = useState(null);
@@ -94,6 +94,51 @@ const MessageDetails = ({
         const filteredFiles = fileUploaded.filter((_, index) => index !== indexToRemove);
 
         setFileUploaded(filteredFiles);
+    };
+
+    const [hoveredTextIndex, setHoveredTextIndex] = useState(null);
+    const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
+    const [hoveredFileIndex, setHoveredFileIndex] = useState(null);
+    const [selectedTextReactions, setSelectedTextReactions] = useState({});
+    const [selectedImageReactions, setSelectedImageReactions] = useState({});
+    const [selectedFileReactions, setSelectedFileReactions] = useState({});
+
+    const handleTextMouseEnter = (messageIndex) => {
+        setHoveredTextIndex(messageIndex);
+    };
+
+    const handleTextMouseLeave = () => {
+        setHoveredTextIndex(null);
+    };
+
+    const handleImageMouseEnter = (messageIndex, imageIndex) => {
+        setHoveredImageIndex({ messageIndex, imageIndex });
+    };
+
+    const handleImageMouseLeave = () => {
+        setHoveredImageIndex(null);
+    };
+
+    const handleFileMouseEnter = (messageIndex, fileIndex) => {
+        setHoveredFileIndex({ messageIndex, fileIndex });
+    };
+
+    const handleFileMouseLeave = () => {
+        setHoveredFileIndex(null);
+    };
+
+    const handleTextReactionSelection = (reaction, messageIndex) => {
+        setSelectedTextReactions({ ...selectedTextReactions, [messageIndex]: reaction });
+    };
+
+    const handleImageReactionSelection = (reaction, messageIndex, imageIndex) => {
+        const imageKey = `${messageIndex}_${imageIndex}`;
+        setSelectedImageReactions({ ...selectedImageReactions, [imageKey]: reaction });
+    };
+
+    const handleFileReactionSelection = (reaction, messageIndex, fileIndex) => {
+        const fileKey = `${messageIndex}_${fileIndex}`;
+        setSelectedFileReactions({ ...selectedFileReactions, [fileKey]: reaction });
     };
 
     return (
@@ -488,235 +533,348 @@ const MessageDetails = ({
             )}
 
             {/* load data from message array */}
-            {dataMessage.map((message, index) => (
-                <Box
-                    key={index}
-                    sx={{
-                        minHeight: '10px',
-                        borderRadius: '12px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-end',
-                        justifyContent: 'flex-end',
-                        marginLeft: 'auto',
-                        mt: 1,
-                        p: 1,
-                        '&:hover': {
-                            bgcolor: '#f2f2f2',
-                            // maxWidth: '200px',
-                        },
-                    }}
-                    onMouseEnter={() => handleHoverOnEachMessage(index)}
-                    onMouseLeave={() => setHoveredOnEachMessage(null)}
-                >
-                    {hoveredOnEachMessage && hoveredOnEachMessage.messageIndex === index && (
-                        <ReactionOnMessage
-                            handCloseReactions={() => setHoveredOnEachMessage(null)}
-                            onReactionSelect={(reaction) =>
-                                handleReactionSelection(reaction, index)
-                            }
-                            listDataReactions={reactionsOnMessaging}
-                        />
-                    )}
-                    {/* show message text  */}
 
-                    <Box sx={{ maxWidth: '200px', position: 'relative', mt: 2 }}>
-                        {message?.msgSent.length > 0 && (
-                            <CustomizeTypography
-                                sx={{
-                                    maxWidth: '200px',
-                                    minHeight: '10px',
-                                    borderRadius: '12px',
-                                    color: theme.palette.primaryText,
-                                    fontSize: '13.5px',
-                                    bgcolor: '#edf3f7',
-                                    p: 1,
-                                    // px: 1,
-                                    // py: '12px',
-                                }}
-                            >
-                                {message?.msgSent}
-                            </CustomizeTypography>
-                        )}
-                        <Box>
-                            {message.imageSent.length > 0 && (
-                                // <Box
-                                //     sx={{
-                                //         display: 'flex',
-                                //         justifyContent: 'center',
-                                //         alignItems: 'center',
-                                //         mt: 1,
-                                //     }}
-                                // >
-                                <Box
-                                    sx={{
-                                        maxWidth: '200px',
-                                        maxHeight: '200px',
-                                        border: `1px solid #a9a5a5`,
-                                        cursor: 'pointer',
-                                        borderRadius: '8px',
-                                        mt: 1,
-                                    }}
-                                >
-                                    {message.imageSent.map((img, imgIndex) => (
-                                        <Box>
-                                            <Avatar
-                                                key={imgIndex}
-                                                src={img.url}
-                                                alt={img.name}
-                                                style={{
-                                                    borderRadius: '8px',
-                                                    py: 1,
-                                                    // borderRadius: 0,
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    objectFit: 'cover',
-                                                }}
-                                                onClick={() =>
-                                                    handleOpenImageModal(index, imgIndex)
-                                                }
-                                            />
-                                            <Modal
-                                                open={
-                                                    openImageMessageModal?.messageIndex === index &&
-                                                    openImageMessageModal?.imgIndex === imgIndex
-                                                }
-                                                onClose={handleCloseImageModal}
-                                            >
-                                                <ImageDetailInMessage
-                                                    imgUrl={img.url}
-                                                    handleClose={handleCloseImageModal}
-                                                />
-                                            </Modal>
-                                        </Box>
-                                    ))}
-                                </Box>
-                                // </Box>
-                            )}
-                        </Box>
+            <Box>
+                {dataMessage.map((message, messageIndex) => {
+                    const text = message[0];
+                    const images = message[1];
+                    const files = message[2];
 
-                        {/* load file just uploaded/ sent */}
-                        {message.fileSent.map((file, fileIndex) => (
-                            <Box
-                                key={fileIndex}
-                                sx={{
-                                    mt: 1,
-                                    height: '60px',
-                                    width: '200px',
-                                    border: `1px solid #a9a5a5`,
-                                    cursor: 'pointer',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    position: 'relative',
-                                }}
-                                onMouseEnter={() => handleHoverFileIndex(index, fileIndex)}
-                                onMouseLeave={() => setHoveredFileIndex(null)}
-                            >
-                                <Avatar
-                                    src={
-                                        file.name.endsWith('.docx') || file.name.endsWith('.doc')
-                                            ? DocxImage
-                                            : PDFImage
-                                    }
-                                    alt={file.name}
-                                    sx={{
-                                        height: '60px',
-                                        width: '50px',
-                                        objectFit: 'cover',
-                                        borderTopLeftRadius: '6px',
-                                        borderBottomLeftRadius: '6px',
-                                        borderTopRightRadius: 0,
-                                        borderBottomRightRadius: 0,
-                                        '&:hover': {
-                                            cursor: 'pointer',
-                                        },
-                                        [mobileScreen]: {
-                                            width: '24px',
-                                            height: '24px',
-                                        },
-                                    }}
-                                />
+                    return (
+                        <Box
+                            key={messageIndex}
+                            sx={{
+                                position: 'relative',
+                                minHeight: '10px',
+                                maxWidth: '200px',
+                                borderRadius: '12px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-end',
+                                justifyContent: 'flex-end',
+                                marginLeft: 'auto',
+                                // initial
+                                mt: 1,
+                                p: 1,
+                            }}
+                        >
+                            {text.length > 0 && (
                                 <CustomizeTypography
-                                    fs="12px"
-                                    fw={true}
+                                    onMouseEnter={() => handleTextMouseEnter(messageIndex)}
+                                    onMouseLeave={handleTextMouseLeave}
                                     sx={{
-                                        color: theme.palette.normalText,
-                                        mx: 1,
-                                        overflow: 'hidden',
-                                        whiteSpace: 'nowrap',
-                                        textOverflow: 'ellipsis',
+                                        borderRadius: '12px',
+                                        color: theme.palette.primaryText,
+                                        fontSize: '13.5px',
+                                        bgcolor: '#edf3f7',
+                                        p: 1,
+                                        position: 'relative',
+                                        '::before': {
+                                            position: 'absolute',
+                                            content: '""',
+                                            width: '200px',
+                                            // bgcolor: 'yellowgreen',
+                                            height: '40px',
+                                            top: '-10px',
+                                            right: '50%',
+                                        },
                                     }}
                                 >
-                                    {file.name}
+                                    {text}
+                                    {/* show reaction list */}
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            right: 0,
+                                            zIndex: 99,
+                                        }}
+                                    >
+                                        {hoveredTextIndex === messageIndex && (
+                                            <ReactionOnMessage
+                                                handCloseReactions={() => setHoveredTextIndex(null)}
+                                                onReactionSelect={(reaction) =>
+                                                    handleTextReactionSelection(
+                                                        reaction,
+                                                        messageIndex,
+                                                    )
+                                                }
+                                                listDataReactions={listIconReactions}
+                                            />
+                                        )}
+                                    </Box>
+                                    {/* show the reaction is chose in message */}
+                                    <Box>
+                                        {selectedTextReactions[messageIndex] && (
+                                            <Avatar
+                                                src={
+                                                    selectedTextReactions[messageIndex]
+                                                        .reactionsImage
+                                                }
+                                                alt={
+                                                    selectedTextReactions[messageIndex]
+                                                        .reactionsName
+                                                }
+                                                sx={{
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    borderRadius: 0,
+                                                    position: 'absolute',
+                                                    bottom: '-30%',
+                                                    right: '10%',
+                                                }}
+                                            />
+                                        )}
+                                    </Box>
                                 </CustomizeTypography>
-                                {hoveredFileIndex &&
-                                    hoveredFileIndex.messageIndex === index && // message index
-                                    hoveredFileIndex.fileIndex === fileIndex && ( // and file index are hovered
+                            )}
+
+                            {images.map((image, imgIndex) => {
+                                const imageKey = `${messageIndex}_${imgIndex}`;
+                                return (
+                                    <Box
+                                        key={imgIndex}
+                                        onMouseEnter={() =>
+                                            handleImageMouseEnter(messageIndex, imgIndex)
+                                        }
+                                        onMouseLeave={handleImageMouseLeave}
+                                        sx={{
+                                            maxWidth: '200px',
+                                            maxHeight: '200px',
+                                            // border: `1px solid #a9a5a5`,
+                                            cursor: 'pointer',
+                                            borderRadius: '8px',
+                                            mt: 2,
+                                            position: 'relative',
+                                            '::before': {
+                                                position: 'absolute',
+                                                content: '""',
+                                                width: '200px',
+                                                // bgcolor: 'yellowgreen',
+                                                height: '40px',
+                                                top: '-10px',
+                                                right: '0%',
+                                            },
+                                        }}
+                                    >
+                                        <Avatar
+                                            key={imgIndex}
+                                            src={image.url}
+                                            alt={image.name}
+                                            sx={{
+                                                borderRadius: '8px',
+                                                // py: 1,
+                                                // borderRadius: 0,
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'contain',
+                                            }}
+                                            onClick={() =>
+                                                handleOpenImageModal(messageIndex, imgIndex)
+                                            }
+                                        />
+                                        {/* Open image in details */}
+                                        <Modal
+                                            open={
+                                                openImageMessageModal?.messageIndex ===
+                                                    messageIndex &&
+                                                openImageMessageModal?.imgIndex === imgIndex
+                                            }
+                                            onClose={handleCloseImageModal}
+                                        >
+                                            <ImageDetailInMessage
+                                                imgUrl={image.url}
+                                                handleClose={handleCloseImageModal}
+                                            />
+                                        </Modal>
+                                        {/* <img src={image.url} alt={image.name} /> */}
+
+                                        {/* Show reactions list */}
                                         <Box
                                             sx={{
                                                 position: 'absolute',
                                                 top: 0,
-                                                left: 0,
                                                 right: 0,
-                                                bottom: 0,
-                                                bgcolor: 'rgba(255, 255, 255, 0.65)',
-                                                borderRadius: '6px',
-                                                zIndex: 999,
-                                                textTransform: 'initial',
-                                                fontSize: '14px',
+                                                zIndex: 99,
                                             }}
                                         >
-                                            {/* use tag a to download  */}
-                                            <a href={file.url} download={file.name}>
-                                                <Button
-                                                    disableTouchRipple
+                                            {hoveredImageIndex &&
+                                                hoveredImageIndex.messageIndex === messageIndex &&
+                                                hoveredImageIndex.imageIndex === imgIndex && (
+                                                    <ReactionOnMessage
+                                                        handCloseReactions={() =>
+                                                            setHoveredImageIndex(null)
+                                                        }
+                                                        onReactionSelect={(reaction) =>
+                                                            handleImageReactionSelection(
+                                                                reaction,
+                                                                messageIndex,
+                                                                imgIndex,
+                                                            )
+                                                        }
+                                                        listDataReactions={listIconReactions}
+                                                    />
+                                                )}
+                                        </Box>
+
+                                        {/* show which reaction is chose */}
+                                        {selectedImageReactions[imageKey] && (
+                                            <Avatar
+                                                src={
+                                                    selectedImageReactions[imageKey].reactionsImage
+                                                }
+                                                alt={selectedImageReactions[imageKey].reactionsName}
+                                                sx={{
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    borderRadius: 0,
+                                                    position: 'absolute',
+                                                    bottom: '-10%',
+                                                    right: '10%',
+                                                }}
+                                            />
+                                        )}
+                                    </Box>
+                                );
+                            })}
+
+                            {/* show file to UI */}
+                            {files.map((file, fileIndex) => {
+                                const fileKey = `${messageIndex}_${fileIndex}`;
+                                return (
+                                    <Box
+                                        key={fileIndex}
+                                        sx={{
+                                            mt: 1,
+                                            height: '60px',
+                                            width: '200px',
+                                            border: `1px solid #a9a5a5`,
+                                            cursor: 'pointer',
+                                            borderRadius: '8px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            position: 'relative',
+                                        }}
+                                        onMouseEnter={() =>
+                                            handleFileMouseEnter(messageIndex, fileIndex)
+                                        }
+                                        onMouseLeave={handleFileMouseLeave}
+                                    >
+                                        <Avatar
+                                            src={
+                                                file.name.endsWith('.docx') ||
+                                                file.name.endsWith('.doc')
+                                                    ? DocxImage
+                                                    : PDFImage
+                                            }
+                                            alt={file.name}
+                                            sx={{
+                                                height: '60px',
+                                                width: '50px',
+                                                objectFit: 'cover',
+                                                borderTopLeftRadius: '6px',
+                                                borderBottomLeftRadius: '6px',
+                                                borderTopRightRadius: 0,
+                                                borderBottomRightRadius: 0,
+                                                '&:hover': {
+                                                    cursor: 'pointer',
+                                                },
+                                                [mobileScreen]: {
+                                                    width: '24px',
+                                                    height: '24px',
+                                                },
+                                            }}
+                                        />
+                                        <CustomizeTypography
+                                            fs="12px"
+                                            fw={true}
+                                            sx={{
+                                                color: theme.palette.normalText,
+                                                mx: 1,
+                                                overflow: 'hidden',
+                                                whiteSpace: 'nowrap',
+                                                textOverflow: 'ellipsis',
+                                            }}
+                                        >
+                                            {file.name}
+                                        </CustomizeTypography>
+
+                                        {hoveredFileIndex &&
+                                            hoveredFileIndex.messageIndex === messageIndex &&
+                                            hoveredFileIndex.fileIndex === fileIndex && (
+                                                <Box
                                                     sx={{
                                                         position: 'absolute',
-                                                        top: '25%',
-                                                        left: '25%',
-                                                        zIndex: 999,
+                                                        top: 0,
+                                                        left: 0,
+                                                        right: 0,
+                                                        bottom: 0,
+                                                        bgcolor: 'rgba(255, 255, 255, 0.65)',
+                                                        borderRadius: '6px',
+                                                        zIndex: 99,
                                                         textTransform: 'initial',
                                                         fontSize: '14px',
-                                                        fontWeight: 'bold',
-                                                        color: theme.palette.normalText,
-                                                        '&:hover': {
-                                                            bgcolor: 'transparent',
-                                                        },
                                                     }}
-                                                    disableFocusRipple
-                                                    startIcon={<DownloadIcon />}
                                                 >
-                                                    Download
-                                                </Button>
-                                            </a>
-                                        </Box>
-                                    )}
-                            </Box>
-                        ))}
-
-                        {selectedReactions[index] && (
-                            <Avatar
-                                src={selectedReactions[index].reactionsImage}
-                                alt={selectedReactions[index].reactionsName}
-                                sx={{
-                                    width: '20px',
-                                    height: '20px',
-                                    borderRadius: 0,
-                                    position: 'absolute',
-                                    bottom: '-4%',
-                                    right: '10%',
-                                }}
-                            />
-                        )}
-                    </Box>
-
-                    {/* load image and only show if it exists */}
-
-                    {/* Hiển thị thời gian gửi */}
-                    {/* <p>Time Sent: {message.timeSent.toLocaleString()}</p> */}
-                </Box>
-            ))}
+                                                    {/* use tag a to download  */}
+                                                    <a href={file.url} download={file.name}>
+                                                        <Button
+                                                            disableTouchRipple
+                                                            sx={{
+                                                                position: 'absolute',
+                                                                top: '25%',
+                                                                left: '25%',
+                                                                zIndex: 999,
+                                                                textTransform: 'initial',
+                                                                fontSize: '14px',
+                                                                fontWeight: 'bold',
+                                                                color: theme.palette.normalText,
+                                                                '&:hover': {
+                                                                    bgcolor: 'transparent',
+                                                                },
+                                                            }}
+                                                            disableFocusRipple
+                                                            startIcon={<DownloadIcon />}
+                                                        >
+                                                            Download
+                                                        </Button>
+                                                    </a>
+                                                    <ReactionOnMessage
+                                                        handCloseReactions={() =>
+                                                            setHoveredFileIndex(null)
+                                                        }
+                                                        onReactionSelect={(reaction) =>
+                                                            handleFileReactionSelection(
+                                                                reaction,
+                                                                messageIndex,
+                                                                fileIndex,
+                                                            )
+                                                        }
+                                                        listDataReactions={listIconReactions}
+                                                    />
+                                                </Box>
+                                            )}
+                                        {selectedFileReactions[fileKey] && (
+                                            <Avatar
+                                                src={selectedFileReactions[fileKey].reactionsImage}
+                                                alt={selectedFileReactions[fileKey].reactionsName}
+                                                sx={{
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    borderRadius: 0,
+                                                    position: 'absolute',
+                                                    bottom: '-20%',
+                                                    right: '10%',
+                                                }}
+                                            />
+                                        )}
+                                    </Box>
+                                );
+                            })}
+                        </Box>
+                    );
+                })}
+            </Box>
 
             {/* load image just uploaded - preparing to send*/}
             {imageUploaded.length > 0 &&
@@ -788,7 +946,6 @@ const MessageDetails = ({
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-
                         borderTop: '1px solid #333',
                     }}
                 >
@@ -856,7 +1013,7 @@ const MessageDetails = ({
 };
 export default MessageDetails;
 
-const reactionsOnMessaging = [
+const listIconReactions = [
     { reactionsImage: Liked, reactionsName: 'Liked a Message' },
     { reactionsImage: Love, reactionsName: 'Loved a Message' },
     { reactionsImage: Laugh, reactionsName: 'Laugh a Message' },
