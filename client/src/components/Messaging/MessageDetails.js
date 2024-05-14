@@ -26,14 +26,16 @@ const MessageDetails = ({
     setFileUploaded,
 }) => {
     const [isHoveredOnMessage, setIsHoveredOnMessage] = useState(false);
-    // const [hoveredFileIndex, setHoveredFileIndex] = useState(null); // download file
-    const [hoveredOnEachMessage, setHoveredOnEachMessage] = useState(null);
     // which image is chose and opened modal?
     const [openImageMessageModal, setOpenImageMessageModal] = useState(null);
     // icon scroll to bottom
     const [showButtonBackToBottom, setShowButtonBackToBottom] = useState(false);
-    // const [selectedReaction, setSelectedReaction] = useState(null);
-    const [selectedReactions, setSelectedReactions] = useState({});
+    const [hoveredTextIndex, setHoveredTextIndex] = useState(null);
+    const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
+    const [hoveredFileIndex, setHoveredFileIndex] = useState(null);
+    const [selectedTextReactions, setSelectedTextReactions] = useState({});
+    const [selectedImageReactions, setSelectedImageReactions] = useState({});
+    const [selectedFileReactions, setSelectedFileReactions] = useState({});
 
     const chatContainerRef = useRef(null);
 
@@ -64,22 +66,6 @@ const MessageDetails = ({
         setOpenImageMessageModal(null);
     };
 
-    // check hover on file
-    const handleHoverFileIndex = (messageIndex, fileIndex) => {
-        setHoveredFileIndex({ messageIndex, fileIndex });
-    };
-
-    // show reactions menu on each message
-    const handleHoverOnEachMessage = (messageIndex) => {
-        setHoveredOnEachMessage({ messageIndex });
-    };
-
-    const handleReactionSelection = (reaction, messageIndex) => {
-        setSelectedReactions({ ...selectedReactions, [messageIndex]: reaction });
-        setHoveredOnEachMessage(null);
-        // console.log('List data just uploaded: ', imageUploaded);
-    };
-
     // remove image just uploaded
     // console.log('List image uploaded: ', imageUploaded);
     const handleRemoveImage = (indexToRemove) => {
@@ -95,13 +81,6 @@ const MessageDetails = ({
 
         setFileUploaded(filteredFiles);
     };
-
-    const [hoveredTextIndex, setHoveredTextIndex] = useState(null);
-    const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
-    const [hoveredFileIndex, setHoveredFileIndex] = useState(null);
-    const [selectedTextReactions, setSelectedTextReactions] = useState({});
-    const [selectedImageReactions, setSelectedImageReactions] = useState({});
-    const [selectedFileReactions, setSelectedFileReactions] = useState({});
 
     const handleTextMouseEnter = (messageIndex) => {
         setHoveredTextIndex(messageIndex);

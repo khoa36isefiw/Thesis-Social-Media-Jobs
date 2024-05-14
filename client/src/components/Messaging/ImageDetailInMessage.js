@@ -83,17 +83,16 @@ function ImageDetailInMessage({ imgUrl, handleClose }) {
 
             <Box>
                 {imgUrl && (
-                    <Box>
-                        <img
-                            src={imgUrl}
-                            alt="Posted Image"
-                            style={{
-                                width: originalWidth,
-                                height: originalHeight,
-                                objectFit: 'contain',
-                            }}
-                        />
-                    </Box>
+                    <img
+                        src={imgUrl}
+                        alt="Posted Image"
+                        style={{
+                            width: originalWidth,
+                            height: originalHeight,
+                            objectFit: 'contain',
+                            marginTop: '6px',
+                        }}
+                    />
                 )}
             </Box>
         </Box>

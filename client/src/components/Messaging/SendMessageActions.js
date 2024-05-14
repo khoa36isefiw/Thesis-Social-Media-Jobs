@@ -14,8 +14,9 @@ import {
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
+import { useDispatch, useSelector } from 'react-redux';
 import { theme } from '../Theme/Theme';
+import { disableKeyEnter, enableKeyEnter } from '../../redux/ButtonSendMessage/sendAction';
 
 const sendMessageActionsList = [
     { actionTitle: 'Press Enter to Send', actionSubTitle: 'Pressing Enter will send message' },
@@ -27,7 +28,13 @@ function SendMessageActions({ handleSendButtonClick, isEmpty }) {
     const [showOptions, setShowOptions] = useState(false);
     // selected item in menu
     // default là 0 do đang test, chưa có làm cái KeyEnter
-    const [selectedOption, setSelectedOption] = useState(sendMessageActionsList[1]); // default value
+    // const [selectedOption, setSelectedOption] = useState(sendMessageActionsList[0]); // default value
+    const selectedOption = useSelector((state) =>
+        state.buttonSendMessage.isEnterKeyEnabled
+            ? sendMessageActionsList[0]
+            : sendMessageActionsList[1],
+    );
+    const dispatch = useDispatch();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -43,8 +50,12 @@ function SendMessageActions({ handleSendButtonClick, isEmpty }) {
     };
 
     const handleSelectedOption = (option) => {
-        setSelectedOption(option);
-
+        // setSelectedOption(option);
+        if (option === sendMessageActionsList[0]) {
+            dispatch(enableKeyEnter());
+        } else {
+            dispatch(disableKeyEnter());
+        }
         // close menu after choosing option
         handleClose();
     };
