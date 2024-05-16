@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
 import { Avatar, Box, Menu, MenuList, MenuItem, ListItemText, Typography } from '@mui/material';
-import Liked from '../../assets/images/like_reactions.png';
-import Love from '../../assets/images/heart_reactions.png';
-import Laugh from '../../assets/images/laughing_reactions.png';
-import Reply from '../../assets/images/left_reactions.png';
 import MoreOption from '../../assets/images/option_reactions.png';
-
-// const reactionsOnMessaging = [
-//     { reactionsImage: Liked, reactionsName: 'Liked a Message' },
-//     { reactionsImage: Love, reactionsName: 'Loved a Message' },
-//     { reactionsImage: Laugh, reactionsName: 'Laugh a Message' },
-//     { reactionsImage: Reply, reactionsName: 'Reply a Message' },
-// ];
 
 const moreActionsList = ['Forward', 'Delete', 'Edit'];
 
-function ReactionOnMessage({ listDataReactions, handCloseReactions, onReactionSelect, msgIndex }) {
+function ReactionOnMessage({
+    listDataReactions,
+    handCloseReactions,
+    onReactionSelect,
+    msgIndex,
+    imgAndFileIndex = null,
+    deleteMessage,
+}) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
 
@@ -33,6 +29,11 @@ function ReactionOnMessage({ listDataReactions, handCloseReactions, onReactionSe
     const handleReactionSelection = (reaction) => {
         handCloseReactions(); // Đóng menu phản ứng sau khi đã chọn
         onReactionSelect(reaction, msgIndex); // Truyền thông tin biểu tượng phản ứng đã chọn lên thành phần cha
+    };
+
+    const handleDelete = () => {
+        deleteMessage(msgIndex, imgAndFileIndex); // Gọi hàm xóa tin nhắn được truyền từ component cha
+        handleClose();
     };
 
     return (
@@ -116,7 +117,10 @@ function ReactionOnMessage({ listDataReactions, handCloseReactions, onReactionSe
                 >
                     <MenuList sx={{ width: '150px', px: 0, py: 0 }}>
                         {moreActionsList.map((action, index) => (
-                            <MenuItem key={index} onClick={handleClose}>
+                            <MenuItem
+                                key={index}
+                                onClick={action === 'Delete' ? handleDelete : handleClose}
+                            >
                                 <ListItemText>
                                     <Typography sx={{ fontSize: '14px', color: '#191919' }}>
                                         {action}
