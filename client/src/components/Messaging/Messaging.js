@@ -35,6 +35,7 @@ import MessageDetails2 from './MessageDetails2';
 function Messaging() {
     const dispatch = useDispatch();
     const textFieldRef = useRef(null);
+    const texareaRef = useRef(null);
     const [isTextFieldFocused, setIsTextFieldFocused] = useState(false);
     // const [isFocused, setIsFocused] = useState(false);
     const [isEmpty, setIsEmpty] = useState(true);
@@ -106,10 +107,18 @@ function Messaging() {
         setLineActive(false);
     };
 
-    const handleTextFieldChange = (event) => {
-        setEditorText(event.target.value);
-        setIsEmpty(event.target.value.trim() === '');
-    };
+    const handleTextFieldChange = useCallback((event) => {
+        const value = event.target.value;
+        setEditorText(value);
+        setIsEmpty(value.trim() === '');
+
+        // setEditorText(event.target.value);
+        // setIsEmpty(event.target.value.trim() === '');
+    }, []);
+    // const handleTextFieldChange = (event) => {
+    //     setEditorText(event.target.value);
+    //     setIsEmpty(event.target.value.trim() === '');
+    // };
 
     // multiple images // initial
     const handleImageUpload = (event) => {
@@ -226,22 +235,37 @@ function Messaging() {
         // console.log('After sending Message: ', newMessageSaved);
 
         // Reset editor after sending message
+
         setEditorText('');
         setImageURL([]);
         setListFilesUploaded([]);
         setIsEmpty(true);
         console.log('Message just sent include: ', newMessageSaved);
-    }, [editorText, imageURL, listFilesUploaded]);
+    }, [editorText, imageURL, listFilesUploaded, messageSaved]);
 
     const handleKeyDown = useCallback(
         (e) => {
             if (e.key === 'Enter' && isEnterKeyEnabled && !isEmpty) {
                 e.preventDefault();
-                handleSendButtonClick();
+                handleSendButtonClick2();
             }
         },
-        [isEnterKeyEnabled, handleSendButtonClick, isEmpty],
+        [isEnterKeyEnabled, handleSendButtonClick2, isEmpty],
     );
+
+    useEffect(() => {
+        if (texareaRef.current) {
+            texareaRef.current.addEventListener('keyup', handleKeyDown);
+        }
+
+        //unmount
+        // clear
+        return () => {
+            if (texareaRef.current) {
+                texareaRef.current.removeEventListener('keyup', handleKeyDown);
+            }
+        };
+    }, [handleKeyDown]);
 
     return (
         <Box
@@ -441,6 +465,7 @@ function Messaging() {
                         {/* Show chat details */}
                         <MessageDetails
                             dataMessage={messageSaved}
+                            setDataMessage={setMessageSaved}
                             imageUploaded={imageURL}
                             setImageUploaded={setImageURL}
                             fileUploaded={listFilesUploaded}
@@ -479,12 +504,13 @@ function Messaging() {
                                     }}
                                 >
                                     <textarea
+                                        inputRef={texareaRef}
                                         value={editorText}
                                         onFocus={handleFocus} // active line
                                         onBlur={handleBlur} // unactive line
                                         onChange={handleTextFieldChange}
-                                        placeholder={isEmpty ? 'Write a message...' : ''}
                                         onKeyDown={handleKeyDown}
+                                        placeholder={isEmpty ? 'Write a message...' : ''}
                                         style={{
                                             width: '100%',
                                             height: '100%',
@@ -594,7 +620,7 @@ function Messaging() {
                                     </Button> */}
 
                                     <SendMessageActions
-                                        handleSendButtonClick={handleSendButtonClick}
+                                        handleSendButtonClick={handleSendButtonClick2}
                                         isEmpty={isEmpty}
                                     />
                                 </Box>
