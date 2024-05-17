@@ -18,7 +18,7 @@ import Reply from '../../assets/images/left_reactions.png';
 import SouthIcon from '@mui/icons-material/South';
 
 // Chat detail
-const MessageDetails = ({
+const DeleteMessageAfterTime = ({
     dataMessage,
     setDataMessage,
     imageUploaded,
@@ -122,39 +122,6 @@ const MessageDetails = ({
         setSelectedFileReactions({ ...selectedFileReactions, [fileKey]: reaction });
     };
 
-    const handleDeleteAMessage2 = (indexToRemove, imgIndex = null) => {
-        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
-
-        if (imgIndex === null) {
-            const filteredMessages = dataMessage.filter((_, index) => index !== indexToRemove);
-            console.log('Data after removing: ', filteredMessages);
-            setDataMessage(filteredMessages);
-        } else {
-            // Lấy tin nhắn cụ thể từ danh sách
-            const messageToEdit = dataMessage[indexToRemove];
-            // Tạo một bản sao mới của danh sách hình ảnh sau khi xóa hình ảnh cụ thể
-            const updatedImages = messageToEdit[1].filter((_, index) => index !== imgIndex);
-            // Tạo một bản sao mới của tin nhắn với danh sách hình ảnh đã cập nhật
-            const updatedMessage = [messageToEdit[0], updatedImages, messageToEdit[2]];
-            // Cập nhật danh sách tin nhắn với tin nhắn đã chỉnh sửa
-            const newDataMessage = [...dataMessage];
-            newDataMessage[indexToRemove] = updatedMessage;
-            console.log(newDataMessage);
-            setDataMessage(newDataMessage);
-        }
-
-        // Scroll to bottom if the user was at the bottom before deletion
-        if (isAtBottom) {
-            setTimeout(() => {
-                scrollToBottom();
-            }, 100);
-        } else {
-            // Ensure the button shows up if the user was not at the bottom
-            setShowButtonBackToBottom(true);
-        }
-    };
-
     const handleDeleteAMessage = (indexToRemove, imgIndex = null) => {
         // Get current scroll position
         const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
@@ -163,18 +130,8 @@ const MessageDetails = ({
         // Update messages data
         const newDataMessage = dataMessage.map((message, index) => {
             if (index === indexToRemove) {
-                if (imgIndex === -1) {
-                    // If imgIndex is -1, return the specified JSX component
-                    return [null, [], []];
-                } else {
-                    // Otherwise, remove the specific image
-                    const [text, images, files] = message;
-                    const updatedImages = images.map((image, idx) =>
-                        idx === imgIndex ? null : image,
-                    );
-                    const updatedFiles = files.map((file, idx) => (idx === imgIndex ? null : file));
-                    return [text, updatedImages, updatedFiles];
-                }
+                // If any part of the message is deleted, mark the entire message as deleted
+                return [null, [], []];
             }
             return message;
         });
@@ -207,281 +164,6 @@ const MessageDetails = ({
             }}
             onScroll={handleScroll}
         >
-            {/* box contains message that we sent */}
-            <Box
-                sx={{
-                    minHeight: '10px',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    alignItems: 'flex-end',
-                    justifyContent: 'flex-end',
-                    marginLeft: 'auto',
-                    mt: 1,
-                    p: 1,
-                }}
-            >
-                <CustomizeTypography
-                    sx={{
-                        borderRadius: '12px',
-                        color: theme.palette.primaryText,
-                        fontSize: '13.5px',
-                        bgcolor: '#edf3f7',
-                        minWidth: '10px',
-                        p: 1,
-                    }}
-                >
-                    Hello bà
-                </CustomizeTypography>
-            </Box>
-
-            <Box sx={{ display: 'flex', alignItems: 'flex-start', p: 1 }}>
-                <Avatar
-                    src={MissYou}
-                    alt={'User Avatar'}
-                    sx={{
-                        height: '40px',
-                        width: '40px',
-                        border: `1px solid ${theme.palette.primaryText}`,
-                    }}
-                />
-                <Box sx={{ ml: 1 }}>
-                    {/* contain name and time that they sent message*/}
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <CustomizeTypography fs="14px" fw={true}>
-                            Melody Fall Topic
-                        </CustomizeTypography>
-                        <Box
-                            sx={{
-                                ml: 1,
-                                width: '5px',
-                                height: '5px',
-                                borderRadius: '50%',
-                                bgcolor: theme.palette.primaryText,
-                            }}
-                        />
-                        <CustomizeTypography
-                            sx={{
-                                color: theme.palette.primaryText,
-                                fontSize: '12px',
-                                ml: 1,
-                            }}
-                        >
-                            11:44 AM
-                        </CustomizeTypography>
-                    </Box>
-
-                    {/* contains message */}
-                    <Box>
-                        <CustomizeTypography
-                            sx={{
-                                color: theme.palette.primaryText,
-                                fontSize: '13.5px',
-                                p: '4px 0',
-                                position: 'relative',
-                                '::before': {
-                                    position: 'absolute',
-                                    content: '""',
-                                    width: '100%',
-                                    height: '20px',
-                                    top: '-10px',
-                                    left: 0,
-                                },
-                                '&:hover': {
-                                    bgcolor: theme.palette.bgButtonHover,
-                                },
-                            }}
-                            onMouseEnter={() => setIsHoveredOnMessage(true)}
-                            onMouseLeave={() => setIsHoveredOnMessage(false)}
-                        >
-                            nghe nèk
-                            <Box
-                                sx={{
-                                    position: 'absolute',
-                                    top: '-10%',
-                                    right: '0',
-                                    zIndex: 9999,
-                                }}
-                            >
-                                {/* {isHoveredOnMessage && (
-                                    <ReactionOnMessage
-                                        handCloseReactions={() => setIsHoveredOnMessage(false)}
-                                        listDataReactions={reactionsOnMessaging}
-                                    />
-                                )} */}
-                            </Box>
-                        </CustomizeTypography>
-
-                        <CustomizeTypography
-                            sx={{
-                                color: theme.palette.primaryText,
-                                fontSize: '13.5px',
-                                mt: 1,
-                            }}
-                        >
-                            sao thế?
-                        </CustomizeTypography>
-                    </Box>
-                </Box>
-            </Box>
-
-            {/* contain message that we sent/ reply/ request */}
-            <Box
-                sx={{
-                    minHeight: '10px',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    alignItems: 'flex-end',
-                    justifyContent: 'flex-end',
-                    marginLeft: 'auto',
-                    maxWidth: '200px',
-                    mt: 1,
-                    p: 1,
-                    '&:hover': {
-                        bgcolor: theme.palette.bgButtonHover,
-                        boxShadow: `0 4px 4px ${theme.palette.primaryText}`,
-                    },
-                }}
-            >
-                <CustomizeTypography
-                    sx={{
-                        borderRadius: '12px',
-                        color: theme.palette.primaryText,
-                        fontSize: '13.5px',
-                        bgcolor: '#edf3f7',
-
-                        p: 1,
-                        position: 'relative',
-                        '::before': {
-                            position: 'absolute',
-                            content: '""',
-                            width: '100%',
-                            height: '20px',
-                            top: '-10px',
-                            left: 0,
-                        },
-                    }}
-                    onMouseEnter={() => setIsHoveredOnMessage(true)}
-                    onMouseLeave={() => setIsHoveredOnMessage(false)}
-                >
-                    Gửi tui lại tên bài nhạc hôm bữa đi.
-                    <Box
-                        sx={{
-                            position: 'absolute',
-                            top: '-10%',
-                            right: '0',
-                            zIndex: 9999,
-                        }}
-                    >
-                        {/* {isHoveredOnMessage && (
-                            <ReactionOnMessage
-                                handCloseReactions={() => setIsHoveredOnMessage(false)}
-                                listDataReactions={reactionsOnMessaging}
-                            />
-                        )} */}
-                    </Box>
-                </CustomizeTypography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'flex-start', p: 1 }}>
-                <Avatar
-                    src={MissYou}
-                    alt={'User Avatar'}
-                    sx={{
-                        height: '40px',
-                        width: '40px',
-                        border: `1px solid ${theme.palette.primaryText}`,
-                    }}
-                />
-                <Box sx={{ ml: 1 }}>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <CustomizeTypography fs="14px" fw={true}>
-                            Melody Fall Topic
-                        </CustomizeTypography>
-                        <Box
-                            sx={{
-                                ml: 1,
-                                width: '5px',
-                                height: '5px',
-                                borderRadius: '50%',
-                                bgcolor: theme.palette.primaryText,
-                            }}
-                        />
-                        <CustomizeTypography
-                            sx={{
-                                color: theme.palette.primaryText,
-                                fontSize: '12px',
-                                ml: 1,
-                            }}
-                        >
-                            2:41 PM
-                        </CustomizeTypography>
-                    </Box>
-                    <Box>
-                        <CustomizeTypography
-                            sx={{
-                                color: theme.palette.primaryText,
-                                fontSize: '13.5px',
-                                mt: 1,
-                            }}
-                        >
-                            Lên YTB search nha
-                        </CustomizeTypography>
-                    </Box>
-                    <Box>
-                        <CustomizeTypography
-                            sx={{
-                                color: theme.palette.primaryText,
-                                fontSize: '13.5px',
-                                mt: 1,
-                            }}
-                        >
-                            初愿
-                        </CustomizeTypography>
-                    </Box>
-                </Box>
-            </Box>
-
-            {/* we are chatting */}
-            <Box
-                sx={{
-                    minHeight: '10px',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    alignItems: 'flex-end',
-                    justifyContent: 'flex-end',
-                    marginLeft: 'auto',
-                    mt: 1,
-                    p: 1,
-                }}
-            >
-                <CustomizeTypography
-                    sx={{
-                        borderRadius: '12px',
-                        color: theme.palette.primaryText,
-                        fontSize: '13.5px',
-                        bgcolor: '#edf3f7',
-                        maxWidth: '200px',
-                        p: 1,
-                    }}
-                >
-                    okay, cảm ơn nha! okay, cảm ơn nha! okay, cảm ơn nha! okay, cảm ơn nha! okay,
-                    cảm ơn nha! okay, cảm ơn nha! okay, cảm ơn nha! okay, cảm ơn nha! okay, cảm ơn
-                    nha! okay, cảm ơn nha! okay, cảm ơn nha!okay, cảm ơn nha! okay, cảm ơn nha!
-                    okay, cảm ơn nha! okay, cảm ơn nha! okay, cảm ơn nha! okay, cảm ơn nha! okay,
-                    cảm ơn nha! okay, cảm ơn nha! okay, cảm ơn nha! okay, cảm ơn nha! okay, cảm ơn
-                    nha!
-                </CustomizeTypography>
-            </Box>
-
             {/* user we are chatting */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', position: 'relative', p: 1 }}>
                 <Avatar
@@ -581,12 +263,19 @@ const MessageDetails = ({
             )}
 
             {/* load data from message array */}
-
             <Box>
                 {dataMessage.map((message, messageIndex) => {
                     const text = message[0];
                     const images = message[1];
                     const files = message[2];
+                    const isDeleted =
+                        text === null &&
+                        images.every((image) => image === null) &&
+                        files.every((file) => file === null); // Check if message is deleted
+                    const messageTime = new Date(message[3]);
+                    const currentTime = new Date();
+                    // check if the message is sent within the last 10 seconds
+                    const isDeleteAble = currentTime - messageTime <= 10000; // true if time < 10s and false when message after 10s
 
                     return (
                         <Box
@@ -606,7 +295,8 @@ const MessageDetails = ({
                                 p: 1,
                             }}
                         >
-                            {text ? (
+                            {/* Render text if available */}
+                            {!isDeleted && text !== null && (
                                 <CustomizeTypography
                                     onMouseEnter={() => setHoveredTextIndex(messageIndex)}
                                     onMouseLeave={() => setHoveredTextIndex(null)}
@@ -621,7 +311,6 @@ const MessageDetails = ({
                                             position: 'absolute',
                                             content: '""',
                                             width: '200px',
-                                            // bgcolor: 'yellowgreen',
                                             height: '40px',
                                             top: '-10px',
                                             right: '0%',
@@ -640,6 +329,7 @@ const MessageDetails = ({
                                     >
                                         {hoveredTextIndex === messageIndex && (
                                             <ReactionOnMessage
+                                                deleteAble={isDeleteAble}
                                                 handCloseReactions={() => setHoveredTextIndex(null)}
                                                 listDataReactions={listIconReactions}
                                                 onReactionSelect={(reaction) =>
@@ -649,6 +339,7 @@ const MessageDetails = ({
                                                     )
                                                 }
                                                 deleteMessage={() =>
+                                                    isDeleteAble &&
                                                     handleDeleteAMessage(messageIndex)
                                                 }
                                             />
@@ -678,31 +369,12 @@ const MessageDetails = ({
                                         )}
                                     </Box>
                                 </CustomizeTypography>
-                            ) : (
-                                <Box
-                                    sx={{
-                                        width: '100%',
-                                        minHeight: '10px',
-                                        bgcolor: '#f4f2ee',
-                                        px: '8px',
-                                        py: '2px',
-                                        borderRadius: '8px',
-                                    }}
-                                >
-                                    <CustomizeTypography
-                                        sx={{
-                                            color: theme.palette.primaryText,
-                                            fontSize: '13.5px',
-                                        }}
-                                    >
-                                        This message has been deleted.
-                                    </CustomizeTypography>
-                                </Box>
                             )}
 
+                            {/* Render images if available */}
                             {images.map((image, imgIndex) => {
                                 const imageKey = `${messageIndex}_${imgIndex}`;
-                                if (image !== null) {
+                                if (!isDeleted && image !== null) {
                                     return (
                                         <Box
                                             key={imgIndex}
@@ -713,7 +385,6 @@ const MessageDetails = ({
                                             sx={{
                                                 maxWidth: '200px',
                                                 maxHeight: '200px',
-                                                // border: `1px solid #a9a5a5`,
                                                 cursor: 'pointer',
                                                 borderRadius: '8px',
                                                 mt: 2,
@@ -722,21 +393,18 @@ const MessageDetails = ({
                                                     position: 'absolute',
                                                     content: '""',
                                                     width: '200px',
-                                                    // bgcolor: 'yellowgreen',
                                                     height: '40px',
                                                     top: '-10px',
                                                     right: '0%',
                                                 },
                                             }}
                                         >
+                                            {/* Render image */}
                                             <Avatar
-                                                key={imgIndex}
                                                 src={image.url}
                                                 alt={image.name}
                                                 sx={{
                                                     borderRadius: '8px',
-                                                    // py: 1,
-                                                    // borderRadius: 0,
                                                     width: '100%',
                                                     height: '100%',
                                                     objectFit: 'contain',
@@ -745,6 +413,7 @@ const MessageDetails = ({
                                                     handleOpenImageModal(messageIndex, imgIndex)
                                                 }
                                             />
+
                                             {/* Open image in details */}
                                             <Modal
                                                 open={
@@ -759,7 +428,6 @@ const MessageDetails = ({
                                                     handleClose={handleCloseImageModal}
                                                 />
                                             </Modal>
-                                            {/* <img src={image.url} alt={image.name} /> */}
 
                                             {/* Show reactions list */}
                                             <Box
@@ -775,6 +443,7 @@ const MessageDetails = ({
                                                         messageIndex &&
                                                     hoveredImageIndex.imageIndex === imgIndex && (
                                                         <ReactionOnMessage
+                                                            deleteAble={isDeleteAble}
                                                             handCloseReactions={() =>
                                                                 setHoveredImageIndex(null)
                                                             }
@@ -786,7 +455,9 @@ const MessageDetails = ({
                                                                 )
                                                             }
                                                             listDataReactions={listIconReactions}
+                                                            // can't delete message after 10s
                                                             deleteMessage={() =>
+                                                                isDeleteAble &&
                                                                 handleDeleteAMessage(
                                                                     messageIndex,
                                                                     imgIndex,
@@ -796,7 +467,7 @@ const MessageDetails = ({
                                                     )}
                                             </Box>
 
-                                            {/* show which reaction is chose */}
+                                            {/* show which reaction is chosen */}
                                             {selectedImageReactions[imageKey] && (
                                                 <Avatar
                                                     src={
@@ -819,35 +490,13 @@ const MessageDetails = ({
                                             )}
                                         </Box>
                                     );
-                                } else {
-                                    return (
-                                        <Box
-                                            key={imgIndex}
-                                            sx={{
-                                                width: '100%',
-                                                minHeight: '10px',
-                                                bgcolor: '#f4f2ee',
-                                                px: '8px',
-                                                py: '2px',
-                                                borderRadius: '8px',
-                                            }}
-                                        >
-                                            <CustomizeTypography
-                                                sx={{
-                                                    color: theme.palette.primaryText,
-                                                    fontSize: '13.5px',
-                                                }}
-                                            >
-                                                This message has been deleted.
-                                            </CustomizeTypography>
-                                        </Box>
-                                    );
                                 }
                             })}
-                            {/* show file to UI */}
+
+                            {/* Render files if available */}
                             {files.map((file, fileIndex) => {
                                 const fileKey = `${messageIndex}_${fileIndex}`;
-                                if (file !== null) {
+                                if (!isDeleted && file !== null) {
                                     return (
                                         <Box
                                             key={fileIndex}
@@ -947,6 +596,8 @@ const MessageDetails = ({
                                                             </Button>
                                                         </a>
                                                         <ReactionOnMessage
+                                                            //if true --> can delete a message
+                                                            deleteAble={isDeleteAble}
                                                             handCloseReactions={() =>
                                                                 setHoveredFileIndex(null)
                                                             }
@@ -959,6 +610,7 @@ const MessageDetails = ({
                                                             }
                                                             listDataReactions={listIconReactions}
                                                             deleteMessage={() =>
+                                                                isDeleteAble &&
                                                                 handleDeleteAMessage(
                                                                     messageIndex,
                                                                     fileIndex,
@@ -988,30 +640,33 @@ const MessageDetails = ({
                                             )}
                                         </Box>
                                     );
-                                } else {
-                                    return (
-                                        <Box
-                                            sx={{
-                                                width: '100%',
-                                                minHeight: '10px',
-                                                bgcolor: '#f4f2ee',
-                                                px: '8px',
-                                                py: '2px',
-                                                borderRadius: '8px',
-                                            }}
-                                        >
-                                            <CustomizeTypography
-                                                sx={{
-                                                    color: theme.palette.primaryText,
-                                                    fontSize: '13.5px',
-                                                }}
-                                            >
-                                                This message has been deleted.
-                                            </CustomizeTypography>
-                                        </Box>
-                                    );
                                 }
                             })}
+
+                            {/* Render "This message has been deleted" box if the message is deleted */}
+                            {isDeleted && (
+                                <Box
+                                    sx={{
+                                        width: '100%',
+                                        minHeight: '10px',
+                                        bgcolor: '#f4f2ee',
+                                        px: '8px',
+                                        py: '2px',
+                                        borderRadius: '8px',
+                                        mt: 2,
+                                        position: 'relative',
+                                    }}
+                                >
+                                    <CustomizeTypography
+                                        sx={{
+                                            color: theme.palette.primaryText,
+                                            fontSize: '13.5px',
+                                        }}
+                                    >
+                                        This message has been deleted.
+                                    </CustomizeTypography>
+                                </Box>
+                            )}
                         </Box>
                     );
                 })}
@@ -1152,7 +807,7 @@ const MessageDetails = ({
         </Box>
     );
 };
-export default MessageDetails;
+export default DeleteMessageAfterTime;
 
 const listIconReactions = [
     { reactionsImage: Liked, reactionsName: 'Liked a Message' },

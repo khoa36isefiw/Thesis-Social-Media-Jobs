@@ -25,13 +25,13 @@ import ImageIcon from '@mui/icons-material/Image';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 
-import CloseIcon from '@mui/icons-material/Close';
 import LinearProgress from '@mui/material/LinearProgress';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import SendMessageActions from './SendMessageActions';
-import MessageDetails2 from './MessageDetails2';
 
+import Delete from './Delete';
+import DeleteMessageAfterTime from './DeleteMessageAfterTime';
 function Messaging() {
     const dispatch = useDispatch();
     const textFieldRef = useRef(null);
@@ -222,20 +222,29 @@ function Messaging() {
     // re-solve press enter to send the message and prevent re-render
 
     const handleSendButtonClick2 = useCallback(() => {
-        // console.log('Before Sending message:', editorText);
-        // save message just sent
-        const currentTime = new Date(); // save the time the message was sent
-        // temp variable to get value
+        const currentTime = new Date();
+        let textToSend = null; // Initialize text to null by default
+        let imageToSend = []; // Initialize images array to empty by default
+
+        // Check if there's text input
+        if (editorText.trim() !== '') {
+            textToSend = editorText.trim();
+        }
+
+        // Check if there are uploaded images
+        if (imageURL.length > 0) {
+            imageToSend = imageURL;
+        }
+
+        // Save the message
         const newMessageSaved = [
             ...messageSaved,
-            [editorText, imageURL, listFilesUploaded, currentTime],
+            [textToSend, imageToSend, listFilesUploaded, currentTime],
         ];
-        // update setMessageSaved with newMessageSaved array
+
         setMessageSaved(newMessageSaved);
-        // console.log('After sending Message: ', newMessageSaved);
 
         // Reset editor after sending message
-
         setEditorText('');
         setImageURL([]);
         setListFilesUploaded([]);
@@ -463,7 +472,7 @@ function Messaging() {
                         </Box>
 
                         {/* Show chat details */}
-                        <MessageDetails
+                        <DeleteMessageAfterTime
                             dataMessage={messageSaved}
                             setDataMessage={setMessageSaved}
                             imageUploaded={imageURL}
@@ -549,7 +558,7 @@ function Messaging() {
                                             accept="image/*"
                                             style={{ display: 'none' }}
                                             onChange={handleImageUpload}
-                                            // multiple
+                                            multiple
                                         />
                                         <IconButton component="span">
                                             <ImageIcon sx={{ fontSize: '24px' }} />
@@ -576,7 +585,7 @@ function Messaging() {
                                             accept=".pdf,.doc,.docx" // Có thể chỉ định các loại tệp bạn muốn cho phép
                                             style={{ display: 'none' }}
                                             onChange={handleFileUpload} // Gọi hàm xử lý khi có sự thay đổi trên input
-                                            // multiple // Cho phép chọn nhiều tệp
+                                            multiple // Cho phép chọn nhiều tệp
                                         />
                                     </IconButton>
 
