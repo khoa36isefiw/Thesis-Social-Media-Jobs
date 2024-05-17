@@ -1,38 +1,44 @@
 import React, { useState } from 'react';
 import { Avatar, Box, Menu, MenuList, MenuItem, ListItemText, Typography } from '@mui/material';
-import Liked from '../../assets/images/like_reactions.png';
-import Love from '../../assets/images/heart_reactions.png';
-import Laugh from '../../assets/images/laughing_reactions.png';
-import Reply from '../../assets/images/left_reactions.png';
 import MoreOption from '../../assets/images/option_reactions.png';
-
-// const reactionsOnMessaging = [
-//     { reactionsImage: Liked, reactionsName: 'Liked a Message' },
-//     { reactionsImage: Love, reactionsName: 'Loved a Message' },
-//     { reactionsImage: Laugh, reactionsName: 'Laugh a Message' },
-//     { reactionsImage: Reply, reactionsName: 'Reply a Message' },
-// ];
 
 const moreActionsList = ['Forward', 'Delete', 'Edit'];
 
-function ReactionOnMessage({ listDataReactions, handCloseReactions, onReactionSelect, msgIndex }) {
+function ReactionOnMessage({
+    listDataReactions,
+    handCloseReactions,
+    onReactionSelect,
+    msgIndex,
+    imgAndFileIndex = null,
+    deleteMessage,
+    deleteAble, // true ---> can delete and show button delete on menu
+}) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
-        setShowOptions(true); // Mở menu options khi click vào biểu tượng "more options"
+        // mở menu options khi click vào biểu tượng "more options"
+        setShowOptions(true);
     };
 
     const handleClose = () => {
         setAnchorEl(null);
-        setShowOptions(false); // Đóng menu options khi click vào một tùy chọn hoặc bất kỳ nơi nào khác trên màn hình
-        handCloseReactions(); // Đóng menu reactions nếu cần
+        // đóng menu options khi click vào một tùy chọn hoặc bất kỳ nơi nào khác trên màn hình
+        setShowOptions(false);
+        handCloseReactions();
     };
 
     const handleReactionSelection = (reaction) => {
-        handCloseReactions(); // Đóng menu phản ứng sau khi đã chọn
-        onReactionSelect(reaction, msgIndex); // Truyền thông tin biểu tượng phản ứng đã chọn lên thành phần cha
+        // đóng menu reactions sau khi đã chọn
+        handCloseReactions();
+
+        onReactionSelect(reaction, msgIndex);
+    };
+
+    const handleDelete = () => {
+        deleteMessage(msgIndex, imgAndFileIndex);
+        handleClose();
     };
 
     return (
@@ -65,7 +71,7 @@ function ReactionOnMessage({ listDataReactions, handCloseReactions, onReactionSe
                                 transform: 'scale(1.25)',
                             },
                         }}
-                        // onClick={handleClose} // Ẩn menu reactions khi click vào một phản ứng
+                        // onClick={handleClose} // Ẩn menu reactions khi click vào một reaction on message
                         onClick={() => handleReactionSelection(reaction)}
                     >
                         <Avatar
@@ -87,7 +93,8 @@ function ReactionOnMessage({ listDataReactions, handCloseReactions, onReactionSe
                             transform: 'scale(1.25)',
                         },
                     }}
-                    onClick={handleClick} // Hiển thị menu options khi click vào biểu tượng "more options"
+                    // show  menu options khi click vào biểu tượng "more options"
+                    onClick={handleClick}
                 >
                     <Avatar
                         src={MoreOption}
@@ -105,7 +112,8 @@ function ReactionOnMessage({ listDataReactions, handCloseReactions, onReactionSe
             <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
                 <Menu
                     anchorEl={anchorEl}
-                    open={showOptions} // Hiển thị menu options khi showOptions là true
+                    // Hiển thị menu options khi showOptions là true
+                    open={showOptions}
                     onClose={handleClose}
                     sx={{
                         // ml: -18,
@@ -115,15 +123,21 @@ function ReactionOnMessage({ listDataReactions, handCloseReactions, onReactionSe
                     }}
                 >
                     <MenuList sx={{ width: '150px', px: 0, py: 0 }}>
-                        {moreActionsList.map((action, index) => (
-                            <MenuItem key={index} onClick={handleClose}>
-                                <ListItemText>
-                                    <Typography sx={{ fontSize: '14px', color: '#191919' }}>
-                                        {action}
-                                    </Typography>
-                                </ListItemText>
-                            </MenuItem>
-                        ))}
+                        {moreActionsList.map((action, index) =>
+                            // if deleteAble is false and action is not Delete --> Menu not render 'Delete' --> render the others
+                            action !== 'Delete' || deleteAble ? ( // show all menu --> if it's true
+                                <MenuItem
+                                    key={index}
+                                    onClick={action === 'Delete' ? handleDelete : handleClose}
+                                >
+                                    <ListItemText>
+                                        <Typography sx={{ fontSize: '14px', color: '#191919' }}>
+                                            {action}
+                                        </Typography>
+                                    </ListItemText>
+                                </MenuItem>
+                            ) : null,
+                        )}
                     </MenuList>
                 </Menu>
             </Box>
