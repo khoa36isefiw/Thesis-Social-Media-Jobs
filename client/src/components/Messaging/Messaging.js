@@ -228,7 +228,7 @@ function Messaging() {
 
         // Check if there's text input
         if (editorText.trim() !== '') {
-            textToSend = editorText.trim();
+            textToSend = editorText.trim(); // remove any space
         }
 
         // Check if there are uploaded images
@@ -258,20 +258,22 @@ function Messaging() {
                 e.preventDefault();
                 handleSendButtonClick2();
             }
+            setIsEmpty(true);
         },
         [isEnterKeyEnabled, handleSendButtonClick2, isEmpty],
     );
 
     useEffect(() => {
-        if (texareaRef.current) {
-            texareaRef.current.addEventListener('keyup', handleKeyDown);
+        const textareaElement = texareaRef.current;
+        if (textareaElement) {
+            textareaElement.addEventListener('keydown', handleKeyDown);
         }
 
         //unmount
         // clear
         return () => {
-            if (texareaRef.current) {
-                texareaRef.current.removeEventListener('keyup', handleKeyDown);
+            if (textareaElement) {
+                textareaElement.removeEventListener('keydown', handleKeyDown);
             }
         };
     }, [handleKeyDown]);
