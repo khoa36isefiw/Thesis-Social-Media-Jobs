@@ -51,6 +51,8 @@ const DeleteMessageAfterTime = ({
     const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
         // show back to bottom button if scrolled up
+        console.log('clientHeight: ', clientHeight);
+
         setShowButtonBackToBottom(scrollTop >= 0 && scrollTop + clientHeight < scrollHeight);
     };
 
@@ -761,8 +763,23 @@ const DeleteMessageAfterTime = ({
             </Box>
 
             {/* load image just uploaded - preparing to send*/}
-            {imageUploaded.length > 0 &&
-                imageUploaded.map((image, index) => (
+            {/* {imageUploaded.length > 0 && */}
+            <Box
+                sx={{
+                    position: 'sticky',
+
+                    // case 2: use top --> chickens winner
+                    overflow: 'scroll',
+                    top: '85%', // must hide the height of the box
+
+                    // case 1: use bottom: 0
+                    // bottom: 0,
+                    // height: imageUploaded.length > 0 || fileUploaded.length > 0 ? '60px' : 0,
+                    width: '100%',
+                    bgcolor: 'white',
+                }}
+            >
+                {imageUploaded.map((image, index) => (
                     <Box
                         key={index}
                         sx={{
@@ -822,49 +839,49 @@ const DeleteMessageAfterTime = ({
                     </Box>
                 ))}
 
-            {fileUploaded.map((file, index) => (
-                <Box
-                    key={index}
-                    sx={{
-                        padding: 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        borderTop: '1px solid #333',
-                    }}
-                >
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Avatar
-                            src={file.name.endsWith('.pdf') ? PDFImage : DocxImage}
-                            alt={file.name.endsWith('.pdf') ? 'PDF File' : 'Docx File'}
-                            sx={{
-                                width: '48px',
-                                height: '48px',
-                                objectFit: 'contain',
-                                borderRadius: 0,
-                                mr: 1,
-                                '&:hover': {
-                                    cursor: 'pointer',
-                                },
-                                [mobileScreen]: {
-                                    width: '24px',
-                                    height: '24px',
-                                },
-                            }}
-                        />
-
-                        <Box>
-                            <CustomizeTypography
-                                fs="13px"
+                {fileUploaded.map((file, index) => (
+                    <Box
+                        key={index}
+                        sx={{
+                            padding: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            borderTop: '1px solid #d0d0d0',
+                        }}
+                    >
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Avatar
+                                src={file.name.endsWith('.pdf') ? PDFImage : DocxImage}
+                                alt={file.name.endsWith('.pdf') ? 'PDF File' : 'Docx File'}
                                 sx={{
-                                    color: theme.palette.normalText,
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
+                                    width: '48px',
+                                    height: '48px',
+                                    objectFit: 'contain',
+                                    borderRadius: 0,
+                                    mr: 1,
+                                    '&:hover': {
+                                        cursor: 'pointer',
+                                    },
+                                    [mobileScreen]: {
+                                        width: '24px',
+                                        height: '24px',
+                                    },
                                 }}
-                            >
-                                {file.name}
-                            </CustomizeTypography>
-                            {/* {showProgress ? (
+                            />
+
+                            <Box>
+                                <CustomizeTypography
+                                    fs="13px"
+                                    sx={{
+                                        color: theme.palette.normalText,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}
+                                >
+                                    {file.name}
+                                </CustomizeTypography>
+                                {/* {showProgress ? (
                             <LinearDeterminate showProgress={showProgress} />
                         ) : (
                             <CustomizeTypography
@@ -874,24 +891,25 @@ const DeleteMessageAfterTime = ({
                                 Attached File
                             </CustomizeTypography>
                         )} */}
+                            </Box>
                         </Box>
+                        <Avatar
+                            sx={{
+                                width: '24px',
+                                height: '24px',
+                                bgcolor: '#fff',
+                                border: '1px solid #404040',
+                                '&:hover': {
+                                    cursor: 'pointer',
+                                },
+                            }}
+                            onClick={() => handleRemoveFiles(index)}
+                        >
+                            <CloseIcon sx={{ color: 'black' }} />
+                        </Avatar>
                     </Box>
-                    <Avatar
-                        sx={{
-                            width: '24px',
-                            height: '24px',
-                            bgcolor: '#fff',
-                            border: '1px solid #404040',
-                            '&:hover': {
-                                cursor: 'pointer',
-                            },
-                        }}
-                        onClick={() => handleRemoveFiles(index)}
-                    >
-                        <CloseIcon sx={{ color: 'black' }} />
-                    </Avatar>
-                </Box>
-            ))}
+                ))}
+            </Box>
         </Box>
     );
 };
