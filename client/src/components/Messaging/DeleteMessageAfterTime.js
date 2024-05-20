@@ -766,10 +766,10 @@ const DeleteMessageAfterTime = ({
             {/* {imageUploaded.length > 0 && */}
             <Box
                 sx={{
-                    position: 'sticky',
+                    position: 'sticky', // based on the user's scroll position
 
                     // case 2: use top --> chickens winner
-                    overflow: 'scroll',
+                    overflow: 'scroll', // need check again is it worth?
                     top: '85%', // must hide the height of the box
 
                     // case 1: use bottom: 0
