@@ -29,9 +29,11 @@ import LinearProgress from '@mui/material/LinearProgress';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import SendMessageActions from './SendMessageActions';
-
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import Delete from './Delete';
 import DeleteMessageAfterTime from './DeleteMessageAfterTime';
+import { highlightPersonAction } from '../../redux/ImportantPerson/highlightPersonAction';
+import { addMessage } from '../../redux/ShowMesssage/showMesssageAction';
 function Messaging() {
     const dispatch = useDispatch();
     const textFieldRef = useRef(null);
@@ -52,6 +54,7 @@ function Messaging() {
     // upload file
     const [showProgress, setShowProgress] = useState(false); // sate control status of progress bar
     const [imageURL, setImageURL] = useState([]); // add images
+
     const [listFilesUploaded, setListFilesUploaded] = useState([]); // add files
     // click button to send message
     const [isClickSend, setIsClickSend] = useState(false);
@@ -60,6 +63,8 @@ function Messaging() {
 
     // redux
     const isEnterKeyEnabled = useSelector((state) => state.buttonSendMessage.isEnterKeyEnabled);
+    // star for person
+    const isStarred = useSelector((state) => state.importantPerson.isHighlight);
 
     // test list data just uploaded
 
@@ -222,7 +227,7 @@ function Messaging() {
     // re-solve press enter to send the message and prevent re-render
 
     const handleSendButtonClick2 = useCallback(() => {
-        const currentTime = new Date();
+        const timestamp = new Date();
         let textToSend = null; // Initialize text to null by default
         let imageToSend = []; // Initialize images array to empty by default
 
@@ -239,18 +244,25 @@ function Messaging() {
         // Save the message
         const newMessageSaved = [
             ...messageSaved,
-            [textToSend, imageToSend, listFilesUploaded, currentTime],
+            [textToSend, imageToSend, listFilesUploaded, timestamp],
         ];
 
         setMessageSaved(newMessageSaved);
 
+        // dispatch an action
+        // dispatch(addMessage(newMessageSaved));
+        // Loop through each message and dispatch action
+        newMessageSaved.forEach((message) => {
+            dispatch(addMessage(message)); // Dispatch action with each message
+        });
+
         // Reset editor after sending message
         setEditorText('');
+        console.log('Message just sent include: ', newMessageSaved);
         setImageURL([]);
         setListFilesUploaded([]);
         setIsEmpty(true);
-        console.log('Message just sent include: ', newMessageSaved);
-    }, [editorText, imageURL, listFilesUploaded, messageSaved]);
+    }, [editorText, imageURL, listFilesUploaded, messageSaved, dispatch]);
 
     const handleKeyDown = useCallback(
         (e) => {
@@ -278,6 +290,10 @@ function Messaging() {
         };
     }, [handleKeyDown]);
 
+    // make important person
+    const handleToggleStar = () => {
+        dispatch(highlightPersonAction());
+    };
     return (
         <Box
             sx={{
@@ -467,8 +483,12 @@ function Messaging() {
                                 <IconButton>
                                     <VideocamIcon sx={{ fontSize: '24px' }} />
                                 </IconButton>
-                                <IconButton>
-                                    <StarIcon sx={{ fontSize: '28px', color: '#c37d17' }} />
+                                <IconButton onClick={handleToggleStar}>
+                                    {isStarred ? (
+                                        <StarIcon sx={{ fontSize: '28px', color: '#c37d17' }} />
+                                    ) : (
+                                        <StarOutlineIcon sx={{ fontSize: '28px' }} />
+                                    )}
                                 </IconButton>
                             </Box>
                         </Box>
@@ -615,21 +635,6 @@ function Messaging() {
                                     </Box>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    {/* Button hiện tại - it's okay bro */}
-                                    {/* <Button
-                                        variant="contained"
-                                        onClick={handleSendButtonClick}
-                                        sx={{
-                                            textTransform: 'initial',
-                                            fontSize: '14px',
-                                            padding: '2px 24px',
-                                            borderRadius: '24px',
-                                        }}
-                                        disabled={isEmpty}
-                                    >
-                                        Send
-                                    </Button> */}
-
                                     <SendMessageActions
                                         handleSendButtonClick={handleSendButtonClick2}
                                         isEmpty={isEmpty}
