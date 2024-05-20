@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box, Avatar, Modal, IconButton, Button } from '@mui/material';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
-import { mobileScreen, theme } from '../Theme/Theme';
+import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import MissYou from '../../assets/images/missu.jpeg';
 import ReactionOnMessage from './ReactionOnMessage';
 import ImageDetailInMessage from './ImageDetailInMessage';
@@ -236,7 +236,7 @@ const DeleteMessageAfterTime = ({
                 </Box>
             </Box>
 
-            {showButtonBackToBottom && (
+            {/* {showButtonBackToBottom && (
                 <IconButton
                     sx={{
                         // define animation
@@ -259,6 +259,86 @@ const DeleteMessageAfterTime = ({
                         width: '32px',
                         height: '32px',
 
+                        animation: `fade-down 0.5s ease-in-out`,
+                        '&:hover': {
+                            bgcolor: '#306191',
+                        },
+                    }}
+                    onClick={scrollToBottom}
+                >
+                    <SouthIcon sx={{ fontSize: '20px', color: '#fff' }} />
+                </IconButton>
+            )} */}
+
+            {/* in the center for all devices */}
+            {showButtonBackToBottom && (
+                <IconButton
+                    sx={{
+                        // define animation
+                        '@keyframes fade-down': {
+                            from: {
+                                opacity: 0,
+                                bottom: '25%',
+                            },
+                            to: {
+                                opacity: 1,
+                                bottom: '30%',
+                            },
+                        },
+                        zIndex: 999,
+                        position: 'fixed',
+                        bottom: '30%',
+                        right: '50%',
+                        transform: 'translate(30%,50%)',
+                        bgcolor: '#0a66c2',
+                        width: '32px',
+                        height: '32px',
+                        [ipadProScreen]: {
+                            bottom: '25%',
+                            right: '45%',
+                            transform: 'translate(-25%,-45%)',
+                            // re-define animation for ipad Pro
+                            '@keyframes fade-down': {
+                                from: {
+                                    opacity: 0,
+                                    bottom: '20%',
+                                },
+                                to: {
+                                    opacity: 1,
+                                    bottom: '25%',
+                                },
+                            },
+                        },
+                        [mobileScreen]: {
+                            bottom: '30%',
+                            right: '45%',
+                            transform: 'translate(-30%,-45%)',
+                            '@keyframes fade-down': {
+                                from: {
+                                    opacity: 0,
+                                    bottom: '25%',
+                                },
+                                to: {
+                                    opacity: 1,
+                                    bottom: '30%',
+                                },
+                            },
+                        },
+                        [tabletScreen]: {
+                            bottom: '25%',
+                            right: '25%',
+                            transform: 'translate(-25%,-25%)',
+                            '@keyframes fade-down': {
+                                from: {
+                                    opacity: 0,
+                                    bottom: '20%',
+                                },
+                                to: {
+                                    opacity: 1,
+                                    bottom: '25%',
+                                },
+                            },
+                        },
                         animation: `fade-down 0.5s ease-in-out`,
                         '&:hover': {
                             bgcolor: '#306191',
