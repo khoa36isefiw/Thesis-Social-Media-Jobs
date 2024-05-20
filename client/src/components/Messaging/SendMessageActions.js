@@ -15,7 +15,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useDispatch, useSelector } from 'react-redux';
-import { theme } from '../Theme/Theme';
+import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import { disableKeyEnter, enableKeyEnter } from '../../redux/ButtonSendMessage/sendAction';
 
 const sendMessageActionsList = [
@@ -62,11 +62,56 @@ function SendMessageActions({ handleSendButtonClick, isEmpty }) {
 
     return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {selectedOption === sendMessageActionsList[0] ? (
-                <Typography sx={{ fontSize: '13px', color: theme.palette.primaryText }}>
-                    Press Enter to Send
-                </Typography>
-            ) : (
+            {/* show 2 options for only laptop */}
+            <Box
+                sx={{
+                    [ipadProScreen]: {
+                        display: 'none',
+                    },
+                    [mobileScreen]: {
+                        display: 'none',
+                    },
+                    [tabletScreen]: {
+                        display: 'none',
+                    },
+                }}
+            >
+                {selectedOption === sendMessageActionsList[0] ? (
+                    <Typography sx={{ fontSize: '13px', color: theme.palette.primaryText }}>
+                        Press Enter to Send
+                    </Typography>
+                ) : (
+                    <Button
+                        variant="contained"
+                        onClick={handleSendButtonClick}
+                        sx={{
+                            textTransform: 'initial',
+                            fontSize: '14px',
+                            padding: '2px 24px',
+                            borderRadius: '24px',
+                        }}
+                        disabled={isEmpty}
+                    >
+                        Send
+                    </Button>
+                )}
+            </Box>
+
+            {/* show for: mobile, tablet, ipadPro */}
+            <Box
+                sx={{
+                    display: 'none',
+                    [ipadProScreen]: {
+                        display: 'block',
+                    },
+                    [mobileScreen]: {
+                        display: 'block',
+                    },
+                    [tabletScreen]: {
+                        display: 'block',
+                    },
+                }}
+            >
                 <Button
                     variant="contained"
                     onClick={handleSendButtonClick}
@@ -80,9 +125,22 @@ function SendMessageActions({ handleSendButtonClick, isEmpty }) {
                 >
                     Send
                 </Button>
-            )}
+            </Box>
 
-            <IconButton>
+            {/* only show for laptop device */}
+            <IconButton
+                sx={{
+                    [ipadProScreen]: {
+                        display: 'none',
+                    },
+                    [mobileScreen]: {
+                        display: 'none',
+                    },
+                    [tabletScreen]: {
+                        display: 'none',
+                    },
+                }}
+            >
                 <MoreHorizIcon
                     sx={{ fontSize: '24px' }}
                     // show menu options
