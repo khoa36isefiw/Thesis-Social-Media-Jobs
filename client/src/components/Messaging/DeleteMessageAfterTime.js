@@ -16,6 +16,8 @@ import Love from '../../assets/images/heart_reactions.png';
 import Laugh from '../../assets/images/laughing_reactions.png';
 import Reply from '../../assets/images/left_reactions.png';
 import SouthIcon from '@mui/icons-material/South';
+import { useDispatch } from 'react-redux';
+import { addMessage, deleteMessage } from '../../redux/ShowMesssage/showMesssageAction';
 
 // Chat detail
 const DeleteMessageAfterTime = ({
@@ -26,6 +28,7 @@ const DeleteMessageAfterTime = ({
     fileUploaded,
     setFileUploaded,
 }) => {
+    const dispatch = useDispatch();
     const [isHoveredOnMessage, setIsHoveredOnMessage] = useState(false);
     // which image is chose and opened modal?
     const [openImageMessageModal, setOpenImageMessageModal] = useState(null);
@@ -122,21 +125,26 @@ const DeleteMessageAfterTime = ({
         setSelectedFileReactions({ ...selectedFileReactions, [fileKey]: reaction });
     };
 
-    const handleDeleteAMessage = (indexToRemove, imgIndex = null) => {
+    const handleDeleteAMessage = (indexToRemove) => {
         // Get current scroll position
         const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
         const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
 
+        const messageToDelete = dataMessage[indexToRemove];
         // Update messages data
         const newDataMessage = dataMessage.map((message, index) => {
             if (index === indexToRemove) {
                 // If any part of the message is deleted, mark the entire message as deleted
-                return [null, [], []];
+                return [null, [], [], message[3].getTime()];
             }
             return message;
         });
 
+        // Update messages data
+
         setDataMessage(newDataMessage);
+        dispatch(deleteMessage(messageToDelete));
+        // dispatch(deleteMessage(indexToRemove));
 
         // Scroll to bottom if the user was at the bottom before deletion
         if (isAtBottom) {
