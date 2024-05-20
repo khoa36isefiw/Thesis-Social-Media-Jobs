@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box, Avatar, Modal, IconButton, Button } from '@mui/material';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
-import { mobileScreen, theme } from '../Theme/Theme';
+import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import MissYou from '../../assets/images/missu.jpeg';
 import ReactionOnMessage from './ReactionOnMessage';
 import ImageDetailInMessage from './ImageDetailInMessage';
@@ -16,6 +16,8 @@ import Love from '../../assets/images/heart_reactions.png';
 import Laugh from '../../assets/images/laughing_reactions.png';
 import Reply from '../../assets/images/left_reactions.png';
 import SouthIcon from '@mui/icons-material/South';
+import { useDispatch } from 'react-redux';
+import { addMessage, deleteMessage } from '../../redux/ShowMesssage/showMesssageAction';
 
 // Chat detail
 const DeleteMessageAfterTime = ({
@@ -26,6 +28,7 @@ const DeleteMessageAfterTime = ({
     fileUploaded,
     setFileUploaded,
 }) => {
+    const dispatch = useDispatch();
     const [isHoveredOnMessage, setIsHoveredOnMessage] = useState(false);
     // which image is chose and opened modal?
     const [openImageMessageModal, setOpenImageMessageModal] = useState(null);
@@ -48,6 +51,8 @@ const DeleteMessageAfterTime = ({
     const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
         // show back to bottom button if scrolled up
+        console.log('clientHeight: ', clientHeight);
+
         setShowButtonBackToBottom(scrollTop >= 0 && scrollTop + clientHeight < scrollHeight);
     };
 
@@ -122,21 +127,26 @@ const DeleteMessageAfterTime = ({
         setSelectedFileReactions({ ...selectedFileReactions, [fileKey]: reaction });
     };
 
-    const handleDeleteAMessage = (indexToRemove, imgIndex = null) => {
+    const handleDeleteAMessage = (indexToRemove) => {
         // Get current scroll position
         const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
         const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
 
+        const messageToDelete = dataMessage[indexToRemove];
         // Update messages data
         const newDataMessage = dataMessage.map((message, index) => {
             if (index === indexToRemove) {
                 // If any part of the message is deleted, mark the entire message as deleted
-                return [null, [], []];
+                return [null, [], [], message[3].getTime()];
             }
             return message;
         });
 
+        // Update messages data
+
         setDataMessage(newDataMessage);
+        dispatch(deleteMessage(messageToDelete));
+        // dispatch(deleteMessage(indexToRemove));
 
         // Scroll to bottom if the user was at the bottom before deletion
         if (isAtBottom) {
@@ -228,7 +238,7 @@ const DeleteMessageAfterTime = ({
                 </Box>
             </Box>
 
-            {showButtonBackToBottom && (
+            {/* {showButtonBackToBottom && (
                 <IconButton
                     sx={{
                         // define animation
@@ -251,6 +261,86 @@ const DeleteMessageAfterTime = ({
                         width: '32px',
                         height: '32px',
 
+                        animation: `fade-down 0.5s ease-in-out`,
+                        '&:hover': {
+                            bgcolor: '#306191',
+                        },
+                    }}
+                    onClick={scrollToBottom}
+                >
+                    <SouthIcon sx={{ fontSize: '20px', color: '#fff' }} />
+                </IconButton>
+            )} */}
+
+            {/* in the center for all devices */}
+            {showButtonBackToBottom && (
+                <IconButton
+                    sx={{
+                        // define animation
+                        '@keyframes fade-down': {
+                            from: {
+                                opacity: 0,
+                                bottom: '25%',
+                            },
+                            to: {
+                                opacity: 1,
+                                bottom: '30%',
+                            },
+                        },
+                        zIndex: 999,
+                        position: 'fixed',
+                        bottom: '30%',
+                        right: '50%',
+                        transform: 'translate(30%,50%)',
+                        bgcolor: '#0a66c2',
+                        width: '32px',
+                        height: '32px',
+                        [ipadProScreen]: {
+                            bottom: '25%',
+                            right: '45%',
+                            transform: 'translate(-25%,-45%)',
+                            // re-define animation for ipad Pro
+                            '@keyframes fade-down': {
+                                from: {
+                                    opacity: 0,
+                                    bottom: '20%',
+                                },
+                                to: {
+                                    opacity: 1,
+                                    bottom: '25%',
+                                },
+                            },
+                        },
+                        [mobileScreen]: {
+                            bottom: '30%',
+                            right: '45%',
+                            transform: 'translate(-30%,-45%)',
+                            '@keyframes fade-down': {
+                                from: {
+                                    opacity: 0,
+                                    bottom: '25%',
+                                },
+                                to: {
+                                    opacity: 1,
+                                    bottom: '30%',
+                                },
+                            },
+                        },
+                        [tabletScreen]: {
+                            bottom: '25%',
+                            right: '25%',
+                            transform: 'translate(-25%,-25%)',
+                            '@keyframes fade-down': {
+                                from: {
+                                    opacity: 0,
+                                    bottom: '20%',
+                                },
+                                to: {
+                                    opacity: 1,
+                                    bottom: '25%',
+                                },
+                            },
+                        },
                         animation: `fade-down 0.5s ease-in-out`,
                         '&:hover': {
                             bgcolor: '#306191',
@@ -673,8 +763,23 @@ const DeleteMessageAfterTime = ({
             </Box>
 
             {/* load image just uploaded - preparing to send*/}
-            {imageUploaded.length > 0 &&
-                imageUploaded.map((image, index) => (
+            {/* {imageUploaded.length > 0 && */}
+            <Box
+                sx={{
+                    position: 'sticky',
+
+                    // case 2: use top --> chickens winner
+                    overflow: 'scroll',
+                    top: '85%', // must hide the height of the box
+
+                    // case 1: use bottom: 0
+                    // bottom: 0,
+                    // height: imageUploaded.length > 0 || fileUploaded.length > 0 ? '60px' : 0,
+                    width: '100%',
+                    bgcolor: 'white',
+                }}
+            >
+                {imageUploaded.map((image, index) => (
                     <Box
                         key={index}
                         sx={{
@@ -734,49 +839,49 @@ const DeleteMessageAfterTime = ({
                     </Box>
                 ))}
 
-            {fileUploaded.map((file, index) => (
-                <Box
-                    key={index}
-                    sx={{
-                        padding: 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        borderTop: '1px solid #333',
-                    }}
-                >
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Avatar
-                            src={file.name.endsWith('.pdf') ? PDFImage : DocxImage}
-                            alt={file.name.endsWith('.pdf') ? 'PDF File' : 'Docx File'}
-                            sx={{
-                                width: '48px',
-                                height: '48px',
-                                objectFit: 'contain',
-                                borderRadius: 0,
-                                mr: 1,
-                                '&:hover': {
-                                    cursor: 'pointer',
-                                },
-                                [mobileScreen]: {
-                                    width: '24px',
-                                    height: '24px',
-                                },
-                            }}
-                        />
-
-                        <Box>
-                            <CustomizeTypography
-                                fs="13px"
+                {fileUploaded.map((file, index) => (
+                    <Box
+                        key={index}
+                        sx={{
+                            padding: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            borderTop: '1px solid #d0d0d0',
+                        }}
+                    >
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Avatar
+                                src={file.name.endsWith('.pdf') ? PDFImage : DocxImage}
+                                alt={file.name.endsWith('.pdf') ? 'PDF File' : 'Docx File'}
                                 sx={{
-                                    color: theme.palette.normalText,
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
+                                    width: '48px',
+                                    height: '48px',
+                                    objectFit: 'contain',
+                                    borderRadius: 0,
+                                    mr: 1,
+                                    '&:hover': {
+                                        cursor: 'pointer',
+                                    },
+                                    [mobileScreen]: {
+                                        width: '24px',
+                                        height: '24px',
+                                    },
                                 }}
-                            >
-                                {file.name}
-                            </CustomizeTypography>
-                            {/* {showProgress ? (
+                            />
+
+                            <Box>
+                                <CustomizeTypography
+                                    fs="13px"
+                                    sx={{
+                                        color: theme.palette.normalText,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}
+                                >
+                                    {file.name}
+                                </CustomizeTypography>
+                                {/* {showProgress ? (
                             <LinearDeterminate showProgress={showProgress} />
                         ) : (
                             <CustomizeTypography
@@ -786,24 +891,25 @@ const DeleteMessageAfterTime = ({
                                 Attached File
                             </CustomizeTypography>
                         )} */}
+                            </Box>
                         </Box>
+                        <Avatar
+                            sx={{
+                                width: '24px',
+                                height: '24px',
+                                bgcolor: '#fff',
+                                border: '1px solid #404040',
+                                '&:hover': {
+                                    cursor: 'pointer',
+                                },
+                            }}
+                            onClick={() => handleRemoveFiles(index)}
+                        >
+                            <CloseIcon sx={{ color: 'black' }} />
+                        </Avatar>
                     </Box>
-                    <Avatar
-                        sx={{
-                            width: '24px',
-                            height: '24px',
-                            bgcolor: '#fff',
-                            border: '1px solid #404040',
-                            '&:hover': {
-                                cursor: 'pointer',
-                            },
-                        }}
-                        onClick={() => handleRemoveFiles(index)}
-                    >
-                        <CloseIcon sx={{ color: 'black' }} />
-                    </Avatar>
-                </Box>
-            ))}
+                ))}
+            </Box>
         </Box>
     );
 };

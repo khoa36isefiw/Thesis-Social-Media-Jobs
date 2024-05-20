@@ -227,7 +227,7 @@ function Messaging() {
     // re-solve press enter to send the message and prevent re-render
 
     const handleSendButtonClick2 = useCallback(() => {
-        const timestamp = new Date();
+        const currentTime = new Date();
         let textToSend = null; // Initialize text to null by default
         let imageToSend = []; // Initialize images array to empty by default
 
@@ -244,7 +244,7 @@ function Messaging() {
         // Save the message
         const newMessageSaved = [
             ...messageSaved,
-            [textToSend, imageToSend, listFilesUploaded, timestamp],
+            [textToSend, imageToSend, listFilesUploaded, currentTime],
         ];
 
         setMessageSaved(newMessageSaved);
@@ -262,7 +262,7 @@ function Messaging() {
         setImageURL([]);
         setListFilesUploaded([]);
         setIsEmpty(true);
-    }, [editorText, imageURL, listFilesUploaded, messageSaved, dispatch]);
+    }, [editorText, imageURL, listFilesUploaded, messageSaved]);
 
     const handleKeyDown = useCallback(
         (e) => {
