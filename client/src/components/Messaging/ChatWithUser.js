@@ -1148,7 +1148,6 @@ const countAttachments = (message) => {
 
 function ChatWithUser({ onClick }) {
     const isStarred = useSelector((state) => state.importantPerson.isHighlight);
-    
 
     // src cũ
     const messages = useSelector((state) => state.messages.messages);
@@ -1265,7 +1264,7 @@ function ChatWithUser({ onClick }) {
                     >
                         {latestMessage ? (
                             <Box>
-                                {isLatestMessageDeleted  ? (
+                                {isLatestMessageDeleted ? (
                                     <CustomizeTypography
                                         sx={{
                                             color: theme.palette.primaryText,
@@ -1303,13 +1302,12 @@ function ChatWithUser({ onClick }) {
                                             latestMessage[0] !== null && (
                                                 <CustomizeTypography
                                                     sx={{
+                                                        width: '165px',
+                                                        overflow: 'hidden',
+                                                        whiteSpace: 'nowrap',
+                                                        textOverflow: 'ellipsis', // replace '...' for text too long
                                                         color: theme.palette.primaryText,
                                                         fontSize: '14px',
-                                                        display: '-webkit-box',
-                                                        WebkitBoxOrient: 'vertical',
-                                                        WebkitLineClamp: 2,
-                                                        overflow: 'hidden',
-                                                        textOverflow: 'ellipsis',
                                                     }}
                                                 >
                                                     You: {latestMessage[0]}
@@ -1329,7 +1327,6 @@ function ChatWithUser({ onClick }) {
                                 No message was sent!
                             </CustomizeTypography>
                         )}
-                        
 
                         {isStarred && (
                             <IconButton>
