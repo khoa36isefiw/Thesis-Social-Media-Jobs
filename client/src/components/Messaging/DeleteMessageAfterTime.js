@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, Avatar, Modal, IconButton, Button } from '@mui/material';
+import { Box, Avatar, Modal, IconButton, Button, Typography, Popover } from '@mui/material';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import MissYou from '../../assets/images/missu.jpeg';
@@ -17,7 +17,7 @@ import Laugh from '../../assets/images/laughing_reactions.png';
 import Reply from '../../assets/images/left_reactions.png';
 import SouthIcon from '@mui/icons-material/South';
 import { useDispatch } from 'react-redux';
-import { addMessage, deleteMessage } from '../../redux/ShowMesssage/showMesssageAction';
+import { deleteMessage } from '../../redux/ShowMesssage/showMesssageAction';
 
 // Chat detail
 const DeleteMessageAfterTime = ({
@@ -37,9 +37,11 @@ const DeleteMessageAfterTime = ({
     const [hoveredTextIndex, setHoveredTextIndex] = useState(null);
     const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
     const [hoveredFileIndex, setHoveredFileIndex] = useState(null);
+    const [hoveredAvatarUserSeen, setHoveredAvatarUserSeen] = useState(false);
     const [selectedTextReactions, setSelectedTextReactions] = useState({});
     const [selectedImageReactions, setSelectedImageReactions] = useState({});
     const [selectedFileReactions, setSelectedFileReactions] = useState({});
+    const [isReactionExist, setIsReactionExist] = useState(false);
 
     const chatContainerRef = useRef(null);
 
@@ -47,6 +49,8 @@ const DeleteMessageAfterTime = ({
         // scroll at the end of the chat detail
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }, [dataMessage, imageUploaded, fileUploaded]); // listen for changes of dataMessage, imageUploaded, fileUploaded
+
+    // Schedule menu update after 10 seconds
 
     const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
@@ -432,6 +436,7 @@ const DeleteMessageAfterTime = ({
                                                     isDeleteAble &&
                                                     handleDeleteAMessage(messageIndex)
                                                 }
+                                                setIsReactionExist={setIsReactionExist}
                                             />
                                         )}
                                     </Box>
@@ -594,7 +599,8 @@ const DeleteMessageAfterTime = ({
                                                 mt: 1,
                                                 height: '60px',
                                                 width: '200px',
-                                                border: `1px solid #a9a5a5`,
+                                                // #e8e8e8
+                                                border: `1px solid #d0d0d0`,
                                                 cursor: 'pointer',
                                                 borderRadius: '8px',
                                                 display: 'flex',
@@ -625,10 +631,10 @@ const DeleteMessageAfterTime = ({
                                                     '&:hover': {
                                                         cursor: 'pointer',
                                                     },
-                                                    [mobileScreen]: {
-                                                        width: '24px',
-                                                        height: '24px',
-                                                    },
+                                                    // [mobileScreen]: {
+                                                    //     width: '24px',
+                                                    //     height: '24px',
+                                                    // },
                                                 }}
                                             />
                                             <CustomizeTypography
@@ -757,6 +763,48 @@ const DeleteMessageAfterTime = ({
                                     </CustomizeTypography>
                                 </Box>
                             )}
+
+                            {/* user saw message */}
+                            {/* // chưa cho từng tin nhắn cụ thể */}
+                            <Box
+                                sx={{
+                                    width: '20px',
+                                    height: '20px',
+                                    mt: isReactionExist ? '14px' : 0,
+                                    position: 'relative',
+                                }}
+                                onMouseEnter={() => setHoveredAvatarUserSeen(true)}
+                                onMouseLeave={() => setHoveredAvatarUserSeen(false)}
+                            >
+                                {hoveredAvatarUserSeen && (
+                                    <Box
+                                        sx={{
+                                            minHeight: '10px',
+                                            width: 'auto',
+                                            bgcolor: 'rgba(0, 0, 0, 0.45)',
+                                            borderRadius: '12px',
+                                            minWidth: '260px',
+                                            padding: '4px',
+                                            textAlign: 'center',
+                                            position: 'absolute',
+                                            bottom: '100%',
+                                            right: 0,
+                                            mb: '8px',
+                                        }}
+                                    >
+                                        <Typography sx={{ color: 'white', fontSize: '13px' }}>
+                                            Melody Fall Topic sent at 11:19 PM
+                                        </Typography>
+                                    </Box>
+                                )}
+                                <Avatar
+                                    src={
+                                        'https://scontent.fsgn5-8.fna.fbcdn.net/v/t39.30808-6/442436708_902395218565766_770634593182991934_n.jpg?_nc_cat=101&_nc_cb=99be929b-232957e6&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGi8jDSTTxVNVv3XmYESVz4VUlfKT6ypOtVSV8pPrKk6zFbjAuqRpvCjF1VkZtPICJhwCv31tPwLJMqw8hjS8oA&_nc_ohc=lBumrtWE1YEQ7kNvgGmWnSL&_nc_ht=scontent.fsgn5-8.fna&oh=00_AYDsjIs4vWl4f63pWjbUYA4yubfcqzJBO-6aoXAWM_Odig&oe=6652A357'
+                                    }
+                                    alt="USER IMAGE"
+                                    sx={{ height: '100%', width: '100%' }}
+                                />
+                            </Box>
                         </Box>
                     );
                 })}
@@ -769,14 +817,16 @@ const DeleteMessageAfterTime = ({
                     position: 'sticky', // based on the user's scroll position
 
                     // case 2: use top --> chickens winner
-                    overflow: 'scroll', // need check again is it worth?
-                    top: '85%', // must hide the height of the box
-
-                    // case 1: use bottom: 0
-                    // bottom: 0,
+                    top: '85%', // for laptop, desktop and... mobile phone?
                     // height: imageUploaded.length > 0 || fileUploaded.length > 0 ? '60px' : 0,
                     width: '100%',
                     bgcolor: 'white',
+                    [ipadProScreen]: {
+                        top: '95%',
+                    },
+                    [tabletScreen]: {
+                        top: '95%', // for laptop and desktop
+                    },
                 }}
             >
                 {imageUploaded.map((image, index) => (
@@ -799,10 +849,10 @@ const DeleteMessageAfterTime = ({
                                 objectFit: 'cover',
                                 borderRadius: '12px',
 
-                                [mobileScreen]: {
-                                    width: '24px',
-                                    height: '24px',
-                                },
+                                // [mobileScreen]: {
+                                //     width: '24px',
+                                //     height: '24px',
+                                // },
                             }}
                         />
                         <Box>
@@ -864,8 +914,8 @@ const DeleteMessageAfterTime = ({
                                         cursor: 'pointer',
                                     },
                                     [mobileScreen]: {
-                                        width: '24px',
-                                        height: '24px',
+                                        width: '36px',
+                                        height: '36px',
                                     },
                                 }}
                             />
@@ -921,3 +971,50 @@ const listIconReactions = [
     { reactionsImage: Laugh, reactionsName: 'Laugh a Message' },
     { reactionsImage: Reply, reactionsName: 'Reply a Message' },
 ];
+
+function MouseOverPopover({ children }) {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handlePopoverOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+
+    return (
+        <div>
+            <Box
+                aria-owns={open ? 'mouse-over-popover' : undefined}
+                aria-haspopup="true"
+                onMouseEnter={handlePopoverOpen}
+                onMouseLeave={handlePopoverClose}
+            >
+                {children}
+            </Box>
+            <Popover
+                id="mouse-over-popover"
+                sx={{
+                    pointerEvents: 'none',
+                }}
+                open={open}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+                onClose={handlePopoverClose}
+                disableRestoreFocus
+            >
+                Melody Fall Topic sent at 11:19 PM
+            </Popover>
+        </div>
+    );
+}

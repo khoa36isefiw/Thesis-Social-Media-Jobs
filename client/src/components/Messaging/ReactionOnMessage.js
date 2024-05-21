@@ -1,6 +1,16 @@
-import React, { useState } from 'react';
-import { Avatar, Box, Menu, MenuList, MenuItem, ListItemText, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import {
+    Avatar,
+    Box,
+    Menu,
+    MenuList,
+    MenuItem,
+    ListItemText,
+    Typography,
+    Divider,
+} from '@mui/material';
 import MoreOption from '../../assets/images/option_reactions.png';
+import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 
 const moreActionsList = ['Forward', 'Delete', 'Edit'];
 
@@ -12,6 +22,7 @@ function ReactionOnMessage({
     imgAndFileIndex = null,
     deleteMessage,
     deleteAble, // true ---> can delete and show button delete on menu
+    setIsReactionExist,
 }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
@@ -32,7 +43,7 @@ function ReactionOnMessage({
     const handleReactionSelection = (reaction) => {
         // đóng menu reactions sau khi đã chọn
         handCloseReactions();
-
+        setIsReactionExist(true);
         onReactionSelect(reaction, msgIndex);
     };
 
@@ -108,32 +119,82 @@ function ReactionOnMessage({
                     />
                 </Box>
             </Box>
-
-            <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
+            {/* menu: delete, forward, edit option */}
+            <Box>
                 <Menu
                     anchorEl={anchorEl}
                     // Hiển thị menu options khi showOptions là true
                     open={showOptions}
                     onClose={handleClose}
                     sx={{
-                        // ml: -18,
                         position: 'absolute',
-                        top: '-150px',
+                        top: deleteAble ? '-150px' : '-95px',
+                        // top: '-150px',
                         right: 0,
+                        ml: -15,
+                        [ipadProScreen]: {
+                            ml: -15,
+                            top: deleteAble ? '-150px' : '-120px',
+                        },
+                        [mobileScreen]: {
+                            ml: 0,
+                            top: deleteAble ? '-150px' : '-125px',
+                        },
+                        [tabletScreen]: {
+                            ml: -3,
+                            top: deleteAble ? '-150px' : '-120px',
+                        },
+                        '.MuiPaper-root': {
+                            borderTopLeftRadius: '8px',
+                            borderTopRightRadius: '8px',
+                            borderBottomLeftRadius: '8px',
+                            borderBottomRightRadius: '0',
+                            // backgroundColor: 'darkorange',
+                            boxShadow: '2px 0px 5px  rgba(0,0,0,0.75)',
+                        },
                     }}
                 >
-                    <MenuList sx={{ width: '150px', px: 0, py: 0 }}>
+                    <MenuList
+                        sx={{
+                            width: '150px',
+                            padding: 0,
+                        }}
+                    >
                         {moreActionsList.map((action, index) =>
                             // if deleteAble is false and action is not Delete --> Menu not render 'Delete' --> render the others
                             action !== 'Delete' || deleteAble ? ( // show all menu --> if it's true
                                 <MenuItem
                                     key={index}
                                     onClick={action === 'Delete' ? handleDelete : handleClose}
+                                    sx={{
+                                        [mobileScreen]: {
+                                            minHeight: '36px',
+                                            px: 0,
+                                            py: 0,
+                                        },
+                                    }}
                                 >
                                     <ListItemText>
-                                        <Typography sx={{ fontSize: '14px', color: '#191919' }}>
+                                        <Typography
+                                            sx={{
+                                                fontSize: '14px',
+                                                color: '#191919',
+                                                // fontWeight: '600',
+                                                [mobileScreen]: {
+                                                    p: 1,
+                                                },
+                                            }}
+                                        >
                                             {action}
                                         </Typography>
+                                        <Divider
+                                            sx={{
+                                                display: 'none',
+                                                [mobileScreen]: {
+                                                    display: 'block',
+                                                },
+                                            }}
+                                        />
                                     </ListItemText>
                                 </MenuItem>
                             ) : null,
