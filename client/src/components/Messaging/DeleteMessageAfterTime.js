@@ -41,7 +41,7 @@ const DeleteMessageAfterTime = ({
     const [selectedTextReactions, setSelectedTextReactions] = useState({});
     const [selectedImageReactions, setSelectedImageReactions] = useState({});
     const [selectedFileReactions, setSelectedFileReactions] = useState({});
-    const [isReactionExist, setIsReactionExist] = useState(false);
+    const [isReactionExist, setIsReactionExist] = useState(false); // use to controll user image spacing
 
     const chatContainerRef = useRef(null);
 
@@ -242,40 +242,6 @@ const DeleteMessageAfterTime = ({
                 </Box>
             </Box>
 
-            {/* {showButtonBackToBottom && (
-                <IconButton
-                    sx={{
-                        // define animation
-                        '@keyframes fade-down': {
-                            from: {
-                                opacity: 0,
-                                bottom: '32%',
-                            },
-                            to: {
-                                opacity: 1,
-                                bottom: '40%',
-                            },
-                        },
-                        zIndex: 999,
-                        position: 'fixed',
-                        bottom: '40%',
-                        right: '32%',
-                        // transform: 'translate(-80%,50%)',
-                        bgcolor: '#0a66c2',
-                        width: '32px',
-                        height: '32px',
-
-                        animation: `fade-down 0.5s ease-in-out`,
-                        '&:hover': {
-                            bgcolor: '#306191',
-                        },
-                    }}
-                    onClick={scrollToBottom}
-                >
-                    <SouthIcon sx={{ fontSize: '20px', color: '#fff' }} />
-                </IconButton>
-            )} */}
-
             {/* in the center for all devices */}
             {showButtonBackToBottom && (
                 <IconButton
@@ -391,79 +357,90 @@ const DeleteMessageAfterTime = ({
                         >
                             {/* Render text if available */}
                             {!isDeleted && text !== null && (
-                                <CustomizeTypography
-                                    onMouseEnter={() => setHoveredTextIndex(messageIndex)}
-                                    onMouseLeave={() => setHoveredTextIndex(null)}
+                                <Box
                                     sx={{
-                                        borderRadius: '12px',
-                                        color: theme.palette.primaryText,
-                                        fontSize: '13.5px',
-                                        bgcolor: '#edf3f7',
-                                        p: 1,
+                                        maxWidth: '250px',
+                                        minHeight: '10px',
                                         position: 'relative',
-                                        '::before': {
-                                            position: 'absolute',
-                                            content: '""',
-                                            width: '200px',
-                                            height: '40px',
-                                            top: '-10px',
-                                            right: '0%',
-                                        },
                                     }}
                                 >
-                                    {text}
-                                    {/* show reaction list */}
-                                    <Box
+                                    <CustomizeTypography
+                                        onMouseEnter={() => setHoveredTextIndex(messageIndex)}
+                                        onMouseLeave={() => setHoveredTextIndex(null)}
                                         sx={{
-                                            position: 'absolute',
-                                            top: 0,
-                                            right: 0,
-                                            zIndex: 999,
+                                            borderRadius: '12px',
+                                            color: theme.palette.primaryText,
+                                            fontSize: '13.5px',
+                                            bgcolor: '#edf3f7',
+                                            p: 1,
+                                            position: 'relative',
+                                            '::before': {
+                                                position: 'absolute',
+                                                content: '""',
+                                                width: '250px',
+                                                // bgcolor: 'yellowgreen',
+                                                height: '40px',
+                                                top: '-10px',
+                                                right: '0%',
+                                            },
                                         }}
                                     >
-                                        {hoveredTextIndex === messageIndex && (
-                                            <ReactionOnMessage
-                                                deleteAble={isDeleteAble}
-                                                handCloseReactions={() => setHoveredTextIndex(null)}
-                                                listDataReactions={listIconReactions}
-                                                onReactionSelect={(reaction) =>
-                                                    handleTextReactionSelection(
-                                                        reaction,
-                                                        messageIndex,
-                                                    )
-                                                }
-                                                deleteMessage={() =>
-                                                    isDeleteAble &&
-                                                    handleDeleteAMessage(messageIndex)
-                                                }
-                                                setIsReactionExist={setIsReactionExist}
-                                            />
-                                        )}
-                                    </Box>
-                                    {/* show the reaction is chosen in message */}
-                                    <Box>
-                                        {selectedTextReactions[messageIndex] && (
-                                            <Avatar
-                                                src={
-                                                    selectedTextReactions[messageIndex]
-                                                        .reactionsImage
-                                                }
-                                                alt={
-                                                    selectedTextReactions[messageIndex]
-                                                        .reactionsName
-                                                }
-                                                sx={{
-                                                    width: '20px',
-                                                    height: '20px',
-                                                    borderRadius: 0,
-                                                    position: 'absolute',
-                                                    bottom: '-30%',
-                                                    right: '10%',
-                                                }}
-                                            />
-                                        )}
-                                    </Box>
-                                </CustomizeTypography>
+                                        {text}
+                                        {/* show reaction list */}
+                                        <Box
+                                            sx={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                right: 0,
+                                                zIndex: 999,
+                                            }}
+                                        >
+                                            {hoveredTextIndex === messageIndex && (
+                                                <ReactionOnMessage
+                                                    deleteAble={isDeleteAble}
+                                                    handCloseReactions={() =>
+                                                        setHoveredTextIndex(null)
+                                                    }
+                                                    listDataReactions={listIconReactions}
+                                                    onReactionSelect={(reaction) =>
+                                                        handleTextReactionSelection(
+                                                            reaction,
+                                                            messageIndex,
+                                                        )
+                                                    }
+                                                    deleteMessage={() =>
+                                                        isDeleteAble &&
+                                                        handleDeleteAMessage(messageIndex)
+                                                    }
+                                                    setIsReactionExist={setIsReactionExist}
+                                                />
+                                            )}
+                                        </Box>
+                                        {/* show the reaction is chosen in message */}
+                                        <Box>
+                                            {selectedTextReactions[messageIndex] && (
+                                                <Avatar
+                                                    src={
+                                                        selectedTextReactions[messageIndex]
+                                                            .reactionsImage
+                                                    }
+                                                    alt={
+                                                        selectedTextReactions[messageIndex]
+                                                            .reactionsName
+                                                    }
+                                                    sx={{
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        borderRadius: 0,
+                                                        position: 'absolute',
+                                                        // bottom: '-30%',
+                                                        right: '10%',
+                                                    }}
+                                                />
+                                            )}
+                                        </Box>
+                                    </CustomizeTypography>
+                                </Box>
                             )}
 
                             {/* Render images if available */}
@@ -482,7 +459,8 @@ const DeleteMessageAfterTime = ({
                                                 maxHeight: '200px',
                                                 cursor: 'pointer',
                                                 borderRadius: '8px',
-                                                mt: 2,
+                                                mt: '20px',
+                                                mb: 1,
                                                 position: 'relative',
                                                 '::before': {
                                                     position: 'absolute',
@@ -558,6 +536,7 @@ const DeleteMessageAfterTime = ({
                                                                     imgIndex,
                                                                 )
                                                             }
+                                                            setIsReactionExist={setIsReactionExist}
                                                         />
                                                     )}
                                             </Box>
@@ -596,7 +575,7 @@ const DeleteMessageAfterTime = ({
                                         <Box
                                             key={fileIndex}
                                             sx={{
-                                                mt: 1,
+                                                mt: '12px',
                                                 height: '60px',
                                                 width: '200px',
                                                 // #e8e8e8
@@ -712,6 +691,7 @@ const DeleteMessageAfterTime = ({
                                                                     fileIndex,
                                                                 )
                                                             }
+                                                            setIsReactionExist={setIsReactionExist}
                                                         />
                                                     </Box>
                                                 )}
@@ -770,7 +750,7 @@ const DeleteMessageAfterTime = ({
                                 sx={{
                                     width: '20px',
                                     height: '20px',
-                                    mt: isReactionExist ? '14px' : 0,
+                                    mt: isReactionExist ? '14px' : '4px',
                                     position: 'relative',
                                 }}
                                 onMouseEnter={() => setHoveredAvatarUserSeen(true)}
@@ -798,9 +778,7 @@ const DeleteMessageAfterTime = ({
                                     </Box>
                                 )}
                                 <Avatar
-                                    src={
-                                        'https://scontent.fsgn5-8.fna.fbcdn.net/v/t39.30808-6/442436708_902395218565766_770634593182991934_n.jpg?_nc_cat=101&_nc_cb=99be929b-232957e6&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGi8jDSTTxVNVv3XmYESVz4VUlfKT6ypOtVSV8pPrKk6zFbjAuqRpvCjF1VkZtPICJhwCv31tPwLJMqw8hjS8oA&_nc_ohc=lBumrtWE1YEQ7kNvgGmWnSL&_nc_ht=scontent.fsgn5-8.fna&oh=00_AYDsjIs4vWl4f63pWjbUYA4yubfcqzJBO-6aoXAWM_Odig&oe=6652A357'
-                                    }
+                                    src={MissYou}
                                     alt="USER IMAGE"
                                     sx={{ height: '100%', width: '100%' }}
                                 />
