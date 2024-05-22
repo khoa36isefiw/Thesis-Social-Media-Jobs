@@ -43,7 +43,6 @@ const countAttachments = (message) => {
 function ChatWithUser({ onClick }) {
     const isStarred = useSelector((state) => state.importantPerson.isHighlight);
 
-    // src cũ
     const messages = useSelector((state) => state.messages.messages);
     const isLatestMessageDeleted = useSelector((state) => state.messages.latestMessageDeleted);
 

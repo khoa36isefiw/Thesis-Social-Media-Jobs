@@ -9,9 +9,13 @@ import {
     Button,
     Avatar,
     Typography,
+    Menu,
+    MenuList,
+    MenuItem,
+    ListItemText,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { sendButtonClick, disabledKeyEnter } from '../../redux/ButtonSendMessage/sendAction';
+
 import ChatWithUser from './ChatWithUser';
 import MessageDetails from './MessageDetails';
 import EmojiPicker from 'emoji-picker-react';
@@ -30,10 +34,14 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import SendMessageActions from './SendMessageActions';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
-import Delete from './Delete';
+
 import DeleteMessageAfterTime from './DeleteMessageAfterTime';
 import { highlightPersonAction } from '../../redux/ImportantPerson/highlightPersonAction';
 import { addMessage } from '../../redux/ShowMesssage/showMesssageAction';
+import ChatWithUserSettings from './ChatWithUserSettings';
+
+const chatWithUserSettingsList = ['Remove star', 'Mute', 'Delete conversation'];
+
 function Messaging() {
     const dispatch = useDispatch();
     const textFieldRef = useRef(null);
@@ -47,19 +55,22 @@ function Messaging() {
     // check if user is activating --> show icon
     const [userIsActive, setUserIsActive] = useState(true);
     const [isMobileScreen, setIsMobileScreen] = useState(false);
-
     // action buttons
     const [editorText, setEditorText] = useState(''); // add text
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
     // upload file
     const [showProgress, setShowProgress] = useState(false); // sate control status of progress bar
     const [imageURL, setImageURL] = useState([]); // add images
-
     const [listFilesUploaded, setListFilesUploaded] = useState([]); // add files
     // click button to send message
     const [isClickSend, setIsClickSend] = useState(false);
     // save message just sent
     const [messageSaved, setMessageSaved] = useState([]);
+    // open menu setting when chatting with one user
+    // menu setting
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [showOptions, setShowOptions] = useState(false);
+    const openMenuChatWithUserSettings = Boolean(anchorEl);
 
     // redux
     const isEnterKeyEnabled = useSelector((state) => state.buttonSendMessage.isEnterKeyEnabled);
@@ -294,6 +305,17 @@ function Messaging() {
     const handleToggleStar = () => {
         dispatch(highlightPersonAction());
     };
+
+    // open menu with user menu settings
+    const handleOpenChatWithUserMenuSettings = (event) => {
+        setAnchorEl(event.currentTarget);
+        setShowOptions(true);
+    };
+
+    const handleCloseChatWithUserMenuSettings = () => {
+        setAnchorEl(null);
+        setShowOptions(false);
+    };
     return (
         <Box
             sx={{
@@ -478,8 +500,79 @@ function Messaging() {
                             </Box>
                             <Box>
                                 <IconButton>
-                                    <MoreHorizIcon sx={{ fontSize: '24px' }} />
+                                    <MoreHorizIcon
+                                        sx={{ fontSize: '24px' }}
+                                        onClick={handleOpenChatWithUserMenuSettings}
+                                    />
                                 </IconButton>
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    open={openMenuChatWithUserSettings}
+                                    onClose={handleCloseChatWithUserMenuSettings}
+                                    sx={{
+                                        position: 'absolute',
+                                        '.MuiPaper-root': {
+                                            backgroundColor: 'darkorange',
+                                            boxShadow: '2px 0px 5px  rgba(0,0,0,0.75)',
+                                        },
+                                    }}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'right',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                >
+                                    <MenuList
+                                        sx={{
+                                            width: '150px',
+                                            padding: 0,
+                                        }}
+                                    >
+                                        {chatWithUserSettingsList.map((action, index) => (
+                                            // if deleteAble is false and action is not Delete --> Menu not render 'Delete' --> render the others
+
+                                            <MenuItem
+                                                key={index}
+                                                sx={{
+                                                    [mobileScreen]: {
+                                                        minHeight: '36px',
+                                                        px: 0,
+                                                        py: 0,
+                                                    },
+                                                }}
+                                                onClick={handleCloseChatWithUserMenuSettings}
+                                            >
+                                                <ListItemText>
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: '14px',
+                                                            color: '#191919',
+                                                            // fontWeight: '600',
+                                                            [mobileScreen]: {
+                                                                p: 1,
+                                                            },
+                                                        }}
+                                                    >
+                                                        {action}
+                                                    </Typography>
+                                                    <Divider
+                                                        sx={{
+                                                            display: 'none',
+                                                            [mobileScreen]: {
+                                                                display: 'block',
+                                                            },
+                                                        }}
+                                                    />
+                                                </ListItemText>
+                                            </MenuItem>
+                                        ))}
+                                    </MenuList>
+                                </Menu>
+                                {/* {openMenuSetting && <ChatWithUserSettings />} */}
+
                                 <IconButton>
                                     <VideocamIcon sx={{ fontSize: '24px' }} />
                                 </IconButton>
