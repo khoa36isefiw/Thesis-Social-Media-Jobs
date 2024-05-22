@@ -45,20 +45,6 @@ function UserHomePageLayout({ children }) {
                             <UserGroup />
                         </Box>
                     </Grid>
-                    {/* <Grid item xs={12} sm={8} lg={6}>
-                        <Box
-                            sx={{
-                                minHeight: '10vh',
-                                borderRadius: '24px',
-                            }}
-                        >
-                            <Box>{children}</Box>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={8} lg={3}>
-                        <Advertising />
-                        <Footer />
-                    </Grid> */}
                     <Grid item xs={12} sm={8} md={9} lg={9} container>
                         <Grid xs={12} sm={12} md={8} lg={8}>
                             <Box

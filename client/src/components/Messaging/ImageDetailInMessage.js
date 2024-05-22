@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar, Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 
 function ImageDetailInMessage({ imgUrl, handleClose }) {
     const [originalWidth, setOriginalWidth] = useState(null);
@@ -57,6 +58,18 @@ function ImageDetailInMessage({ imgUrl, handleClose }) {
                 justifyContent: 'center',
                 width: '1150px',
                 height: '600px',
+                [ipadProScreen]: {
+                    width: '100%',
+                    height: '85%',
+                },
+                [mobileScreen]: {
+                    width: '100%',
+                    height: '85%',
+                },
+                [tabletScreen]: {
+                    width: '100%',
+                    height: '85%',
+                },
                 margin: 'auto',
                 mt: '80px',
                 borderRadius: '12px',
@@ -78,19 +91,56 @@ function ImageDetailInMessage({ imgUrl, handleClose }) {
                 }}
                 onClick={closeModal}
             >
-                <CloseIcon fontSize="large" sx={{ color: '#404040' }} />
+                <CloseIcon
+                    sx={{
+                        color: '#404040',
+                        fontSize: '28px',
+                        [ipadProScreen]: {
+                            fontSize: '32px',
+                        },
+                        [mobileScreen]: {
+                            fontSize: '32px',
+                        },
+                        [tabletScreen]: {
+                            fontSize: '32px',
+                        },
+                    }}
+                />
             </IconButton>
 
             <Box>
                 {imgUrl && (
-                    <img
+                    // <img
+                    //     src={imgUrl}
+                    //     alt="Posted Image"
+                    //     style={{
+                    //         width: originalWidth,
+                    //         height: originalHeight,
+                    //         objectFit: 'contain',
+                    //         marginTop: '6px',
+                    //     }}
+                    // />
+                    <Box
+                        component="img"
                         src={imgUrl}
                         alt="Posted Image"
-                        style={{
+                        sx={{
                             width: originalWidth,
                             height: originalHeight,
                             objectFit: 'contain',
                             marginTop: '6px',
+                            [ipadProScreen]: {
+                                width: '100%',
+                                height: 'auto',
+                            },
+                            [mobileScreen]: {
+                                width: '100%',
+                                height: 'auto',
+                            },
+                            [tabletScreen]: {
+                                width: '100%',
+                                height: 'auto',
+                            },
                         }}
                     />
                 )}

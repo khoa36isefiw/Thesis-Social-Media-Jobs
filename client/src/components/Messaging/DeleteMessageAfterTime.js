@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, Avatar, Modal, IconButton, Button } from '@mui/material';
+import { Box, Avatar, Modal, IconButton, Button, Typography, Popover } from '@mui/material';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import MissYou from '../../assets/images/missu.jpeg';
@@ -17,7 +17,7 @@ import Laugh from '../../assets/images/laughing_reactions.png';
 import Reply from '../../assets/images/left_reactions.png';
 import SouthIcon from '@mui/icons-material/South';
 import { useDispatch } from 'react-redux';
-import { addMessage, deleteMessage } from '../../redux/ShowMesssage/showMesssageAction';
+import { deleteMessage } from '../../redux/ShowMesssage/showMesssageAction';
 
 // Chat detail
 const DeleteMessageAfterTime = ({
@@ -37,9 +37,11 @@ const DeleteMessageAfterTime = ({
     const [hoveredTextIndex, setHoveredTextIndex] = useState(null);
     const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
     const [hoveredFileIndex, setHoveredFileIndex] = useState(null);
+    const [hoveredAvatarUserSeen, setHoveredAvatarUserSeen] = useState(false);
     const [selectedTextReactions, setSelectedTextReactions] = useState({});
     const [selectedImageReactions, setSelectedImageReactions] = useState({});
     const [selectedFileReactions, setSelectedFileReactions] = useState({});
+    const [isReactionExist, setIsReactionExist] = useState(false); // use to controll user image spacing
 
     const chatContainerRef = useRef(null);
 
@@ -47,6 +49,8 @@ const DeleteMessageAfterTime = ({
         // scroll at the end of the chat detail
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }, [dataMessage, imageUploaded, fileUploaded]); // listen for changes of dataMessage, imageUploaded, fileUploaded
+
+    // Schedule menu update after 10 seconds
 
     const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
@@ -238,40 +242,6 @@ const DeleteMessageAfterTime = ({
                 </Box>
             </Box>
 
-            {/* {showButtonBackToBottom && (
-                <IconButton
-                    sx={{
-                        // define animation
-                        '@keyframes fade-down': {
-                            from: {
-                                opacity: 0,
-                                bottom: '32%',
-                            },
-                            to: {
-                                opacity: 1,
-                                bottom: '40%',
-                            },
-                        },
-                        zIndex: 999,
-                        position: 'fixed',
-                        bottom: '40%',
-                        right: '32%',
-                        // transform: 'translate(-80%,50%)',
-                        bgcolor: '#0a66c2',
-                        width: '32px',
-                        height: '32px',
-
-                        animation: `fade-down 0.5s ease-in-out`,
-                        '&:hover': {
-                            bgcolor: '#306191',
-                        },
-                    }}
-                    onClick={scrollToBottom}
-                >
-                    <SouthIcon sx={{ fontSize: '20px', color: '#fff' }} />
-                </IconButton>
-            )} */}
-
             {/* in the center for all devices */}
             {showButtonBackToBottom && (
                 <IconButton
@@ -387,78 +357,90 @@ const DeleteMessageAfterTime = ({
                         >
                             {/* Render text if available */}
                             {!isDeleted && text !== null && (
-                                <CustomizeTypography
-                                    onMouseEnter={() => setHoveredTextIndex(messageIndex)}
-                                    onMouseLeave={() => setHoveredTextIndex(null)}
+                                <Box
                                     sx={{
-                                        borderRadius: '12px',
-                                        color: theme.palette.primaryText,
-                                        fontSize: '13.5px',
-                                        bgcolor: '#edf3f7',
-                                        p: 1,
+                                        maxWidth: '250px',
+                                        minHeight: '10px',
                                         position: 'relative',
-                                        '::before': {
-                                            position: 'absolute',
-                                            content: '""',
-                                            width: '200px',
-                                            height: '40px',
-                                            top: '-10px',
-                                            right: '0%',
-                                        },
                                     }}
                                 >
-                                    {text}
-                                    {/* show reaction list */}
-                                    <Box
+                                    <CustomizeTypography
+                                        onMouseEnter={() => setHoveredTextIndex(messageIndex)}
+                                        onMouseLeave={() => setHoveredTextIndex(null)}
                                         sx={{
-                                            position: 'absolute',
-                                            top: 0,
-                                            right: 0,
-                                            zIndex: 999,
+                                            borderRadius: '12px',
+                                            color: theme.palette.primaryText,
+                                            fontSize: '13.5px',
+                                            bgcolor: '#edf3f7',
+                                            p: 1,
+                                            position: 'relative',
+                                            '::before': {
+                                                position: 'absolute',
+                                                content: '""',
+                                                width: '250px',
+                                                // bgcolor: 'yellowgreen',
+                                                height: '40px',
+                                                top: '-10px',
+                                                right: '0%',
+                                            },
                                         }}
                                     >
-                                        {hoveredTextIndex === messageIndex && (
-                                            <ReactionOnMessage
-                                                deleteAble={isDeleteAble}
-                                                handCloseReactions={() => setHoveredTextIndex(null)}
-                                                listDataReactions={listIconReactions}
-                                                onReactionSelect={(reaction) =>
-                                                    handleTextReactionSelection(
-                                                        reaction,
-                                                        messageIndex,
-                                                    )
-                                                }
-                                                deleteMessage={() =>
-                                                    isDeleteAble &&
-                                                    handleDeleteAMessage(messageIndex)
-                                                }
-                                            />
-                                        )}
-                                    </Box>
-                                    {/* show the reaction is chosen in message */}
-                                    <Box>
-                                        {selectedTextReactions[messageIndex] && (
-                                            <Avatar
-                                                src={
-                                                    selectedTextReactions[messageIndex]
-                                                        .reactionsImage
-                                                }
-                                                alt={
-                                                    selectedTextReactions[messageIndex]
-                                                        .reactionsName
-                                                }
-                                                sx={{
-                                                    width: '20px',
-                                                    height: '20px',
-                                                    borderRadius: 0,
-                                                    position: 'absolute',
-                                                    bottom: '-30%',
-                                                    right: '10%',
-                                                }}
-                                            />
-                                        )}
-                                    </Box>
-                                </CustomizeTypography>
+                                        {text}
+                                        {/* show reaction list */}
+                                        <Box
+                                            sx={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                right: 0,
+                                                zIndex: 999,
+                                            }}
+                                        >
+                                            {hoveredTextIndex === messageIndex && (
+                                                <ReactionOnMessage
+                                                    deleteAble={isDeleteAble}
+                                                    handCloseReactions={() =>
+                                                        setHoveredTextIndex(null)
+                                                    }
+                                                    listDataReactions={listIconReactions}
+                                                    onReactionSelect={(reaction) =>
+                                                        handleTextReactionSelection(
+                                                            reaction,
+                                                            messageIndex,
+                                                        )
+                                                    }
+                                                    deleteMessage={() =>
+                                                        isDeleteAble &&
+                                                        handleDeleteAMessage(messageIndex)
+                                                    }
+                                                    setIsReactionExist={setIsReactionExist}
+                                                />
+                                            )}
+                                        </Box>
+                                        {/* show the reaction is chosen in message */}
+                                        <Box>
+                                            {selectedTextReactions[messageIndex] && (
+                                                <Avatar
+                                                    src={
+                                                        selectedTextReactions[messageIndex]
+                                                            .reactionsImage
+                                                    }
+                                                    alt={
+                                                        selectedTextReactions[messageIndex]
+                                                            .reactionsName
+                                                    }
+                                                    sx={{
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        borderRadius: 0,
+                                                        position: 'absolute',
+                                                        // bottom: '-30%',
+                                                        right: '10%',
+                                                    }}
+                                                />
+                                            )}
+                                        </Box>
+                                    </CustomizeTypography>
+                                </Box>
                             )}
 
                             {/* Render images if available */}
@@ -477,7 +459,8 @@ const DeleteMessageAfterTime = ({
                                                 maxHeight: '200px',
                                                 cursor: 'pointer',
                                                 borderRadius: '8px',
-                                                mt: 2,
+                                                mt: '20px',
+                                                mb: 1,
                                                 position: 'relative',
                                                 '::before': {
                                                     position: 'absolute',
@@ -553,6 +536,7 @@ const DeleteMessageAfterTime = ({
                                                                     imgIndex,
                                                                 )
                                                             }
+                                                            setIsReactionExist={setIsReactionExist}
                                                         />
                                                     )}
                                             </Box>
@@ -591,10 +575,11 @@ const DeleteMessageAfterTime = ({
                                         <Box
                                             key={fileIndex}
                                             sx={{
-                                                mt: 1,
+                                                mt: '12px',
                                                 height: '60px',
                                                 width: '200px',
-                                                border: `1px solid #a9a5a5`,
+                                                // #e8e8e8
+                                                border: `1px solid #d0d0d0`,
                                                 cursor: 'pointer',
                                                 borderRadius: '8px',
                                                 display: 'flex',
@@ -625,10 +610,10 @@ const DeleteMessageAfterTime = ({
                                                     '&:hover': {
                                                         cursor: 'pointer',
                                                     },
-                                                    [mobileScreen]: {
-                                                        width: '24px',
-                                                        height: '24px',
-                                                    },
+                                                    // [mobileScreen]: {
+                                                    //     width: '24px',
+                                                    //     height: '24px',
+                                                    // },
                                                 }}
                                             />
                                             <CustomizeTypography
@@ -706,6 +691,7 @@ const DeleteMessageAfterTime = ({
                                                                     fileIndex,
                                                                 )
                                                             }
+                                                            setIsReactionExist={setIsReactionExist}
                                                         />
                                                     </Box>
                                                 )}
@@ -757,6 +743,46 @@ const DeleteMessageAfterTime = ({
                                     </CustomizeTypography>
                                 </Box>
                             )}
+
+                            {/* user saw message */}
+                            {/* // chưa cho từng tin nhắn cụ thể */}
+                            <Box
+                                sx={{
+                                    width: '20px',
+                                    height: '20px',
+                                    mt: isReactionExist ? '14px' : '4px',
+                                    position: 'relative',
+                                }}
+                                onMouseEnter={() => setHoveredAvatarUserSeen(true)}
+                                onMouseLeave={() => setHoveredAvatarUserSeen(false)}
+                            >
+                                {hoveredAvatarUserSeen && (
+                                    <Box
+                                        sx={{
+                                            minHeight: '10px',
+                                            width: 'auto',
+                                            bgcolor: 'rgba(0, 0, 0, 0.45)',
+                                            borderRadius: '12px',
+                                            minWidth: '260px',
+                                            padding: '4px',
+                                            textAlign: 'center',
+                                            position: 'absolute',
+                                            bottom: '100%',
+                                            right: 0,
+                                            mb: '8px',
+                                        }}
+                                    >
+                                        <Typography sx={{ color: 'white', fontSize: '13px' }}>
+                                            Melody Fall Topic sent at 11:19 PM
+                                        </Typography>
+                                    </Box>
+                                )}
+                                <Avatar
+                                    src={MissYou}
+                                    alt="USER IMAGE"
+                                    sx={{ height: '100%', width: '100%' }}
+                                />
+                            </Box>
                         </Box>
                     );
                 })}
@@ -769,14 +795,16 @@ const DeleteMessageAfterTime = ({
                     position: 'sticky', // based on the user's scroll position
 
                     // case 2: use top --> chickens winner
-                    overflow: 'scroll', // need check again is it worth?
-                    top: '85%', // must hide the height of the box
-
-                    // case 1: use bottom: 0
-                    // bottom: 0,
+                    top: '85%', // for laptop, desktop and... mobile phone?
                     // height: imageUploaded.length > 0 || fileUploaded.length > 0 ? '60px' : 0,
                     width: '100%',
                     bgcolor: 'white',
+                    [ipadProScreen]: {
+                        top: '95%',
+                    },
+                    [tabletScreen]: {
+                        top: '95%', // for laptop and desktop
+                    },
                 }}
             >
                 {imageUploaded.map((image, index) => (
@@ -799,10 +827,10 @@ const DeleteMessageAfterTime = ({
                                 objectFit: 'cover',
                                 borderRadius: '12px',
 
-                                [mobileScreen]: {
-                                    width: '24px',
-                                    height: '24px',
-                                },
+                                // [mobileScreen]: {
+                                //     width: '24px',
+                                //     height: '24px',
+                                // },
                             }}
                         />
                         <Box>
@@ -864,8 +892,8 @@ const DeleteMessageAfterTime = ({
                                         cursor: 'pointer',
                                     },
                                     [mobileScreen]: {
-                                        width: '24px',
-                                        height: '24px',
+                                        width: '36px',
+                                        height: '36px',
                                     },
                                 }}
                             />
@@ -921,3 +949,50 @@ const listIconReactions = [
     { reactionsImage: Laugh, reactionsName: 'Laugh a Message' },
     { reactionsImage: Reply, reactionsName: 'Reply a Message' },
 ];
+
+function MouseOverPopover({ children }) {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handlePopoverOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+
+    return (
+        <div>
+            <Box
+                aria-owns={open ? 'mouse-over-popover' : undefined}
+                aria-haspopup="true"
+                onMouseEnter={handlePopoverOpen}
+                onMouseLeave={handlePopoverClose}
+            >
+                {children}
+            </Box>
+            <Popover
+                id="mouse-over-popover"
+                sx={{
+                    pointerEvents: 'none',
+                }}
+                open={open}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+                onClose={handlePopoverClose}
+                disableRestoreFocus
+            >
+                Melody Fall Topic sent at 11:19 PM
+            </Popover>
+        </div>
+    );
+}
