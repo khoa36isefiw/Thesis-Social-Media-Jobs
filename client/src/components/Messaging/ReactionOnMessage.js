@@ -127,23 +127,8 @@ function ReactionOnMessage({
                     open={showOptions}
                     onClose={handleClose}
                     sx={{
-                        position: 'absolute',
-                        top: deleteAble ? '-150px' : '-95px',
-                        // top: '-150px',
-                        right: 0,
-                        ml: -15,
-                        [ipadProScreen]: {
-                            ml: -15,
-                            top: deleteAble ? '-150px' : '-120px',
-                        },
-                        [mobileScreen]: {
-                            ml: 0,
-                            top: deleteAble ? '-150px' : '-125px',
-                        },
-                        [tabletScreen]: {
-                            ml: -3,
-                            top: deleteAble ? '-150px' : '-120px',
-                        },
+                        mt: '-4px',
+                        ml: '6px',
                         '.MuiPaper-root': {
                             borderTopLeftRadius: '8px',
                             borderTopRightRadius: '8px',
@@ -152,6 +137,14 @@ function ReactionOnMessage({
                             // backgroundColor: 'darkorange',
                             boxShadow: '2px 0px 5px  rgba(0,0,0,0.75)',
                         },
+                    }}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
                     }}
                 >
                     <MenuList
@@ -187,6 +180,7 @@ function ReactionOnMessage({
                                         >
                                             {action}
                                         </Typography>
+                                        {}
                                         <Divider
                                             sx={{
                                                 display: 'none',
