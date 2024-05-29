@@ -10,11 +10,12 @@ import DocxImage from '../../assets/images/doc-file.png';
 // Icon
 import DownloadIcon from '@mui/icons-material/Download';
 import CloseIcon from '@mui/icons-material/Close';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 // reactions
 import Liked from '../../assets/images/like_reactions.png';
 import Love from '../../assets/images/heart_reactions.png';
 import Laugh from '../../assets/images/laughing_reactions.png';
-import Reply from '../../assets/images/left_reactions.png';
+
 import SouthIcon from '@mui/icons-material/South';
 import { useDispatch } from 'react-redux';
 import { deleteMessage } from '../../redux/ShowMesssage/showMesssageAction';
@@ -42,7 +43,7 @@ const DeleteMessageAfterTime = ({
     const [selectedImageReactions, setSelectedImageReactions] = useState({});
     const [selectedFileReactions, setSelectedFileReactions] = useState({});
     const [isReactionExist, setIsReactionExist] = useState(false); // use to controll user image spacing
-
+    const [isReplyMessage, setIsReplyMessage] = useState(false);
     const chatContainerRef = useRef(null);
 
     useEffect(() => {
@@ -413,6 +414,7 @@ const DeleteMessageAfterTime = ({
                                                         handleDeleteAMessage(messageIndex)
                                                     }
                                                     setIsReactionExist={setIsReactionExist}
+                                                    setIsReplyMessage={setIsReplyMessage}
                                                 />
                                             )}
                                         </Box>
@@ -537,6 +539,7 @@ const DeleteMessageAfterTime = ({
                                                                 )
                                                             }
                                                             setIsReactionExist={setIsReactionExist}
+                                                            setIsReplyMessage={setIsReplyMessage}
                                                         />
                                                     )}
                                             </Box>
@@ -692,6 +695,7 @@ const DeleteMessageAfterTime = ({
                                                                 )
                                                             }
                                                             setIsReactionExist={setIsReactionExist}
+                                                            setIsReplyMessage={setIsReplyMessage}
                                                         />
                                                     </Box>
                                                 )}
@@ -788,6 +792,52 @@ const DeleteMessageAfterTime = ({
                 })}
             </Box>
 
+            <Box
+                sx={{
+                    minHeight: '10px',
+                    maxWidth: '250px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                    marginLeft: 'auto',
+                }}
+            >
+                <Box
+                    sx={{
+                        borderRadius: '12px',
+                        // bgcolor: '#f4f2ee',
+                        bgcolor: '#00000008',
+                    }}
+                >
+                    <CustomizeTypography
+                        fs="12.5px"
+                        sx={{
+                            p: 1,
+                            width: '100%',
+                            // color: theme.palette.primaryText,
+                            color: '#65676B',
+                        }}
+                    >
+                        Old Message
+                    </CustomizeTypography>
+                </Box>
+                <CustomizeTypography
+                    fs="13.5px"
+                    sx={{
+                        borderRadius: '12px',
+                        color: theme.palette.primaryText,
+                        fontSize: '13.5px',
+                        bgcolor: '#edf3f7',
+                        p: 1,
+                        mt: -1,
+                        // color: '#000000E9',
+                    }}
+                >
+                    Message is replied
+                </CustomizeTypography>
+            </Box>
+
             {/* load image just uploaded - preparing to send*/}
             {/* {imageUploaded.length > 0 && */}
             <Box
@@ -866,7 +916,6 @@ const DeleteMessageAfterTime = ({
                         </Avatar>
                     </Box>
                 ))}
-
                 {fileUploaded.map((file, index) => (
                     <Box
                         key={index}
@@ -937,6 +986,56 @@ const DeleteMessageAfterTime = ({
                         </Avatar>
                     </Box>
                 ))}
+                {isReplyMessage && (
+                    <Box
+                        sx={{
+                            px: 2,
+                            py: 1,
+                            borderTop: '1px solid #d9d9d9',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <Box>
+                            <CustomizeTypography
+                                fs="13.5px"
+                                fw={true}
+                                sx={{
+                                    color: theme.palette.normalText,
+                                }}
+                            >
+                                Reply to: Kei
+                            </CustomizeTypography>
+                            <CustomizeTypography
+                                fs="12px"
+                                sx={{
+                                    color: '#666666',
+                                }}
+                            >
+                                {/* get the current is chose to reply */}
+                                Message is replied
+                            </CustomizeTypography>
+                        </Box>
+
+                        <Avatar
+                            sx={{
+                                width: '24px',
+                                height: '24px',
+                                bgcolor: '#000',
+                                border: '1px solid #404040',
+                                '&:hover': {
+                                    cursor: 'pointer',
+                                },
+                            }}
+                        >
+                            <HighlightOffIcon
+                                sx={{ color: 'white', fontSize: '20px' }}
+                                onClick={() => setIsReplyMessage(false)}
+                            />
+                        </Avatar>
+                    </Box>
+                )}
             </Box>
         </Box>
     );
@@ -947,52 +1046,4 @@ const listIconReactions = [
     { reactionsImage: Liked, reactionsName: 'Liked a Message' },
     { reactionsImage: Love, reactionsName: 'Loved a Message' },
     { reactionsImage: Laugh, reactionsName: 'Laugh a Message' },
-    { reactionsImage: Reply, reactionsName: 'Reply a Message' },
 ];
-
-function MouseOverPopover({ children }) {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handlePopoverOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handlePopoverClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-
-    return (
-        <div>
-            <Box
-                aria-owns={open ? 'mouse-over-popover' : undefined}
-                aria-haspopup="true"
-                onMouseEnter={handlePopoverOpen}
-                onMouseLeave={handlePopoverClose}
-            >
-                {children}
-            </Box>
-            <Popover
-                id="mouse-over-popover"
-                sx={{
-                    pointerEvents: 'none',
-                }}
-                open={open}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-                onClose={handlePopoverClose}
-                disableRestoreFocus
-            >
-                Melody Fall Topic sent at 11:19 PM
-            </Popover>
-        </div>
-    );
-}
