@@ -13,6 +13,8 @@ import MoreOption from '../../assets/images/option_reactions.png';
 import ReplyMessage from '../../assets/images/left_reactions.png';
 
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
+import { useDispatch } from 'react-redux';
+import { isReplyMessage } from '../../redux/ReplyMessage/replyMessageAction';
 
 const moreActionsList = ['Forward', 'Delete', 'Edit'];
 
@@ -25,8 +27,9 @@ function ReactionOnMessage({
     deleteMessage,
     deleteAble, // true ---> can delete and show button delete on menu
     setIsReactionExist,
-    setIsReplyMessage,
+    messageReply, // list message
 }) {
+    const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
 
@@ -56,7 +59,9 @@ function ReactionOnMessage({
     };
 
     const handleClickReplyAction = () => {
-        setIsReplyMessage(true);
+        // setIsReplyMessage(true);
+        // setIsReplyMessage(dispatch(isReplyMessage()));
+        dispatch(isReplyMessage(messageReply));
     };
 
     return (

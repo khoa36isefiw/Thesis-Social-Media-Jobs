@@ -17,7 +17,7 @@ import Love from '../../assets/images/heart_reactions.png';
 import Laugh from '../../assets/images/laughing_reactions.png';
 
 import SouthIcon from '@mui/icons-material/South';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteMessage } from '../../redux/ShowMesssage/showMesssageAction';
 
 // Chat detail
@@ -44,7 +44,14 @@ const DeleteMessageAfterTime = ({
     const [selectedFileReactions, setSelectedFileReactions] = useState({});
     const [isReactionExist, setIsReactionExist] = useState(false); // use to controll user image spacing
     const [isReplyMessage, setIsReplyMessage] = useState(false);
+    const isRepliedMessage = useSelector((state) => state.replyMessage.isMessageReplied);
+    const repliedMessage = useSelector((state) => state.replyMessage.repliedMessageContent);
+    const textReply = repliedMessage[0];
+    const imageReply = repliedMessage[1];
+    const fileReply = repliedMessage[2];
     const chatContainerRef = useRef(null);
+
+    console.log('Hello: ', repliedMessage);
 
     useEffect(() => {
         // scroll at the end of the chat detail
@@ -415,6 +422,7 @@ const DeleteMessageAfterTime = ({
                                                     }
                                                     setIsReactionExist={setIsReactionExist}
                                                     setIsReplyMessage={setIsReplyMessage}
+                                                    messageReply={message} // test
                                                 />
                                             )}
                                         </Box>
@@ -540,6 +548,8 @@ const DeleteMessageAfterTime = ({
                                                             }
                                                             setIsReactionExist={setIsReactionExist}
                                                             setIsReplyMessage={setIsReplyMessage}
+                                                            // message={dataMessage[messageIndex]} // test
+                                                            messageReply={message} // test
                                                         />
                                                     )}
                                             </Box>
@@ -696,6 +706,7 @@ const DeleteMessageAfterTime = ({
                                                             }
                                                             setIsReactionExist={setIsReactionExist}
                                                             setIsReplyMessage={setIsReplyMessage}
+                                                            messageReply={message} // test
                                                         />
                                                     </Box>
                                                 )}
@@ -986,7 +997,10 @@ const DeleteMessageAfterTime = ({
                         </Avatar>
                     </Box>
                 ))}
-                {isReplyMessage && (
+                {/* {isReplyMessage && ( */}
+
+                {/* initial for reply message */}
+                {isRepliedMessage && (
                     <Box
                         sx={{
                             px: 2,
@@ -1007,15 +1021,44 @@ const DeleteMessageAfterTime = ({
                             >
                                 Reply to: Kei
                             </CustomizeTypography>
-                            <CustomizeTypography
-                                fs="12px"
-                                sx={{
-                                    color: '#666666',
-                                }}
-                            >
-                                {/* get the current is chose to reply */}
-                                Message is replied
-                            </CustomizeTypography>
+
+                            <Box sx={{ overflow: 'hidden' }}>
+                                {/* Mapping through repliedMessageContent to display each message */}
+                                {textReply && (
+                                    <CustomizeTypography
+                                        fs="12px"
+                                        sx={{
+                                            color: '#666666',
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                        }}
+                                    >
+                                        {/* {repliedMessage[0]} */}
+                                        {textReply}
+                                    </CustomizeTypography>
+                                )}
+                                {imageReply.length > 0 && (
+                                    <CustomizeTypography
+                                        fs="12px"
+                                        sx={{
+                                            color: '#666666',
+                                        }}
+                                    >
+                                        Image
+                                    </CustomizeTypography>
+                                )}
+                                {fileReply.length > 0 && (
+                                    <CustomizeTypography
+                                        fs="12px"
+                                        sx={{
+                                            color: '#666666',
+                                        }}
+                                    >
+                                        File
+                                    </CustomizeTypography>
+                                )}
+                            </Box>
                         </Box>
 
                         <Avatar

@@ -38,6 +38,7 @@ import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import DeleteMessageAfterTime from './DeleteMessageAfterTime';
 import { highlightPersonAction } from '../../redux/ImportantPerson/highlightPersonAction';
 import { addMessage } from '../../redux/ShowMesssage/showMesssageAction';
+import { disableReplyMessage } from '../../redux/ReplyMessage/replyMessageAction';
 import ChatWithUserSettings from './ChatWithUserSettings';
 
 const chatWithUserSettingsList = ['Remove star', 'Mute', 'Delete conversation'];
@@ -225,7 +226,7 @@ function Messaging() {
         ];
         // update setMessageSaved with newMessageSaved array
         setMessageSaved(newMessageSaved);
-        // console.log('After sending Message: ', newMessageSaved);
+        console.log('After sending Message: ', newMessageSaved);
 
         // Reset editor after sending message
         setEditorText('');
@@ -266,6 +267,9 @@ function Messaging() {
         newMessageSaved.forEach((message) => {
             dispatch(addMessage(message)); // Dispatch action with each message
         });
+
+        // hide reply message
+        dispatch(disableReplyMessage());
 
         // Reset editor after sending message
         setEditorText('');

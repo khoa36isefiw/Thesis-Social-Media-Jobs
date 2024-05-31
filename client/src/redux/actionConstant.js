@@ -8,3 +8,7 @@ export const HIGH_LIGHT_PERSON = 'HIGH_LIGHT_PERSON';
 // show the last message
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const DELETE_MESSAGE = 'DELETE_MESSAGE';
+
+// reply message
+export const IS_REPLY = 'IS_REPLY';
+export const DISABLE_REPLY_MESSAGE = 'DISABLE_REPLY_MESSAGE';
