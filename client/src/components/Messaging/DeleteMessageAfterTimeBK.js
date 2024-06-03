@@ -53,9 +53,11 @@ const DeleteMessageAfterTime = ({
     // const imageReply = repliedMessage[1];
     // const fileReply = repliedMessage[2];
     const chatContainerRef = useRef(null);
-    console.log('repliedMessage array: ', repliedMessage);
+    console.log('repliedMessage: ', repliedMessage);
 
-    console.log('textReply: ', textReply);
+    // const testGetText = repliedMessage[0];
+    const testGetText = repliedMessage ? repliedMessage[0] : null;
+    console.log('testGetText: ', testGetText);
 
     // console.log('repliedMessage: ', repliedMessage);
     // const testGettextSelected = dataMessage[repliedMessage];
@@ -65,7 +67,7 @@ const DeleteMessageAfterTime = ({
     // console.log('Hello: ', repliedMessage);
     // console.log('Content of repliedMessage: ', dataMessage[repliedMessage]);
 
-    // console.log('isReplyMessageSent: ', isReplyMessageSent);
+    console.log('isReplyMessageSent: ', isReplyMessageSent);
 
     useEffect(() => {
         // scroll at the end of the chat detail
@@ -386,119 +388,133 @@ const DeleteMessageAfterTime = ({
                                         position: 'relative',
                                     }}
                                 >
-                                    {isReplyMessageSent &&
-                                        messageIndex === dataMessage.length - 1 && (
-                                            <Box
-                                                sx={{
-                                                    minHeight: '10px',
-                                                    maxWidth: '250px',
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    alignItems: 'flex-end',
-                                                    justifyContent: 'flex-end',
-                                                    marginLeft: 'auto',
-                                                }}
-                                            >
-                                                <Box
-                                                    sx={{
-                                                        borderRadius: '12px',
-                                                        bgcolor: '#00000008',
-                                                    }}
-                                                >
-                                                    {textReply && (
-                                                        <CustomizeTypography
-                                                            fs="12.5px"
-                                                            sx={{
-                                                                p: 1,
-                                                                width: '100%',
-                                                                color: '#65676B',
-                                                            }}
-                                                        >
-                                                            {textReply}
-                                                        </CustomizeTypography>
-                                                    )}
-                                                </Box>
-                                            </Box>
-                                        )}
-                                    <CustomizeTypography
-                                        onMouseEnter={() => setHoveredTextIndex(messageIndex)}
-                                        onMouseLeave={() => setHoveredTextIndex(null)}
-                                        sx={{
-                                            borderRadius: '12px',
-                                            color: theme.palette.primaryText,
-                                            fontSize: '13.5px',
-                                            bgcolor: '#edf3f7',
-                                            p: 1,
-                                            position: 'relative',
-                                            '::before': {
-                                                position: 'absolute',
-                                                content: '""',
-                                                width: '250px',
-                                                // bgcolor: 'yellowgreen',
-                                                height: '40px',
-                                                top: '-10px',
-                                                right: '0%',
-                                            },
-                                        }}
-                                    >
-                                        {text}
-                                        {/* show reaction list */}
+                                    {isReplyMessageSent ? (
                                         <Box
                                             sx={{
-                                                position: 'absolute',
-                                                top: 0,
-                                                right: 0,
-                                                zIndex: 999,
+                                                minHeight: '10px',
+                                                maxWidth: '250px',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'flex-end',
+                                                justifyContent: 'flex-end',
+                                                marginLeft: 'auto',
                                             }}
                                         >
-                                            {hoveredTextIndex === messageIndex && (
-                                                <ReactionOnMessage
-                                                    deleteAble={isDeleteAble}
-                                                    handCloseReactions={() =>
-                                                        setHoveredTextIndex(null)
-                                                    }
-                                                    listDataReactions={listIconReactions}
-                                                    onReactionSelect={(reaction) =>
-                                                        handleTextReactionSelection(
-                                                            reaction,
-                                                            messageIndex,
-                                                        )
-                                                    }
-                                                    deleteMessage={() =>
-                                                        isDeleteAble &&
-                                                        handleDeleteAMessage(messageIndex)
-                                                    }
-                                                    setIsReactionExist={setIsReactionExist}
-                                                    setIsReplyMessage={setIsReplyMessage}
-                                                    // messageReply={message} // initial
-                                                    messageReply={message} // initial
-                                                />
-                                            )}
+                                            <Box
+                                                sx={{
+                                                    borderRadius: '12px',
+                                                    bgcolor: '#00000008',
+                                                }}
+                                            >
+                                                {textReply && (
+                                                    <CustomizeTypography
+                                                        fs="12.5px"
+                                                        sx={{
+                                                            p: 1,
+                                                            width: '100%',
+                                                            color: '#65676B',
+                                                        }}
+                                                    >
+                                                        {textReply}
+                                                    </CustomizeTypography>
+                                                )}
+                                            </Box>
+
+                                            <CustomizeTypography
+                                                fs="13.5px"
+                                                sx={{
+                                                    borderRadius: '12px',
+                                                    color: theme.palette.primaryText,
+                                                    fontSize: '13.5px',
+                                                    bgcolor: '#edf3f7',
+                                                    p: 1,
+                                                    mt: -1,
+                                                }}
+                                            >
+                                                {text}
+                                            </CustomizeTypography>
                                         </Box>
-                                        {/* show the reaction is chosen in message */}
-                                        <Box>
-                                            {selectedTextReactions[messageIndex] && (
-                                                <Avatar
-                                                    src={
-                                                        selectedTextReactions[messageIndex]
-                                                            .reactionsImage
-                                                    }
-                                                    alt={
-                                                        selectedTextReactions[messageIndex]
-                                                            .reactionsName
-                                                    }
-                                                    sx={{
-                                                        width: '20px',
-                                                        height: '20px',
-                                                        borderRadius: 0,
-                                                        position: 'absolute',
-                                                        // bottom: '-30%',
-                                                        right: '10%',
-                                                    }}
-                                                />
-                                            )}
-                                        </Box>
-                                    </CustomizeTypography>
+                                    ) : (
+                                        <CustomizeTypography
+                                            onMouseEnter={() => setHoveredTextIndex(messageIndex)}
+                                            onMouseLeave={() => setHoveredTextIndex(null)}
+                                            sx={{
+                                                borderRadius: '12px',
+                                                color: theme.palette.primaryText,
+                                                fontSize: '13.5px',
+                                                bgcolor: '#edf3f7',
+                                                p: 1,
+                                                position: 'relative',
+                                                '::before': {
+                                                    position: 'absolute',
+                                                    content: '""',
+                                                    width: '250px',
+                                                    // bgcolor: 'yellowgreen',
+                                                    height: '40px',
+                                                    top: '-10px',
+                                                    right: '0%',
+                                                },
+                                            }}
+                                        >
+                                            {text}
+                                            {/* show reaction list */}
+                                            <Box
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    right: 0,
+                                                    zIndex: 999,
+                                                }}
+                                            >
+                                                {hoveredTextIndex === messageIndex && (
+                                                    <ReactionOnMessage
+                                                        deleteAble={isDeleteAble}
+                                                        handCloseReactions={() =>
+                                                            setHoveredTextIndex(null)
+                                                        }
+                                                        listDataReactions={listIconReactions}
+                                                        onReactionSelect={(reaction) =>
+                                                            handleTextReactionSelection(
+                                                                reaction,
+                                                                messageIndex,
+                                                            )
+                                                        }
+                                                        deleteMessage={() =>
+                                                            isDeleteAble &&
+                                                            handleDeleteAMessage(messageIndex)
+                                                        }
+                                                        setIsReactionExist={setIsReactionExist}
+                                                        setIsReplyMessage={setIsReplyMessage}
+                                                        // messageReply={message} // initial
+                                                        messageReply={message} // initial
+                                                    />
+                                                )}
+                                            </Box>
+                                            {/* show the reaction is chosen in message */}
+                                            <Box>
+                                                {selectedTextReactions[messageIndex] && (
+                                                    <Avatar
+                                                        src={
+                                                            selectedTextReactions[messageIndex]
+                                                                .reactionsImage
+                                                        }
+                                                        alt={
+                                                            selectedTextReactions[messageIndex]
+                                                                .reactionsName
+                                                        }
+                                                        sx={{
+                                                            width: '20px',
+                                                            height: '20px',
+                                                            borderRadius: 0,
+                                                            position: 'absolute',
+                                                            // bottom: '-30%',
+                                                            right: '10%',
+                                                        }}
+                                                    />
+                                                )}
+                                            </Box>
+                                        </CustomizeTypography>
+                                    )}
                                 </Box>
                             )}
 
@@ -1073,7 +1089,7 @@ const DeleteMessageAfterTime = ({
 
                             <Box sx={{ overflow: 'hidden' }}>
                                 {/* Mapping through repliedMessageContent to display each message */}
-                                {textReply && textReply.length > 0 && (
+                                {testGetText && testGetText.length > 0 && (
                                     <CustomizeTypography
                                         fs="12px"
                                         sx={{
@@ -1083,7 +1099,7 @@ const DeleteMessageAfterTime = ({
                                             textOverflow: 'ellipsis',
                                         }}
                                     >
-                                        {textReply}
+                                        {testGetText}
                                     </CustomizeTypography>
                                 )}
 
@@ -1123,7 +1139,7 @@ const DeleteMessageAfterTime = ({
                         >
                             <HighlightOffIcon
                                 sx={{ color: 'white', fontSize: '20px' }}
-                                onClick={() => dispatch(disableReplyMessage())}
+                                // onClick={() => dispatch(disableReplyMessage())}
                             />
                         </Avatar>
                     </Box>

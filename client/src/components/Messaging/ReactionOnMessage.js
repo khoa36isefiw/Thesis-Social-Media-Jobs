@@ -215,7 +215,6 @@ function ReactionOnMessage({
                                         >
                                             {action}
                                         </Typography>
-                                        {}
                                         <Divider
                                             sx={{
                                                 display: 'none',

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Box, Avatar, IconButton } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import MissYou from '../../assets/images/missu.jpeg';
 import { mobileScreen, tabletScreen, theme } from '../Theme/Theme';
@@ -42,6 +44,7 @@ const countAttachments = (message) => {
 
 function ChatWithUser({ onClick }) {
     const isStarred = useSelector((state) => state.importantPerson.isHighlight);
+    const isMuted = useSelector((state) => state.mutePerson.isMutePerson);
 
     const messages = useSelector((state) => state.messages.messages);
     const isLatestMessageDeleted = useSelector((state) => state.messages.latestMessageDeleted);
@@ -55,8 +58,10 @@ function ChatWithUser({ onClick }) {
         <Box
             sx={{
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                // initial
+                // alignItems: 'center',
+                // justifyContent: 'center',
+
                 borderLeft: '4px solid #02754f',
                 width: '100%',
                 height: '90px',
@@ -64,13 +69,16 @@ function ChatWithUser({ onClick }) {
                 p: 1,
                 mb: 1,
                 borderBottom: `1px solid ${theme.palette.bgButtonHover}`,
+                position: 'relative',
             }}
             onClick={onClick}
         >
             <Box
                 sx={{
                     display: 'flex',
-                    alignItems: 'center',
+                    // alignItems: 'center',
+                    // justifyContent: 'space-between',
+                    alignItems: 'flex-start',
                     justifyContent: 'space-between',
                     [mobileScreen]: {
                         justifyContent: 'space-between',
@@ -114,7 +122,7 @@ function ChatWithUser({ onClick }) {
                 </Box>
                 <Box
                     sx={{
-                        mt: 1,
+                        // mt: 1,
                         ml: 1,
                         [mobileScreen]: {
                             flexGrow: 1,
@@ -132,9 +140,12 @@ function ChatWithUser({ onClick }) {
                             justifyContent: 'space-between',
                         }}
                     >
-                        <CustomizeTypography fs="14px">Melody Fall Topic</CustomizeTypography>
+                        <CustomizeTypography fs="14px" flexGrow={1}>
+                            Melody Fall Topic
+                        </CustomizeTypography>
 
                         {/* The time of the last message was sent */}
+
                         <CustomizeTypography
                             sx={{
                                 fontSize: '14px',
@@ -195,7 +206,7 @@ function ChatWithUser({ onClick }) {
                                             latestMessage[0] !== null && (
                                                 <CustomizeTypography
                                                     sx={{
-                                                        width: '165px',
+                                                        maxWidth: '160px',
                                                         overflow: 'hidden',
                                                         whiteSpace: 'nowrap',
                                                         textOverflow: 'ellipsis', // replace '...' for text too long
@@ -221,17 +232,53 @@ function ChatWithUser({ onClick }) {
                             </CustomizeTypography>
                         )}
 
-                        {isStarred && (
-                            <IconButton>
-                                <StarIcon
+                        <Box
+                            sx={{
+                                mt: 1,
+                                mr: '-2px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-end',
+                                justifyContent: 'flex-end',
+                            }}
+                        >
+                            {isStarred && (
+                                <IconButton
+                                    disableTouchRipple
                                     sx={{
-                                        fontSize: '20px',
-                                        color: '#c37d17',
-                                        mt: 2,
+                                        '&:hover': {
+                                            bgcolor: 'transparent',
+                                        },
+                                        padding: 0,
                                     }}
-                                />
-                            </IconButton>
-                        )}
+                                >
+                                    <StarIcon
+                                        sx={{
+                                            fontSize: '20px',
+                                            color: '#c37d17',
+                                        }}
+                                    />
+                                </IconButton>
+                            )}
+
+                            {isMuted && (
+                                <IconButton
+                                    disableTouchRipple
+                                    sx={{
+                                        '&:hover': {
+                                            bgcolor: 'transparent',
+                                        },
+                                        padding: 0,
+                                    }}
+                                >
+                                    <NotificationsOffIcon
+                                        sx={{
+                                            fontSize: '20px',
+                                        }}
+                                    />
+                                </IconButton>
+                            )}
+                        </Box>
                     </Box>
                 </Box>
             </Box>
