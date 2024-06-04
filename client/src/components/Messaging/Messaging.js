@@ -13,6 +13,7 @@ import {
     MenuList,
     MenuItem,
     ListItemText,
+    Modal,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -46,6 +47,7 @@ import {
     disableReplyMessage,
     isMessageReplySent,
 } from '../../redux/ReplyMessage/replyMessageAction';
+import DeleteConversation from './DeleteConversation';
 
 function Messaging() {
     const dispatch = useDispatch();
@@ -75,6 +77,7 @@ function Messaging() {
     // menu setting
     const [anchorEl, setAnchorEl] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
     const openMenuChatWithUserSettings = Boolean(anchorEl);
 
     // redux
@@ -328,6 +331,15 @@ function Messaging() {
     const handleMute = () => {
         dispatch(mutePersonAction());
     };
+
+    const handleOpenDeleteConfirm = () => {
+        setDeleteConfirm(true);
+    };
+
+    const handleCloseDeleteConfirm = () => {
+        setDeleteConfirm(false);
+    };
+
     return (
         <Box
             sx={{
@@ -562,6 +574,8 @@ function Messaging() {
                                                         ? handleRemoveStar
                                                         : action === 'Mute' || action === 'Unmute'
                                                         ? handleMute
+                                                        : action === 'Delete conversation'
+                                                        ? handleOpenDeleteConfirm
                                                         : handleCloseChatWithUserMenuSettings
                                                 }
                                             >
@@ -758,6 +772,9 @@ function Messaging() {
                     </Grid>
                 </Grid>
             </Grid>
+            <Modal open={deleteConfirm} close={handleCloseDeleteConfirm}>
+                <DeleteConversation handleModalClose={handleCloseDeleteConfirm} />
+            </Modal>
         </Box>
     );
 }

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Avatar, IconButton } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import MissYou from '../../assets/images/missu.jpeg';
@@ -45,19 +46,17 @@ const countAttachments = (message) => {
 function ChatWithUser({ onClick }) {
     const isStarred = useSelector((state) => state.importantPerson.isHighlight);
     const isMuted = useSelector((state) => state.mutePerson.isMutePerson);
-
     const messages = useSelector((state) => state.messages.messages);
     const isLatestMessageDeleted = useSelector((state) => state.messages.latestMessageDeleted);
-
     const latestMessage = messages.length ? messages[messages.length - 1] : null;
-
     const attachmentCount = latestMessage ? countAttachments(latestMessage) : 0;
     const messageTime = latestMessage ? getTimeDisplay(new Date(latestMessage[3])) : '11:09 AM';
+    const [isHovered, setIsHovered] = useState(false);
 
     return (
         <Box
             sx={{
-                display: 'flex',
+                // display: 'flex',
                 // initial
                 // alignItems: 'center',
                 // justifyContent: 'center',
@@ -70,16 +69,22 @@ function ChatWithUser({ onClick }) {
                 mb: 1,
                 borderBottom: `1px solid ${theme.palette.bgButtonHover}`,
                 position: 'relative',
+                '&:hover': {
+                    cursor: 'pointer',
+                    backgroundColor: '#eeecec',
+                },
             }}
             onClick={onClick}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
             <Box
                 sx={{
                     display: 'flex',
-                    // alignItems: 'center',
-                    // justifyContent: 'space-between',
                     alignItems: 'flex-start',
                     justifyContent: 'space-between',
+                    // width: '100%',
+                    flexGrow: 1,
                     [mobileScreen]: {
                         justifyContent: 'space-between',
                         flexGrow: 1,
@@ -95,6 +100,7 @@ function ChatWithUser({ onClick }) {
                         height: '64px',
                         width: '64px',
                         position: 'relative',
+                        flexGrow: 1,
                     }}
                 >
                     <Avatar
@@ -124,6 +130,7 @@ function ChatWithUser({ onClick }) {
                     sx={{
                         // mt: 1,
                         ml: 1,
+                        width: '100%',
                         [mobileScreen]: {
                             flexGrow: 1,
                         },
@@ -135,28 +142,54 @@ function ChatWithUser({ onClick }) {
                     {/* Chat with */}
                     <Box
                         sx={{
+                            width: '100%',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
                         }}
                     >
-                        <CustomizeTypography fs="14px" flexGrow={1}>
+                        <CustomizeTypography fs="14px" sx={{ flexGrow: 1 }}>
                             Melody Fall Topic
                         </CustomizeTypography>
 
                         {/* The time of the last message was sent */}
 
-                        <CustomizeTypography
-                            sx={{
-                                fontSize: '14px',
-                                ml: 2,
-                                [mobileScreen]: {
-                                    ml: 0,
-                                },
-                            }}
-                        >
-                            {messageTime}
-                        </CustomizeTypography>
+                        <Box sx={{ flexGrow: 1 }}>
+                            {isHovered ? (
+                                <IconButton
+                                    disableTouchRipple
+                                    sx={{
+                                        padding: 0,
+                                        ml: 2,
+                                        '&:hover': {
+                                            bgcolor: 'transparent',
+                                        },
+                                        display: 'flex',
+                                        alignItems: 'flex-end',
+                                        justifyContent: 'flex-end',
+                                    }}
+                                >
+                                    <MoreHorizIcon
+                                        sx={{
+                                            // ml: 4,
+                                            fontSize: '20px',
+                                        }}
+                                    />
+                                </IconButton>
+                            ) : (
+                                <CustomizeTypography
+                                    sx={{
+                                        fontSize: '14px',
+                                        ml: 2,
+                                        [mobileScreen]: {
+                                            ml: 0,
+                                        },
+                                    }}
+                                >
+                                    {messageTime}
+                                </CustomizeTypography>
+                            )}
+                        </Box>
                     </Box>
 
                     {/* Quick view of the last message */}
