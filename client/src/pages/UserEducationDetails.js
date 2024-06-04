@@ -145,7 +145,6 @@ function UserEducationDetails() {
                 isOpen={isEducationListModalOpen}
                 handleClose={handleCloseEducationListModal}
                 list={educationInformation}
-                // Bổ sung props và hàm xử lý thay đổi vị trí của education (nếu cần)
             />
         </CustomizeBox>
     );
