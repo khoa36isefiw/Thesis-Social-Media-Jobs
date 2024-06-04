@@ -9,6 +9,7 @@ import MissYou from '../../assets/images/missu.jpeg';
 import { mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import { useSelector } from 'react-redux';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import ChatMenuSettings from './ChatMenuSettings';
 
 const formatTime = (date) => {
     let hours = date.getHours();
@@ -52,6 +53,25 @@ function ChatWithUser({ onClick }) {
     const attachmentCount = latestMessage ? countAttachments(latestMessage) : 0;
     const messageTime = latestMessage ? getTimeDisplay(new Date(latestMessage[3])) : '11:09 AM';
     const [isHovered, setIsHovered] = useState(false);
+    // Open Menu Settings
+    const [anchorEl, setAnchorEl] = useState(null);
+    // const [showOptions, setShowOptions] = useState(false);
+    const openMenuChatSettings = Boolean(anchorEl);
+    const menuChatSettings = [
+        `${isStarred ? 'Remove star' : 'Star'}`,
+        `${isMuted ? 'Unmute' : 'Mute'}`,
+        'Delete conversation',
+    ];
+
+    const handleOpenMenuChatSettings = (event) => {
+        setAnchorEl(event.currentTarget);
+        // setShowOptions(true);
+    };
+
+    const handleCloseMenuChatSettings = () => {
+        setAnchorEl(null);
+        // setShowOptions(false);
+    };
 
     return (
         <Box
@@ -83,8 +103,6 @@ function ChatWithUser({ onClick }) {
                     display: 'flex',
                     alignItems: 'flex-start',
                     justifyContent: 'space-between',
-                    // width: '100%',
-                    flexGrow: 1,
                     [mobileScreen]: {
                         justifyContent: 'space-between',
                         flexGrow: 1,
@@ -128,9 +146,9 @@ function ChatWithUser({ onClick }) {
                 </Box>
                 <Box
                     sx={{
-                        // mt: 1,
-                        ml: 1,
                         width: '100%',
+                        ml: 1,
+
                         [mobileScreen]: {
                             flexGrow: 1,
                         },
@@ -154,42 +172,46 @@ function ChatWithUser({ onClick }) {
 
                         {/* The time of the last message was sent */}
 
-                        <Box sx={{ flexGrow: 1 }}>
-                            {isHovered ? (
-                                <IconButton
-                                    disableTouchRipple
+                        {isHovered ? (
+                            <IconButton
+                                disableTouchRipple
+                                sx={{
+                                    padding: 0,
+                                    '&:hover': {
+                                        bgcolor: 'transparent',
+                                    },
+                                    ml: 2,
+                                }}
+                                onClick={handleOpenMenuChatSettings}
+                            >
+                                <MoreHorizIcon
                                     sx={{
-                                        padding: 0,
-                                        ml: 2,
-                                        '&:hover': {
-                                            bgcolor: 'transparent',
-                                        },
-                                        display: 'flex',
-                                        alignItems: 'flex-end',
-                                        justifyContent: 'flex-end',
+                                        // ml: 4,
+
+                                        fontSize: '20px',
                                     }}
-                                >
-                                    <MoreHorizIcon
-                                        sx={{
-                                            // ml: 4,
-                                            fontSize: '20px',
-                                        }}
-                                    />
-                                </IconButton>
-                            ) : (
-                                <CustomizeTypography
-                                    sx={{
-                                        fontSize: '14px',
-                                        ml: 2,
-                                        [mobileScreen]: {
-                                            ml: 0,
-                                        },
-                                    }}
-                                >
-                                    {messageTime}
-                                </CustomizeTypography>
-                            )}
-                        </Box>
+                                />
+                            </IconButton>
+                        ) : (
+                            <CustomizeTypography
+                                sx={{
+                                    fontSize: '14px',
+                                    ml: 2,
+                                    [mobileScreen]: {
+                                        ml: 0,
+                                    },
+                                }}
+                            >
+                                {messageTime}
+                            </CustomizeTypography>
+                        )}
+
+                        {/* Open Menu Setting */}
+                        <ChatMenuSettings
+                            anchorEl={anchorEl}
+                            handleCloseMenuChatSettings={handleCloseMenuChatSettings}
+                            menuChatSettings={menuChatSettings}
+                        />
                     </Box>
 
                     {/* Quick view of the last message */}

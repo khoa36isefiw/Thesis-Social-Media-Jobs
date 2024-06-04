@@ -6,13 +6,7 @@ import {
     Divider,
     Grid,
     IconButton,
-    Button,
-    Avatar,
     Typography,
-    Menu,
-    MenuList,
-    MenuItem,
-    ListItemText,
     Modal,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -48,6 +42,7 @@ import {
     isMessageReplySent,
 } from '../../redux/ReplyMessage/replyMessageAction';
 import DeleteConversation from './DeleteConversation';
+import ChatMenuSettings from './ChatMenuSettings';
 
 function Messaging() {
     const dispatch = useDispatch();
@@ -76,9 +71,8 @@ function Messaging() {
     // open menu setting when chatting with one user
     // menu setting
     const [anchorEl, setAnchorEl] = useState(null);
-    const [showOptions, setShowOptions] = useState(false);
+
     const [deleteConfirm, setDeleteConfirm] = useState(false);
-    const openMenuChatWithUserSettings = Boolean(anchorEl);
 
     // redux
     const isEnterKeyEnabled = useSelector((state) => state.buttonSendMessage.isEnterKeyEnabled);
@@ -316,22 +310,22 @@ function Messaging() {
     // open menu with user menu settings
     const handleOpenChatWithUserMenuSettings = (event) => {
         setAnchorEl(event.currentTarget);
-        setShowOptions(true);
     };
 
     const handleCloseChatWithUserMenuSettings = () => {
         setAnchorEl(null);
-        setShowOptions(false);
     };
 
     // remove star
     const handleRemoveStar = () => {
         dispatch(highlightPersonAction());
     };
+    // mute notifications from the user
     const handleMute = () => {
         dispatch(mutePersonAction());
     };
 
+    // open modal deletion
     const handleOpenDeleteConfirm = () => {
         setDeleteConfirm(true);
     };
@@ -531,82 +525,13 @@ function Messaging() {
                                         onClick={handleOpenChatWithUserMenuSettings}
                                     />
                                 </IconButton>
-                                <Menu
+                                <ChatMenuSettings
                                     anchorEl={anchorEl}
-                                    open={openMenuChatWithUserSettings}
-                                    onClose={handleCloseChatWithUserMenuSettings}
-                                    sx={{
-                                        position: 'absolute',
-                                        '.MuiPaper-root': {
-                                            backgroundColor: 'darkorange',
-                                            boxShadow: '2px 0px 5px  rgba(0,0,0,0.75)',
-                                        },
-                                    }}
-                                    anchorOrigin={{
-                                        vertical: 'bottom',
-                                        horizontal: 'right',
-                                    }}
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                >
-                                    <MenuList
-                                        sx={{
-                                            width: '150px',
-                                            padding: 0,
-                                        }}
-                                    >
-                                        {chatWithUserSettingsList.map((action, index) => (
-                                            // if deleteAble is false and action is not Delete --> Menu not render 'Delete' --> render the others
-
-                                            <MenuItem
-                                                key={index}
-                                                sx={{
-                                                    [mobileScreen]: {
-                                                        minHeight: '36px',
-                                                        px: 0,
-                                                        py: 0,
-                                                    },
-                                                }}
-                                                onClick={
-                                                    action === 'Remove star' || action === 'Star'
-                                                        ? handleRemoveStar
-                                                        : action === 'Mute' || action === 'Unmute'
-                                                        ? handleMute
-                                                        : action === 'Delete conversation'
-                                                        ? handleOpenDeleteConfirm
-                                                        : handleCloseChatWithUserMenuSettings
-                                                }
-                                            >
-                                                <ListItemText>
-                                                    <Typography
-                                                        sx={{
-                                                            fontSize: '14px',
-                                                            color: '#191919',
-                                                            // fontWeight: '600',
-                                                            [mobileScreen]: {
-                                                                p: 1,
-                                                            },
-                                                        }}
-                                                    >
-                                                        {action}
-                                                    </Typography>
-                                                    <Divider
-                                                        sx={{
-                                                            display: 'none',
-                                                            [mobileScreen]: {
-                                                                display: 'block',
-                                                            },
-                                                        }}
-                                                    />
-                                                </ListItemText>
-                                            </MenuItem>
-                                        ))}
-                                    </MenuList>
-                                </Menu>
-                                {/* {openMenuSetting && <ChatWithUserSettings />} */}
-
+                                    handleCloseMenuChatSettings={
+                                        handleCloseChatWithUserMenuSettings
+                                    }
+                                    menuChatSettings={chatWithUserSettingsList}
+                                />
                                 <IconButton>
                                     <VideocamIcon sx={{ fontSize: '24px' }} />
                                 </IconButton>
@@ -772,9 +697,9 @@ function Messaging() {
                     </Grid>
                 </Grid>
             </Grid>
-            <Modal open={deleteConfirm} close={handleCloseDeleteConfirm}>
+            {/* <Modal open={deleteConfirm} close={handleCloseDeleteConfirm}>
                 <DeleteConversation handleModalClose={handleCloseDeleteConfirm} />
-            </Modal>
+            </Modal> */}
         </Box>
     );
 }
