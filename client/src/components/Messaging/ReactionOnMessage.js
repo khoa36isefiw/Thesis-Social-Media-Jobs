@@ -10,7 +10,11 @@ import {
     Divider,
 } from '@mui/material';
 import MoreOption from '../../assets/images/option_reactions.png';
+import ReplyMessage from '../../assets/images/left_reactions.png';
+
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
+import { useDispatch } from 'react-redux';
+import { isReplyMessage } from '../../redux/ReplyMessage/replyMessageAction';
 
 const moreActionsList = ['Forward', 'Delete', 'Edit'];
 
@@ -23,7 +27,9 @@ function ReactionOnMessage({
     deleteMessage,
     deleteAble, // true ---> can delete and show button delete on menu
     setIsReactionExist,
+    messageReply, // list message
 }) {
+    const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
 
@@ -50,6 +56,12 @@ function ReactionOnMessage({
     const handleDelete = () => {
         deleteMessage(msgIndex, imgAndFileIndex);
         handleClose();
+    };
+
+    const handleClickReplyAction = () => {
+        // setIsReplyMessage(true);
+        // setIsReplyMessage(dispatch(isReplyMessage()));
+        dispatch(isReplyMessage(messageReply));
     };
 
     return (
@@ -97,6 +109,29 @@ function ReactionOnMessage({
                         />
                     </Box>
                 ))}
+                {/* reply message options */}
+                <Box
+                    sx={{
+                        '&:hover': {
+                            cursor: 'pointer',
+                            transform: 'scale(1.25)',
+                        },
+                    }}
+                    // show  menu options khi click vào biểu tượng "more options"
+                    onClick={handleClickReplyAction}
+                >
+                    <Avatar
+                        src={ReplyMessage}
+                        sx={{
+                            height: '20px',
+                            width: '20px',
+                            borderRadius: '0',
+                            zIndex: 2,
+                        }}
+                        alt="Reply Message"
+                    />
+                </Box>
+                {/* delete message option */}
                 <Box
                     sx={{
                         '&:hover': {
@@ -180,7 +215,6 @@ function ReactionOnMessage({
                                         >
                                             {action}
                                         </Typography>
-                                        {}
                                         <Divider
                                             sx={{
                                                 display: 'none',

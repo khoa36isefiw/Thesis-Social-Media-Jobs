@@ -36,11 +36,16 @@ import SendMessageActions from './SendMessageActions';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 
 import DeleteMessageAfterTime from './DeleteMessageAfterTime';
-import { highlightPersonAction } from '../../redux/ImportantPerson/highlightPersonAction';
+import {
+    highlightPersonAction,
+    removeStar,
+} from '../../redux/ImportantPerson/highlightPersonAction';
+import { mutePersonAction } from '../../redux/MutePerson/mutePersonAction';
 import { addMessage } from '../../redux/ShowMesssage/showMesssageAction';
-import ChatWithUserSettings from './ChatWithUserSettings';
-
-const chatWithUserSettingsList = ['Remove star', 'Mute', 'Delete conversation'];
+import {
+    disableReplyMessage,
+    isMessageReplySent,
+} from '../../redux/ReplyMessage/replyMessageAction';
 
 function Messaging() {
     const dispatch = useDispatch();
@@ -76,7 +81,16 @@ function Messaging() {
     const isEnterKeyEnabled = useSelector((state) => state.buttonSendMessage.isEnterKeyEnabled);
     // star for person
     const isStarred = useSelector((state) => state.importantPerson.isHighlight);
+    const isMutePerson = useSelector((state) => state.mutePerson.isMutePerson);
 
+    // status of message when is selected to reply
+    const isMessageReplied = useSelector((state) => state.replyMessage.isMessageReplied);
+
+    const chatWithUserSettingsList = [
+        `${isStarred ? 'Remove star' : 'Star'}`,
+        `${isMutePerson ? 'Unmute' : 'Mute'}`,
+        'Delete conversation',
+    ];
     // test list data just uploaded
 
     useEffect(() => {
@@ -214,27 +228,6 @@ function Messaging() {
         setShowPicker(false);
     };
 
-    const handleSendButtonClick = () => {
-        // console.log('Before Sending message:', editorText);
-        // save message just sent
-        const currentTime = new Date(); // save the time the message was sent
-        // temp variable to get value
-        const newMessageSaved = [
-            ...messageSaved,
-            [editorText, imageURL, listFilesUploaded, currentTime],
-        ];
-        // update setMessageSaved with newMessageSaved array
-        setMessageSaved(newMessageSaved);
-        // console.log('After sending Message: ', newMessageSaved);
-
-        // Reset editor after sending message
-        setEditorText('');
-        setImageURL([]);
-        setListFilesUploaded([]);
-        setIsEmpty(true);
-        console.log('Message just sent include: ', newMessageSaved);
-    };
-
     // re-solve press enter to send the message and prevent re-render
 
     const handleSendButtonClick2 = useCallback(() => {
@@ -266,6 +259,17 @@ function Messaging() {
         newMessageSaved.forEach((message) => {
             dispatch(addMessage(message)); // Dispatch action with each message
         });
+
+        // Check if the message is a replied message and dispatch an action if necessary
+        if (isMessageReplied) {
+            dispatch(isMessageReplySent());
+            dispatch(disableReplyMessage());
+        }
+
+        // dispatch(disableReplyMessage());
+
+        // hide reply message
+        // dispatch(disableReplyMessage());
 
         // Reset editor after sending message
         setEditorText('');
@@ -315,6 +319,14 @@ function Messaging() {
     const handleCloseChatWithUserMenuSettings = () => {
         setAnchorEl(null);
         setShowOptions(false);
+    };
+
+    // remove star
+    const handleRemoveStar = () => {
+        dispatch(highlightPersonAction());
+    };
+    const handleMute = () => {
+        dispatch(mutePersonAction());
     };
     return (
         <Box
@@ -396,6 +408,7 @@ function Messaging() {
                     <Grid
                         xs={12}
                         sm={5}
+                        md={5}
                         lg={4}
                         sx={{
                             borderRight: `1px solid ${theme.palette.bgButtonHover}`,
@@ -420,6 +433,7 @@ function Messaging() {
                     <Grid
                         xs={12}
                         sm={7}
+                        md={7}
                         lg={8}
                         sx={{
                             display: 'flex',
@@ -543,7 +557,13 @@ function Messaging() {
                                                         py: 0,
                                                     },
                                                 }}
-                                                onClick={handleCloseChatWithUserMenuSettings}
+                                                onClick={
+                                                    action === 'Remove star' || action === 'Star'
+                                                        ? handleRemoveStar
+                                                        : action === 'Mute' || action === 'Unmute'
+                                                        ? handleMute
+                                                        : handleCloseChatWithUserMenuSettings
+                                                }
                                             >
                                                 <ListItemText>
                                                     <Typography
