@@ -26,6 +26,8 @@ import BackgroundImageModal from '../../BackgroundImageModal/BackgroundImageModa
 import EditUserBackgroundImage from '../../EditUserBackgroundImage/EditUserBackgroundImage';
 import EditUserProfile from '../../EditUserProfile/EditUserProfile';
 import { mobileScreen, tabletScreen, theme } from '../../Theme/Theme';
+import { useDispatch, useSelector } from 'react-redux';
+import { startAChatMessage } from '../../../redux/AddChatMessage/addChatMessageAction';
 
 // define
 const CustomizeTypography = styled(Typography)(({ fontSize, isBold = false }) => ({
@@ -48,12 +50,20 @@ const moreActionLists = [
     { icon: <SaveAltIcon sx={{ fontSize: '20px' }} />, actionText: 'Save to PDF' },
 ];
 
+// generate a random ID
+const generateRandomID = () => {
+    return Math.random().toString(36).concat(2, 9); // Generate a random string
+};
+
 // User information section
 export function UserProfile() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [activeModal, setActiveModal] = useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
+    const listUserInfor = useSelector((state) => state.startAMessage.listUserInformation);
+    console.log('listUserInfor: ', listUserInfor);
 
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -77,6 +87,26 @@ export function UserProfile() {
 
     const handleCloseUserProfile = () => {
         setIsUserProfileOpen(false);
+    };
+
+    // set to store generated IDs
+    let generatedIds = new Set();
+    const generateRandomId = () => {
+        let id = null;
+        do {
+            // create a random number
+            id = Math.floor(Math.random() * 100);
+        } while (generatedIds.has(id)); // check if the number is already generated
+        generatedIds.add(id); // add the generated ID to the set
+        return id;
+    };
+
+    // add chatting for UI messaging
+    const handleStartChatting = (userInfor) => {
+        dispatch(startAChatMessage(userInfor));
+        console.log('userInfor: ', userInfor);
+
+        // console.log('USER ID: ', Math.floor(Math.random() * 100));
     };
 
     return (
@@ -390,7 +420,19 @@ export function UserProfile() {
             </Box>
             {/* Buttons section */}
             <Box sx={{ px: 3, my: 2 }}>
-                <CustomizeButton variant="contained" startIcon={<SendIcon />}>
+                <CustomizeButton
+                    variant="contained"
+                    startIcon={<SendIcon />}
+                    onClick={() =>
+                        handleStartChatting({
+                            userID: generateRandomId(),
+                            // userID: '123',
+                            userImage:
+                                'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRr7RaDl49DG3ZWLUZQd2Ue1TC-8CVpgB7q2X7JGVIjGjWFghZ_',
+                            userName: 'Khoa Nèk',
+                        })
+                    }
+                >
                     Message
                 </CustomizeButton>
                 <CustomizeButton
