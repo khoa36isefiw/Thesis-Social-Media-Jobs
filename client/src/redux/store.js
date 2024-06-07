@@ -5,7 +5,7 @@ import { highlightPersonReducer } from './ImportantPerson/highlightPersonReducer
 import { showMessageReducer } from './ShowMesssage/showMessageReducer';
 import { isMessageRepliedReducer } from './ReplyMessage/replyMessageReducer';
 import { mutePersonReducer } from './MutePerson/mutePersonReducer';
-
+import { addChatMessageReducer } from './AddChatMessage/addChatMessageReducer';
 const rootReducer = combineReducers({
     buttonSendMessage: sendReducer,
     // starred users
@@ -13,6 +13,7 @@ const rootReducer = combineReducers({
     mutePerson: mutePersonReducer,
     messages: showMessageReducer,
     replyMessage: isMessageRepliedReducer,
+    startAMessage: addChatMessageReducer,
 });
 
 const store = createStore(rootReducer);

@@ -61,6 +61,7 @@ function ReactionOnMessage({
     const handleClickReplyAction = () => {
         // setIsReplyMessage(true);
         // setIsReplyMessage(dispatch(isReplyMessage()));
+        console.log('In Reaction: ', messageReply);
         dispatch(isReplyMessage(messageReply));
     };
 

@@ -45,7 +45,9 @@ const DeleteMessageAfterTime = ({
     const [selectedFileReactions, setSelectedFileReactions] = useState({});
     const [isReactionExist, setIsReactionExist] = useState(false); // use to controll user image spacing
     const [isReplyMessage, setIsReplyMessage] = useState(false);
+    // flag know when the message is selected to reply
     const isRepliedMessage = useSelector((state) => state.replyMessage.isMessageReplied); // get the index of message is selected
+    // contain what message is selected to reply
     const repliedMessage = useSelector((state) => state.replyMessage.repliedMessageContent);
     const isReplyMessageSent = useSelector((state) => state.replyMessage.isReplyMessageSend);
     const textReply = repliedMessage ? repliedMessage[0] : null;
@@ -810,94 +812,49 @@ const DeleteMessageAfterTime = ({
 
                             {/* user saw message */}
                             {/* // chưa cho từng tin nhắn cụ thể */}
-                            <Box
-                                sx={{
-                                    width: '20px',
-                                    height: '20px',
-                                    mt: isReactionExist ? '14px' : '4px',
-                                    position: 'relative',
-                                }}
-                                onMouseEnter={() => setHoveredAvatarUserSeen(true)}
-                                onMouseLeave={() => setHoveredAvatarUserSeen(false)}
-                            >
-                                {hoveredAvatarUserSeen && (
-                                    <Box
-                                        sx={{
-                                            minHeight: '10px',
-                                            width: 'auto',
-                                            bgcolor: 'rgba(0, 0, 0, 0.45)',
-                                            borderRadius: '12px',
-                                            minWidth: '260px',
-                                            padding: '4px',
-                                            textAlign: 'center',
-                                            position: 'absolute',
-                                            bottom: '100%',
-                                            right: 0,
-                                            mb: '8px',
-                                        }}
-                                    >
-                                        <Typography sx={{ color: 'white', fontSize: '13px' }}>
-                                            Melody Fall Topic sent at 11:19 PM
-                                        </Typography>
-                                    </Box>
-                                )}
-                                <Avatar
-                                    src={MissYou}
-                                    alt="USER IMAGE"
-                                    sx={{ height: '100%', width: '100%' }}
-                                />
-                            </Box>
+                            {messageIndex === dataMessage.length - 1 && (
+                                <Box
+                                    sx={{
+                                        width: '20px',
+                                        height: '20px',
+                                        mt: isReactionExist ? '14px' : '4px',
+                                        position: 'relative',
+                                    }}
+                                    onMouseEnter={() => setHoveredAvatarUserSeen(true)}
+                                    onMouseLeave={() => setHoveredAvatarUserSeen(false)}
+                                >
+                                    {hoveredAvatarUserSeen && (
+                                        <Box
+                                            sx={{
+                                                minHeight: '10px',
+                                                width: 'auto',
+                                                bgcolor: 'rgba(0, 0, 0, 0.45)',
+                                                borderRadius: '12px',
+                                                minWidth: '260px',
+                                                padding: '4px',
+                                                textAlign: 'center',
+                                                position: 'absolute',
+                                                bottom: '100%',
+                                                right: 0,
+                                                mb: '8px',
+                                            }}
+                                        >
+                                            <Typography sx={{ color: 'white', fontSize: '13px' }}>
+                                                Melody Fall Topic sent at 11:19 PM
+                                            </Typography>
+                                        </Box>
+                                    )}
+                                    <Avatar
+                                        src={MissYou}
+                                        alt="USER IMAGE"
+                                        sx={{ height: '100%', width: '100%' }}
+                                    />
+                                </Box>
+                            )}
                         </Box>
                     );
                 })}
             </Box>
-
-            {/* <Box
-                sx={{
-                    minHeight: '10px',
-                    maxWidth: '250px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-end',
-                    justifyContent: 'flex-end',
-                    marginLeft: 'auto',
-                }}
-            >
-                <Box
-                    sx={{
-                        borderRadius: '12px',
-                        // bgcolor: '#f4f2ee',
-                        bgcolor: '#00000008',
-                    }}
-                >
-                    <CustomizeTypography
-                        fs="12.5px"
-                        sx={{
-                            p: 1,
-                            width: '100%',
-                            // color: theme.palette.primaryText,
-                            color: '#65676B',
-                        }}
-                    >
-                        Old Message
-                    </CustomizeTypography>
-                </Box>
-                <CustomizeTypography
-                    fs="13.5px"
-                    sx={{
-                        borderRadius: '12px',
-                        color: theme.palette.primaryText,
-                        fontSize: '13.5px',
-                        bgcolor: '#edf3f7',
-                        p: 1,
-                        mt: -1,
-                        // color: '#000000E9',
-                    }}
-                >
-                    Message is replied
-                </CustomizeTypography>
-            </Box> */}
-
             {/* load image just uploaded - preparing to send*/}
             {/* {imageUploaded.length > 0 && */}
             <Box
@@ -936,11 +893,6 @@ const DeleteMessageAfterTime = ({
                                 height: '32px',
                                 objectFit: 'cover',
                                 borderRadius: '12px',
-
-                                // [mobileScreen]: {
-                                //     width: '24px',
-                                //     height: '24px',
-                                // },
                             }}
                         />
                         <Box>
@@ -1048,7 +1000,7 @@ const DeleteMessageAfterTime = ({
                 ))}
                 {/* {isReplyMessage && ( */}
 
-                {/* initial for reply message */}
+                {/* get message to respone/ reply */}
                 {isRepliedMessage && (
                     <Box
                         sx={{
@@ -1110,6 +1062,7 @@ const DeleteMessageAfterTime = ({
                             </Box>
                         </Box>
 
+                        {/* close message just selected */}
                         <Avatar
                             sx={{
                                 width: '24px',

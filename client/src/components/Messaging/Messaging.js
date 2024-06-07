@@ -31,6 +31,8 @@ import SendMessageActions from './SendMessageActions';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 
 import DeleteMessageAfterTime from './DeleteMessageAfterTime';
+import DeleteMessageAfterTimeBK from './DeleteMessageAfterTimeBK';
+
 import {
     highlightPersonAction,
     removeStar,
@@ -43,6 +45,7 @@ import {
 } from '../../redux/ReplyMessage/replyMessageAction';
 import DeleteConversation from './DeleteConversation';
 import ChatMenuSettings from './ChatMenuSettings';
+import ChatWithUserV2 from './ChatWithUserV2';
 
 function Messaging() {
     const dispatch = useDispatch();
@@ -432,6 +435,7 @@ function Messaging() {
                             }}
                         >
                             <ChatWithUser onClick={handleChatClick} />
+                            <ChatWithUserV2 onClick={handleChatClick} />
                         </Box>
                     </Grid>
 
@@ -546,7 +550,7 @@ function Messaging() {
                         </Box>
 
                         {/* Show chat details */}
-                        <DeleteMessageAfterTime
+                        <DeleteMessageAfterTimeBK
                             dataMessage={messageSaved}
                             setDataMessage={setMessageSaved}
                             imageUploaded={imageURL}
