@@ -10,6 +10,7 @@ import { mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import { useSelector } from 'react-redux';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import ChatMenuSettings from './ChatMenuSettings';
+import { useEffect } from 'react';
 
 const formatTime = (date) => {
     let hours = date.getHours();
@@ -45,23 +46,32 @@ const countAttachments = (message) => {
 };
 
 function ChatWithUser({ onClick }) {
+    const [isHovered, setIsHovered] = useState(false);
+    // Open Menu Settings
+    const [anchorEl, setAnchorEl] = useState(null);
+    // const [showOptions, setShowOptions] = useState(false);
+    const openMenuChatSettings = Boolean(anchorEl);
     const isStarred = useSelector((state) => state.importantPerson.isHighlight);
     const isMuted = useSelector((state) => state.mutePerson.isMutePerson);
     const messages = useSelector((state) => state.messages.messages);
     const isLatestMessageDeleted = useSelector((state) => state.messages.latestMessageDeleted);
     const latestMessage = messages.length ? messages[messages.length - 1] : null;
     const attachmentCount = latestMessage ? countAttachments(latestMessage) : 0;
+
+    // get a new message with new user
+    const listUserInfor = useSelector((state) => state.startAMessage.listUserInformation);
+
     const messageTime = latestMessage ? getTimeDisplay(new Date(latestMessage[3])) : '11:09 AM';
-    const [isHovered, setIsHovered] = useState(false);
-    // Open Menu Settings
-    const [anchorEl, setAnchorEl] = useState(null);
-    // const [showOptions, setShowOptions] = useState(false);
-    const openMenuChatSettings = Boolean(anchorEl);
+
     const menuChatSettings = [
         `${isStarred ? 'Remove star' : 'Star'}`,
         `${isMuted ? 'Unmute' : 'Mute'}`,
         'Delete conversation',
     ];
+
+    useEffect(() => {
+        console.log('A New Chat Message: ', listUserInfor);
+    }, [listUserInfor]);
 
     const handleOpenMenuChatSettings = (event) => {
         setAnchorEl(event.currentTarget);
