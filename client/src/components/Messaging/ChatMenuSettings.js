@@ -5,20 +5,23 @@ import { highlightPersonAction } from '../../redux/ImportantPerson/highlightPers
 import { mutePersonAction } from '../../redux/MutePerson/mutePersonAction';
 import DeleteConversation from './DeleteConversation';
 
-const ChatMenuSettings = ({ anchorEl, handleCloseMenuChatSettings, menuChatSettings }) => {
+const ChatMenuSettings = ({ anchorEl, handleCloseMenuChatSettings, menuChatSettings, userId }) => {
     const dispatch = useDispatch();
     const [hideMenu, setHideMenu] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState(false);
     // check some case when click into menu
     const handleMenuItemClick = (action) => {
+        console.log('ChatMenuSettings userID: ', userId);
         if (action === 'Remove star' || action === 'Star') {
-            dispatch(highlightPersonAction());
+            // dispatch(highlightPersonAction());
+            dispatch(highlightPersonAction(userId));
+            setHideMenu(true);
         } else if (action === 'Mute' || action === 'Unmute') {
             dispatch(mutePersonAction());
+            setHideMenu(true); // hide Menu after 1s of clicking
         } else if (action === 'Delete conversation') {
             handleOpenDeleteConfirm();
         }
-        setHideMenu(true);
     };
 
     // hide Menu
@@ -27,7 +30,8 @@ const ChatMenuSettings = ({ anchorEl, handleCloseMenuChatSettings, menuChatSetti
             // hide menu after 1s when user clicks into menu
             const timer = setTimeout(() => {
                 handleCloseMenuChatSettings();
-            }, 1500);
+                setHideMenu(false);
+            }, 1000);
 
             return () => {
                 clearTimeout(timer);
@@ -41,6 +45,7 @@ const ChatMenuSettings = ({ anchorEl, handleCloseMenuChatSettings, menuChatSetti
 
     const handleCloseDeleteConfirm = () => {
         setDeleteConfirm(false);
+        handleCloseMenuChatSettings();
     };
     return (
         <>
@@ -92,7 +97,7 @@ const ChatMenuSettings = ({ anchorEl, handleCloseMenuChatSettings, menuChatSetti
                 </MenuList>
             </Menu>
             <Modal open={deleteConfirm} close={handleCloseDeleteConfirm}>
-                <DeleteConversation handleModalClose={handleCloseDeleteConfirm} />
+                <DeleteConversation handleModalClose={handleCloseDeleteConfirm} userId={userId} />
             </Modal>
         </>
     );
