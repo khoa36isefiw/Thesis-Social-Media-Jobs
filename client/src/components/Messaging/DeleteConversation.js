@@ -4,8 +4,17 @@ import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography'
 import CloseIcon from '@mui/icons-material/Close';
 
 import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeAChatMessage } from '../../redux/AddChatMessage/addChatMessageAction';
 
-function DeleteConversation({ handleModalClose }) {
+function DeleteConversation({ handleModalClose, userId }) {
+    const dispatch = useDispatch();
+
+    const handleDeleteConfirmModal = () => {
+        dispatch(removeAChatMessage(userId));
+        handleModalClose();
+    };
+
     return (
         <Box
             sx={{
@@ -17,7 +26,6 @@ function DeleteConversation({ handleModalClose }) {
                 mt: '64px',
                 borderRadius: '8px',
                 boxShadow: '0 4px 4px #333',
-                //  close icon doesn't overflow
                 overflow: 'hidden',
                 [ipadProScreen]: {
                     width: '70%',
@@ -70,11 +78,9 @@ function DeleteConversation({ handleModalClose }) {
                 <Box
                     sx={{
                         p: 1,
-                        // bgcolor: '#339999',
                         height: '60px',
                         display: 'flex',
                         alignItems: 'center',
-                        // mx: 2,
                         justifyContent: 'center',
                     }}
                 >
@@ -82,7 +88,6 @@ function DeleteConversation({ handleModalClose }) {
                         sx={{
                             color: '#404040',
                             fontSize: '16px',
-                            // textAlign: 'center',
                         }}
                     >
                         This conversation will be deleted permanently
@@ -111,7 +116,6 @@ function DeleteConversation({ handleModalClose }) {
                             '&:hover': {
                                 bgcolor: 'transparent',
                                 borderColor: '#404040',
-                                // use box shadow instead of using border width (change size of button)
                                 boxShadow: '0 0 0 1px #404040',
                             },
                         }}
@@ -130,7 +134,7 @@ function DeleteConversation({ handleModalClose }) {
                             mr: '8px',
                             mb: 2,
                         }}
-                        onClick={handleModalClose}
+                        onClick={handleDeleteConfirmModal}
                     >
                         Delete
                     </Button>
