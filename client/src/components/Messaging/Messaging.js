@@ -144,10 +144,6 @@ function Messaging() {
         // setEditorText(event.target.value);
         // setIsEmpty(event.target.value.trim() === '');
     }, []);
-    // const handleTextFieldChange = (event) => {
-    //     setEditorText(event.target.value);
-    //     setIsEmpty(event.target.value.trim() === '');
-    // };
 
     // multiple images // initial
     const handleImageUpload = (event) => {
@@ -233,12 +229,11 @@ function Messaging() {
         const timestamp = new Date();
         let textToSend = null; // Initialize text to null by default
         let imageToSend = []; // Initialize images array to empty by default
-
+        // textToSend = editorText; // remove any space
         // Check if there's text input
         if (editorText.trim() !== '') {
             textToSend = editorText.trim(); // remove any space
         }
-
         // Check if there are uploaded images
         if (imageURL.length > 0) {
             imageToSend = imageURL;
