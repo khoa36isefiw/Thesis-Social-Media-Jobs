@@ -52,7 +52,7 @@ function ChatWithUserV2({ onClick }) {
 
     const openMenuChatSettings = Boolean(anchorEl);
     const isStarred = useSelector((state) => state.importantPerson.isHighlight);
-    const isUserStarred = useSelector((state) => state.importantPerson.highlightedUser);
+    // const isUserStarred = useSelector((state) => state.importantPerson.highlightedUser);
     const isMuted = useSelector((state) => state.mutePerson.isMutePerson);
     const messages = useSelector((state) => state.messages.messages);
     const isLatestMessageDeleted = useSelector((state) => state.messages.latestMessageDeleted);
@@ -60,12 +60,15 @@ function ChatWithUserV2({ onClick }) {
     const attachmentCount = latestMessage ? countAttachments(latestMessage) : 0;
     const isStartNewMessage = useSelector((state) => state.startAMessage.isClickSendMessage);
     const listUserInfor = useSelector((state) => state.startAMessage.listUserInformation);
+    const listUserStared = useSelector((state) => state.importantPerson.listHighlightedUser);
+    const listUserMuted = useSelector((state) => state.mutePerson.listMutedUser);
+    console.log('List user stared: ', listUserStared);
 
     const messageTime = latestMessage ? getTimeDisplay(new Date(latestMessage[3])) : '11:09 AM';
 
     const menuChatSettings = [
-        `${isStarred ? 'Remove star' : 'Star'}`,
-        `${isMuted ? 'Unmute' : 'Mute'}`,
+        `${listUserStared.includes(selectedUser?.userID) ? 'Remove star' : 'Star'}`,
+        `${listUserMuted.includes(selectedUser?.userID) ? 'Unmute' : 'Mute'}`,
         'Delete conversation',
     ];
 
@@ -298,7 +301,7 @@ function ChatWithUserV2({ onClick }) {
                                             height: '100%',
                                         }}
                                     >
-                                        {isStarred && isUserStarred === user.userID && (
+                                        {listUserStared.includes(user.userID) && (
                                             <IconButton
                                                 disableTouchRipple
                                                 sx={{
@@ -316,7 +319,7 @@ function ChatWithUserV2({ onClick }) {
                                                 />
                                             </IconButton>
                                         )}
-                                        {isMuted && (
+                                        {listUserMuted.includes(user.userID) && (
                                             <IconButton
                                                 disableTouchRipple
                                                 sx={{

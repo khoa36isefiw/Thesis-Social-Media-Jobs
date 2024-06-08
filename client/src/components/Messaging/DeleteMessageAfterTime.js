@@ -45,29 +45,19 @@ const DeleteMessageAfterTime = ({
     const [selectedFileReactions, setSelectedFileReactions] = useState({});
     const [isReactionExist, setIsReactionExist] = useState(false); // use to controll user image spacing
     const [isReplyMessage, setIsReplyMessage] = useState(false);
+    // Redux selectors
     // flag know when the message is selected to reply
     const isRepliedMessage = useSelector((state) => state.replyMessage.isMessageReplied); // get the index of message is selected
     // contain what message is selected to reply
     const repliedMessage = useSelector((state) => state.replyMessage.repliedMessageContent);
     const isReplyMessageSent = useSelector((state) => state.replyMessage.isReplyMessageSend);
-    const textReply = repliedMessage ? repliedMessage[0] : null;
-    // const textReply = repliedMessage[0];
-    // const imageReply = repliedMessage[1];
-    // const fileReply = repliedMessage[2];
+
+    // const getTextData = dataMessage[repliedMessage];
+    const getTextData = dataMessage[repliedMessage[repliedMessage.length - 1]];
+    const textReply = getTextData ? getTextData[0] : null;
+    const currentReplyIndex = repliedMessage[repliedMessage.length - 1];
+
     const chatContainerRef = useRef(null);
-    console.log('repliedMessage array: ', repliedMessage);
-
-    console.log('textReply: ', textReply);
-
-    // console.log('repliedMessage: ', repliedMessage);
-    // const testGettextSelected = dataMessage[repliedMessage];
-    // const testGetText = testGettextSelected ? testGettextSelected[0] : null;
-    // console.log('dataMessage[repliedMessage[0]]: ', testGetText);
-
-    // console.log('Hello: ', repliedMessage);
-    // console.log('Content of repliedMessage: ', dataMessage[repliedMessage]);
-
-    // console.log('isReplyMessageSent: ', isReplyMessageSent);
 
     useEffect(() => {
         // scroll at the end of the chat detail
@@ -388,40 +378,41 @@ const DeleteMessageAfterTime = ({
                                         position: 'relative',
                                     }}
                                 >
-                                    {isReplyMessageSent &&
-                                        messageIndex === dataMessage.length - 1 && (
+                                    {isReplyMessageSent && currentReplyIndex === messageIndex && (
+                                        <Box
+                                            sx={{
+                                                minHeight: '10px',
+                                                maxWidth: '250px',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'flex-end',
+                                                justifyContent: 'flex-end',
+                                                marginLeft: 'auto',
+                                            }}
+                                        >
                                             <Box
                                                 sx={{
-                                                    minHeight: '10px',
-                                                    maxWidth: '250px',
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    alignItems: 'flex-end',
-                                                    justifyContent: 'flex-end',
-                                                    marginLeft: 'auto',
+                                                    borderRadius: '12px',
+                                                    bgcolor: '#00000008',
                                                 }}
                                             >
-                                                <Box
+                                                {/* Lấy dữ liệu tin nhắn từ Redux store thay vì chỉ số */}
+
+                                                <CustomizeTypography
+                                                    fs="12.5px"
                                                     sx={{
-                                                        borderRadius: '12px',
-                                                        bgcolor: '#00000008',
+                                                        p: 1,
+                                                        width: '100%',
+                                                        color: '#65676B',
                                                     }}
                                                 >
-                                                    {textReply && (
-                                                        <CustomizeTypography
-                                                            fs="12.5px"
-                                                            sx={{
-                                                                p: 1,
-                                                                width: '100%',
-                                                                color: '#65676B',
-                                                            }}
-                                                        >
-                                                            {textReply}
-                                                        </CustomizeTypography>
-                                                    )}
-                                                </Box>
+                                                    {textReply}
+
+                                                    {/* Hiển thị nội dung của tin nhắn đã chọn để trả lời */}
+                                                </CustomizeTypography>
                                             </Box>
-                                        )}
+                                        </Box>
+                                    )}
                                     <CustomizeTypography
                                         onMouseEnter={() => setHoveredTextIndex(messageIndex)}
                                         onMouseLeave={() => setHoveredTextIndex(null)}
@@ -472,8 +463,7 @@ const DeleteMessageAfterTime = ({
                                                     }
                                                     setIsReactionExist={setIsReactionExist}
                                                     setIsReplyMessage={setIsReplyMessage}
-                                                    // messageReply={message} // initial
-                                                    messageReply={message} // initial
+                                                    messageReply={messageIndex}
                                                 />
                                             )}
                                         </Box>

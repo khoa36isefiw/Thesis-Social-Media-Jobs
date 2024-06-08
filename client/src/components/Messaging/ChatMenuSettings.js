@@ -17,7 +17,9 @@ const ChatMenuSettings = ({ anchorEl, handleCloseMenuChatSettings, menuChatSetti
             dispatch(highlightPersonAction(userId));
             setHideMenu(true);
         } else if (action === 'Mute' || action === 'Unmute') {
-            dispatch(mutePersonAction());
+            // dispatch(mutePersonAction());
+            dispatch(mutePersonAction(userId));
+
             setHideMenu(true); // hide Menu after 1s of clicking
         } else if (action === 'Delete conversation') {
             handleOpenDeleteConfirm();
