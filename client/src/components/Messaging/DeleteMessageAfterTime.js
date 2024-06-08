@@ -423,6 +423,10 @@ const DeleteMessageAfterTime = ({
                                             bgcolor: '#edf3f7',
                                             p: 1,
                                             position: 'relative',
+                                            // keep whitespace and line breaks
+                                            whiteSpace: 'pre-wrap', 
+                                            // breal words if they are too long
+                                            // wordBreak: 'break-word', 
                                             '::before': {
                                                 position: 'absolute',
                                                 content: '""',
