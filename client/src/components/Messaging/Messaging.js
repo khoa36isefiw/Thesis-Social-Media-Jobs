@@ -31,7 +31,6 @@ import SendMessageActions from './SendMessageActions';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 
 import DeleteMessageAfterTime from './DeleteMessageAfterTime';
-import DeleteMessageAfterTimeBK from './DeleteMessageAfterTimeBK';
 
 import {
     highlightPersonAction,
@@ -46,6 +45,7 @@ import {
 import DeleteConversation from './DeleteConversation';
 import ChatMenuSettings from './ChatMenuSettings';
 import ChatWithUserV2 from './ChatWithUserV2';
+import DeleteMessageAfterTimeMainV from './DeleteMessageAfterTimeMainV';
 
 function Messaging() {
     const dispatch = useDispatch();
@@ -435,7 +435,7 @@ function Messaging() {
                             }}
                         >
                             <ChatWithUser onClick={handleChatClick} />
-                            <ChatWithUserV2 onClick={handleChatClick} />
+                            {/* <ChatWithUserV2 onClick={handleChatClick} /> */}
                         </Box>
                     </Grid>
 
@@ -550,7 +550,7 @@ function Messaging() {
                         </Box>
 
                         {/* Show chat details */}
-                        <DeleteMessageAfterTimeBK
+                        <DeleteMessageAfterTime
                             dataMessage={messageSaved}
                             setDataMessage={setMessageSaved}
                             imageUploaded={imageURL}
