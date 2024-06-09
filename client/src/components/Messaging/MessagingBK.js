@@ -80,15 +80,7 @@ function Messaging() {
     const isMessageReplied = useSelector((state) => state.replyMessage.isMessageReplied);
     // get list user added
     const listUserStartAMessage = useSelector((state) => state.startAMessage.listUserInformation);
-    // get user ID --> show their information
-    const userIDIsSelected = useSelector((state) => state.startAMessage.userIDIs);
-    console.log('userIDIsSelected: ', userIDIsSelected);
     console.log('listUserStartAMessage: ', listUserStartAMessage);
-    // find user is selected by user ID
-    const userSelectedByUserID = listUserStartAMessage.find(
-        (user) => user.userID === userIDIsSelected,
-    );
-    console.log('selectedUserByID: ', userSelectedByUserID);
 
     const chatWithUserSettingsList = [
         `${isStarred ? 'Remove star' : 'Star'}`,
@@ -487,7 +479,6 @@ function Messaging() {
                                         }}
                                     >
                                         Melody Fall Topic
-                                        {userSelectedByUserID && userSelectedByUserID.userName}
                                     </CustomizeTypography>
                                     {/* if a user is activating show they are activating and hiding their position career */}
                                     {userIsActive ? (
@@ -515,14 +506,12 @@ function Messaging() {
                                                 },
                                             }}
                                         >
-                                            {/* Jobs */}
                                             Producer
                                         </CustomizeTypography>
                                     )}
                                 </Box>
                                 {/* upload image */}
                             </Box>
-
                             <Box>
                                 <IconButton>
                                     <MoreHorizIcon

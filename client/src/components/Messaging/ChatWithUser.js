@@ -7,10 +7,11 @@ import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import MissYou from '../../assets/images/missu.jpeg';
 import { mobileScreen, tabletScreen, theme } from '../Theme/Theme';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import ChatMenuSettings from './ChatMenuSettings';
 import { useEffect } from 'react';
+import { getUserID } from '../../redux/AddChatMessage/addChatMessageAction';
 
 const formatTime = (date) => {
     let hours = date.getHours();
@@ -46,6 +47,7 @@ const countAttachments = (message) => {
 };
 
 function ChatWithUser({ onClick }) {
+    const dispatch = useDispatch();
     const [isHovered, setIsHovered] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -80,6 +82,11 @@ function ChatWithUser({ onClick }) {
     const handleCloseMenuChatSettings = () => {
         setAnchorEl(null);
         setSelectedUser(null);
+    };
+
+    const handleOpenChatMessageWithUser = (userId) => {
+        onClick();
+        dispatch(getUserID(userId)); //save user id just chose
     };
 
     return (
@@ -370,7 +377,7 @@ function ChatWithUser({ onClick }) {
                                 backgroundColor: '#eeecec',
                             },
                         }}
-                        onClick={onClick}
+                        onClick={() => handleOpenChatMessageWithUser(user.userID)}
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
                     >

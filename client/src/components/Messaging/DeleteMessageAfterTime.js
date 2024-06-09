@@ -51,6 +51,13 @@ const DeleteMessageAfterTime = ({
     // contain what message is selected to reply
     const repliedMessage = useSelector((state) => state.replyMessage.repliedMessageContent);
     const isReplyMessageSent = useSelector((state) => state.replyMessage.isReplyMessageSend);
+    // get list user added
+    const listUserStartAMessage = useSelector((state) => state.startAMessage.listUserInformation);
+    // get user ID --> show their information
+    const userIDIsSelected = useSelector((state) => state.startAMessage.userIDIs);
+    const userSelectedByUserID = listUserStartAMessage.find(
+        (user) => user.userID === userIDIsSelected,
+    );
 
     // const getTextData = dataMessage[repliedMessage];
     const getTextData = dataMessage[repliedMessage[repliedMessage.length - 1]];
@@ -210,7 +217,12 @@ const DeleteMessageAfterTime = ({
                     >
                         <CustomizeTypography fs="14px" fw={true}>
                             Melody Fall Topic
+                            {/* get user name */}
+                            {userSelectedByUserID && userSelectedByUserID.userName}
                         </CustomizeTypography>
+                        {/* <CustomizeTypography fs="14px" fw={true}>
+                            Melody Fall Topic
+                        </CustomizeTypography> */}
                         <Box
                             sx={{
                                 ml: 1,
@@ -424,9 +436,9 @@ const DeleteMessageAfterTime = ({
                                             p: 1,
                                             position: 'relative',
                                             // keep whitespace and line breaks
-                                            whiteSpace: 'pre-wrap', 
+                                            whiteSpace: 'pre-wrap',
                                             // breal words if they are too long
-                                            // wordBreak: 'break-word', 
+                                            // wordBreak: 'break-word',
                                             '::before': {
                                                 position: 'absolute',
                                                 content: '""',
