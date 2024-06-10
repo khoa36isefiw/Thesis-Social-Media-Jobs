@@ -22,6 +22,7 @@ import VideoInput from './VideoInput';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
+import { tabletScreen } from '../Theme/Theme';
 
 const UploadActions = ({ children, title }) => {
     return (
@@ -343,12 +344,15 @@ function PostModal({ closeModal }) {
                 sx={{
                     width: '650px',
                     height: '450px',
+                    // width: '80%',
+                    // height: '450px',
                     position: 'relative',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'start',
                     alignItems: 'start',
                     overflowY: 'scroll',
+                    // [tabletScreen]: { width: '100%' },
                 }}
             >
                 <IconButton

@@ -429,7 +429,7 @@ export function UserProfile() {
                             // userID: '123',
                             userImage:
                                 'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRr7RaDl49DG3ZWLUZQd2Ue1TC-8CVpgB7q2X7JGVIjGjWFghZ_',
-                            userName: 'Khoa Nèk',
+                            userName: `Khoa Nèk ${generateRandomId()}`,
                         })
                     }
                 >

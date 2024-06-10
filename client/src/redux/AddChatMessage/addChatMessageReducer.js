@@ -1,6 +1,6 @@
-import { IS_ADD_CHAT_MESSAGE, REMOVE_CHAT_MESSAGE } from '../actionConstant';
+import { GET_USER_ID, IS_ADD_CHAT_MESSAGE, REMOVE_CHAT_MESSAGE } from '../actionConstant';
 
-const initialState = { isClickSendMessage: false, listUserInformation: [] };
+const initialState = { isClickSendMessage: false, listUserInformation: [], userIDIs: null };
 // function find USER ID
 // export const findUserID = (listUserInformation, userID) => {
 //     return listUserInformation.findIndex((user) => user._id === userID);
@@ -25,12 +25,22 @@ export const addChatMessageReducer = (state = initialState, action) => {
             const listUserMessageAfterMoving = state.listUserInformation.filter(
                 (user) => user.userID !== userID,
             );
-            console.log('List user information after removing: ', listUserMessageAfterMoving);
+            console.log('List users information after removing: ', listUserMessageAfterMoving);
             return {
                 ...state,
                 isClickSendMessage: false,
                 listUserInformation: listUserMessageAfterMoving,
             };
+        // what is USER ID is chose
+        case GET_USER_ID:
+            const { userID: newUserID } = action.payload;
+            // console.log('getUserID: ', newUserID);
+
+            return {
+                ...state,
+                userIDIs: newUserID,
+            };
+
         default:
             return state;
     }

@@ -32,14 +32,19 @@ import StarOutlineIcon from '@mui/icons-material/StarOutline';
 
 import DeleteMessageAfterTime from './DeleteMessageAfterTime';
 
-import { highlightPersonAction } from '../../redux/ImportantPerson/highlightPersonAction';
+import {
+    highlightPersonAction,
+    removeStar,
+} from '../../redux/ImportantPerson/highlightPersonAction';
 import { mutePersonAction } from '../../redux/MutePerson/mutePersonAction';
 import { addMessage } from '../../redux/ShowMesssage/showMesssageAction';
 import {
     disableReplyMessage,
     isMessageReplySent,
 } from '../../redux/ReplyMessage/replyMessageAction';
+import DeleteConversation from './DeleteConversation';
 import ChatMenuSettings from './ChatMenuSettings';
+import ChatWithUserV2 from './ChatWithUserV2';
 
 function Messaging() {
     const dispatch = useDispatch();
@@ -76,25 +81,16 @@ function Messaging() {
     // star for person
     const isStarred = useSelector((state) => state.importantPerson.isHighlight);
     const isMutePerson = useSelector((state) => state.mutePerson.isMutePerson);
+
     // status of message when is selected to reply
     const isMessageReplied = useSelector((state) => state.replyMessage.isMessageReplied);
-    // get list user added
-    const listUserStartAMessage = useSelector((state) => state.startAMessage.listUserInformation);
-    // get user ID --> show their information
-    const userIDIsSelected = useSelector((state) => state.startAMessage.userIDIs);
-    console.log('userIDIsSelected: ', userIDIsSelected);
-    console.log('listUserStartAMessage: ', listUserStartAMessage);
-    // find user is selected by user ID
-    const userSelectedByUserID = listUserStartAMessage.find(
-        (user) => user.userID === userIDIsSelected,
-    );
-    console.log('selectedUserByID: ', userSelectedByUserID);
 
     const chatWithUserSettingsList = [
         `${isStarred ? 'Remove star' : 'Star'}`,
         `${isMutePerson ? 'Unmute' : 'Mute'}`,
         'Delete conversation',
     ];
+    // test list data just uploaded
 
     useEffect(() => {
         const handleResize = () => {
@@ -233,11 +229,14 @@ function Messaging() {
         const timestamp = new Date();
         let textToSend = null; // Initialize text to null by default
         let imageToSend = []; // Initialize images array to empty by default
-        // textToSend = editorText; // remove any space
-        // Check if there's text input
-        if (editorText.trim() !== '') {
-            textToSend = editorText.trim(); // remove any space
-        }
+
+        // Check if there's text input - initial for text
+        // if (editorText.trim() !== '') {
+        //     // textToSend = editorText.trim(); // remove any space
+        //     textToSend = editorText; // remove any space
+        // }
+
+        textToSend = editorText;
         // Check if there are uploaded images
         if (imageURL.length > 0) {
             imageToSend = imageURL;
@@ -315,24 +314,6 @@ function Messaging() {
 
     const handleCloseChatWithUserMenuSettings = () => {
         setAnchorEl(null);
-    };
-
-    // remove star
-    const handleRemoveStar = () => {
-        dispatch(highlightPersonAction());
-    };
-    // mute notifications from the user
-    const handleMute = () => {
-        dispatch(mutePersonAction());
-    };
-
-    // open modal deletion
-    const handleOpenDeleteConfirm = () => {
-        setDeleteConfirm(true);
-    };
-
-    const handleCloseDeleteConfirm = () => {
-        setDeleteConfirm(false);
     };
 
     return (
@@ -487,7 +468,6 @@ function Messaging() {
                                         }}
                                     >
                                         Melody Fall Topic
-                                        {userSelectedByUserID && userSelectedByUserID.userName}
                                     </CustomizeTypography>
                                     {/* if a user is activating show they are activating and hiding their position career */}
                                     {userIsActive ? (
@@ -515,14 +495,12 @@ function Messaging() {
                                                 },
                                             }}
                                         >
-                                            {/* Jobs */}
                                             Producer
                                         </CustomizeTypography>
                                     )}
                                 </Box>
                                 {/* upload image */}
                             </Box>
-
                             <Box>
                                 <IconButton>
                                     <MoreHorizIcon
@@ -702,37 +680,8 @@ function Messaging() {
                     </Grid>
                 </Grid>
             </Grid>
-            {/* <Modal open={deleteConfirm} close={handleCloseDeleteConfirm}>
-                <DeleteConversation handleModalClose={handleCloseDeleteConfirm} />
-            </Modal> */}
         </Box>
     );
 }
 
 export default Messaging;
-
-function LinearDeterminate({ showProgress }) {
-    const [progress, setProgress] = useState(0);
-
-    React.useEffect(() => {
-        const timer = setInterval(() => {
-            setProgress((oldProgress) => {
-                if (oldProgress === 100) {
-                    return 0;
-                }
-                const diff = Math.random() * 10;
-                return Math.min(oldProgress + diff, 100);
-            });
-        }, 500);
-
-        return () => {
-            clearInterval(timer);
-        };
-    }, []);
-
-    return (
-        <Box sx={{ width: '100%', display: showProgress ? 'block' : 'none' }}>
-            <LinearProgress variant="determinate" value={progress} />
-        </Box>
-    );
-}

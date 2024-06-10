@@ -7,7 +7,8 @@ import Like from '../../assets/images/like-no-color.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import CommentModal from './CommentModal';
-import { mobileScreen } from '../Theme/Theme';
+
+import { mobileScreen, tabletScreen } from '../Theme/Theme';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -198,12 +199,7 @@ function Post({
                 <PostActionButton />
             </Box>
             {/* Comment Modal */}
-            <Modal
-                open={openModal}
-                onClose={handleCloseModal}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
+            <Modal open={openModal} onClose={handleCloseModal}>
                 <CommentModal
                     imageUrl={imageUrl}
                     handleClose={handleCloseModal}
@@ -221,72 +217,6 @@ function Post({
 }
 
 export default Post;
-
-export function PostActionButton() {
-    const [isHovering, setIsHovering] = useState(false);
-
-    const handleMouseOver = () => {
-        setIsHovering(true);
-    };
-
-    const handleMouseOut = () => {
-        setIsHovering(false);
-    };
-
-    return (
-        <Container
-            sx={{
-                mt: 1,
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                position: 'relative',
-            }}
-        >
-            <Box
-                sx={{
-                    position: 'relative',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    px: 2,
-                    py: 1,
-                    '&:hover': {
-                        backgroundColor: '#d3d3d3',
-                        cursor: 'pointer',
-                    },
-                    '::after': {
-                        position: 'absolute',
-                        content: '""',
-                        width: '120px',
-                        height: '40px',
-                        backgroundColor: 'transparent',
-                        // backgroundColor: '#333',
-                        top: '-75%',
-                        left: '-20%',
-                    },
-                }}
-                onMouseOver={handleMouseOver}
-                onMouseOut={handleMouseOut}
-            >
-                <Avatar src={Like} sx={{ height: '20px', width: '20px', borderRadius: '0' }} />
-                <Typography sx={{ ml: 1 }}>Like</Typography>
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: '-70%',
-                        left: '-30%',
-                        zIndex: 9999,
-                    }}
-                >
-                    {isHovering && <ReactionMenu handleChoose={() => setIsHovering(false)} />}
-                </Box>
-            </Box>
-            <ActionButton src={Comment} alt="Comment a Post" text="Comment" />
-            <ActionButton src={Send} alt="Send a Post" text="Send" />
-        </Container>
-    );
-}
 
 // define reactions button
 
@@ -319,6 +249,9 @@ const ReactionMenu = ({ handleChoose }) => {
                 alignItems: 'center',
                 justifyContent: 'space-around',
                 mt: -4,
+                [mobileScreen]: {
+                    ml: 1,
+                },
             }}
         >
             {reactionsButtonList.map((buttonReaction, index) => (
@@ -375,3 +308,79 @@ export const ActionButton = ({ src, alt, text, onMouseEnter, onMouseLeave }) => 
         <Typography>{text}</Typography>
     </Box>
 );
+
+export function PostActionButton() {
+    const [isHovering, setIsHovering] = useState(false);
+
+    const handleMouseOver = () => {
+        setIsHovering(true);
+    };
+
+    const handleMouseOut = () => {
+        setIsHovering(false);
+    };
+
+    return (
+        <Box
+            sx={{
+                mt: 1,
+                mx: '24px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                position: 'relative',
+                [tabletScreen]: {
+                    mx: 0,
+                },
+                [mobileScreen]: {
+                    mx: 1,
+                },
+            }}
+        >
+            <Box
+                sx={{
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    px: 2,
+                    py: 1,
+                    '&:hover': {
+                        backgroundColor: '#d3d3d3',
+                        cursor: 'pointer',
+                    },
+                    '::after': {
+                        position: 'absolute',
+                        content: '""',
+                        width: '120px',
+                        height: '40px',
+                        backgroundColor: 'transparent',
+                        // backgroundColor: '#333',
+                        top: '-75%',
+                        left: '-50%',
+                    },
+                }}
+                onMouseOver={handleMouseOver}
+                onMouseOut={handleMouseOut}
+            >
+                <Avatar src={Like} sx={{ height: '20px', width: '20px', borderRadius: '0' }} />
+                <Typography sx={{ ml: 1 }}>Like</Typography>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '-70%',
+                        left: '-30%',
+                        zIndex: 9999,
+                        [tabletScreen]: {
+                            left: '0%',
+                        },
+                    }}
+                >
+                    {isHovering && <ReactionMenu handleChoose={() => setIsHovering(false)} />}
+                </Box>
+            </Box>
+            <ActionButton src={Comment} alt="Comment a Post" text="Comment" />
+            <ActionButton src={Send} alt="Send a Post" text="Send" />
+        </Box>
+    );
+}
