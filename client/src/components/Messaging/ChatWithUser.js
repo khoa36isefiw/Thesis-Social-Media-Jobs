@@ -371,6 +371,7 @@ function ChatWithUser({ onClick }) {
                             mb: 1,
                             mt: 1,
                             borderBottom: `1px solid ${theme.palette.bgButtonHover}`,
+
                             position: 'relative',
                             '&:hover': {
                                 cursor: 'pointer',

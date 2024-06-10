@@ -425,6 +425,8 @@ function Messaging() {
                                 display: showChatList ? 'block' : 'none',
                                 // display: showChatDetails ? 'block' : 'none',
                             },
+                            overflow: 'hidden',
+                            overflowY: 'scroll',
                         }}
                     >
                         <Box
