@@ -2,24 +2,24 @@ import React, { useState } from 'react';
 import { Box, Typography, Avatar, IconButton } from '@mui/material';
 import Comment from '../../assets/images/comment.png';
 import Send from '../../assets/images/send.png';
-
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-
 import FavoriteIcon from '@mui/icons-material/Favorite';
-
 import { mobileScreen, tabletScreen } from '../Theme/Theme';
-
+import Liked from '../../assets/images/like.png';
 import { ReactionMenu } from './ReactionMenu';
 import { ActionButton } from './ActionButton';
-import { blue, red, yellow } from '@mui/material/colors';
-import { useSelector } from 'react-redux';
+import { blue, red } from '@mui/material/colors';
+import { useDispatch, useSelector } from 'react-redux';
+import { setReactionOnPost } from '../../redux/ManagePost/managePostAction';
 
-export function PostActionButton({ onReactionClick, selectedReaction }) {
+export function PostActionButton({ postID, onReactionClick }) {
+    const dispatch = useDispatch();
     const [isHovering, setIsHovering] = useState(false);
     // get icon is selected
-    const getIconSelected = useSelector((state) => state.managePost.reactionIs);
-    console.log('icon is selected: ', getIconSelected);
+    const dataOfSelectedReaction = useSelector((state) => state.managePost.reactions[postID]);
+
+    const getReactionText = dataOfSelectedReaction ? dataOfSelectedReaction.btnText : null;
 
     const handleMouseOver = () => {
         setIsHovering(true);
@@ -27,6 +27,16 @@ export function PostActionButton({ onReactionClick, selectedReaction }) {
 
     const handleMouseOut = () => {
         setIsHovering(false);
+    };
+
+    const handleLikeOnPost = () => {
+        // default reaction for post/ blog
+        dispatch(setReactionOnPost(postID, { srcImage: Liked, btnText: 'Liked a Post' }));
+    };
+
+    // remove reactions when user click on reaction button on post
+    const handleRemoveReactionOnPost = () => {
+        dispatch(setReactionOnPost(postID, null));
     };
 
     return (
@@ -71,49 +81,51 @@ export function PostActionButton({ onReactionClick, selectedReaction }) {
                 }}
                 onMouseOver={handleMouseOver}
                 onMouseOut={handleMouseOut}
-                onClick={onReactionClick}
             >
                 <IconButton sx={{ padding: 0 }}>
-                    {selectedReaction ? (
-                        getIconSelected.btnText === 'Loved a Post' ? (
-                            <FavoriteIcon sx={{ fontSize: '24px', color: red[900] }} />
-                        ) : getIconSelected.btnText === 'Laughed a Post' ? (
-                            // <EmojiEmotionsRoundedIcon sx={{ fontSize: '24px', color: '#ffef62' }} />
+                    {dataOfSelectedReaction ? (
+                        getReactionText === 'Loved a Post' ? (
+                            <FavoriteIcon
+                                sx={{ fontSize: '24px', color: red[900] }}
+                                onClick={handleRemoveReactionOnPost}
+                            />
+                        ) : getReactionText === 'Laughed a Post' ? (
                             <Avatar
-                                src={getIconSelected.srcImage}
-                                alt={getIconSelected.btnText}
-                                // onClick={() => handleChoose(buttonReaction)}
+                                src={dataOfSelectedReaction.srcImage}
+                                alt={getReactionText}
                                 sx={{
                                     height: '24px',
                                     width: '24px',
                                 }}
+                                onClick={handleRemoveReactionOnPost}
                             />
                         ) : (
-                            <ThumbUpAltIcon sx={{ fontSize: '24px', color: blue[900] }} />
+                            <ThumbUpAltIcon
+                                sx={{ fontSize: '24px', color: blue[900] }}
+                                onClick={handleRemoveReactionOnPost}
+                            />
                         )
                     ) : (
-                        <ThumbUpOffAltIcon sx={{ fontSize: '24px' }} />
+                        <ThumbUpOffAltIcon sx={{ fontSize: '24px' }} onClick={handleLikeOnPost} />
                     )}
                 </IconButton>
                 <Typography
                     sx={{
                         ml: 1,
-                        // color: selectedReaction ? blue[900] : getIconSelected.btnText === 'Loved a Post'? ,
-                        // color: selectedReaction ? getIconSelected.btnText === 'Loved a Post' ? '#e91e63': getIconSelected.btnText === 'Laughed a Post'? '#ffea00' :blue[900],
                         color:
-                            selectedReaction && getIconSelected.btnText === 'Loved a Post'
+                            dataOfSelectedReaction && getReactionText === 'Loved a Post'
                                 ? '#e91e63'
-                                : getIconSelected.btnText === 'Laughed a Post'
+                                : getReactionText === 'Laughed a Post'
                                 ? '#ffc400'
                                 : blue[900],
 
-                        fontWeight: selectedReaction ? 'bold' : 'normal',
+                        fontWeight: dataOfSelectedReaction ? 'bold' : 'normal',
                         fontSize: '13px',
                     }}
                 >
-                    {getIconSelected.btnText === 'Loved a Post'
+                    {getReactionText === 'Loved a Post'
                         ? 'Love'
-                        : getIconSelected.btnText === 'Laughed a Post'
+                        : getReactionText === 'Laughed a Post'
                         ? 'Laugh'
                         : 'Like'}
                 </Typography>
@@ -128,7 +140,7 @@ export function PostActionButton({ onReactionClick, selectedReaction }) {
                         },
                     }}
                 >
-                    {isHovering && <ReactionMenu handleChoose={onReactionClick} />}
+                    {isHovering && <ReactionMenu postID={postID} handleChoose={onReactionClick} />}
                 </Box>
             </Box>
             <ActionButton src={Comment} alt="Comment a Post" text="Comment" />
