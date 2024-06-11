@@ -11,6 +11,7 @@ import CommentModal from './CommentModal';
 import { mobileScreen, tabletScreen } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
 import { useSelector } from 'react-redux';
+import { setReactionOnPost } from '../../redux/ManagePost/managePostAction';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -45,8 +46,8 @@ function Post({
     // Check content is always an array?
     const contentArray = Array.isArray(content) ? content : [content];
     const [expanded, setExpanded] = useState(false);
-    const [selectedReaction, setSelectedReaction] = useState(null);
     const [openModal, setOpenModal] = useState(false);
+    const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
 
     const toggleExpanded = () => {
         setExpanded(!expanded);
@@ -61,8 +62,8 @@ function Post({
     };
 
     const handleChooseReaction = (reaction) => {
-        setSelectedReaction(reaction);
-        console.log('Post has ID reaction on is: ', postID);
+        setReactionOnPost(postID, reaction);
+        // console.log('Post has ID reaction on is: ', postID);
     };
 
     return (
@@ -189,7 +190,7 @@ function Post({
                                     }}
                                     alt="Laugh a Post"
                                 />
-                                {/* <Typography>112</Typography> */}
+                                {/* update the number of reations */}
                                 <CustomTypography>
                                     {numberOfReaction + (selectedReaction ? 1 : 0)}
                                 </CustomTypography>
@@ -207,10 +208,7 @@ function Post({
                     </Box>
                 </Box>
                 <Divider />
-                <PostActionButton
-                    onReactionClick={handleChooseReaction}
-                    selectedReaction={selectedReaction}
-                />
+                <PostActionButton postID={postID} onReactionClick={handleChooseReaction} />
             </Box>
             {/* Comment Modal */}
             <Modal open={openModal} onClose={handleCloseModal}>

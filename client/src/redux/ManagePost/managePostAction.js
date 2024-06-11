@@ -1,6 +1,6 @@
 import { GET_REACTION_ON_POST } from '../actionConstant';
 
-export const getReactionOnPost = (reaction) => ({
+export const setReactionOnPost = (postId, reaction) => ({
     type: GET_REACTION_ON_POST,
-    payload: { reaction },
+    payload: { postId, reaction },
 });

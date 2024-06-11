@@ -4,7 +4,7 @@ import Liked from '../../assets/images/like.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import { useDispatch } from 'react-redux';
-import { getReactionOnPost } from '../../redux/ManagePost/managePostAction';
+import { setReactionOnPost } from '../../redux/ManagePost/managePostAction';
 
 import { mobileScreen } from '../Theme/Theme';
 
@@ -24,11 +24,11 @@ const reactionsButtonList = [
     },
 ];
 
-export const ReactionMenu = ({ handleChoose }) => {
+export const ReactionMenu = ({ postID, handleChoose }) => {
     const dispatch = useDispatch();
     const handleChooseReaction = (reaction) => {
         handleChoose(reaction);
-        dispatch(getReactionOnPost(reaction));
+        dispatch(setReactionOnPost(postID, reaction));
     };
     return (
         <Box

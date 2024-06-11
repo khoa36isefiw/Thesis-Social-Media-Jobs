@@ -1,17 +1,18 @@
 import { GET_REACTION_ON_POST } from '../actionConstant';
 
-const initialState = { reactionIs: '' };
+const initialState = { reactions: {} };
 
 export const managePostReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_REACTION_ON_POST:
-            const { reaction } = action.payload;
-            // const { reaction: newReaction } = action.payload;
-            console.log('reaction is selected: ', reaction);
-            console.log('reactionIs: ', state.reactionIs);
+            const { postId, reaction } = action.payload;
+
             return {
                 ...state,
-                reactionIs: reaction,
+                reactions: {
+                    ...state.reactions,
+                    [postId]: reaction,
+                },
             };
 
         default:
