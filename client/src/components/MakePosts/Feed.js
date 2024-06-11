@@ -77,6 +77,7 @@ function Feed() {
             {posts.map((post) => (
                 <Post
                     key={post.id}
+                    postID={post.id}
                     avatarSrc={post.avatarSrc}
                     displayName={post.displayName}
                     followers={post.followers}

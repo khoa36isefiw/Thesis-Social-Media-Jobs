@@ -14,9 +14,10 @@ import Liked from '../../assets/images/like.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import UserAvatar from '../../assets/images/avatar.jpeg';
-import { ActionButton, PostActionButton } from './Post';
+import { ActionButton } from './Post';
 import Picker from 'emoji-picker-react';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
+import { PostActionButton } from './PostActionButton';
 
 // Customize styles for Typography in this Component
 const ActionsTypography = styled(Typography)(({}) => ({
