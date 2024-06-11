@@ -24,3 +24,7 @@ export const SET_CURRENT_REPLY_INDEX = 'SET_CURRENT_REPLY_INDEX';
 export const IS_ADD_CHAT_MESSAGE = 'IS_ADD_CHAT_MESSAGE';
 export const REMOVE_CHAT_MESSAGE = 'REMOVE_CHAT_MESSAGE';
 export const GET_USER_ID = 'GET_USER_ID';
+
+// User Home Page
+//reaction on post
+export const GET_REACTION_ON_POST = 'GET_REACTION_ON_POST';
