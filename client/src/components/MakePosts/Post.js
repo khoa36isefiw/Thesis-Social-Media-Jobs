@@ -9,6 +9,8 @@ import Laugh from '../../assets/images/laughing.png';
 import CommentModal from './CommentModal';
 
 import { mobileScreen, tabletScreen } from '../Theme/Theme';
+import { PostActionButton } from './PostActionButton';
+import { useSelector } from 'react-redux';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -30,6 +32,7 @@ const CustomTypography = ({ children }) => (
 );
 
 function Post({
+    postID,
     avatarSrc,
     displayName,
     followers,
@@ -42,11 +45,12 @@ function Post({
     // Check content is always an array?
     const contentArray = Array.isArray(content) ? content : [content];
     const [expanded, setExpanded] = useState(false);
+    const [selectedReaction, setSelectedReaction] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
 
     const toggleExpanded = () => {
         setExpanded(!expanded);
     };
-    const [openModal, setOpenModal] = useState(false);
 
     const handleImageClick = () => {
         setOpenModal(true);
@@ -54,6 +58,11 @@ function Post({
 
     const handleCloseModal = () => {
         setOpenModal(false);
+    };
+
+    const handleChooseReaction = (reaction) => {
+        setSelectedReaction(reaction);
+        console.log('Post has ID reaction on is: ', postID);
     };
 
     return (
@@ -147,7 +156,7 @@ function Post({
             <Box sx={{ p: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', my: '8px' }}>
                     <Box sx={{ mb: '2px', display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-                        {numberOfReaction ? (
+                        {numberOfReaction || selectedReaction ? (
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Avatar
                                     src={Liked}
@@ -181,7 +190,9 @@ function Post({
                                     alt="Laugh a Post"
                                 />
                                 {/* <Typography>112</Typography> */}
-                                <CustomTypography>{numberOfReaction}</CustomTypography>
+                                <CustomTypography>
+                                    {numberOfReaction + (selectedReaction ? 1 : 0)}
+                                </CustomTypography>
                             </Box>
                         ) : (
                             <></>
@@ -196,7 +207,10 @@ function Post({
                     </Box>
                 </Box>
                 <Divider />
-                <PostActionButton />
+                <PostActionButton
+                    onReactionClick={handleChooseReaction}
+                    selectedReaction={selectedReaction}
+                />
             </Box>
             {/* Comment Modal */}
             <Modal open={openModal} onClose={handleCloseModal}>
@@ -217,170 +231,3 @@ function Post({
 }
 
 export default Post;
-
-// define reactions button
-
-const reactionsButtonList = [
-    {
-        srcImage: Liked,
-        btnText: 'Liked a Post',
-    },
-    {
-        srcImage: Love,
-        btnText: 'Loved a Post',
-    },
-    {
-        srcImage: Laugh,
-        btnText: 'Laugh a Post',
-    },
-];
-
-const ReactionMenu = ({ handleChoose }) => {
-    return (
-        <Box
-            sx={{
-                width: '140px',
-                height: '40px',
-                backgroundColor: '#fff',
-                border: '1px solid #d9d9d9',
-                boxShadow: '0 4px 4px #b3b3b3',
-                borderRadius: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-around',
-                mt: -4,
-                [mobileScreen]: {
-                    ml: 1,
-                },
-            }}
-        >
-            {reactionsButtonList.map((buttonReaction, index) => (
-                <Box key={index} sx={{ '&:hover': { transform: 'scale(1.05)' } }}>
-                    <Avatar
-                        src={buttonReaction.srcImage}
-                        alt={buttonReaction.btnText}
-                        onClick={handleChoose}
-                        sx={{
-                            height: '24px',
-                            width: '24px',
-                            '&:hover': {
-                                cursor: 'pointer',
-                                transform: 'scale(1.25)',
-                            },
-                        }}
-                    />
-                </Box>
-            ))}
-        </Box>
-    );
-};
-
-// definde button action
-
-export const ActionButton = ({ src, alt, text, onMouseEnter, onMouseLeave }) => (
-    <Box
-        sx={{
-            '&:hover': {
-                backgroundColor: '#d3d3d3',
-                cursor: 'pointer',
-            },
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            px: 2,
-            py: 1,
-        }}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-    >
-        <Avatar
-            src={src}
-            sx={{
-                height: '20px',
-                width: '20px',
-                borderRadius: '0',
-                mr: '4px',
-
-                mr: 1,
-            }}
-            alt={alt}
-        />
-        <Typography>{text}</Typography>
-    </Box>
-);
-
-export function PostActionButton() {
-    const [isHovering, setIsHovering] = useState(false);
-
-    const handleMouseOver = () => {
-        setIsHovering(true);
-    };
-
-    const handleMouseOut = () => {
-        setIsHovering(false);
-    };
-
-    return (
-        <Box
-            sx={{
-                mt: 1,
-                mx: '24px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                position: 'relative',
-                [tabletScreen]: {
-                    mx: 0,
-                },
-                [mobileScreen]: {
-                    mx: 1,
-                },
-            }}
-        >
-            <Box
-                sx={{
-                    position: 'relative',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    px: 2,
-                    py: 1,
-                    '&:hover': {
-                        backgroundColor: '#d3d3d3',
-                        cursor: 'pointer',
-                    },
-                    '::after': {
-                        position: 'absolute',
-                        content: '""',
-                        width: '120px',
-                        height: '40px',
-                        backgroundColor: 'transparent',
-                        // backgroundColor: '#333',
-                        top: '-75%',
-                        left: '-50%',
-                    },
-                }}
-                onMouseOver={handleMouseOver}
-                onMouseOut={handleMouseOut}
-            >
-                <Avatar src={Like} sx={{ height: '20px', width: '20px', borderRadius: '0' }} />
-                <Typography sx={{ ml: 1 }}>Like</Typography>
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: '-70%',
-                        left: '-30%',
-                        zIndex: 9999,
-                        [tabletScreen]: {
-                            left: '0%',
-                        },
-                    }}
-                >
-                    {isHovering && <ReactionMenu handleChoose={() => setIsHovering(false)} />}
-                </Box>
-            </Box>
-            <ActionButton src={Comment} alt="Comment a Post" text="Comment" />
-            <ActionButton src={Send} alt="Send a Post" text="Send" />
-        </Box>
-    );
-}
