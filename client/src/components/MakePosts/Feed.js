@@ -11,6 +11,7 @@ export const posts = [
         displayName: 'Shawn Hoffman',
         followers: '14,123',
         time: '1d',
+        hashtag: '#newyear',
         content: [
             '✨✨✨ Happy New Year of the Dragon!!!!',
             'FPT IS sincerely wishes you a peaceful and happy new year.',
@@ -31,6 +32,7 @@ export const posts = [
         displayName: 'John Doe',
         followers: '8,765',
         time: '3h',
+        hashtag: '#sunset #beachlife',
         content: ['Enjoying a beautiful sunset at the beach.', '#sunset #beachlife'],
         numberOfReaction: 200,
         numberOfComment: 45,
@@ -43,6 +45,7 @@ export const posts = [
         displayName: 'Husky Siberian',
         followers: '12',
         time: '21h',
+        hashtag: '',
         content: 'What should I do if I want to become a Front-End Developer?',
         numberOfReaction: 12,
         numberOfComment: 0,
@@ -55,6 +58,7 @@ export const posts = [
         displayName: `Vanvietbooks' Page`,
         followers: '285,010',
         time: '12h',
+        hashtag: '',
         content: [
             '#quote_of_the_day #365ngayhanhphuc',
             'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
@@ -82,6 +86,7 @@ function Feed() {
                     displayName={post.displayName}
                     followers={post.followers}
                     time={post.time}
+                    hashtag={post.hashtag}
                     content={post.content}
                     numberOfReaction={post.numberOfReaction}
                     numberOfComment={post.numberOfComment}
