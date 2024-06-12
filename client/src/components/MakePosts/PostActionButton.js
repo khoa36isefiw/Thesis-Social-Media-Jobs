@@ -46,7 +46,8 @@ export function PostActionButton({ postID, onReactionClick }) {
     const handleMouseOut = () => {
         clearTimeout(horverTimeout);
         setIsHovering(false);
-        setMenuVisible(false);
+        setHoverTimeout(null);
+        // setMenuVisible(false);
     };
 
     // button
@@ -68,7 +69,10 @@ export function PostActionButton({ postID, onReactionClick }) {
     const handleChooseReaction = () => {
         onReactionClick();
         // handleMouseOut();
+        clearTimeout(horverTimeout);
         setMenuVisible(false);
+        setIsHovering(false);
+        setHoverTimeout(null);
     };
 
     return (
@@ -170,13 +174,14 @@ export function PostActionButton({ postID, onReactionClick }) {
                             top: '-70%',
                             left: '-30%',
                             zIndex: 999,
+                            bgcolor: 'blue',
                             [tabletScreen]: {
                                 left: '0%',
                             },
                             animation: `${fadeIn} 0.3s ease-in-out`,
                         }}
                     >
-                        <ReactionMenu postID={postID} handleChoose={handleChooseReaction} />
+                        {<ReactionMenu postID={postID} handleChoose={handleChooseReaction} />}
                     </Box>
                 )}
             </Box>

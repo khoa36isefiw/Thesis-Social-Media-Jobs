@@ -12,6 +12,7 @@ import { mobileScreen, tabletScreen } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
 import { useSelector } from 'react-redux';
 import { setReactionOnPost } from '../../redux/ManagePost/managePostAction';
+import { blue } from '@mui/material/colors';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -38,6 +39,7 @@ function Post({
     displayName,
     followers,
     time,
+    hashtag,
     content,
     numberOfReaction,
     numberOfComment,
@@ -88,13 +90,13 @@ function Post({
                         alt="User Avatar"
                     />
                     <Box sx={{ ml: 2 }}>
-                        <Typography sx={{ fontSize: '13px', fontWeight: 'bold' }}>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             {displayName}
                         </Typography>
-                        <Typography sx={{ fontSize: '12.5px', color: 'text.secondary' }}>
+                        <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
                             {followers} followers
                         </Typography>
-                        <Typography sx={{ fontSize: '12.5px', color: 'text.secondary' }}>
+                        <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
                             {time}
                         </Typography>
                     </Box>
@@ -102,13 +104,27 @@ function Post({
 
                 {/* show post content */}
                 <Box>
+                    {/* hash tag */}
+                    {hashtag && (
+                        <Box>
+                            <Typography
+                                variant="body1"
+                                component="div" // Set component to "div" for line breaks
+                                sx={{ fontSize: '14px', color: blue[700] }}
+                            >
+                                {hashtag}
+                            </Typography>
+                        </Box>
+                    )}
+
+                    {/* content of post */}
                     <Box sx={{ mb: 2 }}>
                         {contentArray.map((paragraph, index) => (
                             <Box key={index} sx={{ mb: 2 }}>
                                 <Typography
                                     variant="body1"
                                     component="div" // Set component to "div" for line breaks
-                                    sx={{ fontSize: '12.5px', mt: 1, textAlign: 'justify' }}
+                                    sx={{ fontSize: '14px', mt: 1, textAlign: 'justify' }}
                                 >
                                     {index < 2 || expanded ? paragraph : ''}
                                 </Typography>
