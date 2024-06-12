@@ -213,6 +213,7 @@ function CommentModal({
                             top: '0px',
                             height: '70px',
                             bgcolor: '#fff',
+                            borderTopRightRadius: '12px',
                             zIndex: 12,
                             p: 1,
                             borderBottom: '1px solid #d0d0d0',
