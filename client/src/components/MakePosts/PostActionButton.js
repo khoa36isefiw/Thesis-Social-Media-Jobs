@@ -25,7 +25,7 @@ const fadeIn = keyframes`
   }
 `;
 
-export function PostActionButton({ postID, onReactionClick }) {
+export function PostActionButton({ postID, onReactionClick, xAxisMargin = true }) {
     const dispatch = useDispatch();
     const [isHovering, setIsHovering] = useState(false);
     const [menuVisible, setMenuVisible] = useState(false);
@@ -79,7 +79,7 @@ export function PostActionButton({ postID, onReactionClick }) {
         <Box
             sx={{
                 mt: 1,
-                mx: '24px',
+                mx: xAxisMargin ? '24px' : 0,
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
