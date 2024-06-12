@@ -5,9 +5,10 @@ export const ActionButton = ({ src, alt, text, onMouseEnter, onMouseLeave }) => 
     <Box
         sx={{
             '&:hover': {
-                backgroundColor: '#d3d3d3',
+                backgroundColor: '#8c8c8c1a',
                 cursor: 'pointer',
             },
+            borderRadius: '4px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
