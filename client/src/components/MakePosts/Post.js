@@ -229,12 +229,15 @@ function Post({
             {/* Comment Modal */}
             <Modal open={openModal} onClose={handleCloseModal}>
                 <CommentModal
+                    postId={postID}
                     imageUrl={imageUrl}
                     handleClose={handleCloseModal}
+                    onReactionClick={handleChooseReaction}
                     userAvatar={avatarSrc}
                     userName={displayName}
                     follower={followers}
                     time={time}
+                    postHashtag={hashtag}
                     postContent={content}
                     numberReactions={numberOfReaction}
                     numberComments={numberOfComment}

@@ -14,10 +14,13 @@ import Liked from '../../assets/images/like.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import UserAvatar from '../../assets/images/avatar.jpeg';
+import { useLocation } from 'react-router-dom';
 import { ActionButton } from './Post';
 import Picker from 'emoji-picker-react';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
+import { blue } from '@mui/material/colors';
+import { useSelector } from 'react-redux';
 
 // Customize styles for Typography in this Component
 const ActionsTypography = styled(Typography)(({}) => ({
@@ -30,21 +33,27 @@ const ActionsTypography = styled(Typography)(({}) => ({
 }));
 
 function CommentModal({
+    postId,
     imageUrl,
     userAvatar,
     userName,
     follower,
     time,
+    postHashtag,
     postContent,
     numberReactions,
     numberComments,
     handleClose,
+    onReactionClick,
 }) {
+    const location = useLocation();
     // get the initial width and height of the image
     const [originalWidth, setOriginalWidth] = useState(null);
     const [originalHeight, setOriginalHeight] = useState(null);
     const [isMobileScreen, setIsMobileScreen] = useState(false);
+    const selectedReaction = useSelector((state) => state.managePost.reactions[postId]);
 
+    console.log('location.pathname:', location.pathname);
     useEffect(() => {
         const handleResize = () => {
             setIsMobileScreen(window.innerWidth <= 768);
@@ -199,8 +208,9 @@ function CommentModal({
                             display: 'flex',
                             position: 'sticky',
                             justifyContent: 'space-between',
+                            alignItems: 'flex-start',
                             top: '0px',
-                            height: '80px',
+                            height: '70px',
                             bgcolor: '#fff',
                             zIndex: 12,
                             p: 1,
@@ -280,7 +290,21 @@ function CommentModal({
                         </IconButton>
                     </Box>
                     {/* Content of post */}
-                    <Box sx={{ mb: 2, px: 2 }}>
+
+                    <Box sx={{ mt: 1, mb: 2, px: 2 }}>
+                        <Box>
+                            {postHashtag && (
+                                <Box>
+                                    <Typography
+                                        variant="body1"
+                                        component="div" // Set component to "div" for line breaks
+                                        sx={{ fontSize: '14px', color: blue[700] }}
+                                    >
+                                        {postHashtag}
+                                    </Typography>
+                                </Box>
+                            )}
+                        </Box>
                         {contentArray.map((paragraph, index) => (
                             <Box key={index}>
                                 <Typography
@@ -340,7 +364,7 @@ function CommentModal({
                                     flexGrow: 1,
                                 }}
                             >
-                                {numberReactions ? (
+                                {numberReactions || selectedReaction ? (
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                         <Avatar
                                             src={Liked}
@@ -375,7 +399,7 @@ function CommentModal({
                                         />
                                         {/* <Typography>112</Typography> */}
                                         <Typography sx={{ fontSize: '13px', ml: '8px' }}>
-                                            {numberReactions}
+                                            {numberReactions + (selectedReaction ? 1 : 0)}
                                         </Typography>
                                     </Box>
                                 ) : (
@@ -400,7 +424,11 @@ function CommentModal({
                         </Box>
                         <Divider />
                         <Box sx={{ mb: 2, mt: '-4px' }}>
-                            <PostActionButton />
+                            <PostActionButton
+                                postID={postId}
+                                onReactionClick={onReactionClick}
+                                xAxisMargin={false}
+                            />
                         </Box>
                         <Box sx={{ display: 'flex' }}>
                             <Avatar
