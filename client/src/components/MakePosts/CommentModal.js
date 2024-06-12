@@ -200,6 +200,7 @@ function CommentModal({
                         borderRadius: '12px',
                         [tabletScreen]: {
                             width: '400px',
+                            // width: '100%',
                         },
                     }}
                 >

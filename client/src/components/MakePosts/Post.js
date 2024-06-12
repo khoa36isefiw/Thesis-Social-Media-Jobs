@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Container, Typography, Avatar, Divider, Modal } from '@mui/material';
 import Liked from '../../assets/images/like.png';
-import Comment from '../../assets/images/comment.png';
-import Send from '../../assets/images/send.png';
-import Like from '../../assets/images/like-no-color.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import CommentModal from './CommentModal';

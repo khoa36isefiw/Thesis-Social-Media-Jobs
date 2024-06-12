@@ -1,5 +1,6 @@
 // definde button action
 import { Box, Typography, Avatar } from '@mui/material';
+import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 
 export const ActionButton = ({ src, alt, text, onMouseEnter, onMouseLeave }) => (
     <Box
@@ -14,6 +15,15 @@ export const ActionButton = ({ src, alt, text, onMouseEnter, onMouseLeave }) => 
             justifyContent: 'center',
             px: 2,
             py: 1,
+            [ipadProScreen]: {
+                px: 2,
+            },
+            [mobileScreen]: {
+                px: 1,
+            },
+            [tabletScreen]: {
+                px: 1,
+            },
         }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}

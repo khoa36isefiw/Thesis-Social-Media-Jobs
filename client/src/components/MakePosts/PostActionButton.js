@@ -5,7 +5,7 @@ import Send from '../../assets/images/send.png';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { mobileScreen, tabletScreen } from '../Theme/Theme';
+import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import Liked from '../../assets/images/like.png';
 import { ReactionMenu } from './ReactionMenu';
 import { ActionButton } from './ActionButton';
@@ -80,12 +80,16 @@ export function PostActionButton({ postID, onReactionClick, xAxisMargin = true }
             sx={{
                 mt: 1,
                 mx: xAxisMargin ? '24px' : 0,
+                // mx: '24px',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 position: 'relative',
+                [ipadProScreen]: {
+                    mx: 1,
+                },
                 [tabletScreen]: {
-                    mx: 0,
+                    mx: 1,
                 },
                 [mobileScreen]: {
                     mx: 1,
@@ -115,6 +119,15 @@ export function PostActionButton({ postID, onReactionClick, xAxisMargin = true }
                         // backgroundColor: '#333',
                         top: '-75%',
                         left: '-50%',
+                    },
+                    [ipadProScreen]: {
+                        px: 2,
+                    },
+                    [mobileScreen]: {
+                        px: 1,
+                    },
+                    [tabletScreen]: {
+                        px: 1,
                     },
                 }}
                 onMouseOver={handleMouseOver}
@@ -200,7 +213,6 @@ const ReactionButtons = ({ handleAction, icon, textAction, textColor, fw = true 
                 alignItems: 'center',
             }}
         >
-            {/* <FavoriteIcon sx={{ fontSize: '24px', color: red[900] }} /> */}
             <Box>{icon}</Box>
             <Typography
                 sx={{
