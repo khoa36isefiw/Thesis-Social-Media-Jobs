@@ -1,5 +1,14 @@
-import React, { useState } from 'react';
-import { Box, Container, Typography, Avatar, Divider, Modal, IconButton } from '@mui/material';
+import React, { useRef, useState } from 'react';
+import {
+    Box,
+    Container,
+    Typography,
+    Avatar,
+    Divider,
+    Modal,
+    IconButton,
+    TextField,
+} from '@mui/material';
 import { mobileScreen, tabletScreen } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
 import { useSelector } from 'react-redux';
@@ -10,10 +19,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import Liked from '../../assets/images/like.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
-import CommentModal from './CommentModal';
+import CommentModal, { CommentData } from './CommentModal';
 import PostMenuSettings from './PostMenuSettings';
 import HideThePost from './HideThePost';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
+import UserAvatar from '../../assets/images/avatar.jpeg';
+import FilterComments from '../Messaging/FilterComments';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -47,11 +58,13 @@ function Post({
     imageUrl,
 }) {
     // Check content is always an array?
+    const commentTextFieldRef = useRef(null);
     const [menuStatus, setMenuStatus] = useState(null);
     const contentArray = Array.isArray(content) ? content : [content];
     const [expanded, setExpanded] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [hideThePostSelected, setHideThePostSelected] = useState(false);
+    const [isOpenCommentRegion, setIsOpenCommentRegion] = useState(false);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
 
     const toggleExpanded = () => {
@@ -88,6 +101,19 @@ function Post({
     const handleShowThePostJustHidden = () => {
         setHideThePostSelected(false);
     };
+
+    const handleOpenCommentRegion = () => {
+        setIsOpenCommentRegion(true);
+        // condition to check when button comment is clicked --> It will auto focus on textfield comment
+        setTimeout(() => {
+            // use this because this setIsOpenCommentRegion occures before commentTextFieldRef running
+            if (commentTextFieldRef.current) {
+                commentTextFieldRef.current.focus();
+            }
+        }, 0);
+    };
+
+    console.log('commentTextFieldRef: ', commentTextFieldRef);
 
     return (
         <Box>
@@ -267,7 +293,47 @@ function Post({
                             </Box>
                         </Box>
                         <Divider />
-                        <PostActionButton postID={postID} onReactionClick={handleChooseReaction} />
+                        <PostActionButton
+                            openCommentRegion={handleOpenCommentRegion}
+                            postID={postID}
+                            onReactionClick={handleChooseReaction}
+                        />
+                        {isOpenCommentRegion && (
+                            <Box>
+                                <Box sx={{ display: 'flex', mt: 1 }}>
+                                    <Avatar
+                                        src={UserAvatar}
+                                        alt="User Image"
+                                        sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
+                                    />
+                                    <TextField
+                                        inputRef={commentTextFieldRef}
+                                        id="comment"
+                                        placeholder="Write your comment..."
+                                        variant="outlined"
+                                        fullWidth
+                                        multiline
+                                        sx={{
+                                            ml: 1,
+                                            mb: 1,
+                                            '& .MuiOutlinedInput-root': {
+                                                // Apply styles to the root of the input
+                                                borderRadius: '24px', // Set border radius to 50px
+                                                '& .MuiInputBase-input::placeholder': {
+                                                    fontSize: '13px',
+                                                    color: 'gray',
+                                                },
+                                                '& .MuiInputBase-input': {
+                                                    fontSize: '13px',
+                                                },
+                                            },
+                                        }}
+                                    />
+                                </Box>
+                                <FilterComments />
+                                <CommentData />
+                            </Box>
+                        )}
                     </Box>
                     {/* Comment Modal */}
                     <Modal open={openModal} onClose={handleCloseModal}>

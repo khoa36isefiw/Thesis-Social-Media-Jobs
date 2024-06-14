@@ -25,7 +25,12 @@ const fadeIn = keyframes`
   }
 `;
 
-export function PostActionButton({ postID, onReactionClick, xAxisMargin = true }) {
+export function PostActionButton({
+    postID,
+    onReactionClick,
+    openCommentRegion,
+    xAxisMargin = true,
+}) {
     const dispatch = useDispatch();
     const [isHovering, setIsHovering] = useState(false);
     const [menuVisible, setMenuVisible] = useState(false);
@@ -198,7 +203,12 @@ export function PostActionButton({ postID, onReactionClick, xAxisMargin = true }
                     </Box>
                 )}
             </Box>
-            <ActionButton src={Comment} alt="Comment a Post" text="Comment" />
+            <ActionButton
+                handleAction={openCommentRegion}
+                src={Comment}
+                alt="Comment a Post"
+                text="Comment"
+            />
             <ActionButton src={Send} alt="Send a Post" text="Send" />
         </Box>
     );

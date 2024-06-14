@@ -2,39 +2,7 @@ import * as React from 'react';
 import { Typography, Button, Snackbar, IconButton, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
-// export default function SnackbarShowNotifications() {
-//     const [open, setOpen] = React.useState(false);
-
-//     const handleClick = () => {
-//         setOpen(true);
-//     };
-
-//     const handleClose = (event, reason) => {
-//         if (reason === 'clickaway') {
-//             return;
-//         }
-
-//         setOpen(false);
-//     };
-
-//     return (
-//         <div>
-//             <Button onClick={handleClick}>Open Snackbar</Button>
-//             <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}>
-//                 <Typography>This is a success Alert inside a Snackbar!</Typography>
-//                 {/* <Alert
-//                     onClose={handleClose}
-//                     severity="success"
-//                     variant="filled"
-//                     sx={{ width: '100%' }}
-//                 >
-//                     This is a success Alert inside a Snackbar!
-//                 </Alert> */}
-//             </Snackbar>
-//         </div>
-//     );
-// }
+import { blue, green } from '@mui/material/colors';
 
 export default function SnackbarShowNotifications() {
     const [open, setOpen] = React.useState(false);
@@ -52,27 +20,51 @@ export default function SnackbarShowNotifications() {
 
     const action = (
         <React.Fragment>
-            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-                <CloseIcon fontSize="small" />
+            <IconButton size="large" aria-label="close" color="black" onClick={handleClose}>
+                <CloseIcon fontSize="large" />
             </IconButton>
         </React.Fragment>
     );
 
     const messageShow = (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-                <CheckCircleIcon fontSize="small" />
+            <IconButton onClick={handleClose}>
+                <CheckCircleIcon sx={{ fontSize: '24px', color: 'green' }} />
             </IconButton>
-            <Typography>This post is saved!</Typography>
+            <Typography sx={{ fontSize: '13.5px', color: 'black' }}>This post is saved!</Typography>
+            <Typography
+                sx={{
+                    fontSize: '13.5px',
+                    color: blue[800],
+                    fontWeight: 'bold',
+                    '&:hover': {
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                    },
+                    ml: '4px',
+                }}
+            >
+                See saved posts
+            </Typography>
         </Box>
     );
 
     return (
         <div>
+            {/* MuiPaper-root MuiPaper-elevation MuiPaper-elevation6 MuiSnackbarContent-root */}
             <Button onClick={handleClick}>Open Snackbar</Button>
             <Snackbar
+                sx={{
+                    '.MuiPaper-root': {
+                        bgcolor: '#fff',
+                        borderRadius: '8px',
+                        px: 1,
+                        py: 0,
+                        width: '350px',
+                    },
+                }}
                 open={open}
-                autoHideDuration={6000}
+                autoHideDuration={8000}
                 onClose={handleClose}
                 // message="Note archived"
                 message={messageShow}
