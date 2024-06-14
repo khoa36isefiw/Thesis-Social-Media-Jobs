@@ -2,7 +2,7 @@
 import { Box, Typography, Avatar } from '@mui/material';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 
-export const ActionButton = ({ src, alt, text, onMouseEnter, onMouseLeave }) => (
+export const ActionButton = ({ handleAction, src, alt, text, onMouseEnter, onMouseLeave }) => (
     <Box
         sx={{
             '&:hover': {
@@ -27,6 +27,7 @@ export const ActionButton = ({ src, alt, text, onMouseEnter, onMouseLeave }) => 
         }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        onClick={handleAction}
     >
         <Avatar
             src={src}

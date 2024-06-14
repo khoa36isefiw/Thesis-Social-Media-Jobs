@@ -659,7 +659,7 @@ function CommentModal({
 
 export default CommentModal;
 
-function CommentData() {
+export function CommentData() {
     return (
         <>
             <Box sx={{ display: 'flex' }}>
