@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
     Box,
     Container,
@@ -58,6 +58,7 @@ function Post({
     imageUrl,
 }) {
     // Check content is always an array?
+    const commentTextFieldRef = useRef(null);
     const [menuStatus, setMenuStatus] = useState(null);
     const contentArray = Array.isArray(content) ? content : [content];
     const [expanded, setExpanded] = useState(false);
@@ -103,8 +104,16 @@ function Post({
 
     const handleOpenCommentRegion = () => {
         setIsOpenCommentRegion(true);
-        console.log('âhhaahi');
+        // condition to check when button comment is clicked --> It will auto focus on textfield comment
+        setTimeout(() => {
+            // use this because this setIsOpenCommentRegion occures before commentTextFieldRef running
+            if (commentTextFieldRef.current) {
+                commentTextFieldRef.current.focus();
+            }
+        }, 0);
     };
+
+    console.log('commentTextFieldRef: ', commentTextFieldRef);
 
     return (
         <Box>
@@ -291,13 +300,14 @@ function Post({
                         />
                         {isOpenCommentRegion && (
                             <Box>
-                                <Box sx={{ display: 'flex' }}>
+                                <Box sx={{ display: 'flex', mt: 1 }}>
                                     <Avatar
                                         src={UserAvatar}
                                         alt="User Image"
                                         sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
                                     />
                                     <TextField
+                                        inputRef={commentTextFieldRef}
                                         id="comment"
                                         placeholder="Write your comment..."
                                         variant="outlined"

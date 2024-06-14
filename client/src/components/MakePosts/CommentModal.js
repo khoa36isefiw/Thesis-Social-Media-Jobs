@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Box,
     Typography,
@@ -46,6 +46,7 @@ function CommentModal({
     handleClose,
     onReactionClick,
 }) {
+    const commentModalTextFieldRef = useRef(null);
     const location = useLocation();
     // get the initial width and height of the image
     const [originalWidth, setOriginalWidth] = useState(null);
@@ -105,6 +106,16 @@ function CommentModal({
 
     const toggleExpanded = () => {
         setExpanded(!expanded);
+    };
+
+    //auto focus on textfield to write comment
+
+    const handleOpenCommentRegion = () => {
+        // condition to check when button comment is clicked
+        // --> It will auto focus on textfield comment in Comment Modal
+        if (commentModalTextFieldRef.current) {
+            commentModalTextFieldRef.current.focus();
+        }
     };
 
     return (
@@ -427,6 +438,7 @@ function CommentModal({
                         <Divider />
                         <Box sx={{ mb: 2, mt: '-4px' }}>
                             <PostActionButton
+                                openCommentRegion={handleOpenCommentRegion}
                                 postID={postId}
                                 onReactionClick={onReactionClick}
                                 xAxisMargin={false}
@@ -439,6 +451,7 @@ function CommentModal({
                                 sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
                             />
                             <TextField
+                                inputRef={commentModalTextFieldRef}
                                 id="comment"
                                 placeholder="Write your comment..."
                                 variant="outlined"
