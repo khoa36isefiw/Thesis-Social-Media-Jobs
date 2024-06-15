@@ -661,8 +661,8 @@ function CommentModal({
                                 <ActionsTypography sx={{ ml: 2 }}>Reply</ActionsTypography>
                             </Box>
                         </Box>
-                        <CommentData />
-                        <CommentData />
+                        <CommentData postId={postId} />
+                        {/* <CommentData /> */}
                     </Box>
                 </Box>
             </Box>
@@ -672,7 +672,10 @@ function CommentModal({
 
 export default CommentModal;
 
-export function CommentData() {
+export function CommentData({ postId }) {
+    const commentList = useSelector((state) => state.managePost.comments[postId]);
+
+    console.log('commentList: ', commentList);
     return (
         <>
             <Box sx={{ display: 'flex' }}>
@@ -851,6 +854,54 @@ export function CommentData() {
                     <ActionsTypography sx={{ ml: 2 }}>Reply</ActionsTypography>
                 </Box>
             </Box>
+
+            {/* Load comment  */}
+            {commentList &&
+                commentList.map((comment, index) => (
+                    <Box sx={{ display: 'flex', mt: 2 }}>
+                        <Avatar
+                            // src={'https://cdn.mos.cms.futurecdn.net/xaycNDmeyxpHDrPqU6LmaD.jpg'}
+                            src={
+                                'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png'
+                            }
+                            alt="User Image"
+                            sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
+                        />
+                        <Box
+                            sx={{
+                                border: '1px solid #f2f2f2',
+                                maxHeight: '150px',
+                                width: '100%',
+                                p: 1,
+                                borderRadius: '10px',
+                                backgroundColor: '#f2f2f2',
+                                ml: 1,
+                            }}
+                        >
+                            <Typography
+                                sx={{
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    [tabletScreen]: {
+                                        fontSize: '14px',
+                                    },
+                                }}
+                            >
+                                Luna Kei
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    fontSize: '14px',
+                                    [tabletScreen]: {
+                                        fontSize: '13.5px',
+                                    },
+                                }}
+                            >
+                                {comment}
+                            </Typography>
+                        </Box>
+                    </Box>
+                ))}
         </>
     );
 }
