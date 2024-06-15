@@ -28,3 +28,6 @@ export const GET_USER_ID = 'GET_USER_ID';
 // User Home Page
 //reaction on post
 export const GET_REACTION_ON_POST = 'GET_REACTION_ON_POST';
+
+// comment on post
+export const ADD_COMMENT = 'ADD_COMMENT';

@@ -8,11 +8,12 @@ import {
     Modal,
     IconButton,
     TextField,
+    Icon,
 } from '@mui/material';
 import { mobileScreen, tabletScreen } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
-import { useSelector } from 'react-redux';
-import { setReactionOnPost } from '../../redux/ManagePost/managePostAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { addComment, setReactionOnPost } from '../../redux/ManagePost/managePostAction';
 import { blue } from '@mui/material/colors';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CloseIcon from '@mui/icons-material/Close';
@@ -25,6 +26,7 @@ import HideThePost from './HideThePost';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import FilterComments from '../Messaging/FilterComments';
+import SendIcon from '@mui/icons-material/Send';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -58,6 +60,7 @@ function Post({
     imageUrl,
 }) {
     // Check content is always an array?
+    const dispatch = useDispatch();
     const commentTextFieldRef = useRef(null);
     const [menuStatus, setMenuStatus] = useState(null);
     const contentArray = Array.isArray(content) ? content : [content];
@@ -65,6 +68,7 @@ function Post({
     const [openModal, setOpenModal] = useState(false);
     const [hideThePostSelected, setHideThePostSelected] = useState(false);
     const [isOpenCommentRegion, setIsOpenCommentRegion] = useState(false);
+    const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
 
     const toggleExpanded = () => {
@@ -113,8 +117,22 @@ function Post({
         }, 0);
     };
 
-    console.log('commentTextFieldRef: ', commentTextFieldRef);
+    const handleCommentTextFieldChange = () => {
+        const commentTextValue = commentTextFieldRef.current.value;
+        setIsEmptyCommentField(commentTextValue.trim() === '');
+    };
 
+    console.log('isEmptyCommentField:', isEmptyCommentField);
+    const handleCommentSubmit = () => {
+        const commentText = commentTextFieldRef.current.value.trim();
+        console.log(commentText);
+        if (commentText !== '') {
+            dispatch(addComment(postID, commentText));
+            // clear input after submitting
+            commentTextFieldRef.current.value = '';
+            setIsEmptyCommentField(true);
+        }
+    };
     return (
         <Box>
             {hideThePostSelected ? (
@@ -161,7 +179,6 @@ function Post({
                             <IconButton onClick={handleHideThePostSelected}>
                                 <CloseIcon sx={{ fontSize: '24px' }} />
                             </IconButton>
-                            <SnackbarShowNotifications />
                         </Box>
 
                         {/* show post content */}
@@ -308,6 +325,7 @@ function Post({
                                     />
                                     <TextField
                                         inputRef={commentTextFieldRef}
+                                        onChange={handleCommentTextFieldChange}
                                         id="comment"
                                         placeholder="Write your comment..."
                                         variant="outlined"
@@ -330,8 +348,16 @@ function Post({
                                         }}
                                     />
                                 </Box>
+                                {!isEmptyCommentField && (
+                                    <IconButton
+                                        onClick={handleCommentSubmit}
+                                        sx={{ transform: 'rotate(-45deg)' }}
+                                    >
+                                        <SendIcon />
+                                    </IconButton>
+                                )}
                                 <FilterComments />
-                                <CommentData />
+                                <CommentData postId={postID} />
                             </Box>
                         )}
                     </Box>
