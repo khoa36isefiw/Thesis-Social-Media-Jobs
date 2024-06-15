@@ -1,6 +1,6 @@
-import { GET_REACTION_ON_POST } from '../actionConstant';
+import { ADD_COMMENT, GET_REACTION_ON_POST } from '../actionConstant';
 
-const initialState = { reactions: {} };
+const initialState = { reactions: {}, comments: {} };
 
 export const managePostReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -12,6 +12,16 @@ export const managePostReducer = (state = initialState, action) => {
                 reactions: {
                     ...state.reactions,
                     [postId]: reaction,
+                },
+            };
+
+        case ADD_COMMENT:
+            const { postID, comment } = action.payload;
+            return {
+                ...state,
+                comments: {
+                    ...state.comments,
+                    [postID]: [...(state.comments[postID] || []), comment],
                 },
             };
 
