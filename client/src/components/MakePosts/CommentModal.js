@@ -878,7 +878,7 @@ export function CommentData({ postId }) {
                             <Box
                                 sx={{
                                     border: '1px solid #f2f2f2',
-                                    maxHeight: '150px',
+                                    minHeight: '10px',
                                     width: '100%',
                                     px: 1,
                                     py: '4px',
