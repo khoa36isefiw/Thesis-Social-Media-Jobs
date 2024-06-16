@@ -27,7 +27,6 @@ import HideThePost from './HideThePost';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import FilterComments from '../Messaging/FilterComments';
-import SendIcon from '@mui/icons-material/Send';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import MoodIcon from '@mui/icons-material/Mood';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
@@ -137,6 +136,13 @@ function Post({
             // clear input after submitting
             commentTextFieldRef.current.value = '';
             setIsEmptyCommentField(true);
+        }
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault(); // Prevent newline insertion
+            handleCommentSubmit();
         }
     };
 
@@ -346,6 +352,7 @@ function Post({
                                             onChange={handleCommentTextFieldChange}
                                             disabled={false}
                                             isShowPlaceholder={true}
+                                            handleKeyDown={handleKeyDown}
                                         />
                                         <Test2
                                             disabled={true}
@@ -385,51 +392,6 @@ function Post({
 
 export default Post;
 
-<TextField
-    // inputRef={commentTextFieldRef}
-    // onChange={handleCommentTextFieldChange}
-    id="comment"
-    placeholder="Write your comment..."
-    variant="outlined"
-    fullWidth
-    multiline
-    sx={{
-        ml: 1,
-        mb: 1,
-        '& .MuiOutlinedInput-root': {
-            // Apply styles to the root of the input
-            borderRadius: '24px', // Set border radius to 50px
-            '& .MuiInputBase-input::placeholder': {
-                fontSize: '13px',
-                color: 'gray',
-            },
-            '& .MuiInputBase-input': {
-                fontSize: '13px',
-            },
-        },
-    }}
-    InputProps={{
-        endAdornment: (
-            <InputAdornment
-                position="end"
-                sx={{
-                    /* Put the flex item at the start */
-                    alignSelf: 'flex-start',
-
-                    marginTop: '8px',
-                }}
-            >
-                <IconButton>
-                    <MoodIcon sx={{ fontSize: '24px' }} />
-                </IconButton>
-                <IconButton>
-                    <InsertPhotoIcon sx={{ fontSize: '24px' }} />
-                </IconButton>
-            </InputAdornment>
-        ),
-    }}
-/>;
-
 const Test2 = ({
     disabled,
     onChange,
@@ -437,12 +399,14 @@ const Test2 = ({
     isShowPlaceholder = false,
     isEmptyCommentField,
     submitFunction,
+    handleKeyDown,
 }) => {
     return (
         <TextField
             inputRef={inputRef}
             onChange={onChange}
             placeholder={isShowPlaceholder && 'Write your comment...'}
+            onKeyDown={handleKeyDown}
             variant="outlined"
             fullWidth
             multiline
