@@ -867,7 +867,12 @@ export function CommentData({ postId }) {
                                     'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png'
                                 }
                                 alt="User Image"
-                                sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
+                                sx={{
+                                    height: '40px',
+                                    width: '40px',
+                                    objectFit: 'cover',
+                                    border: '1px solid #d0d0d0',
+                                }}
                             />
 
                             <Box
