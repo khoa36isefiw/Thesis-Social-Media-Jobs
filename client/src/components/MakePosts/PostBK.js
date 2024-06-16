@@ -9,7 +9,6 @@ import {
     IconButton,
     TextField,
     Icon,
-    InputAdornment,
 } from '@mui/material';
 import { mobileScreen, tabletScreen } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
@@ -28,9 +27,6 @@ import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShow
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import FilterComments from '../Messaging/FilterComments';
 import SendIcon from '@mui/icons-material/Send';
-import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import MoodIcon from '@mui/icons-material/Mood';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -66,7 +62,6 @@ function Post({
     // Check content is always an array?
     const dispatch = useDispatch();
     const commentTextFieldRef = useRef(null);
-    const [editorText, setEditorText] = useState(''); // add text
     const [menuStatus, setMenuStatus] = useState(null);
     const contentArray = Array.isArray(content) ? content : [content];
     const [expanded, setExpanded] = useState(false);
@@ -96,6 +91,7 @@ function Post({
     // open menu setting for post
     const handleOpenPostMenuSettings = (event) => {
         setMenuStatus(event.currentTarget);
+        console.log(event.currentTarget);
     };
 
     const handleClosePostMenuSettings = () => {
@@ -121,14 +117,12 @@ function Post({
         }, 0);
     };
 
-    // for textfield
     const handleCommentTextFieldChange = () => {
         const commentTextValue = commentTextFieldRef.current.value;
         setIsEmptyCommentField(commentTextValue.trim() === '');
     };
 
     console.log('isEmptyCommentField:', isEmptyCommentField);
-    // for text field
     const handleCommentSubmit = () => {
         const commentText = commentTextFieldRef.current.value.trim();
         console.log(commentText);
@@ -139,7 +133,6 @@ function Post({
             setIsEmptyCommentField(true);
         }
     };
-
     return (
         <Box>
             {hideThePostSelected ? (
@@ -330,31 +323,39 @@ function Post({
                                         alt="User Image"
                                         sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
                                     />
-                                    <Box
+                                    <TextField
+                                        inputRef={commentTextFieldRef}
+                                        onChange={handleCommentTextFieldChange}
+                                        id="comment"
+                                        placeholder="Write your comment..."
+                                        variant="outlined"
+                                        fullWidth
+                                        multiline
                                         sx={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            flexGrow: 1,
-                                            border: '1px solid #d0d0d0',
                                             ml: 1,
-                                            borderRadius: '12px',
-                                            backdropFilter: '',
+                                            mb: 1,
+                                            '& .MuiOutlinedInput-root': {
+                                                // Apply styles to the root of the input
+                                                borderRadius: '24px', // Set border radius to 50px
+                                                '& .MuiInputBase-input::placeholder': {
+                                                    fontSize: '13px',
+                                                    color: 'gray',
+                                                },
+                                                '& .MuiInputBase-input': {
+                                                    fontSize: '13px',
+                                                },
+                                            },
                                         }}
-                                    >
-                                        <Test2
-                                            inputRef={commentTextFieldRef}
-                                            onChange={handleCommentTextFieldChange}
-                                            disabled={false}
-                                            isShowPlaceholder={true}
-                                        />
-                                        <Test2
-                                            disabled={true}
-                                            isEmptyCommentField={isEmptyCommentField}
-                                            submitFunction={handleCommentSubmit}
-                                        />
-                                    </Box>
+                                    />
                                 </Box>
-
+                                {!isEmptyCommentField && (
+                                    <IconButton
+                                        onClick={handleCommentSubmit}
+                                        sx={{ transform: 'rotate(-45deg)' }}
+                                    >
+                                        <SendIcon />
+                                    </IconButton>
+                                )}
                                 <FilterComments />
                                 <CommentData postId={postID} />
                             </Box>
@@ -384,129 +385,3 @@ function Post({
 }
 
 export default Post;
-
-<TextField
-    // inputRef={commentTextFieldRef}
-    // onChange={handleCommentTextFieldChange}
-    id="comment"
-    placeholder="Write your comment..."
-    variant="outlined"
-    fullWidth
-    multiline
-    sx={{
-        ml: 1,
-        mb: 1,
-        '& .MuiOutlinedInput-root': {
-            // Apply styles to the root of the input
-            borderRadius: '24px', // Set border radius to 50px
-            '& .MuiInputBase-input::placeholder': {
-                fontSize: '13px',
-                color: 'gray',
-            },
-            '& .MuiInputBase-input': {
-                fontSize: '13px',
-            },
-        },
-    }}
-    InputProps={{
-        endAdornment: (
-            <InputAdornment
-                position="end"
-                sx={{
-                    /* Put the flex item at the start */
-                    alignSelf: 'flex-start',
-
-                    marginTop: '8px',
-                }}
-            >
-                <IconButton>
-                    <MoodIcon sx={{ fontSize: '24px' }} />
-                </IconButton>
-                <IconButton>
-                    <InsertPhotoIcon sx={{ fontSize: '24px' }} />
-                </IconButton>
-            </InputAdornment>
-        ),
-    }}
-/>;
-
-const Test2 = ({
-    disabled,
-    onChange,
-    inputRef,
-    isShowPlaceholder = false,
-    isEmptyCommentField,
-    submitFunction,
-}) => {
-    return (
-        <TextField
-            inputRef={inputRef}
-            onChange={onChange}
-            placeholder={isShowPlaceholder && 'Write your comment...'}
-            variant="outlined"
-            fullWidth
-            multiline
-            disabled={disabled}
-            sx={{
-                ml: 1,
-                '& .MuiOutlinedInput-root': {
-                    borderRadius: '24px',
-                    border: 'none',
-                    '& fieldset': {
-                        border: 'none',
-                    },
-                    '& .MuiInputBase-input::placeholder': {
-                        fontSize: '13px',
-                        color: 'gray',
-                    },
-                    '& .MuiInputBase-input': {
-                        fontSize: '13px',
-                    },
-                },
-                '& .Mui-disabled': {
-                    backgroundColor: 'transparent',
-                },
-            }}
-            InputProps={{
-                startAdornment: disabled && (
-                    <InputAdornment
-                        position="start"
-                        sx={{
-                            alignSelf: 'flex-end',
-                            marginTop: '8px',
-                        }}
-                    >
-                        <IconButton sx={{ padding: 0 }}>
-                            <MoodIcon sx={{ fontSize: '24px' }} />
-                        </IconButton>
-                        <IconButton>
-                            <InsertPhotoIcon sx={{ fontSize: '24px' }} />
-                        </IconButton>
-                    </InputAdornment>
-                ),
-                endAdornment: disabled && (
-                    <InputAdornment
-                        position="end"
-                        sx={{
-                            alignSelf: 'flex-end',
-                            marginTop: '8px',
-                        }}
-                    >
-                        <IconButton
-                            onClick={submitFunction}
-                            disabled={isEmptyCommentField}
-                            sx={{ transform: 'rotate(-35deg)' }}
-                        >
-                            <SendRoundedIcon
-                                sx={{
-                                    fontSize: '22px',
-                                    color: isEmptyCommentField ? 'gray' : blue[700],
-                                }}
-                            />
-                        </IconButton>
-                    </InputAdornment>
-                ),
-            }}
-        />
-    );
-};
