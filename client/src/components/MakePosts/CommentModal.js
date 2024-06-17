@@ -21,6 +21,7 @@ import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
 import { blue } from '@mui/material/colors';
 import { useSelector } from 'react-redux';
+import MoreHoriz from '@mui/icons-material/MoreHoriz';
 
 // Customize styles for Typography in this Component
 const ActionsTypography = styled(Typography)(({}) => ({
@@ -690,7 +691,7 @@ export function CommentData({ postId }) {
                         maxHeight: '150px',
                         width: '100%',
                         p: 1,
-                        borderRadius: '10px',
+                        borderRadius: '12px',
                         backgroundColor: '#f2f2f2',
                         ml: 1,
                     }}
@@ -858,50 +859,222 @@ export function CommentData({ postId }) {
             {/* Load comment  */}
             {commentList &&
                 commentList.map((comment, index) => (
-                    <Box sx={{ display: 'flex', mt: 2 }}>
-                        <Avatar
-                            // src={'https://cdn.mos.cms.futurecdn.net/xaycNDmeyxpHDrPqU6LmaD.jpg'}
-                            src={
-                                'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png'
-                            }
-                            alt="User Image"
-                            sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
-                        />
+                    <Box>
+                        <Box sx={{ display: 'flex', mt: 2 }}>
+                            <Avatar
+                                // src={'https://cdn.mos.cms.futurecdn.net/xaycNDmeyxpHDrPqU6LmaD.jpg'}
+                                src={
+                                    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png'
+                                }
+                                alt="User Image"
+                                sx={{
+                                    height: '40px',
+                                    width: '40px',
+                                    objectFit: 'cover',
+                                    border: '1px solid #d0d0d0',
+                                }}
+                            />
+
+                            <Box
+                                sx={{
+                                    border: '1px solid #f2f2f2',
+                                    minHeight: '10px',
+                                    width: '100%',
+                                    px: 1,
+                                    py: '4px',
+                                    borderRadius: '12px',
+                                    backgroundColor: '#f2f2f2',
+                                    ml: 1,
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            fontSize: '16px',
+                                            fontWeight: 'bold',
+                                            [tabletScreen]: {
+                                                fontSize: '14px',
+                                            },
+                                        }}
+                                    >
+                                        Luna Kei
+                                    </Typography>
+                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                        {/* time comment */}
+                                        <Typography>1m</Typography>
+                                        {/* More action with this comment */}
+                                        <IconButton>
+                                            <MoreHoriz />
+                                        </IconButton>
+                                    </Box>
+                                </Box>
+                                <Typography
+                                    sx={{
+                                        fontSize: '14px',
+                                        [tabletScreen]: {
+                                            fontSize: '13.5px',
+                                        },
+                                    }}
+                                >
+                                    {comment}
+                                </Typography>
+                            </Box>
+                        </Box>
+                        {/* status of comment */}
                         <Box
                             sx={{
-                                border: '1px solid #f2f2f2',
-                                maxHeight: '150px',
-                                width: '100%',
-                                p: 1,
-                                borderRadius: '10px',
-                                backgroundColor: '#f2f2f2',
-                                ml: 1,
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                width: '220px',
+                                mt: '4px',
+                                ml: 5,
+                                [tabletScreen]: {
+                                    mx: 4,
+                                },
                             }}
                         >
-                            <Typography
+                            <Box
                                 sx={{
-                                    fontSize: '16px',
-                                    fontWeight: 'bold',
-                                    [tabletScreen]: {
-                                        fontSize: '14px',
-                                    },
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
                                 }}
                             >
-                                Luna Kei
-                            </Typography>
-                            <Typography
+                                <ActionsTypography sx={{ ml: 1 }}>Like</ActionsTypography>
+                                <ActionsTypography sx={{ ml: 1 }}>-</ActionsTypography>
+                                <Avatar
+                                    src={Liked}
+                                    sx={{
+                                        height: '16px',
+                                        width: '16px',
+                                        borderRadius: '0',
+                                        zIndex: 10,
+                                        ml: 1,
+                                    }}
+                                    alt="Liked a Post"
+                                />
+                            </Box>
+                            <Box
                                 sx={{
-                                    fontSize: '14px',
-                                    [tabletScreen]: {
-                                        fontSize: '13.5px',
-                                    },
+                                    width: '1px',
+                                    bgcolor: 'gray',
+                                }}
+                            />
+                            <ActionsTypography>Reply</ActionsTypography>
+                            {/* The number of responses */}
+                            <ActionsTypography>-</ActionsTypography>
+                            <ActionsTypography sx={{ fontWeight: 'normal' }}>
+                                1 Reply
+                            </ActionsTypography>
+                        </Box>
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    mt: 1,
+                                    ml: 6,
                                 }}
                             >
-                                {comment}
-                            </Typography>
+                                <Avatar
+                                    src={
+                                        'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
+                                    }
+                                    alt="User Image"
+                                    sx={{ height: '32px', width: '32px', objectFit: 'cover' }}
+                                />
+                                <Box
+                                    sx={{
+                                        border: '1px solid #f2f2f2',
+                                        maxHeight: '150px',
+                                        width: '100%',
+                                        p: 1,
+                                        borderRadius: '10px',
+                                        backgroundColor: '#f2f2f2',
+                                        ml: 1,
+                                    }}
+                                >
+                                    <ActionsOnComment userName={'October'} timePostComment={'1m'} />
+                                    <Typography
+                                        sx={{
+                                            fontSize: '14px',
+                                            [tabletScreen]: {
+                                                fontSize: '13.5px',
+                                            },
+                                        }}
+                                    >
+                                        Depends on the trip you take
+                                    </Typography>
+                                </Box>
+                            </Box>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    ml: 11,
+                                    mt: '4px',
+                                    alignItems: 'center',
+                                    width: '220px',
+                                    // justifyContent: 'space-between',
+                                }}
+                            >
+                                <ActionsTypography sx={{ ml: 1 }}>Like</ActionsTypography>
+                                <Box
+                                    sx={{
+                                        width: '1px',
+                                        height: '21px',
+                                        bgcolor: 'gray',
+                                        ml: 2,
+                                    }}
+                                />
+                                <ActionsTypography sx={{ ml: 2 }}>Reply</ActionsTypography>
+                            </Box>
                         </Box>
                     </Box>
                 ))}
         </>
     );
 }
+
+const ActionsOnComment = ({ userName, timePostComment }) => {
+    return (
+        <Box
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+            }}
+        >
+            <Typography
+                sx={{
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    [tabletScreen]: {
+                        fontSize: '14px',
+                    },
+                }}
+            >
+                {/* Luna Kei */}
+                {userName}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {/* time comment */}
+                <Typography
+                    sx={{
+                        fontSize: '12px',
+                    }}
+                >
+                    {timePostComment}
+                </Typography>
+                {/* More action with this comment */}
+                <IconButton sx={{ py: 0, px: '4px' }}>
+                    <MoreHoriz sx={{ fontSize: '18px' }} />
+                </IconButton>
+            </Box>
+        </Box>
+    );
+};
