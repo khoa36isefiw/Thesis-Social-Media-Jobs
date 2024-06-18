@@ -47,7 +47,7 @@ const PostMenuSettings = ({ openMenuStatus, handleClosePostMenuSettings, postId 
         // } else if (action === 'Delete conversation') {
         //     handleOpenDeleteConfirm();
         // }
-        setHideMenu(true);
+        // setHideMenu(true);
     };
 
     // hide Menu
@@ -71,7 +71,7 @@ const PostMenuSettings = ({ openMenuStatus, handleClosePostMenuSettings, postId 
                 open={Boolean(openMenuStatus)}
                 onClose={handleClosePostMenuSettings}
                 sx={{
-                    position: 'absolute',
+                    // position: 'absolute',
                     '.MuiPaper-root': {
                         // backgroundColor: 'darkorange',
                         boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.75)',

@@ -73,7 +73,7 @@ function CommentModal({
         img.onload = () => {
             let newHeight = img.naturalHeight;
             let newWidth = img.naturalWidth;
-            // console.log('Original height and width for image: ', newHeight, newWidth);
+            console.log('Original height and width for image: ', newHeight, newWidth);
             if (newHeight >= 650) {
                 newHeight = 650;
             }
@@ -489,7 +489,7 @@ function CommentModal({
 
 export default CommentModal;
 
-export function CommentData({ postId, imageUrl }) {
+export function CommentData({ postId }) {
     const commentList = useSelector((state) => state.managePost.comments[postId]);
     const [hoverStatus, setHoverStatus] = useState({ postId: null, commentId: null });
 
@@ -501,7 +501,7 @@ export function CommentData({ postId, imageUrl }) {
         setHoverStatus({ postId: null, commentId: null });
     };
 
-    console.log('commentList: ', commentList);
+    console.log('commentList: ', commentList && commentList[0]);
     return (
         <>
             <Box sx={{ display: 'flex' }}>
@@ -711,46 +711,17 @@ export function CommentData({ postId, imageUrl }) {
                                         </IconButton>
                                     </Box>
                                 </Box>
-
-                                {/* check if comment is array */}
-                                {Array.isArray(comment) ? (
-                                    <>
-                                        {/* If the comment array contains only an image */}
-                                        {comment.length === 1 && (
-                                            <Avatar
-                                                src={comment[0]}
-                                                alt="User Uploaded Image"
-                                                sx={{ height: '100px', width: '100px', mt: 1 }}
-                                            />
-                                        )}
-                                        {/* If the comment array contains both text and an image */}
-                                        {comment.length > 1 && (
-                                            <>
-                                                <Typography
-                                                    sx={{
-                                                        fontSize: { xs: '13.5px', md: '14px' },
-                                                    }}
-                                                >
-                                                    {comment[0]}
-                                                </Typography>
-                                                <Avatar
-                                                    src={comment[1]}
-                                                    alt="User Uploaded Image"
-                                                    sx={{ height: '100px', width: '100px', mt: 1 }}
-                                                />
-                                            </>
-                                        )}
-                                    </>
-                                ) : (
-                                    // Not an array --> show comment
-                                    <Typography
-                                        sx={{
-                                            fontSize: { xs: '13.5px', md: '14px' },
-                                        }}
-                                    >
-                                        {comment}
-                                    </Typography>
-                                )}
+                                <Typography
+                                    sx={{
+                                        fontSize: '14px',
+                                        [tabletScreen]: {
+                                            fontSize: '13.5px',
+                                        },
+                                    }}
+                                >
+                                    {comment}
+                                </Typography>
+                                {/* {comment && <Avatar src={comment.url} />} */}
                             </Box>
                         </Box>
                         {/* status of comment */}
@@ -837,11 +808,7 @@ export function CommentData({ postId, imageUrl }) {
                                         'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
                                     }
                                     alt="User Image"
-                                    sx={{
-                                        height: '32px',
-                                        width: '32px',
-                                        objectFit: 'cover',
-                                    }}
+                                    sx={{ height: '32px', width: '32px', objectFit: 'cover' }}
                                 />
                                 <Box
                                     sx={{
