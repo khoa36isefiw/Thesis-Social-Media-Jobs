@@ -9,6 +9,7 @@ import {
     IconButton,
     TextField,
     Icon,
+    InputAdornment,
 } from '@mui/material';
 import { mobileScreen, tabletScreen } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
@@ -26,7 +27,9 @@ import HideThePost from './HideThePost';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import FilterComments from '../Messaging/FilterComments';
-import SendIcon from '@mui/icons-material/Send';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import MoodIcon from '@mui/icons-material/Mood';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -62,6 +65,7 @@ function Post({
     // Check content is always an array?
     const dispatch = useDispatch();
     const commentTextFieldRef = useRef(null);
+    const [editorText, setEditorText] = useState(''); // add text
     const [menuStatus, setMenuStatus] = useState(null);
     const contentArray = Array.isArray(content) ? content : [content];
     const [expanded, setExpanded] = useState(false);
@@ -69,6 +73,8 @@ function Post({
     const [hideThePostSelected, setHideThePostSelected] = useState(false);
     const [isOpenCommentRegion, setIsOpenCommentRegion] = useState(false);
     const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
+    // upload image from comment
+    const [imageURL, setImageURL] = useState(null);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
 
     const toggleExpanded = () => {
@@ -91,11 +97,12 @@ function Post({
     // open menu setting for post
     const handleOpenPostMenuSettings = (event) => {
         setMenuStatus(event.currentTarget);
-        console.log(event.currentTarget);
+        // setMenuStatus({ anchorEl: event.currentTarget, postId: postID });
     };
 
     const handleClosePostMenuSettings = () => {
         setMenuStatus(null);
+        // setMenuStatus({ anchorEl: null, postId: null });
     };
 
     const handleHideThePostSelected = () => {
@@ -117,22 +124,60 @@ function Post({
         }, 0);
     };
 
+    // for textfield
     const handleCommentTextFieldChange = () => {
         const commentTextValue = commentTextFieldRef.current.value;
+
         setIsEmptyCommentField(commentTextValue.trim() === '');
     };
 
     console.log('isEmptyCommentField:', isEmptyCommentField);
+    // for text field
     const handleCommentSubmit = () => {
         const commentText = commentTextFieldRef.current.value.trim();
+        // const commentText = commentTextFieldRef.current.value;
+        const commentSent = [commentText, imageURL.url];
         console.log(commentText);
         if (commentText !== '') {
-            dispatch(addComment(postID, commentText));
+            // dispatch(addComment(postID, commentText));
+            dispatch(addComment(postID, commentSent));
+
             // clear input after submitting
             commentTextFieldRef.current.value = '';
             setIsEmptyCommentField(true);
         }
     };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault(); // Prevent newline insertion
+            handleCommentSubmit();
+        }
+    };
+
+    // upload image
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0]; // Get the list of selected file
+        const uploadedImages = []; // get the existing array of images
+        const reader = new FileReader();
+        reader.onload = () => {
+            const imageDataURL = reader.result;
+            console.log('imageDataURL: ', imageDataURL);
+            // get the name of the uploaded image
+            const imageName = file.name;
+            console.log('imageDataURL: ', imageName);
+
+            // store both the name and URL
+            setImageURL({ name: imageName, url: imageDataURL });
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
+
+    console.log('Image data just uploaded: ', imageURL);
+
     return (
         <Box>
             {hideThePostSelected ? (
@@ -162,6 +207,7 @@ function Post({
                                 <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                                     {displayName}
                                 </Typography>
+
                                 <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
                                     {followers} followers
                                 </Typography>
@@ -172,10 +218,7 @@ function Post({
                             <IconButton onClick={handleOpenPostMenuSettings}>
                                 <MoreHorizIcon sx={{ fontSize: '24px' }} />
                             </IconButton>
-                            <PostMenuSettings
-                                openMenuStatus={menuStatus}
-                                handleClosePostMenuSettings={handleClosePostMenuSettings}
-                            />
+
                             <IconButton onClick={handleHideThePostSelected}>
                                 <CloseIcon sx={{ fontSize: '24px' }} />
                             </IconButton>
@@ -323,39 +366,53 @@ function Post({
                                         alt="User Image"
                                         sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
                                     />
-                                    <TextField
-                                        inputRef={commentTextFieldRef}
-                                        onChange={handleCommentTextFieldChange}
-                                        id="comment"
-                                        placeholder="Write your comment..."
-                                        variant="outlined"
-                                        fullWidth
-                                        multiline
+                                    <Box
                                         sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            flexGrow: 1,
+                                            border: '1px solid #d0d0d0',
                                             ml: 1,
-                                            mb: 1,
-                                            '& .MuiOutlinedInput-root': {
-                                                // Apply styles to the root of the input
-                                                borderRadius: '24px', // Set border radius to 50px
-                                                '& .MuiInputBase-input::placeholder': {
-                                                    fontSize: '13px',
-                                                    color: 'gray',
-                                                },
-                                                '& .MuiInputBase-input': {
-                                                    fontSize: '13px',
-                                                },
-                                            },
+                                            borderRadius: '12px',
+                                            backdropFilter: '',
                                         }}
-                                    />
-                                </Box>
-                                {!isEmptyCommentField && (
-                                    <IconButton
-                                        onClick={handleCommentSubmit}
-                                        sx={{ transform: 'rotate(-45deg)' }}
                                     >
-                                        <SendIcon />
-                                    </IconButton>
-                                )}
+                                        <CommentTextField
+                                            inputRef={commentTextFieldRef}
+                                            onChange={handleCommentTextFieldChange}
+                                            disabled={false}
+                                            isShowPlaceholder={true}
+                                            handleKeyDown={handleKeyDown}
+                                            imageURLUploaded={imageURL}
+                                        />
+                                        {/* {imageURL && (
+                                            <Box
+                                                sx={{
+                                                    mt: 1,
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                }}
+                                            >
+                                                <Avatar
+                                                    src={imageURL.url}
+                                                    alt="Uploaded Comment Image"
+                                                    sx={{
+                                                        width: '100px',
+                                                        height: '100px',
+                                                        borderRadius: '0',
+                                                    }}
+                                                />
+                                            </Box>
+                                        )} */}
+                                        <CommentTextField
+                                            disabled={true}
+                                            isEmptyCommentField={isEmptyCommentField}
+                                            submitFunction={handleCommentSubmit}
+                                            uploadedImage={handleImageUpload}
+                                        />
+                                    </Box>
+                                </Box>
+
                                 <FilterComments />
                                 <CommentData postId={postID} />
                             </Box>
@@ -378,6 +435,10 @@ function Post({
                             numberComments={numberOfComment}
                         />
                     </Modal>
+                    <PostMenuSettings
+                        openMenuStatus={menuStatus}
+                        handleClosePostMenuSettings={handleClosePostMenuSettings}
+                    />
                 </Box>
             )}
         </Box>
@@ -385,3 +446,100 @@ function Post({
 }
 
 export default Post;
+
+const CommentTextField = ({
+    disabled,
+    onChange,
+    inputRef,
+    isShowPlaceholder = false,
+    isEmptyCommentField,
+    submitFunction,
+    handleKeyDown,
+    uploadedImage,
+    imageURLUploaded,
+}) => {
+    return (
+        <Box>
+            <TextField
+                inputRef={inputRef}
+                onChange={onChange}
+                placeholder={isShowPlaceholder && 'Write your comment...'}
+                onKeyDown={handleKeyDown}
+                variant="outlined"
+                fullWidth
+                multiline
+                disabled={disabled}
+                sx={{
+                    ml: 1,
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '24px',
+                        border: 'none',
+                        '& fieldset': {
+                            border: 'none',
+                        },
+                        '& .MuiInputBase-input::placeholder': {
+                            fontSize: '13px',
+                            color: 'gray',
+                        },
+                        '& .MuiInputBase-input': {
+                            fontSize: '13px',
+                        },
+                    },
+                    '& .Mui-disabled': {
+                        backgroundColor: 'transparent',
+                    },
+                }}
+                InputProps={{
+                    startAdornment: disabled && (
+                        <InputAdornment
+                            position="start"
+                            sx={{
+                                alignSelf: 'flex-end',
+                                marginTop: '8px',
+                            }}
+                        >
+                            <IconButton sx={{ padding: 0 }}>
+                                <MoodIcon sx={{ fontSize: '24px' }} />
+                            </IconButton>
+                            <label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    onChange={uploadedImage}
+                                    multiple
+                                />
+                                <IconButton component="span">
+                                    <InsertPhotoIcon sx={{ fontSize: '24px' }} />
+                                </IconButton>
+                            </label>
+                        </InputAdornment>
+                    ),
+                    endAdornment: disabled && (
+                        <InputAdornment
+                            position="end"
+                            sx={{
+                                alignSelf: 'flex-end',
+                                marginTop: '8px',
+                            }}
+                        >
+                            <IconButton
+                                onClick={submitFunction}
+                                disabled={isEmptyCommentField}
+                                sx={{ transform: 'rotate(-35deg)' }}
+                            >
+                                <SendRoundedIcon
+                                    sx={{
+                                        fontSize: '22px',
+                                        color: isEmptyCommentField ? 'gray' : blue[700],
+                                    }}
+                                />
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+            />
+            {imageURLUploaded && <Avatar src={imageURLUploaded.url} />}
+        </Box>
+    );
+};

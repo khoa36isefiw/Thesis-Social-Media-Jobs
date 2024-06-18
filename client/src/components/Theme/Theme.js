@@ -8,7 +8,10 @@ export const theme = createTheme({
         normalText: '#404040',
         primaryText: '#00000099',
         detailTextColor: '#2196f3',
+        bgColorButton: '#666',
+        bgColorButtonHover: '#191919',
         bgButtonHover: '#eeeeee',
+
         shadowColor: '#565656',
     },
     breakpoints: {

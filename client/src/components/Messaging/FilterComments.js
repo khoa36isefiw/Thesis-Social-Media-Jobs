@@ -81,6 +81,7 @@ function FilterComments() {
             sx={{
                 display: 'flex',
                 alignItems: 'center',
+                my: 1,
             }}
         >
             <Typography sx={{ color: theme.palette.normalText, fontSize: '14px' }}>
