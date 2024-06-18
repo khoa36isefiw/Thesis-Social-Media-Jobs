@@ -22,6 +22,7 @@ import { PostActionButton } from './PostActionButton';
 import { blue } from '@mui/material/colors';
 import { useSelector } from 'react-redux';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import { ReactionMenu } from './ReactionMenu';
 
 // Customize styles for Typography in this Component
 const ActionsTypography = styled(Typography)(({}) => ({
@@ -55,7 +56,6 @@ function CommentModal({
     const [isMobileScreen, setIsMobileScreen] = useState(false);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postId]);
 
-    console.log('location.pathname:', location.pathname);
     useEffect(() => {
         const handleResize = () => {
             setIsMobileScreen(window.innerWidth <= 768);
@@ -73,7 +73,7 @@ function CommentModal({
         img.onload = () => {
             let newHeight = img.naturalHeight;
             let newWidth = img.naturalWidth;
-            console.log('Original height and width for image: ', newHeight, newWidth);
+            // console.log('Original height and width for image: ', newHeight, newWidth);
             if (newHeight >= 650) {
                 newHeight = 650;
             }
@@ -477,191 +477,7 @@ function CommentModal({
                         </Box>
 
                         {/* Submit Button */}
-                        {/* <Button variant="contained" color="primary" fullWidth>
-                            Comment
-                        </Button> */}
 
-                        {/* Another User Comment in Posts */}
-                        <Box sx={{ display: 'flex' }}>
-                            <Avatar
-                                src={'https://cdn.mos.cms.futurecdn.net/xaycNDmeyxpHDrPqU6LmaD.jpg'}
-                                alt="User Image"
-                                sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
-                            />
-                            <Box
-                                sx={{
-                                    border: '1px solid #f2f2f2',
-                                    maxHeight: '150px',
-                                    width: '100%',
-                                    p: 1,
-                                    borderRadius: '10px',
-                                    backgroundColor: '#f2f2f2',
-                                    ml: 1,
-                                }}
-                            >
-                                <Typography
-                                    sx={{
-                                        fontSize: '16px',
-                                        fontWeight: 'bold',
-                                        [tabletScreen]: {
-                                            fontSize: '14px',
-                                        },
-                                    }}
-                                >
-                                    Tim Tran
-                                </Typography>
-                                <Typography
-                                    sx={{
-                                        fontSize: '14px',
-                                        [tabletScreen]: {
-                                            fontSize: '13.5px',
-                                        },
-                                    }}
-                                >
-                                    Where did you go? Please share with me the information about
-                                    your journey. What should I need to prepare for this trip?
-                                </Typography>
-                            </Box>
-                        </Box>
-                        {/* Like, Reply actions */}
-
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'space-evenly',
-                                mt: 1,
-                                ml: 1,
-                                [tabletScreen]: {
-                                    mx: 4,
-                                },
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <ActionsTypography sx={{ ml: 1 }}>Like</ActionsTypography>
-                                <ActionsTypography sx={{ ml: 1 }}>-</ActionsTypography>
-                                <Avatar
-                                    src={Liked}
-                                    sx={{
-                                        height: '16px',
-                                        width: '16px',
-                                        borderRadius: '0',
-                                        zIndex: 10,
-                                        ml: 1,
-                                    }}
-                                    alt="Liked a Post"
-                                />
-                            </Box>
-                            <Box
-                                sx={{
-                                    width: '1px',
-                                    bgcolor: 'gray',
-                                }}
-                            />
-                            <ActionsTypography>Reply</ActionsTypography>
-                            {/* The number of responses */}
-                            <ActionsTypography>-</ActionsTypography>
-                            <ActionsTypography sx={{ fontWeight: 'normal' }}>
-                                1 Reply
-                            </ActionsTypography>
-                        </Box>
-
-                        {/* responses */}
-                        {/* <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
-                            <Avatar
-                                src={
-                                    'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
-                                }
-                                alt="User Image"
-                                sx={{ height: '32px', width: '32px', objectFit: 'cover' }}
-                            />
-                            <Box
-                                sx={{
-                                    border: '1px solid #f2f2f2',
-                                    maxHeight: '150px',
-                                    width: '100%',
-                                    p: 1,
-                                    borderRadius: '10px',
-                                    backgroundColor: '#f2f2f2',
-                                    ml: 1,
-                                }}
-                            >
-                                <Typography sx={{ fontSize: '16px', fontWeight: 'bold' }}>
-                                    October
-                                </Typography>
-                                <Typography sx={{ fontSize: '14px' }}>
-                                    Depends on the trip you take
-                                </Typography>
-                            </Box>
-                        </Box> */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
-                                <Avatar
-                                    src={
-                                        'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
-                                    }
-                                    alt="User Image"
-                                    sx={{ height: '32px', width: '32px', objectFit: 'cover' }}
-                                />
-                                <Box
-                                    sx={{
-                                        border: '1px solid #f2f2f2',
-                                        maxHeight: '150px',
-                                        width: '100%',
-                                        p: 1,
-                                        borderRadius: '10px',
-                                        backgroundColor: '#f2f2f2',
-                                        ml: 1,
-                                    }}
-                                >
-                                    <Typography
-                                        sx={{
-                                            fontSize: '16px',
-                                            fontWeight: 'bold',
-                                            [tabletScreen]: {
-                                                fontSize: '14px',
-                                            },
-                                        }}
-                                    >
-                                        October
-                                    </Typography>
-                                    <Typography
-                                        sx={{
-                                            fontSize: '14px',
-                                            [tabletScreen]: {
-                                                fontSize: '13.5px',
-                                            },
-                                        }}
-                                    >
-                                        Depends on the trip you take
-                                    </Typography>
-                                </Box>
-                            </Box>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    ml: 11,
-                                    mt: 1,
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <ActionsTypography sx={{ ml: 1 }}>Like</ActionsTypography>
-                                <Box
-                                    sx={{
-                                        width: '1px',
-                                        height: '21px',
-                                        bgcolor: 'gray',
-                                        ml: 2,
-                                    }}
-                                />
-                                <ActionsTypography sx={{ ml: 2 }}>Reply</ActionsTypography>
-                            </Box>
-                        </Box>
                         <CommentData postId={postId} />
                         {/* <CommentData /> */}
                     </Box>
@@ -673,8 +489,17 @@ function CommentModal({
 
 export default CommentModal;
 
-export function CommentData({ postId }) {
+export function CommentData({ postId, imageUrl }) {
     const commentList = useSelector((state) => state.managePost.comments[postId]);
+    const [hoverStatus, setHoverStatus] = useState({ postId: null, commentId: null });
+
+    const handleLikeHover = (commentId) => {
+        setHoverStatus({ postId, commentId });
+    };
+
+    const handleLikeLeave = () => {
+        setHoverStatus({ postId: null, commentId: null });
+    };
 
     console.log('commentList: ', commentList);
     return (
@@ -767,33 +592,6 @@ export function CommentData({ postId }) {
             </Box>
 
             {/* responses */}
-            {/* <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
-                            <Avatar
-                                src={
-                                    'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
-                                }
-                                alt="User Image"
-                                sx={{ height: '32px', width: '32px', objectFit: 'cover' }}
-                            />
-                            <Box
-                                sx={{
-                                    border: '1px solid #f2f2f2',
-                                    maxHeight: '150px',
-                                    width: '100%',
-                                    p: 1,
-                                    borderRadius: '10px',
-                                    backgroundColor: '#f2f2f2',
-                                    ml: 1,
-                                }}
-                            >
-                                <Typography sx={{ fontSize: '16px', fontWeight: 'bold' }}>
-                                    October
-                                </Typography>
-                                <Typography sx={{ fontSize: '14px' }}>
-                                    Depends on the trip you take
-                                </Typography>
-                            </Box>
-                        </Box> */}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
                     <Avatar
@@ -855,11 +653,10 @@ export function CommentData({ postId }) {
                     <ActionsTypography sx={{ ml: 2 }}>Reply</ActionsTypography>
                 </Box>
             </Box>
-
             {/* Load comment  */}
             {commentList &&
                 commentList.map((comment, index) => (
-                    <Box>
+                    <Box key={index}>
                         <Box sx={{ display: 'flex', mt: 2 }}>
                             <Avatar
                                 // src={'https://cdn.mos.cms.futurecdn.net/xaycNDmeyxpHDrPqU6LmaD.jpg'}
@@ -914,16 +711,46 @@ export function CommentData({ postId }) {
                                         </IconButton>
                                     </Box>
                                 </Box>
-                                <Typography
-                                    sx={{
-                                        fontSize: '14px',
-                                        [tabletScreen]: {
-                                            fontSize: '13.5px',
-                                        },
-                                    }}
-                                >
-                                    {comment}
-                                </Typography>
+
+                                {/* check if comment is array */}
+                                {Array.isArray(comment) ? (
+                                    <>
+                                        {/* If the comment array contains only an image */}
+                                        {comment.length === 1 && (
+                                            <Avatar
+                                                src={comment[0]}
+                                                alt="User Uploaded Image"
+                                                sx={{ height: '100px', width: '100px', mt: 1 }}
+                                            />
+                                        )}
+                                        {/* If the comment array contains both text and an image */}
+                                        {comment.length > 1 && (
+                                            <>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: { xs: '13.5px', md: '14px' },
+                                                    }}
+                                                >
+                                                    {comment[0]}
+                                                </Typography>
+                                                <Avatar
+                                                    src={comment[1]}
+                                                    alt="User Uploaded Image"
+                                                    sx={{ height: '100px', width: '100px', mt: 1 }}
+                                                />
+                                            </>
+                                        )}
+                                    </>
+                                ) : (
+                                    // Not an array --> show comment
+                                    <Typography
+                                        sx={{
+                                            fontSize: { xs: '13.5px', md: '14px' },
+                                        }}
+                                    >
+                                        {comment}
+                                    </Typography>
+                                )}
                             </Box>
                         </Box>
                         {/* status of comment */}
@@ -946,7 +773,31 @@ export function CommentData({ postId }) {
                                     alignItems: 'center',
                                 }}
                             >
-                                <ActionsTypography sx={{ ml: 1 }}>Like</ActionsTypography>
+                                <Box>
+                                    <ActionsTypography
+                                        sx={{ ml: 1, position: 'relative' }}
+                                        onMouseEnter={() => handleLikeHover(index)}
+                                        onMouseLeave={handleLikeLeave}
+                                    >
+                                        Like
+                                        <Box
+                                            sx={{
+                                                position: 'absolute',
+                                                top: '-50%',
+                                                left: '-20%',
+                                                zIndex: 999,
+                                            }}
+                                        >
+                                            {hoverStatus.postId === postId &&
+                                                hoverStatus.commentId === index && (
+                                                    <ReactionMenu
+                                                        postId={postId}
+                                                        handleChoose={''}
+                                                    />
+                                                )}
+                                        </Box>
+                                    </ActionsTypography>
+                                </Box>
                                 <ActionsTypography sx={{ ml: 1 }}>-</ActionsTypography>
                                 <Avatar
                                     src={Liked}
@@ -986,7 +837,11 @@ export function CommentData({ postId }) {
                                         'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
                                     }
                                     alt="User Image"
-                                    sx={{ height: '32px', width: '32px', objectFit: 'cover' }}
+                                    sx={{
+                                        height: '32px',
+                                        width: '32px',
+                                        objectFit: 'cover',
+                                    }}
                                 />
                                 <Box
                                     sx={{
