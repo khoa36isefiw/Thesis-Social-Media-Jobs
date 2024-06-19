@@ -222,7 +222,7 @@ function Messaging() {
     };
 
     const handleEmojiClick = (event) => {
-        setEditorText(editorText + event.emoji); //
+        setEditorText(editorText + event.emoji);
         setIsEmpty(false);
         setShowPicker(false);
     };

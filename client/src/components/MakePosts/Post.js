@@ -21,7 +21,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Liked from '../../assets/images/like.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
-import CommentModal, { CommentData } from './CommentModal';
+import CommentModal from './CommentModal';
 import PostMenuSettings from './PostMenuSettings';
 import HideThePost from './HideThePost';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
@@ -30,6 +30,10 @@ import FilterComments from '../Messaging/FilterComments';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import MoodIcon from '@mui/icons-material/Mood';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import { CommentsData } from './CommentsData';
+import EmojiPicker from 'emoji-picker-react';
+
+import ImageDetailInMessage from '../Messaging/ImageDetailInMessage';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -73,6 +77,7 @@ function Post({
     const [hideThePostSelected, setHideThePostSelected] = useState(false);
     const [isOpenCommentRegion, setIsOpenCommentRegion] = useState(false);
     const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
+    const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
 
     // upload image from comment
     const [imageURL, setImageURL] = useState(null);
@@ -133,7 +138,6 @@ function Post({
         setIsEmptyCommentField(commentTextValue.trim() === '');
     };
 
-    // console.log('isEmptyCommentField:', isEmptyCommentField);
     // for text field
     const handleCommentSubmit = () => {
         const commentText = commentTextFieldRef.current.value.trim();
@@ -188,7 +192,22 @@ function Post({
     const handleRemoveImageUploaded = () => {
         setImageURL(null);
         setShowIconUploadImage(true);
+        setIsEmptyCommentField(true);
     };
+
+    // add emoji
+    const handleEmojiClick = (event) => {
+        // const commentText = commentTextFieldRef.current.value + event.emoji;
+        if (commentTextFieldRef.current) {
+            const currentValue = commentTextFieldRef.current.value;
+            const newValue = currentValue + event.emoji;
+            commentTextFieldRef.current.value = newValue;
+        }
+        setIsEmptyCommentField(false);
+        setShowPicker(false);
+    };
+
+    console.log('editorText: ', editorText);
 
     return (
         <Box>
@@ -398,25 +417,7 @@ function Post({
                                             imageURLUploaded={imageURL}
                                             removeImageUploaded={handleRemoveImageUploaded}
                                         />
-                                        {/* {imageURL && (
-                                            <Box
-                                                sx={{
-                                                    mt: 1,
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                }}
-                                            >
-                                                <Avatar
-                                                    src={imageURL.url}
-                                                    alt="Uploaded Comment Image"
-                                                    sx={{
-                                                        width: '100px',
-                                                        height: '100px',
-                                                        borderRadius: '0',
-                                                    }}
-                                                />
-                                            </Box>
-                                        )} */}
+
                                         <CommentTextField
                                             disabled={true}
                                             isEmptyCommentField={isEmptyCommentField}
@@ -424,12 +425,15 @@ function Post({
                                             uploadedImage={handleImageUpload}
                                             showIconUploadImage={showIconUploadImage}
                                             removeImageUploaded={handleRemoveImageUploaded}
+                                            setShowPicker={setShowPicker}
+                                            showPicker={showPicker}
+                                            handleEmojiClick={handleEmojiClick}
                                         />
                                     </Box>
                                 </Box>
 
                                 <FilterComments />
-                                <CommentData postId={postID} imageUrl={imageUrl} />
+                                <CommentsData postId={postID} imageUrl={imageUrl} />
                             </Box>
                         )}
                     </Box>
@@ -474,9 +478,28 @@ const CommentTextField = ({
     imageURLUploaded,
     showIconUploadImage,
     removeImageUploaded,
+    showPicker,
+    setShowPicker,
+    handleEmojiClick,
 }) => {
     const [originalWidth, setOriginalWidth] = useState(null);
     const [originalHeight, setOriginalHeight] = useState(null);
+
+    // BackgroundImageModal
+    // function BackgroundImageModal({ imgUrl, handleClose }) {
+    const [openModalImage, setOpenModalImage] = useState(false);
+    const [commentText, setCommentText] = useState('');
+
+    const handleOpenImageUploadedInComment = () => {
+        setOpenModalImage(true);
+    };
+
+    const handleCloseImageUploadedInComment = () => {
+        setOpenModalImage(false);
+    };
+
+    console.log('imageURLUploaded In Post: ', imageURLUploaded && imageURLUploaded.url);
+    console.log('uploadedImage In Post: ', uploadedImage);
 
     // need to research more to show image size
     useEffect(() => {
@@ -503,13 +526,21 @@ const CommentTextField = ({
         };
     });
 
-    console.log('OS height and width for image in Comment Post: ', originalHeight, originalWidth);
+    const handleCommentChange = (event) => {
+        setCommentText(event.target.value);
+        if (onChange) {
+            onChange(event);
+        }
+    };
+
+    const handleEmojiSelect = (event, emojiObject) => {};
 
     return (
         <Box>
             <TextField
                 inputRef={inputRef}
                 onChange={onChange}
+                // value={commentText}
                 placeholder={isShowPlaceholder ? 'Write your comment...' : null}
                 onKeyDown={handleKeyDown}
                 variant="outlined"
@@ -545,8 +576,28 @@ const CommentTextField = ({
                                 marginTop: '8px',
                             }}
                         >
-                            <IconButton sx={{ padding: 0 }}>
+                            {/* <IconButton sx={{ padding: 0 }}>
                                 <MoodIcon sx={{ fontSize: '24px' }} />
+                            </IconButton> */}
+
+                            <IconButton onClick={() => setShowPicker((val) => !val)}>
+                                <MoodIcon sx={{ fontSize: '24px' }} />
+                                {showPicker && (
+                                    // <Box sx={{ position: 'absolute', top: '10px', left: '5%' }}>
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            top: '-45rem',
+                                            left: '-10rem',
+                                            zIndex: 22,
+                                        }}
+                                    >
+                                        <EmojiPicker
+                                            pickerStyle={{ width: '100%' }}
+                                            onEmojiClick={handleEmojiClick}
+                                        />
+                                    </Box>
+                                )}
                             </IconButton>
                             {showIconUploadImage ? (
                                 <label>
@@ -555,7 +606,6 @@ const CommentTextField = ({
                                         accept="image/*"
                                         style={{ display: 'none' }}
                                         onChange={uploadedImage}
-                                        multiple
                                     />
                                     <IconButton component="span">
                                         <InsertPhotoIcon sx={{ fontSize: '24px' }} />
@@ -617,8 +667,18 @@ const CommentTextField = ({
                             // height: originalHeight,
                             borderRadius: 0,
                             objectFit: 'cover',
+                            '&:hover': {
+                                cursor: 'pointer',
+                            },
                         }}
+                        onClick={handleOpenImageUploadedInComment}
                     />
+                    <Modal open={openModalImage} onClose={handleCloseImageUploadedInComment}>
+                        <ImageDetailInMessage
+                            imgUrl={imageURLUploaded.url}
+                            handleClose={handleCloseImageUploadedInComment}
+                        />
+                    </Modal>
                     <IconButton
                         sx={{
                             position: 'absolute',
