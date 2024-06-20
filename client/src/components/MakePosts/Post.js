@@ -34,6 +34,7 @@ import { CommentsData } from './CommentsData';
 import EmojiPicker from 'emoji-picker-react';
 
 import ImageDetailInMessage from '../Messaging/ImageDetailInMessage';
+import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -206,8 +207,6 @@ function Post({
         setIsEmptyCommentField(false);
         setShowPicker(false);
     };
-
-    console.log('editorText: ', editorText);
 
     return (
         <Box>
@@ -482,13 +481,9 @@ const CommentTextField = ({
     setShowPicker,
     handleEmojiClick,
 }) => {
-    const [originalWidth, setOriginalWidth] = useState(null);
-    const [originalHeight, setOriginalHeight] = useState(null);
-
-    // BackgroundImageModal
-    // function BackgroundImageModal({ imgUrl, handleClose }) {
+    // const [originalWidth, setOriginalWidth] = useState(null);
+    // const [originalHeight, setOriginalHeight] = useState(null);
     const [openModalImage, setOpenModalImage] = useState(false);
-    const [commentText, setCommentText] = useState('');
 
     const handleOpenImageUploadedInComment = () => {
         setOpenModalImage(true);
@@ -498,49 +493,38 @@ const CommentTextField = ({
         setOpenModalImage(false);
     };
 
-    console.log('imageURLUploaded In Post: ', imageURLUploaded && imageURLUploaded.url);
-    console.log('uploadedImage In Post: ', uploadedImage);
-
     // need to research more to show image size
-    useEffect(() => {
-        const img = new Image();
-        img.src = imageURLUploaded && imageURLUploaded.url;
-        img.onload = () => {
-            let newHeight = img.naturalHeight;
-            let newWidth = img.naturalWidth;
-            console.log(
-                'Original height and width for image in Comment Post: ',
-                newHeight,
-                newWidth,
-            );
-            if (newHeight >= 200) {
-                newHeight = 80;
-            }
-            if (newWidth >= 200) {
-                newWidth = 200;
-            }
+    // useEffect(() => {
+    //     const img = new Image();
+    //     img.src = imageURLUploaded && imageURLUploaded.url;
+    //     img.onload = () => {
+    //         let newHeight = img.naturalHeight;
+    //         let newWidth = img.naturalWidth;
+    //         // console.log(
+    //         //     'Original height and width for image in Comment Post: ',
+    //         //     newHeight,
+    //         //     newWidth,
+    //         // );
+    //         if (newHeight >= 200) {
+    //             newHeight = 150;
+    //         }
+    //         if (newWidth >= 200) {
+    //             newWidth = 200;
+    //         }
 
-            setOriginalWidth(newWidth);
-            setOriginalHeight(newHeight);
-            console.log('New height and width for image in Comment Post: ', newHeight, newWidth);
-        };
-    });
+    //         // setOriginalWidth(newWidth);
+    //         // setOriginalHeight(newHeight);
+    //         // console.log('New height and width for image in Comment Post: ', newHeight, newWidth);
+    //     };
+    // });
 
-    const handleCommentChange = (event) => {
-        setCommentText(event.target.value);
-        if (onChange) {
-            onChange(event);
-        }
-    };
-
-    const handleEmojiSelect = (event, emojiObject) => {};
+    console.log('imageURLUploaded: ', imageURLUploaded);
 
     return (
         <Box>
             <TextField
                 inputRef={inputRef}
                 onChange={onChange}
-                // value={commentText}
                 placeholder={isShowPlaceholder ? 'Write your comment...' : null}
                 onKeyDown={handleKeyDown}
                 variant="outlined"
@@ -576,10 +560,6 @@ const CommentTextField = ({
                                 marginTop: '8px',
                             }}
                         >
-                            {/* <IconButton sx={{ padding: 0 }}>
-                                <MoodIcon sx={{ fontSize: '24px' }} />
-                            </IconButton> */}
-
                             <IconButton onClick={() => setShowPicker((val) => !val)}>
                                 <MoodIcon sx={{ fontSize: '24px' }} />
                                 {showPicker && (
@@ -639,46 +619,22 @@ const CommentTextField = ({
                 }}
             />
 
-            {/* If image is uploaded and shows it on */}
-
+            {/* If image is uploaded and shows it on, image uploaded to send comment in post */}
             {imageURLUploaded && (
                 <Box
                     sx={{
-                        // width: '50%',
-                        // height: '50%',
-                        width: originalWidth,
-                        height: originalHeight,
+                        // width: originalWidth,
+                        // height: originalHeight,
+                        maxWidth: '210px',
+                        maxHeight: '210px',
                         position: 'relative',
-                        // display: 'inline-block',
-                        bgcolor: 'blue',
+                        bgcolor: blue[100],
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         overFlow: 'hidden',
                     }}
                 >
-                    <Avatar
-                        src={imageURLUploaded.url}
-                        alt={'User Uploaded Image to Comment'}
-                        sx={{
-                            width: '90%',
-                            height: '90%',
-                            // width: originalWidth,
-                            // height: originalHeight,
-                            borderRadius: 0,
-                            objectFit: 'cover',
-                            '&:hover': {
-                                cursor: 'pointer',
-                            },
-                        }}
-                        onClick={handleOpenImageUploadedInComment}
-                    />
-                    <Modal open={openModalImage} onClose={handleCloseImageUploadedInComment}>
-                        <ImageDetailInMessage
-                            imgUrl={imageURLUploaded.url}
-                            handleClose={handleCloseImageUploadedInComment}
-                        />
-                    </Modal>
                     <IconButton
                         sx={{
                             position: 'absolute',
@@ -687,8 +643,8 @@ const CommentTextField = ({
                             height: '32px',
                             backgroundColor: theme.palette.bgColorButton,
                             zIndex: 99,
-                            top: 0,
-                            right: 0,
+                            top: '-5%',
+                            right: '-5%',
                             '&:hover': {
                                 bgcolor: theme.palette.bgColorButtonHover,
                             },
@@ -697,6 +653,38 @@ const CommentTextField = ({
                     >
                         <CloseIcon fontSize="large" />
                     </IconButton>
+                    {/* <Box
+                        component="img"
+                        src={imageURLUploaded.url}
+                        alt={'User Uploaded Image to Comment'}
+                        sx={{
+                            // width: '90%',
+                            // height: '90%',
+                            width: originalWidth,
+                            height: originalHeight,
+                            borderRadius: '12px',
+                            p: 1,
+                            objectFit: 'cover',
+                            '&:hover': {
+                                cursor: 'pointer',
+                            },
+                        }}
+                        onClick={handleOpenImageUploadedInComment}
+                    /> */}
+                    <ImageOriginialSize
+                        imageURL={imageURLUploaded.url}
+                        maxImageHeight={200}
+                        maxImageWidth={200}
+                        customHeight={150}
+                        customWidth={200}
+                        handleFunction={handleOpenImageUploadedInComment}
+                    />
+                    <Modal open={openModalImage} onClose={handleCloseImageUploadedInComment}>
+                        <ImageDetailInMessage
+                            imgUrl={imageURLUploaded.url}
+                            handleClose={handleCloseImageUploadedInComment}
+                        />
+                    </Modal>
                 </Box>
             )}
         </Box>

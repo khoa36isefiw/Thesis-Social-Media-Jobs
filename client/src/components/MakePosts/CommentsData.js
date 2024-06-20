@@ -7,6 +7,8 @@ import { tabletScreen } from '../Theme/Theme';
 import { ReactionMenu } from './ReactionMenu';
 import ImageDetailInMessage from '../Messaging/ImageDetailInMessage';
 import { ActionsTypography } from './CommentModal';
+import { blue } from '@mui/material/colors';
+import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
 
 export function CommentsData({ postId, imageUrl }) {
     const commentList = useSelector((state) => state.managePost.comments[postId]);
@@ -29,7 +31,8 @@ export function CommentsData({ postId, imageUrl }) {
         setHoverStatus({ postId: null, commentId: null });
     };
 
-    console.log('commentList: ', commentList);
+    console.log('what the hell???: ', commentList);
+    console.log('imageUrl: ', imageUrl);
     return (
         <>
             <Box sx={{ display: 'flex' }}>
@@ -68,8 +71,8 @@ export function CommentsData({ postId, imageUrl }) {
                             },
                         }}
                     >
-                        Where did you go? Please share with me the information about your journey.
-                        What should I need to prepare for this trip?
+                        Where did you go? Please share with me the information about your
+                        journey.What should I need to prepare for this trip?
                     </Typography>
                 </Box>
             </Box>
@@ -241,67 +244,93 @@ export function CommentsData({ postId, imageUrl }) {
                                 </Box>
 
                                 {/* check if comment is array */}
-                                {Array.isArray(comment) ? (
-                                    <>
-                                        {/* If the comment array contains only an image */}
-                                        {comment.length === 1 && (
-                                            <Avatar
-                                                src={comment[0]}
-                                                alt="User Uploaded Image"
-                                                sx={{ height: '100px', width: '100px', mt: 1 }}
-                                            />
-                                        )}
-                                        {/* If the comment array contains both text and an image */}
-                                        {comment.length > 1 && (
-                                            <>
-                                                <Typography
-                                                    sx={{
-                                                        fontSize: { xs: '13.5px', md: '14px' },
-                                                    }}
-                                                >
-                                                    {comment[0]}
-                                                </Typography>
+                                <Box sx={{ width: '100%' }}>
+                                    {Array.isArray(comment) ? (
+                                        <Box
+                                            sx={{
+                                                overflow: 'scroll',
+                                                maxHeight: '250px',
+                                            }}
+                                        >
+                                            {/* If the comment array contains only an image */}
+                                            {comment.length === 1 && (
                                                 <Avatar
-                                                    src={comment[1]}
+                                                    src={comment[0]}
                                                     alt="User Uploaded Image"
-                                                    sx={{
-                                                        height: '100px',
-                                                        width: '100px',
-                                                        mt: 1,
-                                                        '&:hover': {
-                                                            cursor: 'pointer',
-                                                        },
-                                                    }}
-                                                    onClick={() =>
-                                                        handleOpenImageModal(postId, index)
-                                                    }
+                                                    sx={{ height: '100px', width: '100px', mt: 1 }}
                                                 />
-                                                <Modal
-                                                    open={
-                                                        openImageCommentModal?.postID === postId &&
-                                                        openImageCommentModal?.commentIndex ===
-                                                            index
-                                                    }
-                                                    onClose={handleCloseImageModal}
-                                                >
-                                                    <ImageDetailInMessage
-                                                        imgUrl={comment[1]}
-                                                        handleClose={handleCloseImageModal}
-                                                    />
-                                                </Modal>
-                                            </>
-                                        )}
-                                    </>
-                                ) : (
-                                    // Not an array --> show comment
-                                    <Typography
-                                        sx={{
-                                            fontSize: { xs: '13.5px', md: '14px' },
-                                        }}
-                                    >
-                                        {comment}
-                                    </Typography>
-                                )}
+                                            )}
+                                            {/* If the comment array contains both text and an image */}
+                                            {comment.length > 1 && (
+                                                <Box sx={{ width: '100%' }}>
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: {
+                                                                xs: '13.5px',
+                                                                md: '14px',
+                                                            },
+                                                            wordBreak: 'break-word',
+                                                            whiteSpace: 'pre-wrap',
+                                                        }}
+                                                    >
+                                                        {comment[0]}
+                                                    </Typography>
+
+                                                    <Box
+                                                        sx={{
+                                                            bgcolor: blue[100],
+                                                            maxWidth: '210px',
+                                                            maxHeight: '210px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                        }}
+                                                    >
+                                                        <ImageOriginialSize
+                                                            imageURL={comment[1]}
+                                                            maxImageHeight={200}
+                                                            maxImageWidth={200}
+                                                            customHeight={150}
+                                                            customWidth={200}
+                                                            handleFunction={() =>
+                                                                handleOpenImageModal(postId, index)
+                                                            }
+                                                        />
+                                                    </Box>
+
+                                                    <Modal
+                                                        open={
+                                                            openImageCommentModal?.postID ===
+                                                                postId &&
+                                                            openImageCommentModal?.commentIndex ===
+                                                                index
+                                                        }
+                                                        onClose={handleCloseImageModal}
+                                                    >
+                                                        <ImageDetailInMessage
+                                                            imgUrl={comment[1]}
+                                                            handleClose={handleCloseImageModal}
+                                                        />
+                                                    </Modal>
+                                                </Box>
+                                            )}
+                                        </Box>
+                                    ) : (
+                                        // Not an array --> show comment
+                                        <Typography
+                                            sx={{
+                                                maxHeight: '250px',
+                                                overflow: 'scroll',
+                                                // if text in the line too long --> break the text overflow to new line
+                                                wordBreak: 'break-word',
+                                                whiteSpace: 'pre-wrap', // maintain the space when we copy some text
+                                                fontSize: { xs: '13.5px', md: '14px' },
+                                            }}
+                                        >
+                                            {comment}
+                                        </Typography>
+                                    )}
+                                </Box>
                             </Box>
                         </Box>
                         {/* status of comment */}
