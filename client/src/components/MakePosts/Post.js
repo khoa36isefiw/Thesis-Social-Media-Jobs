@@ -97,8 +97,10 @@ function Post({
         setOpenModal(false);
     };
 
-    const handleChooseReaction = (reaction) => {
-        setReactionOnPost(postID, reaction);
+    const handleChooseReaction = () => {
+        // dispatch(setReactionOnPost(postID, reaction));
+        dispatch(setReactionOnPost(postID));
+
         // console.log('Post has ID reaction on is: ', postID);
     };
 
@@ -481,8 +483,6 @@ const CommentTextField = ({
     setShowPicker,
     handleEmojiClick,
 }) => {
-    // const [originalWidth, setOriginalWidth] = useState(null);
-    // const [originalHeight, setOriginalHeight] = useState(null);
     const [openModalImage, setOpenModalImage] = useState(false);
 
     const handleOpenImageUploadedInComment = () => {
@@ -493,32 +493,7 @@ const CommentTextField = ({
         setOpenModalImage(false);
     };
 
-    // need to research more to show image size
-    // useEffect(() => {
-    //     const img = new Image();
-    //     img.src = imageURLUploaded && imageURLUploaded.url;
-    //     img.onload = () => {
-    //         let newHeight = img.naturalHeight;
-    //         let newWidth = img.naturalWidth;
-    //         // console.log(
-    //         //     'Original height and width for image in Comment Post: ',
-    //         //     newHeight,
-    //         //     newWidth,
-    //         // );
-    //         if (newHeight >= 200) {
-    //             newHeight = 150;
-    //         }
-    //         if (newWidth >= 200) {
-    //             newWidth = 200;
-    //         }
-
-    //         // setOriginalWidth(newWidth);
-    //         // setOriginalHeight(newHeight);
-    //         // console.log('New height and width for image in Comment Post: ', newHeight, newWidth);
-    //     };
-    // });
-
-    console.log('imageURLUploaded: ', imageURLUploaded);
+    // console.log('imageURLUploaded: ', imageURLUploaded);
 
     return (
         <Box>
@@ -653,24 +628,7 @@ const CommentTextField = ({
                     >
                         <CloseIcon fontSize="large" />
                     </IconButton>
-                    {/* <Box
-                        component="img"
-                        src={imageURLUploaded.url}
-                        alt={'User Uploaded Image to Comment'}
-                        sx={{
-                            // width: '90%',
-                            // height: '90%',
-                            width: originalWidth,
-                            height: originalHeight,
-                            borderRadius: '12px',
-                            p: 1,
-                            objectFit: 'cover',
-                            '&:hover': {
-                                cursor: 'pointer',
-                            },
-                        }}
-                        onClick={handleOpenImageUploadedInComment}
-                    /> */}
+
                     <ImageOriginialSize
                         imageURL={imageURLUploaded.url}
                         maxImageHeight={200}
