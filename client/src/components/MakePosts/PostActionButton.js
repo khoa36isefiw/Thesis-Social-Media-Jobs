@@ -199,7 +199,13 @@ export function PostActionButton({
                             animation: `${fadeIn} 0.3s ease-in-out`,
                         }}
                     >
-                        {<ReactionMenu postID={postID} handleChoose={handleChooseReaction} />}
+                        {
+                            <ReactionMenu
+                                postID={postID}
+                                handleChoose={handleChooseReaction}
+                                commentID={null}
+                            />
+                        }
                     </Box>
                 )}
             </Box>
