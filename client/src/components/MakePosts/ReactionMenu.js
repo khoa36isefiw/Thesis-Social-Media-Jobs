@@ -4,7 +4,10 @@ import Liked from '../../assets/images/like.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import { useDispatch } from 'react-redux';
-import { setReactionOnPost } from '../../redux/ManagePost/managePostAction';
+import {
+    setReactionOnCommentInPost,
+    setReactionOnPost,
+} from '../../redux/ManagePost/managePostAction';
 
 import { mobileScreen } from '../Theme/Theme';
 
@@ -24,11 +27,21 @@ const reactionsButtonList = [
     },
 ];
 
-export const ReactionMenu = ({ postID, handleChoose }) => {
+export const ReactionMenu = ({ postID, commentID, handleChoose }) => {
     const dispatch = useDispatch();
     const handleChooseReaction = (reaction) => {
         handleChoose(reaction);
-        dispatch(setReactionOnPost(postID, reaction));
+        // dispatch(setReactionOnPost(postID, reaction));
+        if (commentID !== null) {
+            // if commentID exists
+            console.log('chạy về đây nè!');
+            console.log('postID: ', postID);
+            dispatch(setReactionOnCommentInPost(postID, commentID, reaction));
+        } else {
+            console.log('có cái nịt :)');
+            console.log('postID2 22: ', postID);
+            dispatch(setReactionOnPost(postID, reaction));
+        }
     };
     return (
         <Box
