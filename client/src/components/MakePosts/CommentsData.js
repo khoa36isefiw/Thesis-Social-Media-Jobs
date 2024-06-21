@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, IconButton, Avatar, Modal } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import Liked from '../../assets/images/like.png';
-import { tabletScreen } from '../Theme/Theme';
+import { tabletScreen, theme } from '../Theme/Theme';
 import { ReactionMenu } from './ReactionMenu';
 import ImageDetailInMessage from '../Messaging/ImageDetailInMessage';
 import { ActionsTypography } from './CommentModal';
 import { blue } from '@mui/material/colors';
 import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
+import { setReactionOnCommentInPost } from '../../redux/ManagePost/managePostAction';
 
 export function CommentsData({ postId, imageUrl }) {
+    const dispatch = useDispatch();
     const commentList = useSelector((state) => state.managePost.comments[postId]);
+    const reactionList = useSelector((state) => state.managePost.commentReactions[postId]);
+    // const reactionList = useSelector((state) => state.managePost.commentReactions);
     const [hoverStatus, setHoverStatus] = useState({ postId: null, commentId: null });
     const [openImageCommentModal, setOpenImageCommentModal] = useState(null);
     const handleOpenImageModal = (postID, commentIndex) => {
@@ -31,8 +35,46 @@ export function CommentsData({ postId, imageUrl }) {
         setHoverStatus({ postId: null, commentId: null });
     };
 
-    console.log('what the hell???: ', commentList);
-    console.log('imageUrl: ', imageUrl);
+    const handleChooseReactionOnComment = (postId, commentId) => {
+        dispatch(setReactionOnCommentInPost(postId, commentId));
+    };
+    // console.log('List comment in$`{postId}` : ', commentList);
+    // console.log(`List comment in ${postId}: `, commentList);
+    console.log(`List reactions in ${postId}: `, reactionList);
+    const renderReactionIcon = (commentId) => {
+        const reaction = reactionList?.[commentId]; // get data from object
+        const reactionCount = reaction ? 1 : 0;
+        console.log('reaction: ', reaction);
+        return reaction ? (
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box
+                    sx={{
+                        height: '5px',
+                        width: '5px',
+                        bgcolor: 'black',
+                        ml: 1,
+                        borderRadius: '50%',
+                    }}
+                />
+                <Avatar
+                    src={reaction.srcImage}
+                    sx={{
+                        height: '16px',
+                        width: '16px',
+                        borderRadius: '0',
+                        zIndex: 10,
+                        ml: 1,
+                    }}
+                    alt="Reaction"
+                />
+
+                <Typography sx={{ ml: 1, fontSize: '12.5px', color: theme.palette.primaryText }}>
+                    {reactionCount}
+                </Typography>
+            </Box>
+        ) : null;
+    };
+
     return (
         <>
             <Box sx={{ display: 'flex' }}>
@@ -355,7 +397,19 @@ export function CommentsData({ postId, imageUrl }) {
                             >
                                 <Box>
                                     <ActionsTypography
-                                        sx={{ ml: 1, position: 'relative' }}
+                                        sx={{
+                                            ml: 1,
+                                            position: 'relative',
+                                            '::before': {
+                                                position: 'absolute',
+                                                content: '""',
+                                                width: '20px',
+                                                // bgcolor: 'yellow',
+                                                height: '40px',
+                                                top: '-10px',
+                                                left: '0%',
+                                            },
+                                        }}
                                         onMouseEnter={() => handleLikeHover(index)}
                                         onMouseLeave={handleLikeLeave}
                                     >
@@ -366,30 +420,28 @@ export function CommentsData({ postId, imageUrl }) {
                                                 top: '-50%',
                                                 left: '-20%',
                                                 zIndex: 999,
+                                                bgcolor: 'blue',
                                             }}
                                         >
                                             {hoverStatus.postId === postId &&
                                                 hoverStatus.commentId === index && (
                                                     <ReactionMenu
-                                                        postId={postId}
-                                                        handleChoose={''}
+                                                        postID={postId}
+                                                        handleChoose={() =>
+                                                            handleChooseReactionOnComment(
+                                                                postId,
+                                                                index,
+                                                            )
+                                                        }
+                                                        commentID={index}
                                                     />
                                                 )}
                                         </Box>
                                     </ActionsTypography>
                                 </Box>
-                                <ActionsTypography sx={{ ml: 1 }}>-</ActionsTypography>
-                                <Avatar
-                                    src={Liked}
-                                    sx={{
-                                        height: '16px',
-                                        width: '16px',
-                                        borderRadius: '0',
-                                        zIndex: 10,
-                                        ml: 1,
-                                    }}
-                                    alt="Liked a Post"
-                                />
+
+                                {/* need have field: numberOfReaction to plus with reaction */}
+                                {renderReactionIcon(index)}
                             </Box>
                             <Box
                                 sx={{
@@ -400,6 +452,7 @@ export function CommentsData({ postId, imageUrl }) {
                             <ActionsTypography>Reply</ActionsTypography>
                             {/* The number of responses */}
                             <ActionsTypography>-</ActionsTypography>
+
                             <ActionsTypography sx={{ fontWeight: 'normal' }}>
                                 1 Reply
                             </ActionsTypography>
