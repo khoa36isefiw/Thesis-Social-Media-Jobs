@@ -10,14 +10,20 @@ import { ActionsTypography } from './CommentModal';
 import { blue } from '@mui/material/colors';
 import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
 import { setReactionOnCommentInPost } from '../../redux/ManagePost/managePostAction';
+import { CommentTextField } from './Post';
+import UserAvatar from '../../assets/images/avatar.jpeg';
 
 export function CommentsData({ postId, imageUrl }) {
     const dispatch = useDispatch();
+    const replyTextFieldRef = useRef(null);
     const commentList = useSelector((state) => state.managePost.comments[postId]);
     const reactionList = useSelector((state) => state.managePost.commentReactions[postId]);
     // const reactionList = useSelector((state) => state.managePost.commentReactions);
     const [hoverStatus, setHoverStatus] = useState({ postId: null, commentId: null });
     const [openImageCommentModal, setOpenImageCommentModal] = useState(null);
+    const [showReplyCommentField, setShowReplyCommentField] = useState(false);
+    const [showIconUploadImage, setShowIconUploadImage] = useState(true);
+
     const handleOpenImageModal = (postID, commentIndex) => {
         setOpenImageCommentModal({ postID, commentIndex });
     };
@@ -73,6 +79,15 @@ export function CommentsData({ postId, imageUrl }) {
                 </Typography>
             </Box>
         ) : null;
+    };
+
+    const handleShowReplyField = () => {
+        setShowReplyCommentField(true);
+        setTimeout(() => {
+            if (replyTextFieldRef.current) {
+                replyTextFieldRef.current.focus();
+            }
+        }, 100);
     };
 
     return (
@@ -404,7 +419,7 @@ export function CommentsData({ postId, imageUrl }) {
                                                 position: 'absolute',
                                                 content: '""',
                                                 width: '20px',
-                                                // bgcolor: 'yellow',
+                                                // bgcolor: 'yelloReplyw',
                                                 height: '40px',
                                                 top: '-10px',
                                                 left: '0%',
@@ -449,7 +464,10 @@ export function CommentsData({ postId, imageUrl }) {
                                     bgcolor: 'gray',
                                 }}
                             />
-                            <ActionsTypography>Reply</ActionsTypography>
+                            <ActionsTypography onClick={handleShowReplyField}>
+                                Reply
+                            </ActionsTypography>
+
                             {/* The number of responses */}
                             <ActionsTypography>-</ActionsTypography>
 
@@ -521,6 +539,37 @@ export function CommentsData({ postId, imageUrl }) {
                                 />
                                 <ActionsTypography sx={{ ml: 2 }}>Reply</ActionsTypography>
                             </Box>
+
+                            {/* show textfield to reply the comment */}
+                            {showReplyCommentField && (
+                                <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
+                                    <Avatar
+                                        src={UserAvatar}
+                                        alt="User Image"
+                                        sx={{ height: '32px', width: '32px', objectFit: 'cover' }}
+                                    />
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            flexGrow: 1,
+                                            border: '1px solid #d0d0d0',
+                                            ml: 1,
+                                            borderRadius: '12px',
+                                        }}
+                                    >
+                                        <CommentTextField
+                                            inputRef={replyTextFieldRef}
+                                            isShowPlaceholder={true}
+                                            defaultValue={'Luna Kei'}
+                                        />
+                                        <CommentTextField
+                                            disabled={true}
+                                            showIconUploadImage={showIconUploadImage}
+                                        />
+                                    </Box>
+                                </Box>
+                            )}
                         </Box>
                     </Box>
                 ))}
