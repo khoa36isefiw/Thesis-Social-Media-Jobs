@@ -467,7 +467,7 @@ function Post({
 
 export default Post;
 
-const CommentTextField = ({
+export const CommentTextField = ({
     disabled,
     onChange,
     inputRef,
@@ -482,7 +482,16 @@ const CommentTextField = ({
     showPicker,
     setShowPicker,
     handleEmojiClick,
+    defaultValue = '',
 }) => {
+    useEffect(() => {
+        if (inputRef && inputRef.current) {
+            inputRef.current.focus();
+            const length = inputRef.current.value.length;
+            inputRef.current.setSelectionRange(length, length);
+        }
+    }, [defaultValue]);
+
     const [openModalImage, setOpenModalImage] = useState(false);
 
     const handleOpenImageUploadedInComment = () => {
@@ -494,6 +503,7 @@ const CommentTextField = ({
     };
 
     // console.log('imageURLUploaded: ', imageURLUploaded);
+    const finalDefaultValue = defaultValue ? `${defaultValue} ` : defaultValue;
 
     return (
         <Box>
@@ -506,9 +516,11 @@ const CommentTextField = ({
                 fullWidth
                 multiline
                 disabled={disabled}
+                defaultValue={finalDefaultValue}
                 sx={{
                     ml: 1,
                     '& .MuiOutlinedInput-root': {
+                        padding: 2,
                         borderRadius: '24px',
                         border: 'none',
                         '& fieldset': {
@@ -520,6 +532,7 @@ const CommentTextField = ({
                         },
                         '& .MuiInputBase-input': {
                             fontSize: '13px',
+                            // ml: defaultValue ? 2 : 0,
                         },
                     },
                     '& .Mui-disabled': {
