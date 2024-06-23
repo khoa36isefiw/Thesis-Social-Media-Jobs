@@ -35,6 +35,7 @@ import EmojiPicker from 'emoji-picker-react';
 
 import ImageDetailInMessage from '../Messaging/ImageDetailInMessage';
 import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
+import { postMenuSettings } from './Data/PostMenuSettingDatas';
 
 // definde typograph for this component
 const CustomTypography = ({ children }) => (
@@ -458,6 +459,7 @@ function Post({
                     <PostMenuSettings
                         openMenuStatus={menuStatus}
                         handleClosePostMenuSettings={handleClosePostMenuSettings}
+                        postMenuSettingsList={postMenuSettings}
                     />
                 </Box>
             )}
@@ -484,6 +486,8 @@ export const CommentTextField = ({
     handleEmojiClick,
     defaultValue = '',
 }) => {
+    const [openModalImage, setOpenModalImage] = useState(false);
+    const [isBold, setIsBold] = useState(true);
     useEffect(() => {
         if (inputRef && inputRef.current) {
             inputRef.current.focus();
@@ -491,8 +495,6 @@ export const CommentTextField = ({
             inputRef.current.setSelectionRange(length, length);
         }
     }, [defaultValue]);
-
-    const [openModalImage, setOpenModalImage] = useState(false);
 
     const handleOpenImageUploadedInComment = () => {
         setOpenModalImage(true);
@@ -504,6 +506,11 @@ export const CommentTextField = ({
 
     // console.log('imageURLUploaded: ', imageURLUploaded);
     const finalDefaultValue = defaultValue ? `${defaultValue} ` : defaultValue;
+
+    const handleInputChange = (event) => {
+        setIsBold(event.target.value === defaultValue); // Set bold only if the text is the default value
+        onChange(event);
+    };
 
     return (
         <Box>
@@ -529,6 +536,7 @@ export const CommentTextField = ({
                         '& .MuiInputBase-input::placeholder': {
                             fontSize: '13px',
                             color: 'gray',
+                            // fontWeight: isBold ? 'bold' : 'normal',
                         },
                         '& .MuiInputBase-input': {
                             fontSize: '13px',

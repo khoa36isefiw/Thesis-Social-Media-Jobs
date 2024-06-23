@@ -6,32 +6,16 @@ import {
     ListItemText,
     Typography,
     Divider,
-    Modal,
     ListItemIcon,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
 
-import CancelIcon from '@mui/icons-material/Cancel';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import LinkIcon from '@mui/icons-material/Link';
-
-const postMenuSettings = [
-    {
-        textAction: 'Copy to link post',
-        iconActionn: (
-            <LinkIcon sx={{ fontSize: '20px', color: 'black', transform: 'rotate(-45deg)' }} />
-        ),
-    },
-    {
-        textAction: "I don't to see it",
-        iconActionn: <VisibilityOffIcon sx={{ fontSize: '20px', color: 'black' }} />,
-    },
-    {
-        textAction: 'Unfollow User Name Here',
-        iconActionn: <CancelIcon sx={{ fontSize: '20px', color: 'black' }} />,
-    },
-];
-const PostMenuSettings = ({ openMenuStatus, handleClosePostMenuSettings, postId }) => {
+const PostMenuSettings = ({
+    openMenuStatus,
+    handleClosePostMenuSettings,
+    postMenuSettingsList,
+    postId,
+}) => {
     const dispatch = useDispatch();
     const [hideMenu, setHideMenu] = useState(false);
 
@@ -92,7 +76,7 @@ const PostMenuSettings = ({ openMenuStatus, handleClosePostMenuSettings, postId 
                         padding: 0,
                     }}
                 >
-                    {postMenuSettings.map((postSetting, index) => (
+                    {postMenuSettingsList.map((postSetting, index) => (
                         <MenuItem key={index} onClick={() => handleMenuItemClick(postSetting)}>
                             <ListItemIcon>{postSetting.iconActionn}</ListItemIcon>
                             <ListItemText>
