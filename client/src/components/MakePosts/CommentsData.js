@@ -12,6 +12,9 @@ import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
 import { setReactionOnCommentInPost } from '../../redux/ManagePost/managePostAction';
 import { CommentTextField } from './Post';
 import UserAvatar from '../../assets/images/avatar.jpeg';
+import { commentMenuSettings } from './Data/PostMenuSettingDatas';
+import PostMenuSettings from './PostMenuSettings';
+import { ActionsOnComment } from './ActionsOnComment';
 
 export function CommentsData({ postId, imageUrl }) {
     const dispatch = useDispatch();
@@ -20,9 +23,15 @@ export function CommentsData({ postId, imageUrl }) {
     const reactionList = useSelector((state) => state.managePost.commentReactions[postId]);
     // const reactionList = useSelector((state) => state.managePost.commentReactions);
     const [hoverStatus, setHoverStatus] = useState({ postId: null, commentId: null });
+    const [replyStatus, setReplyStatus] = useState({ postId: null, commentId: null });
+    const [menuStatus, setMenuStatus] = useState(null);
     const [openImageCommentModal, setOpenImageCommentModal] = useState(null);
     const [showReplyCommentField, setShowReplyCommentField] = useState(false);
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
+
+    const [isEmptyReplyField, setIsEmptyReplyField] = useState(true);
+    const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
+    const [imageURL, setImageURL] = useState(null);
 
     const handleOpenImageModal = (postID, commentIndex) => {
         setOpenImageCommentModal({ postID, commentIndex });
@@ -43,6 +52,8 @@ export function CommentsData({ postId, imageUrl }) {
 
     const handleChooseReactionOnComment = (postId, commentId) => {
         dispatch(setReactionOnCommentInPost(postId, commentId));
+        // hide the Menu after choosing reaction on Comment
+        setHoverStatus({ postId: null, commentId: null });
     };
     // console.log('List comment in$`{postId}` : ', commentList);
     // console.log(`List comment in ${postId}: `, commentList);
@@ -81,13 +92,63 @@ export function CommentsData({ postId, imageUrl }) {
         ) : null;
     };
 
-    const handleShowReplyField = () => {
+    const handleShowReplyField = (commentId) => {
         setShowReplyCommentField(true);
         setTimeout(() => {
             if (replyTextFieldRef.current) {
                 replyTextFieldRef.current.focus();
             }
         }, 100);
+        setReplyStatus({ postId, commentId });
+    };
+
+    // upload image
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0]; // Get the list of selected file
+        const uploadedImages = []; // get the existing array of images
+        const reader = new FileReader();
+        reader.onload = () => {
+            const imageDataURL = reader.result;
+            // get the name of the uploaded image
+            const imageName = file.name;
+            // store both the name and URL
+            setImageURL({ name: imageName, url: imageDataURL });
+            setShowIconUploadImage(false);
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+        setIsEmptyReplyField(false);
+    };
+
+    const handleRemoveImageUploaded = () => {
+        setImageURL(null);
+        setShowIconUploadImage(true);
+        setIsEmptyReplyField(true);
+    };
+
+    // add emoji
+    const handleEmojiClick = (event) => {
+        // const commentText = commentTextFieldRef.current.value + event.emoji;
+        if (replyTextFieldRef.current) {
+            const currentValue = replyTextFieldRef.current.value;
+            const newValue = currentValue + event.emoji;
+            replyTextFieldRef.current.value = newValue;
+        }
+        setIsEmptyReplyField(false);
+        setShowPicker(false);
+    };
+
+    // open menu setting for post
+    const handleOpenCommentMenuSettings = (event) => {
+        setMenuStatus(event.currentTarget);
+        // setMenuStatus({ anchorEl: event.currentTarget, postId: postID });
+    };
+
+    const handleCloseCommentMenuSettings = () => {
+        setMenuStatus(null);
+        // setMenuStatus({ anchorEl: null, postId: null });
     };
 
     return (
@@ -294,7 +355,7 @@ export function CommentsData({ postId, imageUrl }) {
                                         {/* time comment */}
                                         <Typography>1m</Typography>
                                         {/* More action with this comment */}
-                                        <IconButton>
+                                        <IconButton onClick={handleOpenCommentMenuSettings}>
                                             <MoreHoriz />
                                         </IconButton>
                                     </Box>
@@ -464,10 +525,9 @@ export function CommentsData({ postId, imageUrl }) {
                                     bgcolor: 'gray',
                                 }}
                             />
-                            <ActionsTypography onClick={handleShowReplyField}>
+                            <ActionsTypography onClick={() => handleShowReplyField(index)}>
                                 Reply
                             </ActionsTypography>
-
                             {/* The number of responses */}
                             <ActionsTypography>-</ActionsTypography>
 
@@ -541,77 +601,55 @@ export function CommentsData({ postId, imageUrl }) {
                             </Box>
 
                             {/* show textfield to reply the comment */}
-                            {showReplyCommentField && (
-                                <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
-                                    <Avatar
-                                        src={UserAvatar}
-                                        alt="User Image"
-                                        sx={{ height: '32px', width: '32px', objectFit: 'cover' }}
-                                    />
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            flexGrow: 1,
-                                            border: '1px solid #d0d0d0',
-                                            ml: 1,
-                                            borderRadius: '12px',
-                                        }}
-                                    >
-                                        <CommentTextField
-                                            inputRef={replyTextFieldRef}
-                                            isShowPlaceholder={true}
-                                            defaultValue={'Luna Kei'}
+                            {showReplyCommentField &&
+                                replyStatus.postId === postId &&
+                                replyStatus.commentId === index && (
+                                    <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
+                                        <Avatar
+                                            src={UserAvatar}
+                                            alt="User Image"
+                                            sx={{
+                                                height: '32px',
+                                                width: '32px',
+                                                objectFit: 'cover',
+                                            }}
                                         />
-                                        <CommentTextField
-                                            disabled={true}
-                                            showIconUploadImage={showIconUploadImage}
-                                        />
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                flexGrow: 1,
+                                                border: '1px solid #d0d0d0',
+                                                ml: 1,
+                                                borderRadius: '12px',
+                                            }}
+                                        >
+                                            <CommentTextField
+                                                inputRef={replyTextFieldRef}
+                                                isShowPlaceholder={true}
+                                                imageURLUploaded={imageURL}
+                                                defaultValue={'Luna Kei'}
+                                                removeImageUploaded={handleRemoveImageUploaded}
+                                            />
+                                            <CommentTextField
+                                                disabled={true}
+                                                showIconUploadImage={showIconUploadImage}
+                                                uploadedImage={handleImageUpload}
+                                                setShowPicker={setShowPicker}
+                                                showPicker={showPicker}
+                                                handleEmojiClick={handleEmojiClick}
+                                            />
+                                        </Box>
                                     </Box>
-                                </Box>
-                            )}
+                                )}
                         </Box>
                     </Box>
                 ))}
+            <PostMenuSettings
+                openMenuStatus={menuStatus}
+                handleClosePostMenuSettings={handleCloseCommentMenuSettings}
+                postMenuSettingsList={commentMenuSettings}
+            />
         </>
     );
 }
-
-const ActionsOnComment = ({ userName, timePostComment }) => {
-    return (
-        <Box
-            sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-            }}
-        >
-            <Typography
-                sx={{
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    [tabletScreen]: {
-                        fontSize: '14px',
-                    },
-                }}
-            >
-                {/* Luna Kei */}
-                {userName}
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                {/* time comment */}
-                <Typography
-                    sx={{
-                        fontSize: '12px',
-                    }}
-                >
-                    {timePostComment}
-                </Typography>
-                {/* More action with this comment */}
-                <IconButton sx={{ py: 0, px: '4px' }}>
-                    <MoreHoriz sx={{ fontSize: '18px' }} />
-                </IconButton>
-            </Box>
-        </Box>
-    );
-};
