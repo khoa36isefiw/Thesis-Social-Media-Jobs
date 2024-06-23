@@ -17,13 +17,17 @@ import UserAvatar from '../../assets/images/avatar.jpeg';
 import { useLocation } from 'react-router-dom';
 
 import Picker from 'emoji-picker-react';
-import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
+import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
 import { blue } from '@mui/material/colors';
 import { useSelector } from 'react-redux';
 
 import { CommentsData } from './CommentsData';
+import { CommentTextField } from './Post';
+import FilterComments from '../Messaging/FilterComments';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 // Customize styles for Typography in this Component
 export const ActionsTypography = styled(Typography)(({}) => ({
     color: '#000000BF',
@@ -55,6 +59,10 @@ function CommentModal({
     const [originalHeight, setOriginalHeight] = useState(null);
     const [isMobileScreen, setIsMobileScreen] = useState(false);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postId]);
+    const [imageURL, setImageURL] = useState(null);
+    const [showIconUploadImage, setShowIconUploadImage] = useState(true);
+    const [isEmptyCommentModalField, setIsEmptyCommentModalField] = useState(true);
+    const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
 
     useEffect(() => {
         const handleResize = () => {
@@ -119,6 +127,49 @@ function CommentModal({
         }
     };
 
+    // upload image
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0]; // Get the list of selected file
+        const reader = new FileReader();
+        reader.onload = () => {
+            const imageDataURL = reader.result;
+            // get the name of the uploaded image
+            const imageName = file.name;
+            // store both the name and URL
+            setImageURL({ name: imageName, url: imageDataURL });
+            setShowIconUploadImage(false);
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+        setIsEmptyCommentModalField(false);
+    };
+
+    const handleRemoveImageUploaded = () => {
+        setImageURL(null);
+        setShowIconUploadImage(true);
+        setIsEmptyCommentModalField(true);
+    };
+
+    const handleEmojiClick = (event) => {
+        // const commentText = commentTextFieldRef.current.value + event.emoji;
+        if (commentModalTextFieldRef.current) {
+            const currentValue = commentModalTextFieldRef.current.value;
+            const newValue = currentValue + event.emoji;
+            commentModalTextFieldRef.current.value = newValue;
+        }
+        setIsEmptyCommentModalField(false);
+        setShowPicker(false);
+    };
+
+    // for textfield
+    const handleCommentTextFieldChange = () => {
+        const commentTextValue = commentModalTextFieldRef.current.value;
+
+        setIsEmptyCommentModalField(commentTextValue.trim() === '');
+    };
+
     return (
         <Box
             sx={{
@@ -131,6 +182,8 @@ function CommentModal({
                 boxShadow: '0 8px 4px #333',
                 width: isMobileScreen ? '100%' : '1100px',
                 maxHeight: '650px',
+                // width: '90%',
+                // height: '90%',
                 [ipadProScreen]: {
                     width: '100%',
                 },
@@ -153,14 +206,14 @@ function CommentModal({
                     },
                 }}
             >
-                {/* Image */}
+                {/* Contain Image */}
                 <Box
                     sx={{
+                        position: 'relative',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         backgroundColor: 'black',
-                        // backgroundColor: '#333',
                         width: '700px',
                         height: '650px',
                         borderTopLeftRadius: '8px',
@@ -176,8 +229,6 @@ function CommentModal({
                         <Box
                             sx={{
                                 textAlign: 'center',
-                                // maxWidth: originalWidth,
-                                // height: originalHeight,
                             }}
                         >
                             <Box
@@ -201,6 +252,80 @@ function CommentModal({
                             />
                         </Box>
                     )}
+
+                    <IconButton
+                        sx={{
+                            position: 'absolute',
+                            width: '48px',
+                            height: '48px',
+                            // backgroundColor: '#fff',
+                            backgroundColor: theme.palette.bgButtonHover,
+                            top: '50%',
+                            left: '1%',
+                            transition: 'left 0.3s ease-in-out',
+                            // '&:hover': {
+                            //     backgroundColor: '#fff',
+                            //     '@keyframes slideToRight': {
+                            //         from: {
+                            //             opacity: 0,
+                            //             left: '1%',
+                            //         },
+                            //         to: {
+                            //             opacity: 1,
+                            //             left: '1%',
+                            //         },
+                            //     },
+                            //     animation: `slideToRight 0.3s ease-in-out`,
+                            // },
+
+                            transition: 'transform 0.3s ease-in-out',
+                            transform: 'translateX(0)', // initial state
+
+                            '&:hover': {
+                                backgroundColor: '#fff',
+                                transform: 'translateX(-5px)', // slide to the left on hover
+                            },
+                            '&:not(:hover)': {
+                                transform: 'translateX(0)', // return to original position when not hovered
+                            },
+                        }}
+                    >
+                        <ArrowBackIosNewIcon
+                            sx={{
+                                fontSize: '24px',
+                                mr: '4px',
+                            }}
+                        />
+                    </IconButton>
+
+                    <IconButton
+                        sx={{
+                            position: 'absolute',
+                            width: '48px',
+                            height: '48px',
+                            // backgroundColor: '#fff',
+                            backgroundColor: theme.palette.bgButtonHover,
+                            top: '50%',
+                            right: '1%',
+
+                            transition: 'transform 0.3s ease-in-out',
+                            transform: 'translateX(0)', // initial state
+
+                            '&:hover': {
+                                backgroundColor: '#fff',
+                                transform: 'translateX(5px)', // slide to the left on hover
+                            },
+                            '&:not(:hover)': {
+                                transform: 'translateX(0)', // return to original position when not hovered
+                            },
+                        }}
+                    >
+                        <ArrowForwardIosIcon
+                            sx={{
+                                fontSize: '24px',
+                            }}
+                        />
+                    </IconButton>
                 </Box>
 
                 {/* Comment Input */}
@@ -208,7 +333,6 @@ function CommentModal({
                     sx={{
                         width: isMobileScreen ? '100%' : '400px',
                         maxHeight: '650px',
-                        overflowY: 'scroll',
                         borderRadius: '12px',
                         [tabletScreen]: {
                             width: '400px',
@@ -303,149 +427,158 @@ function CommentModal({
                             <CloseIcon fontSize="large" />
                         </IconButton>
                     </Box>
-                    {/* Content of post */}
 
-                    <Box sx={{ mt: 1, mb: 2, px: 2 }}>
-                        <Box>
-                            {postHashtag && (
-                                <Box>
-                                    <Typography
-                                        variant="body1"
-                                        component="div" // Set component to "div" for line breaks
-                                        sx={{ fontSize: '14px', color: blue[700] }}
-                                    >
-                                        {postHashtag}
-                                    </Typography>
-                                </Box>
-                            )}
-                        </Box>
-                        {contentArray.map((paragraph, index) => (
-                            <Box key={index}>
-                                <Typography
-                                    variant="body1"
-                                    sx={{ fontSize: '12.5px', mt: 1, textAlign: 'justify' }}
-                                >
-                                    {expanded || paragraph.length < 250
-                                        ? paragraph
-                                        : `${paragraph.slice(0, 250)}...`}
-                                    {!expanded && index === contentArray.length - 1 && (
-                                        <Button
-                                            variant="text"
-                                            color="primary"
-                                            onClick={toggleExpanded}
-                                        >
-                                            <Typography>See More</Typography>
-                                        </Button>
-                                    )}
-                                </Typography>
-                            </Box>
-                        ))}
-                        {expanded && (
-                            <Button variant="text" color="primary" onClick={toggleExpanded}>
-                                <Typography>See Less</Typography>
-                            </Button>
-                        )}
-                    </Box>
-                    {/* show reaction and comments */}
+                    {/* Content of post */}
                     <Box
                         sx={{
+                            // the box containing user information has the height of 70px that needs to minus it
+                            height: 'calc(100% - 70px)',
                             overflowY: 'scroll',
-                            px: 2,
-                            pb: 2,
-                            [tabletScreen]: {
-                                px: 1,
-                            },
-                            [mobileScreen]: {
-                                px: 1,
-                            },
+                            overflowX: 'hidden',
                         }}
                     >
                         <Box
                             sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                my: '24px',
+                                mt: 1,
+                                mb: 2,
+                                px: 2,
+                            }}
+                        >
+                            <Box>
+                                {postHashtag && (
+                                    <Box>
+                                        <Typography
+                                            variant="body1"
+                                            component="div" // Set component to "div" for line breaks
+                                            sx={{ fontSize: '14px', color: blue[700] }}
+                                        >
+                                            {postHashtag}
+                                        </Typography>
+                                    </Box>
+                                )}
+                            </Box>
+                            {contentArray.map((paragraph, index) => (
+                                <Box key={index}>
+                                    <Typography
+                                        variant="body1"
+                                        sx={{ fontSize: '12.5px', mt: 1, textAlign: 'justify' }}
+                                    >
+                                        {expanded || paragraph.length < 250
+                                            ? paragraph
+                                            : `${paragraph.slice(0, 250)}...`}
+                                        {!expanded && index === contentArray.length - 1 && (
+                                            <Button
+                                                variant="text"
+                                                color="primary"
+                                                onClick={toggleExpanded}
+                                            >
+                                                <Typography>See More</Typography>
+                                            </Button>
+                                        )}
+                                    </Typography>
+                                </Box>
+                            ))}
+                            {expanded && (
+                                <Button variant="text" color="primary" onClick={toggleExpanded}>
+                                    <Typography>See Less</Typography>
+                                </Button>
+                            )}
+                        </Box>
+                        {/* show reaction and comments */}
+                        <Box
+                            sx={{
+                                overflowY: 'scroll',
+                                px: 2,
+                                pb: 2,
                                 [tabletScreen]: {
-                                    my: '12px',
+                                    px: 1,
+                                },
+                                [mobileScreen]: {
+                                    px: 1,
                                 },
                             }}
                         >
                             <Box
                                 sx={{
-                                    mb: '2px',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    flexGrow: 1,
+                                    my: '24px',
+                                    [tabletScreen]: {
+                                        my: '12px',
+                                    },
                                 }}
                             >
-                                {numberReactions || selectedReaction ? (
-                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                        <Avatar
-                                            src={Liked}
-                                            sx={{
-                                                height: '24px',
-                                                width: '24px',
-                                                borderRadius: '0',
-                                                zIndex: 10,
-                                            }}
-                                            alt="Liked a Post"
-                                        />
-                                        <Avatar
-                                            src={Love}
-                                            sx={{
-                                                height: '24px',
-                                                width: '24px',
-                                                borderRadius: '0',
-                                                ml: '-8px',
-                                                zIndex: 9,
-                                            }}
-                                            alt="Loved a Post"
-                                        />
-                                        <Avatar
-                                            src={Laugh}
-                                            sx={{
-                                                height: '24px',
-                                                width: '24px',
-                                                borderRadius: '0',
-                                                ml: '-8px',
-                                            }}
-                                            alt="Loved a Post"
-                                        />
-                                        {/* <Typography>112</Typography> */}
-                                        <Typography sx={{ fontSize: '13px', ml: '8px' }}>
-                                            {numberReactions + (selectedReaction ? 1 : 0)}
+                                <Box
+                                    sx={{
+                                        mb: '2px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        flexGrow: 1,
+                                    }}
+                                >
+                                    {numberReactions || selectedReaction ? (
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <Avatar
+                                                src={Liked}
+                                                sx={{
+                                                    height: '24px',
+                                                    width: '24px',
+                                                    borderRadius: '0',
+                                                    zIndex: 10,
+                                                }}
+                                                alt="Liked a Post"
+                                            />
+                                            <Avatar
+                                                src={Love}
+                                                sx={{
+                                                    height: '24px',
+                                                    width: '24px',
+                                                    borderRadius: '0',
+                                                    ml: '-8px',
+                                                    zIndex: 9,
+                                                }}
+                                                alt="Loved a Post"
+                                            />
+                                            <Avatar
+                                                src={Laugh}
+                                                sx={{
+                                                    height: '24px',
+                                                    width: '24px',
+                                                    borderRadius: '0',
+                                                    ml: '-8px',
+                                                }}
+                                                alt="Loved a Post"
+                                            />
+                                            {/* <Typography>112</Typography> */}
+                                            <Typography sx={{ fontSize: '13px', ml: '8px' }}>
+                                                {numberReactions + (selectedReaction ? 1 : 0)}
+                                            </Typography>
+                                        </Box>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </Box>
+                                <Box>
+                                    {numberComments !== 0 ? (
+                                        <Typography sx={{ fontSize: '13px' }}>
+                                            {numberComments} comments
                                         </Typography>
-                                    </Box>
-                                ) : (
-                                    <></>
-                                )}
+                                    ) : (
+                                        <></>
+                                    )}
+                                </Box>
                             </Box>
-                            <Box
-                            // sx={{
-                            //     [mobileScreen]: {
-                            //         mr: 2,
-                            //     },
-                            // }}
-                            >
-                                {numberComments !== 0 ? (
-                                    <Typography sx={{ fontSize: '13px' }}>
-                                        {numberComments} comments
-                                    </Typography>
-                                ) : (
-                                    <></>
-                                )}
+                            <Divider />
+                            <Box sx={{ mb: 2, mt: '-4px' }}>
+                                <PostActionButton
+                                    openCommentRegion={handleOpenCommentRegion}
+                                    postID={postId}
+                                    onReactionClick={onReactionClick}
+                                    xAxisMargin={false}
+                                />
                             </Box>
-                        </Box>
-                        <Divider />
-                        <Box sx={{ mb: 2, mt: '-4px' }}>
-                            <PostActionButton
-                                openCommentRegion={handleOpenCommentRegion}
-                                postID={postId}
-                                onReactionClick={onReactionClick}
-                                xAxisMargin={false}
-                            />
-                        </Box>
-                        <Box sx={{ display: 'flex' }}>
+                            <FilterComments />
+                            {/* <Box sx={{ display: 'flex' }}>
                             <Avatar
                                 src={UserAvatar}
                                 alt="User Image"
@@ -474,12 +607,51 @@ function CommentModal({
                                     },
                                 }}
                             />
+                        </Box> */}
+                            <Box sx={{ display: 'flex', mt: 1, mb: 2 }}>
+                                <Avatar
+                                    src={UserAvatar}
+                                    alt="User Image"
+                                    sx={{
+                                        height: '40px',
+                                        width: '40px',
+                                        objectFit: 'cover',
+                                    }}
+                                />
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        flexGrow: 1,
+                                        border: '1px solid #d0d0d0',
+                                        ml: 1,
+                                        borderRadius: '12px',
+                                    }}
+                                >
+                                    <CommentTextField
+                                        inputRef={commentModalTextFieldRef}
+                                        onChange={handleCommentTextFieldChange}
+                                        isShowPlaceholder={true}
+                                        imageURLUploaded={imageURL}
+                                        removeImageUploaded={handleRemoveImageUploaded}
+                                    />
+                                    <CommentTextField
+                                        disabled={true}
+                                        isEmptyCommentField={isEmptyCommentModalField}
+                                        showIconUploadImage={showIconUploadImage}
+                                        uploadedImage={handleImageUpload}
+                                        setShowPicker={setShowPicker}
+                                        showPicker={showPicker}
+                                        handleEmojiClick={handleEmojiClick}
+                                    />
+                                </Box>
+                            </Box>
+
+                            {/* Submit Button */}
+
+                            <CommentsData postId={postId} />
+                            {/* <CommentData /> */}
                         </Box>
-
-                        {/* Submit Button */}
-
-                        <CommentsData postId={postId} />
-                        {/* <CommentData /> */}
                     </Box>
                 </Box>
             </Box>
