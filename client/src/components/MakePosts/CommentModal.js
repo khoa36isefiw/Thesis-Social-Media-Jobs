@@ -23,7 +23,7 @@ import { blue } from '@mui/material/colors';
 import { useSelector } from 'react-redux';
 
 import { CommentsData } from './CommentsData';
-import { CommentTextField } from './Post';
+import { CommentTextField } from './CommentTextField';
 import FilterComments from '../Messaging/FilterComments';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 

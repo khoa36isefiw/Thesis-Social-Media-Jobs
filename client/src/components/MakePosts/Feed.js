@@ -13,7 +13,7 @@ export const posts = [
         time: '1d',
         hashtag: '#newyear',
         content: [
-            '✨✨✨ Happy New Year of the Dragon!!!!',
+            '✨✨✨ Happy New Year of the Dragon!!!!\n',
             'FPT IS sincerely wishes you a peaceful and happy new year.',
 
             // '✨✨✨ Happy New Year of the Dragon!!!!',
@@ -58,10 +58,9 @@ export const posts = [
         displayName: `Vanvietbooks' Page`,
         followers: '285,010',
         time: '12h',
-        hashtag: '',
+        hashtag: '#quote_of_the_day #365ngayhanhphuc',
         content: [
-            '#quote_of_the_day #365ngayhanhphuc',
-            'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
+            'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.\n',
             'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
             'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
             'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.',
