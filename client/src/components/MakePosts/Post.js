@@ -305,6 +305,9 @@ function Post({
                                                         fontWeight: 'bold',
                                                         color: 'blue',
                                                     },
+                                                    display: 'flex',
+                                                    alignItems: 'end',
+                                                    justifyContent: 'flex-end',
                                                 }}
                                             >
                                                 See Less
@@ -365,7 +368,7 @@ function Post({
                         />
                     )}
 
-                    {/* region for: reaction, comment and share */}
+                    {/* region for: reaction, comment and share - show icon is selected*/}
                     <Box sx={{ p: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '8px' }}>
                             <Box
