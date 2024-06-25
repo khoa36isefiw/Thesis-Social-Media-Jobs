@@ -524,7 +524,7 @@ function CommentModal({
                                                     height: '24px',
                                                     width: '24px',
                                                     borderRadius: '0',
-                                                    zIndex: 10,
+                                                    zIndex: 2,
                                                 }}
                                                 alt="Liked a Post"
                                             />
@@ -535,7 +535,7 @@ function CommentModal({
                                                     width: '24px',
                                                     borderRadius: '0',
                                                     ml: '-8px',
-                                                    zIndex: 9,
+                                                    zIndex: 1,
                                                 }}
                                                 alt="Loved a Post"
                                             />
@@ -575,39 +575,10 @@ function CommentModal({
                                     postID={postId}
                                     onReactionClick={onReactionClick}
                                     xAxisMargin={false}
+                                    leftAbout={'-15%'}
                                 />
                             </Box>
                             <FilterComments />
-                            {/* <Box sx={{ display: 'flex' }}>
-                            <Avatar
-                                src={UserAvatar}
-                                alt="User Image"
-                                sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
-                            />
-                            <TextField
-                                inputRef={commentModalTextFieldRef}
-                                id="comment"
-                                placeholder="Write your comment..."
-                                variant="outlined"
-                                fullWidth
-                                multiline
-                                sx={{
-                                    ml: 1,
-                                    mb: 2,
-                                    '& .MuiOutlinedInput-root': {
-                                        // Apply styles to the root of the input
-                                        borderRadius: '24px', // Set border radius to 50px
-                                        '& .MuiInputBase-input::placeholder': {
-                                            fontSize: '13px',
-                                            color: 'gray',
-                                        },
-                                        '& .MuiInputBase-input': {
-                                            fontSize: '13px',
-                                        },
-                                    },
-                                }}
-                            />
-                        </Box> */}
                             <Box sx={{ display: 'flex', mt: 1, mb: 2 }}>
                                 <Avatar
                                     src={UserAvatar}
@@ -646,9 +617,7 @@ function CommentModal({
                                     />
                                 </Box>
                             </Box>
-
                             {/* Submit Button */}
-
                             <CommentsData postId={postId} />
                             {/* <CommentData /> */}
                         </Box>
