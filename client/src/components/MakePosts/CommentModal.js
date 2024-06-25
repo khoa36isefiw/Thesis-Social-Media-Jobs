@@ -65,7 +65,7 @@ function CommentModal({
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
     // check if the content of post is an array
     const contentArray = Array.isArray(postContent) ? postContent : [postContent];
-
+    const commentList = useSelector((state) => state.managePost.comments[postId]);
     useEffect(() => {
         const handleResize = () => {
             setIsMobileScreen(window.innerWidth <= 768);
@@ -623,13 +623,22 @@ function CommentModal({
                                     )}
                                 </Box>
                                 <Box>
-                                    {numberComments !== 0 ? (
+                                    {numberComments !== 0 && commentList ? (
+                                        <Typography sx={{ fontSize: '13px' }}>
+                                            {numberComments + commentList?.length} comments
+                                        </Typography>
+                                    ) : (
+                                        <Typography sx={{ fontSize: '13px' }}>
+                                            {numberComments} comments
+                                        </Typography>
+                                    )}
+                                    {/* {numberComments !== 0 ? (
                                         <Typography sx={{ fontSize: '13px' }}>
                                             {numberComments} comments
                                         </Typography>
                                     ) : (
                                         <></>
-                                    )}
+                                    )} */}
                                 </Box>
                             </Box>
                             <Divider />

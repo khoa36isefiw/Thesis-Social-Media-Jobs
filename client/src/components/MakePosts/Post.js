@@ -70,6 +70,10 @@ function Post({
     const [imageURL, setImageURL] = useState(null);
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
+    // get the number of comments
+    const commentList = useSelector((state) => state.managePost.comments[postID]);
+
+    console.log('commentList count: ', commentList && commentList.length);
 
     const toggleExpanded = () => {
         console.log('Before clicking: ', expanded);
@@ -263,7 +267,7 @@ function Post({
                                     </Typography>
                                 </Box>
                             )}
-                            
+
                             {/* content of post */}
                             <Box sx={{ mb: 2 }}>
                                 <Typography
@@ -422,10 +426,12 @@ function Post({
                                 )}
                             </Box>
                             <Box>
-                                {numberOfComment !== 0 ? (
-                                    <CustomTypography>{numberOfComment} comments</CustomTypography>
+                                {numberOfComment !== 0 && commentList ? (
+                                    <CustomTypography>
+                                        {numberOfComment + commentList?.length} comments
+                                    </CustomTypography>
                                 ) : (
-                                    <></>
+                                    <CustomTypography>{numberOfComment} comments</CustomTypography>
                                 )}
                             </Box>
                         </Box>
