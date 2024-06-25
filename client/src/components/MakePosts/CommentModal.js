@@ -63,6 +63,8 @@ function CommentModal({
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const [isEmptyCommentModalField, setIsEmptyCommentModalField] = useState(true);
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
+    // check if the content of post is an array
+    const contentArray = Array.isArray(postContent) ? postContent : [postContent];
 
     useEffect(() => {
         const handleResize = () => {
@@ -110,8 +112,6 @@ function CommentModal({
         };
     }, [imageUrl]);
     const [expanded, setExpanded] = useState(false);
-
-    const contentArray = Array.isArray(postContent) ? postContent : [postContent];
 
     const toggleExpanded = () => {
         setExpanded(!expanded);
@@ -169,6 +169,11 @@ function CommentModal({
 
         setIsEmptyCommentModalField(commentTextValue.trim() === '');
     };
+
+    const concatenateString = contentArray.length >= 2 ? contentArray[1] : '';
+    // console.log('concatenateString: ', concatenateString);
+    const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
+    console.log('MAX_CONTENT_LENGTH: ', MAX_CONTENT_LENGTH);
 
     return (
         <Box
@@ -457,32 +462,91 @@ function CommentModal({
                                     </Box>
                                 )}
                             </Box>
-                            {contentArray.map((paragraph, index) => (
-                                <Box key={index}>
-                                    <Typography
-                                        variant="body1"
-                                        sx={{ fontSize: '12.5px', mt: 1, textAlign: 'justify' }}
-                                    >
-                                        {expanded || paragraph.length < 250
-                                            ? paragraph
-                                            : `${paragraph.slice(0, 250)}...`}
-                                        {!expanded && index === contentArray.length - 1 && (
-                                            <Button
-                                                variant="text"
-                                                color="primary"
+
+                            {/* content of post */}
+                            <Box sx={{ mb: 2 }}>
+                                <Typography
+                                    variant="body1"
+                                    component="div" // Set component to "div" for line breaks
+                                    sx={{
+                                        fontSize: '14px',
+                                        mt: 1,
+                                        textAlign: 'justify',
+                                        whiteSpace: 'pre-line',
+                                    }}
+                                >
+                                    {expanded ? (
+                                        <Box>
+                                            {contentArray.map((paragraph, index) => (
+                                                <Box key={index} sx={{ mb: 2 }}>
+                                                    <Typography
+                                                        variant="body1"
+                                                        component="div"
+                                                        sx={{
+                                                            fontSize: '14px',
+                                                            mt: 1,
+                                                            textAlign: 'justify',
+                                                            whiteSpace: 'pre-line',
+                                                        }}
+                                                    >
+                                                        {paragraph}
+                                                    </Typography>
+                                                </Box>
+                                            ))}
+                                            <Typography
+                                                component="span"
                                                 onClick={toggleExpanded}
+                                                sx={{
+                                                    fontSize: '12.5px',
+                                                    '&:hover': {
+                                                        cursor: 'pointer',
+                                                        textDecoration: 'underline',
+                                                        fontWeight: 'bold',
+                                                        color: 'blue',
+                                                    },
+                                                    display: 'flex',
+                                                    alignItems: 'end',
+                                                    justifyContent: 'flex-end',
+                                                }}
                                             >
-                                                <Typography>See More</Typography>
-                                            </Button>
-                                        )}
-                                    </Typography>
-                                </Box>
-                            ))}
-                            {expanded && (
-                                <Button variant="text" color="primary" onClick={toggleExpanded}>
-                                    <Typography>See Less</Typography>
-                                </Button>
-                            )}
+                                                See Less
+                                            </Typography>
+                                        </Box>
+                                    ) : (
+                                        <Box>
+                                            <Typography
+                                                variant="body1"
+                                                component="div" // Set component to "div" for line breaks
+                                                sx={{
+                                                    fontSize: '14px',
+                                                    mt: 1,
+                                                    textAlign: 'justify',
+                                                    whiteSpace: 'pre-line',
+                                                }}
+                                            >
+                                                {MAX_CONTENT_LENGTH}
+                                                {MAX_CONTENT_LENGTH.length === 200 && (
+                                                    <Typography
+                                                        component="span"
+                                                        onClick={toggleExpanded}
+                                                        sx={{
+                                                            fontSize: '12.5px',
+                                                            '&:hover': {
+                                                                cursor: 'pointer',
+                                                                textDecoration: 'underline',
+                                                                fontWeight: 'bold',
+                                                                color: 'blue',
+                                                            },
+                                                        }}
+                                                    >
+                                                        ...See More
+                                                    </Typography>
+                                                )}
+                                            </Typography>
+                                        </Box>
+                                    )}
+                                </Typography>
+                            </Box>
                         </Box>
                         {/* show reaction and comments */}
                         <Box

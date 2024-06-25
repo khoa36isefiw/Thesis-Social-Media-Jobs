@@ -263,8 +263,8 @@ function Post({
                                     </Typography>
                                 </Box>
                             )}
+                            
                             {/* content of post */}
-
                             <Box sx={{ mb: 2 }}>
                                 <Typography
                                     variant="body1"
