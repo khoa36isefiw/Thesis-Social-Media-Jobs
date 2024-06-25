@@ -20,7 +20,7 @@ import Picker from 'emoji-picker-react';
 import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
 import { blue } from '@mui/material/colors';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { CommentsData } from './CommentsData';
 import { CommentTextField } from './CommentTextField';
@@ -29,6 +29,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { CustomTypography } from './Post';
+import { addComment } from '../../redux/ManagePost/managePostAction';
 // Customize styles for Typography in this Component
 export const ActionsTypography = styled(Typography)(({}) => ({
     color: '#000000BF',
@@ -53,6 +54,7 @@ function CommentModal({
     handleClose,
     onReactionClick,
 }) {
+    const dispatch = useDispatch();
     // check if the content of post is an array
     const contentArray = Array.isArray(postContent) ? postContent : [postContent];
     const commentList = useSelector((state) => state.managePost.comments[postId]);
@@ -177,6 +179,29 @@ function CommentModal({
         setIsEmptyCommentModalField(commentTextValue.trim() === '');
     };
 
+    // send comment for comment modal
+    const handleCommentSubmit = () => {
+        const commentText = commentModalTextFieldRef.current.value.trim();
+        // const commentText = commentModalTextFieldRef.current.value;
+        let commentSent = null;
+        if (imageURL !== null) {
+            commentSent = [commentText, imageURL.url];
+
+            dispatch(addComment(postId, commentSent));
+            commentModalTextFieldRef.current.value = '';
+            setIsEmptyCommentModalField(true);
+            setImageURL(null);
+        } else {
+            if (commentText !== '') {
+                // dispatch(addComment(postId, commentText));
+                dispatch(addComment(postId, commentText));
+                // clear input after submitting
+                commentModalTextFieldRef.current.value = '';
+                setIsEmptyCommentModalField(true);
+            }
+        }
+        setShowIconUploadImage(true);
+    };
     return (
         <Box
             sx={{
@@ -660,10 +685,12 @@ function CommentModal({
                                         isShowPlaceholder={true}
                                         imageURLUploaded={imageURL}
                                         removeImageUploaded={handleRemoveImageUploaded}
+                                        disabled={false}
                                     />
                                     <CommentTextField
                                         disabled={true}
                                         isEmptyCommentField={isEmptyCommentModalField}
+                                        submitFunction={handleCommentSubmit}
                                         showIconUploadImage={showIconUploadImage}
                                         uploadedImage={handleImageUpload}
                                         setShowPicker={setShowPicker}
