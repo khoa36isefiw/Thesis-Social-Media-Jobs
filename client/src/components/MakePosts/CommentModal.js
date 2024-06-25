@@ -28,6 +28,7 @@ import FilterComments from '../Messaging/FilterComments';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { CustomTypography } from './Post';
 // Customize styles for Typography in this Component
 export const ActionsTypography = styled(Typography)(({}) => ({
     color: '#000000BF',
@@ -52,6 +53,9 @@ function CommentModal({
     handleClose,
     onReactionClick,
 }) {
+    // check if the content of post is an array
+    const contentArray = Array.isArray(postContent) ? postContent : [postContent];
+    const commentList = useSelector((state) => state.managePost.comments[postId]);
     const commentModalTextFieldRef = useRef(null);
     const location = useLocation();
     // get the initial width and height of the image
@@ -63,9 +67,10 @@ function CommentModal({
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const [isEmptyCommentModalField, setIsEmptyCommentModalField] = useState(true);
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
-    // check if the content of post is an array
-    const contentArray = Array.isArray(postContent) ? postContent : [postContent];
-    const commentList = useSelector((state) => state.managePost.comments[postId]);
+
+    const concatenateString = contentArray.length >= 2 ? contentArray[1] : '';
+    // concatenate 2 strings and concat them max 200 characters
+    const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
     useEffect(() => {
         const handleResize = () => {
             setIsMobileScreen(window.innerWidth <= 768);
@@ -170,11 +175,6 @@ function CommentModal({
         setIsEmptyCommentModalField(commentTextValue.trim() === '');
     };
 
-    const concatenateString = contentArray.length >= 2 ? contentArray[1] : '';
-    // console.log('concatenateString: ', concatenateString);
-    const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
-    console.log('MAX_CONTENT_LENGTH: ', MAX_CONTENT_LENGTH);
-
     return (
         <Box
             sx={{
@@ -268,20 +268,6 @@ function CommentModal({
                             top: '50%',
                             left: '1%',
                             transition: 'left 0.3s ease-in-out',
-                            // '&:hover': {
-                            //     backgroundColor: '#fff',
-                            //     '@keyframes slideToRight': {
-                            //         from: {
-                            //             opacity: 0,
-                            //             left: '1%',
-                            //         },
-                            //         to: {
-                            //             opacity: 1,
-                            //             left: '1%',
-                            //         },
-                            //     },
-                            //     animation: `slideToRight 0.3s ease-in-out`,
-                            // },
 
                             transition: 'transform 0.3s ease-in-out',
                             transform: 'translateX(0)', // initial state
@@ -622,23 +608,16 @@ function CommentModal({
                                         <></>
                                     )}
                                 </Box>
-                                <Box>
+                                <Box onClick={handleOpenCommentRegion}>
                                     {numberComments !== 0 && commentList ? (
-                                        <Typography sx={{ fontSize: '13px' }}>
+                                        <CustomTypography>
                                             {numberComments + commentList?.length} comments
-                                        </Typography>
+                                        </CustomTypography>
                                     ) : (
-                                        <Typography sx={{ fontSize: '13px' }}>
+                                        <CustomTypography>
                                             {numberComments} comments
-                                        </Typography>
+                                        </CustomTypography>
                                     )}
-                                    {/* {numberComments !== 0 ? (
-                                        <Typography sx={{ fontSize: '13px' }}>
-                                            {numberComments} comments
-                                        </Typography>
-                                    ) : (
-                                        <></>
-                                    )} */}
                                 </Box>
                             </Box>
                             <Divider />

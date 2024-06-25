@@ -23,7 +23,7 @@ import { postMenuSettings } from './Data/PostMenuSettingDatas';
 import { CommentTextField } from './CommentTextField';
 
 // definde typograph for this component
-const CustomTypography = ({ children }) => (
+export const CustomTypography = ({ children }) => (
     <Typography
         sx={{
             ml: '8px',
@@ -205,7 +205,17 @@ function Post({
     const concatenateString = contentArray.length >= 2 ? contentArray[1] : '';
     // console.log('concatenateString: ', concatenateString);
     const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
-    console.log('MAX_CONTENT_LENGTH: ', MAX_CONTENT_LENGTH);
+
+    const handleClicksTheNumberOfComments = () => {
+        setIsOpenCommentRegion(true);
+        // condition to check when button comment is clicked --> It will auto focus on textfield comment
+        setTimeout(() => {
+            // use this because this setIsOpenCommentRegion occures before commentTextFieldRef running
+            if (commentTextFieldRef.current) {
+                commentTextFieldRef.current.focus();
+            }
+        }, 0);
+    };
 
     return (
         <Box>
@@ -425,13 +435,17 @@ function Post({
                                     <></>
                                 )}
                             </Box>
-                            <Box>
+                            {/* show the number of comments */}
+                            <Box onClick={handleClicksTheNumberOfComments}>
                                 {numberOfComment !== 0 && commentList ? (
                                     <CustomTypography>
                                         {numberOfComment + commentList?.length} comments
                                     </CustomTypography>
                                 ) : (
-                                    <CustomTypography>{numberOfComment} comments</CustomTypography>
+                                    <CustomTypography>
+                                        {/* {numberOfComment === 0 ? '' : `${numberOfComment} comments`} */}
+                                        {numberOfComment} comments
+                                    </CustomTypography>
                                 )}
                             </Box>
                         </Box>
