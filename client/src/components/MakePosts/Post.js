@@ -72,8 +72,9 @@ function Post({
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
     // get the number of comments
     const commentList = useSelector((state) => state.managePost.comments[postID]);
+    const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
 
-    console.log('commentList count: ', commentList && commentList.length);
+    // console.log('getCommentListLength: ', getCommentListLength);
 
     const toggleExpanded = () => {
         console.log('Before clicking: ', expanded);
@@ -437,15 +438,15 @@ function Post({
                             </Box>
                             {/* show the number of comments */}
                             <Box onClick={handleClicksTheNumberOfComments}>
-                                {numberOfComment !== 0 && commentList ? (
+                                {numberOfComment !== 0 || getCommentListLength !== 0 ? (
+                                    // show the number of comments
                                     <CustomTypography>
-                                        {numberOfComment + commentList?.length} comments
+                                        {numberOfComment + getCommentListLength} comment
+                                        {numberOfComment + getCommentListLength > 1 ? 's' : ''}
                                     </CustomTypography>
                                 ) : (
-                                    <CustomTypography>
-                                        {/* {numberOfComment === 0 ? '' : `${numberOfComment} comments`} */}
-                                        {numberOfComment} comments
-                                    </CustomTypography>
+                                    // doesn't show
+                                    <></>
                                 )}
                             </Box>
                         </Box>

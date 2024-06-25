@@ -71,6 +71,8 @@ function CommentModal({
     const concatenateString = contentArray.length >= 2 ? contentArray[1] : '';
     // concatenate 2 strings and concat them max 200 characters
     const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
+    const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
+
     useEffect(() => {
         const handleResize = () => {
             setIsMobileScreen(window.innerWidth <= 768);
@@ -609,14 +611,15 @@ function CommentModal({
                                     )}
                                 </Box>
                                 <Box onClick={handleOpenCommentRegion}>
-                                    {numberComments !== 0 && commentList ? (
+                                    {numberComments !== 0 || getCommentListLength !== 0 ? (
+                                        // show the number of comments
                                         <CustomTypography>
-                                            {numberComments + commentList?.length} comments
+                                            {numberComments + getCommentListLength} comment
+                                            {numberComments + getCommentListLength > 1 ? 's' : ''}
                                         </CustomTypography>
                                     ) : (
-                                        <CustomTypography>
-                                            {numberComments} comments
-                                        </CustomTypography>
+                                        // doesn't show
+                                        <></>
                                     )}
                                 </Box>
                             </Box>
