@@ -30,6 +30,7 @@ export function PostActionButton({
     onReactionClick,
     openCommentRegion,
     xAxisMargin = true,
+    leftAbout,
 }) {
     const dispatch = useDispatch();
     const [isHovering, setIsHovering] = useState(false);
@@ -111,7 +112,6 @@ export function PostActionButton({
                     py: '4px',
                     borderRadius: '4px',
                     '&:hover': {
-                        // backgroundColor: '#d3d3d3',
                         backgroundColor: '#8C8C8C1A',
                         cursor: 'pointer',
                     },
@@ -121,7 +121,7 @@ export function PostActionButton({
                         width: '120px',
                         height: '40px',
                         backgroundColor: 'transparent',
-                        // backgroundColor: '#333',
+
                         top: '-75%',
                         left: '-50%',
                     },
@@ -190,9 +190,10 @@ export function PostActionButton({
                         sx={{
                             position: 'absolute',
                             top: '-70%',
-                            left: '-30%',
-                            zIndex: 999,
-                            bgcolor: 'blue',
+                            // left: '-30%',
+                            left: leftAbout,
+                            zIndex: 2,
+                            // bgcolor: 'blue',
                             [tabletScreen]: {
                                 left: '0%',
                             },

@@ -10,7 +10,7 @@ import { ActionsTypography } from './CommentModal';
 import { blue } from '@mui/material/colors';
 import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
 import { setReactionOnCommentInPost } from '../../redux/ManagePost/managePostAction';
-import { CommentTextField } from './Post';
+import { CommentTextField } from './CommentTextField';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import { commentMenuSettings } from './Data/PostMenuSettingDatas';
 import PostMenuSettings from './PostMenuSettings';

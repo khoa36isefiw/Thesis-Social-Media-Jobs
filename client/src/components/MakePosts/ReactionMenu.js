@@ -50,7 +50,7 @@ export const ReactionMenu = ({ postID, commentID, handleChoose }) => {
                 height: '40px',
                 backgroundColor: '#fff',
                 border: '1px solid #d9d9d9',
-                boxShadow: '0 4px 4px #565656',
+                boxShadow: '0 2px 4px #565656',
                 borderRadius: '8px',
                 display: 'flex',
                 alignItems: 'center',
