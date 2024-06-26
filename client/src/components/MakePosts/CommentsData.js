@@ -485,6 +485,9 @@ export function CommentsData({ postId, imageUrl }) {
                                                 top: '-10px',
                                                 left: '0%',
                                             },
+                                            [tabletScreen]: {
+                                                ml: 2,
+                                            },
                                         }}
                                         onMouseEnter={() => handleLikeHover(index)}
                                         onMouseLeave={handleLikeLeave}
@@ -495,8 +498,7 @@ export function CommentsData({ postId, imageUrl }) {
                                                 position: 'absolute',
                                                 top: '-50%',
                                                 left: '-20%',
-                                                zIndex: 999,
-                                                bgcolor: 'blue',
+                                                zIndex: 10,
                                             }}
                                         >
                                             {hoverStatus.postId === postId &&

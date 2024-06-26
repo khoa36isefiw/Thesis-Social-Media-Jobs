@@ -23,7 +23,7 @@ import { postMenuSettings } from './Data/PostMenuSettingDatas';
 import { CommentTextField } from './CommentTextField';
 
 // definde typograph for this component
-const CustomTypography = ({ children }) => (
+export const CustomTypography = ({ children }) => (
     <Typography
         sx={{
             ml: '8px',
@@ -72,8 +72,9 @@ function Post({
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
     // get the number of comments
     const commentList = useSelector((state) => state.managePost.comments[postID]);
+    const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
 
-    console.log('commentList count: ', commentList && commentList.length);
+    // console.log('getCommentListLength: ', getCommentListLength);
 
     const toggleExpanded = () => {
         console.log('Before clicking: ', expanded);
@@ -205,7 +206,17 @@ function Post({
     const concatenateString = contentArray.length >= 2 ? contentArray[1] : '';
     // console.log('concatenateString: ', concatenateString);
     const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
-    console.log('MAX_CONTENT_LENGTH: ', MAX_CONTENT_LENGTH);
+
+    const handleClicksTheNumberOfComments = () => {
+        setIsOpenCommentRegion(true);
+        // condition to check when button comment is clicked --> It will auto focus on textfield comment
+        setTimeout(() => {
+            // use this because this setIsOpenCommentRegion occures before commentTextFieldRef running
+            if (commentTextFieldRef.current) {
+                commentTextFieldRef.current.focus();
+            }
+        }, 0);
+    };
 
     return (
         <Box>
@@ -425,13 +436,17 @@ function Post({
                                     <></>
                                 )}
                             </Box>
-                            <Box>
-                                {numberOfComment !== 0 && commentList ? (
+                            {/* show the number of comments */}
+                            <Box onClick={handleClicksTheNumberOfComments}>
+                                {numberOfComment !== 0 || getCommentListLength !== 0 ? (
+                                    // show the number of comments
                                     <CustomTypography>
-                                        {numberOfComment + commentList?.length} comments
+                                        {numberOfComment + getCommentListLength} comment
+                                        {numberOfComment + getCommentListLength > 1 ? 's' : ''}
                                     </CustomTypography>
                                 ) : (
-                                    <CustomTypography>{numberOfComment} comments</CustomTypography>
+                                    // doesn't show
+                                    <></>
                                 )}
                             </Box>
                         </Box>

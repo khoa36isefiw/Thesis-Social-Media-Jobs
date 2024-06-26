@@ -20,7 +20,7 @@ import Picker from 'emoji-picker-react';
 import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
 import { blue } from '@mui/material/colors';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { CommentsData } from './CommentsData';
 import { CommentTextField } from './CommentTextField';
@@ -28,6 +28,8 @@ import FilterComments from '../Messaging/FilterComments';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { CustomTypography } from './Post';
+import { addComment } from '../../redux/ManagePost/managePostAction';
 // Customize styles for Typography in this Component
 export const ActionsTypography = styled(Typography)(({}) => ({
     color: '#000000BF',
@@ -52,6 +54,10 @@ function CommentModal({
     handleClose,
     onReactionClick,
 }) {
+    const dispatch = useDispatch();
+    // check if the content of post is an array
+    const contentArray = Array.isArray(postContent) ? postContent : [postContent];
+    const commentList = useSelector((state) => state.managePost.comments[postId]);
     const commentModalTextFieldRef = useRef(null);
     const location = useLocation();
     // get the initial width and height of the image
@@ -63,9 +69,12 @@ function CommentModal({
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const [isEmptyCommentModalField, setIsEmptyCommentModalField] = useState(true);
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
-    // check if the content of post is an array
-    const contentArray = Array.isArray(postContent) ? postContent : [postContent];
-    const commentList = useSelector((state) => state.managePost.comments[postId]);
+
+    const concatenateString = contentArray.length >= 2 ? contentArray[1] : '';
+    // concatenate 2 strings and concat them max 200 characters
+    const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
+    const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
+
     useEffect(() => {
         const handleResize = () => {
             setIsMobileScreen(window.innerWidth <= 768);
@@ -170,10 +179,29 @@ function CommentModal({
         setIsEmptyCommentModalField(commentTextValue.trim() === '');
     };
 
-    const concatenateString = contentArray.length >= 2 ? contentArray[1] : '';
-    // console.log('concatenateString: ', concatenateString);
-    const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
-    console.log('MAX_CONTENT_LENGTH: ', MAX_CONTENT_LENGTH);
+    // send comment for comment modal
+    const handleCommentSubmit = () => {
+        const commentText = commentModalTextFieldRef.current.value.trim();
+        // const commentText = commentModalTextFieldRef.current.value;
+        let commentSent = null;
+        if (imageURL !== null) {
+            commentSent = [commentText, imageURL.url];
+
+            dispatch(addComment(postId, commentSent));
+            commentModalTextFieldRef.current.value = '';
+            setIsEmptyCommentModalField(true);
+            setImageURL(null);
+        } else {
+            if (commentText !== '') {
+                // dispatch(addComment(postId, commentText));
+                dispatch(addComment(postId, commentText));
+                // clear input after submitting
+                commentModalTextFieldRef.current.value = '';
+                setIsEmptyCommentModalField(true);
+            }
+        }
+        setShowIconUploadImage(true);
+    };
 
     return (
         <Box
@@ -268,20 +296,6 @@ function CommentModal({
                             top: '50%',
                             left: '1%',
                             transition: 'left 0.3s ease-in-out',
-                            // '&:hover': {
-                            //     backgroundColor: '#fff',
-                            //     '@keyframes slideToRight': {
-                            //         from: {
-                            //             opacity: 0,
-                            //             left: '1%',
-                            //         },
-                            //         to: {
-                            //             opacity: 1,
-                            //             left: '1%',
-                            //         },
-                            //     },
-                            //     animation: `slideToRight 0.3s ease-in-out`,
-                            // },
 
                             transition: 'transform 0.3s ease-in-out',
                             transform: 'translateX(0)', // initial state
@@ -622,23 +636,17 @@ function CommentModal({
                                         <></>
                                     )}
                                 </Box>
-                                <Box>
-                                    {numberComments !== 0 && commentList ? (
-                                        <Typography sx={{ fontSize: '13px' }}>
-                                            {numberComments + commentList?.length} comments
-                                        </Typography>
+                                <Box onClick={handleOpenCommentRegion}>
+                                    {numberComments !== 0 || getCommentListLength !== 0 ? (
+                                        // show the number of comments
+                                        <CustomTypography>
+                                            {numberComments + getCommentListLength} comment
+                                            {numberComments + getCommentListLength > 1 ? 's' : ''}
+                                        </CustomTypography>
                                     ) : (
-                                        <Typography sx={{ fontSize: '13px' }}>
-                                            {numberComments} comments
-                                        </Typography>
-                                    )}
-                                    {/* {numberComments !== 0 ? (
-                                        <Typography sx={{ fontSize: '13px' }}>
-                                            {numberComments} comments
-                                        </Typography>
-                                    ) : (
+                                        // doesn't show
                                         <></>
-                                    )} */}
+                                    )}
                                 </Box>
                             </Box>
                             <Divider />
@@ -678,10 +686,12 @@ function CommentModal({
                                         isShowPlaceholder={true}
                                         imageURLUploaded={imageURL}
                                         removeImageUploaded={handleRemoveImageUploaded}
+                                        disabled={false}
                                     />
                                     <CommentTextField
                                         disabled={true}
                                         isEmptyCommentField={isEmptyCommentModalField}
+                                        submitFunction={handleCommentSubmit}
                                         showIconUploadImage={showIconUploadImage}
                                         uploadedImage={handleImageUpload}
                                         setShowPicker={setShowPicker}
