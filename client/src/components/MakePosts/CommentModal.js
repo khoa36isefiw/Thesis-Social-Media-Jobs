@@ -202,6 +202,7 @@ function CommentModal({
         }
         setShowIconUploadImage(true);
     };
+
     return (
         <Box
             sx={{
