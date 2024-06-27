@@ -1,113 +1,127 @@
-import React, { useState, useRef } from 'react';
-import {
-    Avatar,
-    Box,
-    Container,
-    IconButton,
-    Typography,
-    TextField,
-    Tooltip,
-    tooltipClasses,
-    styled,
-    Button,
-    Divider,
-} from '@mui/material';
-import UserAvatar from '../../assets/images/avatar.jpeg';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import Picker from 'emoji-picker-react';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import ImageIcon from '@mui/icons-material/Image';
-import VideoInput from './VideoInput';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import ClearIcon from '@mui/icons-material/Clear';
-import EditIcon from '@mui/icons-material/Edit';
-import { tabletScreen } from '../Theme/Theme';
+// import React, { useState, useRef } from 'react';
+// import {
+//     Avatar,
+//     Box,
+//     Container,
+//     IconButton,
+//     Typography,
+//     TextField,
+//     Tooltip,
+//     tooltipClasses,
+//     styled,
+//     Button,
+//     Divider,
+// } from '@mui/material';
+// import UserAvatar from '../../assets/images/avatar.jpeg';
+// import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+// import Picker from 'emoji-picker-react';
+// import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+// import YouTubeIcon from '@mui/icons-material/YouTube';
+// import ImageIcon from '@mui/icons-material/Image';
+// import VideoInput from './VideoInput';
+// import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+// import ClearIcon from '@mui/icons-material/Clear';
+// import EditIcon from '@mui/icons-material/Edit';
+// import { tabletScreen } from '../Theme/Theme';
 
-const UploadActions = ({ children, title }) => {
-    return (
-        <LightTooltip
-            title={title}
-            arrow={true}
-            placement="top"
-            sx={{
-                '& .MuiTooltip-arrow': {
-                    color: 'white',
-                },
-            }}
-        >
-            {children}
-        </LightTooltip>
-    );
-};
+// const UploadActions = ({ children, title }) => {
+//     return (
+//         <LightTooltip
+//             title={title}
+//             arrow={true}
+//             placement="top"
+//             sx={{
+//                 '& .MuiTooltip-arrow': {
+//                     color: 'white',
+//                 },
+//             }}
+//         >
+//             {children}
+//         </LightTooltip>
+//     );
+// };
 
-const LightTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltip}`]: {
-        backgroundColor: theme.palette.common.white,
-        color: 'rgba(0, 0, 0, 0.87)',
-        boxShadow: theme.shadows[1],
-        fontSize: 11,
-    },
-}));
+// const LightTooltip = styled(({ className, ...props }) => (
+//     <Tooltip {...props} classes={{ popper: className }} />
+// ))(({ theme }) => ({
+//     [`& .${tooltipClasses.tooltip}`]: {
+//         backgroundColor: theme.palette.common.white,
+//         color: 'rgba(0, 0, 0, 0.87)',
+//         boxShadow: theme.shadows[1],
+//         fontSize: 11,
+//     },
+// }));
 
 // function PostModal({ closeModal }) {
 //     const [editorText, setEditorText] = useState('');
-//     const [imageUrl, setImageUrl] = useState();
-//     const [videoSrc, setVideoSrc] = useState('');
+//     const [imageUrl, setImageUrl] = useState('');
+//     const [videoUrl, setVideoUrl] = useState('');
+//     // show emoij table
 //     const [showPicker, setShowPicker] = useState(false);
-//     const [openVideoModal, setOpenVideoModal] = useState(false);
+//     const editorRef = useRef(null);
 
 //     const handleUploadImage = (event) => {
 //         const file = event.target.files[0];
-//         const reader = new FileReader();
-//         reader.onloadend = () => {
-//             setImageUrl(reader.result);
-//             const img = `<img src="${reader.result}" alt="Uploaded Image" style="width: 100%; max-height: 300px; objectFit:cover; position:relative;"/>`;
-//             setEditorText(editorText + img);
-//         };
-//         reader.readAsDataURL(file);
-//     };
-
-//     const handleDeleteImage = () => {
-//         setImageUrl(null);
-//         setEditorText('');
-//     };
-
-//     const handleFileChange = (event) => {
-//         const file = event.target.files[0];
-//         const url = URL.createObjectURL(file);
-//         setVideoSrc(url);
-//         const video = `<video controls style="max-width: 100%; max-height: 300px;"><source src="${url}" type="${file.type}" /></video>`;
-//         setEditorText(editorText + video);
+//         if (file) {
+//             const reader = new FileReader();
+//             reader.onloadend = () => {
+//                 setImageUrl(reader.result);
+//                 const img = `<img src="${reader.result}" alt="Uploaded Image" style="max-width: 100%; max-height: 300px; objectFit: cover;"/>`;
+//                 setEditorText(editorText + img);
+//             };
+//             reader.readAsDataURL(file);
+//         } else {
+//             console.error('No file selected.');
+//         }
 //     };
 
 //     const handleUploadVideo = (event) => {
 //         const file = event.target.files[0];
-//         const url = URL.createObjectURL(file);
-//         setVideoSrc(url);
-//         const video = `<video controls style="max-width: 100%; max-height: 300px;"><source src="${url}" type="${file.type}" /></video>`;
-//         setEditorText(editorText + video);
+
+//         if (file) {
+//             const reader = new FileReader();
+//             reader.onloadend = () => {
+//                 setVideoUrl(reader.result);
+//                 setEditorText(
+//                     (prevText) =>
+//                         prevText +
+//                         `<video controls style="max-width: 100%; max-height: 300px;"><source src="${reader.result}" type="${file.type}" /></video>`,
+//                 );
+//             };
+//             reader.readAsDataURL(file);
+//         } else {
+//             console.error('No file Selected!');
+//         }
 //     };
 
+//     // pick emoji
 //     const handleEmojiClick = (event, emojiObject) => {
 //         const emoji = emojiObject.emoji;
-//         setEditorText(editorText + emoji);
+//         // // console.log('Ahihi: ', emoji);
+//         // setEditorText((prevInput) => prevInput + event.emoji);
+//         setEditorText(editorText + event.emoji);
+//         setShowPicker(false);
+//     };
+
+//     const handleChange = (event) => {
+//         setEditorText(event.target.value);
 //     };
 
 //     return (
-//         <Box>
+//         <div>
 //             <Container
 //                 sx={{
 //                     width: '650px',
 //                     height: '450px',
+//                     // width: '80%',
+//                     // height: '450px',
 //                     position: 'relative',
 //                     display: 'flex',
 //                     flexDirection: 'column',
 //                     justifyContent: 'start',
 //                     alignItems: 'start',
 //                     overflowY: 'scroll',
+//                     // [tabletScreen]: { width: '100%' },
 //                 }}
 //             >
 //                 <IconButton
@@ -115,8 +129,10 @@ const LightTooltip = styled(({ className, ...props }) => (
 //                         position: 'absolute',
 //                         top: '0',
 //                         right: '0',
+//                         opacity: '0.65',
 //                         '&:hover': {
 //                             backgroundColor: 'transparent',
+//                             opacity: '1',
 //                         },
 //                     }}
 //                     onClick={closeModal}
@@ -163,20 +179,51 @@ const LightTooltip = styled(({ className, ...props }) => (
 //                     </Box>
 //                 </Box>
 
-//                 <div
-//                     contentEditable
-//                     id="editor"
-//                     style={{
-//                         postion: 'relative',
-//                         border: '1px solid #ccc',
+//                 <Box
+//                     sx={{
 //                         borderRadius: '4px',
 //                         padding: '8px',
 //                         minHeight: '300px',
 //                         width: '100%',
 //                         overflowY: 'auto',
+//                         border: '1px solid #333',
 //                     }}
-//                     dangerouslySetInnerHTML={{ __html: editorText }}
-//                 ></div>
+//                     contentEditable={true}
+//                     onFocus={(e) => {
+//                         e.target.style.border = 'none';
+//                     }}
+//                     onBlur={(e) => {
+//                         e.target.style.border = 'none';
+//                     }}
+//                     onChange={handleChange}
+//                 >
+//                     {imageUrl && (
+//                         <img
+//                             src={imageUrl}
+//                             alt="Uploaded Image"
+//                             style={{ maxWidth: '100%', maxHeight: '300px' }}
+//                         />
+//                     )}
+//                     {videoUrl && (
+//                         <video controls style={{ maxWidth: '100%', maxHeight: '300px' }}>
+//                             <source src={videoUrl} type="video/mp4" />
+//                         </video>
+//                     )}
+//                 </Box>
+//                 <textarea
+//                     id="editor"
+//                     style={{
+//                         borderRadius: '4px',
+//                         padding: '8px',
+//                         minHeight: '300px',
+//                         width: '100%',
+//                         overflowY: 'auto',
+//                         border: '1px solid #333',
+//                     }}
+//                     value={editorText}
+//                     onChange={handleChange}
+//                 />
+
 //                 <Box>
 //                     {imageUrl && (
 //                         <Box sx={{ postion: 'absolute' }}>
@@ -185,9 +232,9 @@ const LightTooltip = styled(({ className, ...props }) => (
 //                                     postion: 'absolute',
 //                                     top: '-99px',
 //                                     right: 0,
-//                                     zIndex: '1', // Đảm bảo nút nằm trên cùng
+//                                     zIndex: '1',
 //                                 }}
-//                                 onClick={handleDeleteImage}
+//                                 // onClick={handleDeleteImage}
 //                             >
 //                                 <ClearIcon />
 //                             </IconButton>
@@ -195,7 +242,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 //                                 sx={{
 //                                     top: '4px',
 //                                     left: '4px',
-//                                     zIndex: '1', // Đảm bảo nút nằm trên cùng
+//                                     zIndex: '1',
 //                                 }}
 //                                 // onClick={handleEditImage}
 //                             >
@@ -205,132 +252,177 @@ const LightTooltip = styled(({ className, ...props }) => (
 //                     )}
 //                 </Box>
 //             </Container>
-//             <Box>
-//                 <IconButton onClick={() => setShowPicker((val) => !val)}>
-//                     <SentimentSatisfiedAltIcon fontSize="large" />
-//                 </IconButton>
-//                 {showPicker && (
-//                     <Box
-//                         sx={{
-//                             position: 'absolute',
-//                             top: '-50px',
-//                             left: '20%',
-//                         }}
-//                     >
-//                         <Picker pickerStyle={{ width: '100%' }} />
-//                     </Box>
-//                 )}
-//             </Box>
-//             {!imageUrl && (
-//                 <Box>
-//                     <Box sx={{ display: 'flex' }}>
-//                         <UploadActions title="Upload Image">
-//                             <IconButton>
-//                                 <label htmlFor="upload-image">
-//                                     <ImageIcon
-//                                         fontSize="large"
-//                                         sx={{
-//                                             '&:hover': {
-//                                                 cursor: 'pointer',
-//                                             },
-//                                         }}
-//                                     />
-//                                 </label>
-//                                 <input
-//                                     id="upload-image"
-//                                     type="file"
-//                                     accept="image/*"
-//                                     hidden
-//                                     onChange={handleUploadImage}
-//                                 />
-//                             </IconButton>
-//                         </UploadActions>
-//                         <UploadActions title="Upload Video">
-//                             <IconButton>
-//                                 <label htmlFor="upload-video">
-//                                     <YouTubeIcon fontSize="large" />
-//                                 </label>
-//                                 <input
-//                                     id="upload-video"
-//                                     type="file"
-//                                     accept="video/*"
-//                                     hidden
-//                                     onChange={handleUploadVideo}
-//                                 />
-//                             </IconButton>
-//                         </UploadActions>
-//                     </Box>
-//                 </Box>
-//             )}
 
-//     <Divider sx={{ mt: 2, mb: 2 }} />
-//     <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
-//         <Button
-//             variant="contained"
-//             disabled={!editorText.trim()}
-//             sx={{
-//                 fontSize: '14px',
-//                 borderRadius: '24px',
-//                 padding: '8px 32px',
-//             }}
-//         >
-//             Post
-//         </Button>
-//     </Box>
-// </Box>
+//             <div>
+//                 <input type="file" accept="image/*" onChange={handleUploadImage} />
+//                 <input type="file" accept="video/*" onChange={handleUploadVideo} />
+
+//                 <Box>
+//                     <IconButton onClick={() => setShowPicker((val) => !val)}>
+//                         <SentimentSatisfiedAltIcon fontSize="large" />
+//                     </IconButton>
+//                     {showPicker && (
+//                         <Box
+//                             sx={{
+//                                 position: 'absolute',
+//                                 top: '10px',
+//                                 left: '5%',
+//                             }}
+//                         >
+//                             <Picker
+//                                 pickerStyle={{ width: '100%' }}
+//                                 onEmojiClick={handleEmojiClick}
+//                             />
+//                         </Box>
+//                     )}
+//                 </Box>
+//             </div>
+
+//             {/* show image and video just uploaded but not in textbox */}
+//             {/* {imageUrl && (
+//                 <div>
+//                     <img
+//                         src={imageUrl}
+//                         alt="Uploaded Image"
+//                         style={{ maxWidth: '100%', maxHeight: '300px' }}
+//                     />
+//                 </div>
+//             )}
+//             {videoUrl && (
+//                 <div>
+//                     <video controls style={{ maxWidth: '100%', maxHeight: '300px' }}>
+//                         <source src={videoUrl} type="video/mp4" />
+//                     </video>
+//                 </div>
+//             )} */}
+//             <Divider sx={{ mt: 2, mb: 2 }} />
+//             <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+//                 <Button
+//                     variant="contained"
+//                     // check if editor is empty --> disabled this Button
+//                     disabled={!editorText.trim()}
+//                     sx={{
+//                         fontSize: '14px',
+//                         borderRadius: '24px',
+//                         padding: '8px 32px',
+//                     }}
+//                 >
+//                     Post
+//                 </Button>
+//             </Box>
+//         </div>
 //     );
 // }
 
 // export default PostModal;
 
+import React, { useState, useRef } from 'react';
+import {
+    Avatar,
+    Box,
+    Container,
+    IconButton,
+    Typography,
+    TextField,
+    Tooltip,
+    tooltipClasses,
+    styled,
+    Button,
+    Divider,
+} from '@mui/material';
+import UserAvatar from '../../assets/images/avatar.jpeg';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import Picker from 'emoji-picker-react';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import ImageIcon from '@mui/icons-material/Image';
+import VideoInput from './VideoInput';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import ClearIcon from '@mui/icons-material/Clear';
+import EditIcon from '@mui/icons-material/Edit';
+import { tabletScreen } from '../Theme/Theme';
+import { CommentTextField } from './CommentTextField';
+
+const UploadActions = ({ children, title }) => {
+    return (
+        <LightTooltip
+            title={title}
+            arrow={true}
+            placement="top"
+            sx={{
+                '& .MuiTooltip-arrow': {
+                    color: 'white',
+                },
+            }}
+        >
+            {children}
+        </LightTooltip>
+    );
+};
+
+const LightTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+    },
+}));
+
 function PostModal({ closeModal }) {
+    const startAPostTextFieldRef = useRef(null);
     const [editorText, setEditorText] = useState('');
-    const [imageUrl, setImageUrl] = useState('');
+    const [imageURL, setImageURL] = useState([]);
+
     const [videoUrl, setVideoUrl] = useState('');
     // show emoij table
     const [showPicker, setShowPicker] = useState(false);
     const editorRef = useRef(null);
+    const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
+    const [showIconUploadImage, setShowIconUploadImage] = useState(true);
 
-    const handleUploadImage = (event) => {
-        const file = event.target.files[0];
-        if (file) {
+    // upload for multiple images
+    const handleImageUpload = (event) => {
+        const files = event.target.files; // Get the list of selected files
+        const uploadedImages = []; // get the existing array of images
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setImageUrl(reader.result);
-                const img = `<img src="${reader.result}" alt="Uploaded Image" style="max-width: 100%; max-height: 300px; objectFit: cover;"/>`;
-                setEditorText(editorText + img);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            console.error('No file selected.');
-        }
-    };
 
-    const handleUploadVideo = (event) => {
-        const file = event.target.files[0];
+            reader.onload = () => {
+                const imageDataURL = reader.result;
+                // get the name of the uploaded image
+                const imageName = file.name;
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setVideoUrl(reader.result);
-                setEditorText(
-                    (prevText) =>
-                        prevText +
-                        `<video controls style="max-width: 100%; max-height: 300px;"><source src="${reader.result}" type="${file.type}" /></video>`,
-                );
+                // store both the name and URL
+                uploadedImages.push({ name: imageName, url: imageDataURL });
+
+                // If all files have been processed, update the state
+                if (uploadedImages.length === files.length) {
+                    setImageURL((prevImage) => [...prevImage, ...uploadedImages]);
+                    setIsEmptyCommentField(false);
+                    // hide the progress bar after all images have been uploaded
+                }
             };
-            reader.readAsDataURL(file);
-        } else {
-            console.error('No file Selected!');
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
         }
     };
 
     // pick emoji
-    const handleEmojiClick = (event, emojiObject) => {
-        const emoji = emojiObject.emoji;
-        // // console.log('Ahihi: ', emoji);
-        // setEditorText((prevInput) => prevInput + event.emoji);
-        setEditorText(editorText + event.emoji);
+    const handleEmojiClick = (event) => {
+        // const commentText = commentTextFieldRef.current.value + event.emoji;
+        if (startAPostTextFieldRef.current) {
+            const currentValue = startAPostTextFieldRef.current.value;
+            const newValue = currentValue + event.emoji;
+            startAPostTextFieldRef.current.value = newValue;
+        }
+        setIsEmptyCommentField(false);
         setShowPicker(false);
     };
 
@@ -338,9 +430,18 @@ function PostModal({ closeModal }) {
         setEditorText(event.target.value);
     };
 
+    const handleCommentTextFieldChange = () => {
+        const postTextValue = startAPostTextFieldRef.current.value;
+        setIsEmptyCommentField(postTextValue.trim() === '');
+    };
+
+    const handleRemoveImageUploaded = () => {
+        setImageURL(null);
+    };
+
     return (
         <div>
-            <Container
+            <Box
                 sx={{
                     width: '650px',
                     height: '450px',
@@ -378,7 +479,7 @@ function PostModal({ closeModal }) {
                         alignItems: 'center',
                         justifyContent: 'start',
                         borderRadius: '12px',
-                        py: 2,
+                        p: 2,
                         '&:hover': {
                             cursor: 'pointer',
                             backgroundColor: '#d3d3d3',
@@ -412,120 +513,40 @@ function PostModal({ closeModal }) {
 
                 <Box
                     sx={{
-                        borderRadius: '4px',
-                        padding: '8px',
+                        borderRadius: '8px',
                         minHeight: '300px',
                         width: '100%',
                         overflowY: 'auto',
                         border: '1px solid #333',
-                    }}
-                    contentEditable={true}
-                    onFocus={(e) => {
-                        e.target.style.border = 'none';
-                    }}
-                    onBlur={(e) => {
-                        e.target.style.border = 'none';
                     }}
                     onChange={handleChange}
                 >
-                    {imageUrl && (
-                        <img
-                            src={imageUrl}
-                            alt="Uploaded Image"
-                            style={{ maxWidth: '100%', maxHeight: '300px' }}
-                        />
-                    )}
-                    {videoUrl && (
-                        <video controls style={{ maxWidth: '100%', maxHeight: '300px' }}>
-                            <source src={videoUrl} type="video/mp4" />
-                        </video>
-                    )}
-                </Box>
-                <textarea
-                    id="editor"
-                    style={{
-                        borderRadius: '4px',
-                        padding: '8px',
-                        minHeight: '300px',
-                        width: '100%',
-                        overflowY: 'auto',
-                        border: '1px solid #333',
-                    }}
-                    value={editorText}
-                    onChange={handleChange}
-                />
-
-                <Box>
-                    {imageUrl && (
-                        <Box sx={{ postion: 'absolute' }}>
-                            <IconButton
-                                sx={{
-                                    postion: 'absolute',
-                                    top: '-99px',
-                                    right: 0,
-                                    zIndex: '1',
-                                }}
-                                // onClick={handleDeleteImage}
-                            >
-                                <ClearIcon />
-                            </IconButton>
-                            <IconButton
-                                sx={{
-                                    top: '4px',
-                                    left: '4px',
-                                    zIndex: '1',
-                                }}
-                                // onClick={handleEditImage}
-                            >
-                                <EditIcon />
-                            </IconButton>
-                        </Box>
-                    )}
-                </Box>
-            </Container>
-
-            <div>
-                <input type="file" accept="image/*" onChange={handleUploadImage} />
-                <input type="file" accept="video/*" onChange={handleUploadVideo} />
-
-                <Box>
-                    <IconButton onClick={() => setShowPicker((val) => !val)}>
-                        <SentimentSatisfiedAltIcon fontSize="large" />
-                    </IconButton>
-                    {showPicker && (
-                        <Box
-                            sx={{
-                                position: 'absolute',
-                                top: '10px',
-                                left: '5%',
-                            }}
-                        >
-                            <Picker
-                                pickerStyle={{ width: '100%' }}
-                                onEmojiClick={handleEmojiClick}
-                            />
-                        </Box>
-                    )}
-                </Box>
-            </div>
-
-            {/* show image and video just uploaded but not in textbox */}
-            {/* {imageUrl && (
-                <div>
-                    <img
-                        src={imageUrl}
-                        alt="Uploaded Image"
-                        style={{ maxWidth: '100%', maxHeight: '300px' }}
+                    <CommentTextField
+                        inputRef={startAPostTextFieldRef}
+                        onChange={handleCommentTextFieldChange}
+                        disabled={false}
+                        isShowPlaceholder={true}
+                        // handleKeyDown={handleKeyDown}
+                        imageURLUploaded={imageURL}
+                        removeImageUploaded={handleRemoveImageUploaded}
+                        defaultPlaceholder="What do you want to talk about?"
                     />
-                </div>
-            )}
-            {videoUrl && (
-                <div>
-                    <video controls style={{ maxWidth: '100%', maxHeight: '300px' }}>
-                        <source src={videoUrl} type="video/mp4" />
-                    </video>
-                </div>
-            )} */}
+
+                    <CommentTextField
+                        disabled={true}
+                        isEmptyCommentField={isEmptyCommentField}
+                        // submitFunction={handleCommentSubmit}
+                        uploadedImage={handleImageUpload}
+                        showIconUploadImage={showIconUploadImage}
+                        removeImageUploaded={handleRemoveImageUploaded}
+                        setShowPicker={setShowPicker}
+                        showPicker={showPicker}
+                        handleEmojiClick={handleEmojiClick}
+                        multiple={true}
+                    />
+                </Box>
+            </Box>
+
             <Divider sx={{ mt: 2, mb: 2 }} />
             <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
                 <Button

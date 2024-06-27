@@ -11,6 +11,7 @@ import ImageDetailInMessage from '../Messaging/ImageDetailInMessage';
 import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
 
 export const CommentTextField = ({
+    multiple = false,
     disabled,
     onChange,
     inputRef,
@@ -26,9 +27,11 @@ export const CommentTextField = ({
     setShowPicker,
     handleEmojiClick,
     defaultValue = '',
+    defaultPlaceholder = 'Write your comment...',
 }) => {
     const [openModalImage, setOpenModalImage] = useState(false);
     const [isBold, setIsBold] = useState(true);
+
     useEffect(() => {
         if (inputRef && inputRef.current) {
             inputRef.current.focus();
@@ -48,17 +51,16 @@ export const CommentTextField = ({
     // console.log('imageURLUploaded: ', imageURLUploaded);
     const finalDefaultValue = defaultValue ? `${defaultValue} ` : defaultValue;
 
-    const handleInputChange = (event) => {
-        setIsBold(event.target.value === defaultValue); // Set bold only if the text is the default value
-        onChange(event);
-    };
+    console.log('uploadedImage is an array: ', Array.isArray(imageURLUploaded));
 
     return (
         <Box>
             <TextField
                 inputRef={inputRef}
                 onChange={onChange}
-                placeholder={isShowPlaceholder ? 'Write your comment...' : null}
+                placeholder={
+                    isShowPlaceholder ? (defaultPlaceholder ? defaultPlaceholder : '') : null
+                }
                 onKeyDown={handleKeyDown}
                 variant="outlined"
                 fullWidth
@@ -123,6 +125,7 @@ export const CommentTextField = ({
                                         accept="image/*"
                                         style={{ display: 'none' }}
                                         onChange={uploadedImage}
+                                        multiple={multiple ? true : false}
                                     />
                                     <IconButton component="span">
                                         <InsertPhotoIcon sx={{ fontSize: '24px' }} />
@@ -156,12 +159,9 @@ export const CommentTextField = ({
                 }}
             />
 
-            {/* If image is uploaded and shows it on, image uploaded to send comment in post */}
             {imageURLUploaded && (
                 <Box
                     sx={{
-                        // width: originalWidth,
-                        // height: originalHeight,
                         maxWidth: '210px',
                         maxHeight: '210px',
                         position: 'relative',
@@ -172,33 +172,69 @@ export const CommentTextField = ({
                         overFlow: 'hidden',
                     }}
                 >
-                    <IconButton
-                        sx={{
-                            position: 'absolute',
-                            color: 'white',
-                            width: '32px',
-                            height: '32px',
-                            backgroundColor: theme.palette.bgColorButton,
-                            zIndex: 99,
-                            top: '-5%',
-                            right: '-5%',
-                            '&:hover': {
-                                bgcolor: theme.palette.bgColorButtonHover,
-                            },
-                        }}
-                        onClick={removeImageUploaded}
-                    >
-                        <CloseIcon fontSize="large" />
-                    </IconButton>
+                    {/* check if  imageURLUploaded is an array of object*/}
+                    {Array.isArray(imageURLUploaded) ? (
+                        imageURLUploaded.map((image, index) => (
+                            <Box key={index}>
+                                <IconButton
+                                    sx={{
+                                        position: 'absolute',
+                                        color: 'white',
+                                        width: '32px',
+                                        height: '32px',
+                                        backgroundColor: theme.palette.bgColorButton,
+                                        zIndex: 99,
+                                        top: '-5%',
+                                        right: '-5%',
+                                        '&:hover': {
+                                            bgcolor: theme.palette.bgColorButtonHover,
+                                        },
+                                    }}
+                                    onClick={removeImageUploaded}
+                                >
+                                    <CloseIcon fontSize="large" />
+                                </IconButton>
+                                <ImageOriginialSize
+                                    imageURL={image.url} // just get one image
+                                    maxImageHeight={200}
+                                    maxImageWidth={200}
+                                    customHeight={150}
+                                    customWidth={200}
+                                    handleFunction={handleOpenImageUploadedInComment}
+                                />
+                            </Box>
+                        ))
+                    ) : (
+                        <Box>
+                            <IconButton
+                                sx={{
+                                    position: 'absolute',
+                                    color: 'white',
+                                    width: '32px',
+                                    height: '32px',
+                                    backgroundColor: theme.palette.bgColorButton,
+                                    zIndex: 99,
+                                    top: '-5%',
+                                    right: '-5%',
+                                    '&:hover': {
+                                        bgcolor: theme.palette.bgColorButtonHover,
+                                    },
+                                }}
+                                onClick={removeImageUploaded}
+                            >
+                                <CloseIcon fontSize="large" />
+                            </IconButton>
+                            <ImageOriginialSize
+                                imageURL={imageURLUploaded.url} // just get one image
+                                maxImageHeight={200}
+                                maxImageWidth={200}
+                                customHeight={150}
+                                customWidth={200}
+                                handleFunction={handleOpenImageUploadedInComment}
+                            />
+                        </Box>
+                    )}
 
-                    <ImageOriginialSize
-                        imageURL={imageURLUploaded.url}
-                        maxImageHeight={200}
-                        maxImageWidth={200}
-                        customHeight={150}
-                        customWidth={200}
-                        handleFunction={handleOpenImageUploadedInComment}
-                    />
                     <Modal open={openModalImage} onClose={handleCloseImageUploadedInComment}>
                         <ImageDetailInMessage
                             imgUrl={imageURLUploaded.url}
@@ -207,6 +243,8 @@ export const CommentTextField = ({
                     </Modal>
                 </Box>
             )}
+
+            {/* If image is uploaded and shows it on, image uploaded to send comment in post */}
         </Box>
     );
 };

@@ -533,24 +533,3 @@ function Post({
 }
 
 export default Post;
-
-// <Typography
-//     variant="body1"
-//     component="div" // Set component to "div" for line breaks
-//     sx={{ fontSize: '14px', mt: 1, textAlign: 'justify' }}
-// >
-//     {/* paragraph
-//                                                       .substring(0, 100)
-//                                                       .concat(
-//                                                           paragraph.substring(
-//                                                               100,
-//                                                               paragraph.length,
-//                                                           ),
-//                                                       ) */}
-//     {index === 0 || expanded
-//         ? paragraph.substring(0, 100)
-//         : paragraph.substring(0, 100).concat(paragraph.substring(100, paragraph.length))}
-//     {/* {index < 2 || expanded ? paragraph : ''} */}
-// </Typography>;
-
-// bk 2
