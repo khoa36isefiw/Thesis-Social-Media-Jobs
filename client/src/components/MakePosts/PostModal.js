@@ -23,6 +23,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import { tabletScreen } from '../Theme/Theme';
+import { CommentTextField } from './CommentTextField';
 
 const UploadActions = ({ children, title }) => {
     return (
@@ -52,285 +53,58 @@ const LightTooltip = styled(({ className, ...props }) => (
     },
 }));
 
-// function PostModal({ closeModal }) {
-//     const [editorText, setEditorText] = useState('');
-//     const [imageUrl, setImageUrl] = useState();
-//     const [videoSrc, setVideoSrc] = useState('');
-//     const [showPicker, setShowPicker] = useState(false);
-//     const [openVideoModal, setOpenVideoModal] = useState(false);
-
-//     const handleUploadImage = (event) => {
-//         const file = event.target.files[0];
-//         const reader = new FileReader();
-//         reader.onloadend = () => {
-//             setImageUrl(reader.result);
-//             const img = `<img src="${reader.result}" alt="Uploaded Image" style="width: 100%; max-height: 300px; objectFit:cover; position:relative;"/>`;
-//             setEditorText(editorText + img);
-//         };
-//         reader.readAsDataURL(file);
-//     };
-
-//     const handleDeleteImage = () => {
-//         setImageUrl(null);
-//         setEditorText('');
-//     };
-
-//     const handleFileChange = (event) => {
-//         const file = event.target.files[0];
-//         const url = URL.createObjectURL(file);
-//         setVideoSrc(url);
-//         const video = `<video controls style="max-width: 100%; max-height: 300px;"><source src="${url}" type="${file.type}" /></video>`;
-//         setEditorText(editorText + video);
-//     };
-
-//     const handleUploadVideo = (event) => {
-//         const file = event.target.files[0];
-//         const url = URL.createObjectURL(file);
-//         setVideoSrc(url);
-//         const video = `<video controls style="max-width: 100%; max-height: 300px;"><source src="${url}" type="${file.type}" /></video>`;
-//         setEditorText(editorText + video);
-//     };
-
-//     const handleEmojiClick = (event, emojiObject) => {
-//         const emoji = emojiObject.emoji;
-//         setEditorText(editorText + emoji);
-//     };
-
-//     return (
-//         <Box>
-//             <Container
-//                 sx={{
-//                     width: '650px',
-//                     height: '450px',
-//                     position: 'relative',
-//                     display: 'flex',
-//                     flexDirection: 'column',
-//                     justifyContent: 'start',
-//                     alignItems: 'start',
-//                     overflowY: 'scroll',
-//                 }}
-//             >
-//                 <IconButton
-//                     sx={{
-//                         position: 'absolute',
-//                         top: '0',
-//                         right: '0',
-//                         '&:hover': {
-//                             backgroundColor: 'transparent',
-//                         },
-//                     }}
-//                     onClick={closeModal}
-//                     disableTouchRipple
-//                 >
-//                     <ClearIcon fontSize="large" />
-//                 </IconButton>
-
-//                 <Box
-//                     sx={{
-//                         display: 'flex',
-//                         alignItems: 'center',
-//                         justifyContent: 'start',
-//                         borderRadius: '12px',
-//                         p: 2,
-//                         '&:hover': {
-//                             cursor: 'pointer',
-//                             backgroundColor: '#d3d3d3',
-//                         },
-//                         maxWidth: '250px',
-//                     }}
-//                 >
-//                     <Avatar
-//                         src={UserAvatar}
-//                         alt="User Avatar"
-//                         sx={{ height: '48px', width: '48px', mr: 1 }}
-//                     />
-//                     <Box
-//                         sx={{
-//                             display: 'flex',
-//                             justifyContent: 'start',
-//                             alignItems: 'start',
-//                         }}
-//                     >
-//                         <Box>
-//                             <Typography sx={{ textAlign: 'left', fontSize: '14px' }}>
-//                                 Huynh Dang Khoa
-//                             </Typography>
-//                             <Typography sx={{ textAlign: 'left', fontSize: '14px' }}>
-//                                 Post to Anyone
-//                             </Typography>
-//                         </Box>
-//                         <ArrowDropDownIcon fontSize="large" />
-//                     </Box>
-//                 </Box>
-
-//                 <div
-//                     contentEditable
-//                     id="editor"
-//                     style={{
-//                         postion: 'relative',
-//                         border: '1px solid #ccc',
-//                         borderRadius: '4px',
-//                         padding: '8px',
-//                         minHeight: '300px',
-//                         width: '100%',
-//                         overflowY: 'auto',
-//                     }}
-//                     dangerouslySetInnerHTML={{ __html: editorText }}
-//                 ></div>
-//                 <Box>
-//                     {imageUrl && (
-//                         <Box sx={{ postion: 'absolute' }}>
-//                             <IconButton
-//                                 sx={{
-//                                     postion: 'absolute',
-//                                     top: '-99px',
-//                                     right: 0,
-//                                     zIndex: '1', // Đảm bảo nút nằm trên cùng
-//                                 }}
-//                                 onClick={handleDeleteImage}
-//                             >
-//                                 <ClearIcon />
-//                             </IconButton>
-//                             <IconButton
-//                                 sx={{
-//                                     top: '4px',
-//                                     left: '4px',
-//                                     zIndex: '1', // Đảm bảo nút nằm trên cùng
-//                                 }}
-//                                 // onClick={handleEditImage}
-//                             >
-//                                 <EditIcon />
-//                             </IconButton>
-//                         </Box>
-//                     )}
-//                 </Box>
-//             </Container>
-//             <Box>
-//                 <IconButton onClick={() => setShowPicker((val) => !val)}>
-//                     <SentimentSatisfiedAltIcon fontSize="large" />
-//                 </IconButton>
-//                 {showPicker && (
-//                     <Box
-//                         sx={{
-//                             position: 'absolute',
-//                             top: '-50px',
-//                             left: '20%',
-//                         }}
-//                     >
-//                         <Picker pickerStyle={{ width: '100%' }} />
-//                     </Box>
-//                 )}
-//             </Box>
-//             {!imageUrl && (
-//                 <Box>
-//                     <Box sx={{ display: 'flex' }}>
-//                         <UploadActions title="Upload Image">
-//                             <IconButton>
-//                                 <label htmlFor="upload-image">
-//                                     <ImageIcon
-//                                         fontSize="large"
-//                                         sx={{
-//                                             '&:hover': {
-//                                                 cursor: 'pointer',
-//                                             },
-//                                         }}
-//                                     />
-//                                 </label>
-//                                 <input
-//                                     id="upload-image"
-//                                     type="file"
-//                                     accept="image/*"
-//                                     hidden
-//                                     onChange={handleUploadImage}
-//                                 />
-//                             </IconButton>
-//                         </UploadActions>
-//                         <UploadActions title="Upload Video">
-//                             <IconButton>
-//                                 <label htmlFor="upload-video">
-//                                     <YouTubeIcon fontSize="large" />
-//                                 </label>
-//                                 <input
-//                                     id="upload-video"
-//                                     type="file"
-//                                     accept="video/*"
-//                                     hidden
-//                                     onChange={handleUploadVideo}
-//                                 />
-//                             </IconButton>
-//                         </UploadActions>
-//                     </Box>
-//                 </Box>
-//             )}
-
-//     <Divider sx={{ mt: 2, mb: 2 }} />
-//     <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
-//         <Button
-//             variant="contained"
-//             disabled={!editorText.trim()}
-//             sx={{
-//                 fontSize: '14px',
-//                 borderRadius: '24px',
-//                 padding: '8px 32px',
-//             }}
-//         >
-//             Post
-//         </Button>
-//     </Box>
-// </Box>
-//     );
-// }
-
-// export default PostModal;
-
 function PostModal({ closeModal }) {
+    const startAPostTextFieldRef = useRef(null);
     const [editorText, setEditorText] = useState('');
-    const [imageUrl, setImageUrl] = useState('');
+    const [imageURL, setImageURL] = useState([]);
+
     const [videoUrl, setVideoUrl] = useState('');
     // show emoij table
     const [showPicker, setShowPicker] = useState(false);
     const editorRef = useRef(null);
+    const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
+    const [showIconUploadImage, setShowIconUploadImage] = useState(true);
 
-    const handleUploadImage = (event) => {
-        const file = event.target.files[0];
-        if (file) {
+    // upload for multiple images
+    const handleImageUpload = (event) => {
+        const files = event.target.files; // Get the list of selected files
+        const uploadedImages = []; // get the existing array of images
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setImageUrl(reader.result);
-                const img = `<img src="${reader.result}" alt="Uploaded Image" style="max-width: 100%; max-height: 300px; objectFit: cover;"/>`;
-                setEditorText(editorText + img);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            console.error('No file selected.');
-        }
-    };
 
-    const handleUploadVideo = (event) => {
-        const file = event.target.files[0];
+            reader.onload = () => {
+                const imageDataURL = reader.result;
+                // get the name of the uploaded image
+                const imageName = file.name;
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setVideoUrl(reader.result);
-                setEditorText(
-                    (prevText) =>
-                        prevText +
-                        `<video controls style="max-width: 100%; max-height: 300px;"><source src="${reader.result}" type="${file.type}" /></video>`,
-                );
+                // store both the name and URL
+                uploadedImages.push({ name: imageName, url: imageDataURL });
+
+                // If all files have been processed, update the state
+                if (uploadedImages.length === files.length) {
+                    setImageURL((prevImage) => [...prevImage, ...uploadedImages]);
+                    setIsEmptyCommentField(false);
+                    // hide the progress bar after all images have been uploaded
+                }
             };
-            reader.readAsDataURL(file);
-        } else {
-            console.error('No file Selected!');
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
         }
     };
 
     // pick emoji
-    const handleEmojiClick = (event, emojiObject) => {
-        const emoji = emojiObject.emoji;
-        // // console.log('Ahihi: ', emoji);
-        // setEditorText((prevInput) => prevInput + event.emoji);
-        setEditorText(editorText + event.emoji);
+    const handleEmojiClick = (event) => {
+        // const commentText = commentTextFieldRef.current.value + event.emoji;
+        if (startAPostTextFieldRef.current) {
+            const currentValue = startAPostTextFieldRef.current.value;
+            const newValue = currentValue + event.emoji;
+            startAPostTextFieldRef.current.value = newValue;
+        }
+        setIsEmptyCommentField(false);
         setShowPicker(false);
     };
 
@@ -338,9 +112,18 @@ function PostModal({ closeModal }) {
         setEditorText(event.target.value);
     };
 
+    const handleCommentTextFieldChange = () => {
+        const postTextValue = startAPostTextFieldRef.current.value;
+        setIsEmptyCommentField(postTextValue.trim() === '');
+    };
+
+    const handleRemoveImageUploaded = () => {
+        setImageURL(null);
+    };
+
     return (
         <div>
-            <Container
+            <Box
                 sx={{
                     width: '650px',
                     height: '450px',
@@ -351,7 +134,6 @@ function PostModal({ closeModal }) {
                     flexDirection: 'column',
                     justifyContent: 'start',
                     alignItems: 'start',
-                    overflowY: 'scroll',
                     // [tabletScreen]: { width: '100%' },
                 }}
             >
@@ -378,12 +160,13 @@ function PostModal({ closeModal }) {
                         alignItems: 'center',
                         justifyContent: 'start',
                         borderRadius: '12px',
-                        py: 2,
+                        maxWidth: '250px',
+                        p: 2,
+                        mb: 2,
                         '&:hover': {
                             cursor: 'pointer',
                             backgroundColor: '#d3d3d3',
                         },
-                        maxWidth: '250px',
                     }}
                 >
                     <Avatar
@@ -399,7 +182,9 @@ function PostModal({ closeModal }) {
                         }}
                     >
                         <Box>
-                            <Typography sx={{ textAlign: 'left', fontSize: '14px' }}>
+                            <Typography
+                                sx={{ textAlign: 'left', fontSize: '16px', fontWeight: 'bold' }}
+                            >
                                 Huynh Dang Khoa
                             </Typography>
                             <Typography sx={{ textAlign: 'left', fontSize: '14px' }}>
@@ -412,120 +197,39 @@ function PostModal({ closeModal }) {
 
                 <Box
                     sx={{
-                        borderRadius: '4px',
-                        padding: '8px',
+                        borderRadius: '8px',
                         minHeight: '300px',
                         width: '100%',
-                        overflowY: 'auto',
-                        border: '1px solid #333',
-                    }}
-                    contentEditable={true}
-                    onFocus={(e) => {
-                        e.target.style.border = 'none';
-                    }}
-                    onBlur={(e) => {
-                        e.target.style.border = 'none';
+                        overflow: 'scroll',
                     }}
                     onChange={handleChange}
                 >
-                    {imageUrl && (
-                        <img
-                            src={imageUrl}
-                            alt="Uploaded Image"
-                            style={{ maxWidth: '100%', maxHeight: '300px' }}
-                        />
-                    )}
-                    {videoUrl && (
-                        <video controls style={{ maxWidth: '100%', maxHeight: '300px' }}>
-                            <source src={videoUrl} type="video/mp4" />
-                        </video>
-                    )}
-                </Box>
-                <textarea
-                    id="editor"
-                    style={{
-                        borderRadius: '4px',
-                        padding: '8px',
-                        minHeight: '300px',
-                        width: '100%',
-                        overflowY: 'auto',
-                        border: '1px solid #333',
-                    }}
-                    value={editorText}
-                    onChange={handleChange}
-                />
-
-                <Box>
-                    {imageUrl && (
-                        <Box sx={{ postion: 'absolute' }}>
-                            <IconButton
-                                sx={{
-                                    postion: 'absolute',
-                                    top: '-99px',
-                                    right: 0,
-                                    zIndex: '1',
-                                }}
-                                // onClick={handleDeleteImage}
-                            >
-                                <ClearIcon />
-                            </IconButton>
-                            <IconButton
-                                sx={{
-                                    top: '4px',
-                                    left: '4px',
-                                    zIndex: '1',
-                                }}
-                                // onClick={handleEditImage}
-                            >
-                                <EditIcon />
-                            </IconButton>
-                        </Box>
-                    )}
-                </Box>
-            </Container>
-
-            <div>
-                <input type="file" accept="image/*" onChange={handleUploadImage} />
-                <input type="file" accept="video/*" onChange={handleUploadVideo} />
-
-                <Box>
-                    <IconButton onClick={() => setShowPicker((val) => !val)}>
-                        <SentimentSatisfiedAltIcon fontSize="large" />
-                    </IconButton>
-                    {showPicker && (
-                        <Box
-                            sx={{
-                                position: 'absolute',
-                                top: '10px',
-                                left: '5%',
-                            }}
-                        >
-                            <Picker
-                                pickerStyle={{ width: '100%' }}
-                                onEmojiClick={handleEmojiClick}
-                            />
-                        </Box>
-                    )}
-                </Box>
-            </div>
-
-            {/* show image and video just uploaded but not in textbox */}
-            {/* {imageUrl && (
-                <div>
-                    <img
-                        src={imageUrl}
-                        alt="Uploaded Image"
-                        style={{ maxWidth: '100%', maxHeight: '300px' }}
+                    <CommentTextField
+                        inputRef={startAPostTextFieldRef}
+                        onChange={handleCommentTextFieldChange}
+                        disabled={false}
+                        isShowPlaceholder={true}
+                        // handleKeyDown={handleKeyDown}
+                        imageURLUploaded={imageURL}
+                        removeImageUploaded={handleRemoveImageUploaded}
+                        defaultPlaceholder="What do you want to talk about?"
                     />
-                </div>
-            )}
-            {videoUrl && (
-                <div>
-                    <video controls style={{ maxWidth: '100%', maxHeight: '300px' }}>
-                        <source src={videoUrl} type="video/mp4" />
-                    </video>
-                </div>
-            )} */}
+                </Box>
+                <CommentTextField
+                    disabled={true}
+                    isEmptyCommentField={isEmptyCommentField}
+                    // submitFunction={handleCommentSubmit}
+                    uploadedImage={handleImageUpload}
+                    showIconUploadImage={showIconUploadImage}
+                    removeImageUploaded={handleRemoveImageUploaded}
+                    setShowPicker={setShowPicker}
+                    showPicker={showPicker}
+                    handleEmojiClick={handleEmojiClick}
+                    multiple={true}
+                    showSendButton={false}
+                />
+            </Box>
+
             <Divider sx={{ mt: 2, mb: 2 }} />
             <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
                 <Button
@@ -533,9 +237,10 @@ function PostModal({ closeModal }) {
                     // check if editor is empty --> disabled this Button
                     disabled={!editorText.trim()}
                     sx={{
-                        fontSize: '14px',
+                        fontSize: '13px',
                         borderRadius: '24px',
-                        padding: '8px 32px',
+                        padding: '8px 24px',
+                        fontWeight: 'bold',
                     }}
                 >
                     Post

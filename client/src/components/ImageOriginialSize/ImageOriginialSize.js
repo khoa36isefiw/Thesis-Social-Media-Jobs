@@ -11,6 +11,8 @@ function ImageOriginialSize({
 }) {
     const [originalWidth, setOriginalWidth] = useState(null);
     const [originalHeight, setOriginalHeight] = useState(null);
+
+    // console.log('image list in post: ', imageURL);
     useEffect(() => {
         const img = new Image();
         // img.src = imageURL && imageURL.url;
@@ -41,6 +43,7 @@ function ImageOriginialSize({
                 width: originalWidth,
                 height: originalHeight,
                 borderRadius: '12px',
+
                 p: 1,
                 objectFit: 'cover',
                 '&:hover': {
