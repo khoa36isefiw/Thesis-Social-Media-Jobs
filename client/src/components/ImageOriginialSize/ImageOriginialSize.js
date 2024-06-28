@@ -43,6 +43,7 @@ function ImageOriginialSize({
                 width: originalWidth,
                 height: originalHeight,
                 borderRadius: '12px',
+
                 p: 1,
                 objectFit: 'cover',
                 '&:hover': {
