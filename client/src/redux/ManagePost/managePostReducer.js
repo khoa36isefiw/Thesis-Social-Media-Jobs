@@ -1,10 +1,11 @@
 import {
     ADD_COMMENT,
+    ADD_NEW_POSTS,
     GET_REACTION_IN_COMMENT_ON_POST,
     GET_REACTION_ON_POST,
 } from '../actionConstant';
 
-const initialState = { reactions: {}, comments: {}, commentReactions: {} };
+const initialState = { reactions: {}, comments: {}, commentReactions: {}, listPostsData: [] };
 
 export const managePostReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -40,6 +41,12 @@ export const managePostReducer = (state = initialState, action) => {
                         [commentId]: cReaction,
                     },
                 },
+            };
+        case ADD_NEW_POSTS:
+            const { postData } = action.payload;
+            return {
+                ...state,
+                listPostsData: [...state.listPostsData, postData],
             };
 
         default:

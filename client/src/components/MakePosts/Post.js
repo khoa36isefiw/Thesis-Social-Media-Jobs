@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Typography, Avatar, Divider, Modal, Button, IconButton } from '@mui/material';
+import { Box, Typography, Avatar, Divider, Modal, Button, IconButton, Grid } from '@mui/material';
 import { mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +21,8 @@ import { CommentsData } from './CommentsData';
 
 import { postMenuSettings } from './Data/PostMenuSettingDatas';
 import { CommentTextField } from './CommentTextField';
+import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
+import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 
 // definde typograph for this component
 export const CustomTypography = ({ children }) => (
@@ -65,11 +67,12 @@ function Post({
     const [isOpenCommentRegion, setIsOpenCommentRegion] = useState(false);
     const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
-
     // upload image from comment
     const [imageURL, setImageURL] = useState(null);
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
+    // update the current time for each posts
+    const [currentTimestamp, setCurrentTimestamp] = useState(new Date());
     // get the number of comments
     const commentList = useSelector((state) => state.managePost.comments[postID]);
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
@@ -218,6 +221,20 @@ function Post({
         }, 0);
     };
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentTimestamp(new Date());
+        }, 60000); // 60 seconds
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    // console.log('time: ', time);
+    // const d = new Date('2024-06-29T07:18:19.309Z');
+    // console.log('get Hours: ', d.getHours());
+    // console.log('get Minutes: ', d.getMinutes());
+    // console.log('get Seconds: ', d.getSeconds());
+
     return (
         <Box>
             {hideThePostSelected ? (
@@ -252,7 +269,9 @@ function Post({
                                     {followers} followers
                                 </Typography>
                                 <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
-                                    {time}
+                                    {/* {time} */}
+                                    {/* update and show the current of posts */}
+                                    {calculateTimeElapsed(time)}
                                 </Typography>
                             </Box>
                             <IconButton onClick={handleOpenPostMenuSettings}>
@@ -285,10 +304,10 @@ function Post({
                                     variant="body1"
                                     component="div" // Set component to "div" for line breaks
                                     sx={{
+                                        width: '100%',
                                         fontSize: '14px',
                                         mt: 1,
                                         textAlign: 'justify',
-                                        whiteSpace: 'pre-line',
                                     }}
                                 >
                                     {expanded ? (
@@ -302,7 +321,7 @@ function Post({
                                                             fontSize: '14px',
                                                             mt: 1,
                                                             textAlign: 'justify',
-                                                            whiteSpace: 'pre-line',
+                                                            whiteSpace: 'pre-wrap', // maintain the space when we copy some text
                                                         }}
                                                     >
                                                         {paragraph}
@@ -337,7 +356,7 @@ function Post({
                                                     fontSize: '14px',
                                                     mt: 1,
                                                     textAlign: 'justify',
-                                                    whiteSpace: 'pre-line',
+                                                    whiteSpace: 'pre-wrap',
                                                 }}
                                             >
                                                 {MAX_CONTENT_LENGTH}
@@ -368,19 +387,111 @@ function Post({
 
                     {/* Doesn't have image */}
                     {imageUrl && (
-                        <Avatar
-                            src={imageUrl}
-                            onClick={handleImageClick}
-                            sx={{
-                                height: '100%',
-                                width: '100%',
-                                borderRadius: '0',
-                                '&:hover': {
-                                    cursor: 'pointer',
-                                },
-                            }}
-                            alt="Image Upload by User"
-                        />
+                        <Box>
+                            {Array.isArray(imageUrl) ? (
+                                <Grid container>
+                                    {/* just show 4 image from list image in post */}
+                                    {imageUrl.slice(0, 4).map((image, index) => (
+                                        <Grid
+                                            item
+                                            xs={6}
+                                            md={6}
+                                            lg={imageUrl.length >= 4 ? 6 : 12}
+                                            key={index}
+                                            sx={{
+                                                borderRight:
+                                                    (imageUrl.length >= 4 && index === 0) ||
+                                                    index === 2
+                                                        ? '2px solid white'
+                                                        : null,
+                                                borderBottom:
+                                                    (imageUrl.length >= 4 && index === 0) ||
+                                                    index === 1
+                                                        ? '2px solid white'
+                                                        : null,
+                                                position: 'relative',
+                                                bgcolor: blue[100],
+                                                // center for image
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                overflow: 'hidden',
+                                            }}
+                                        >
+                                            <Avatar
+                                                src={image.url}
+                                                onClick={handleImageClick}
+                                                sx={{
+                                                    height: '320px',
+                                                    width: '100%',
+                                                    borderRadius: '0',
+                                                    objectFit: 'cover',
+                                                    // m: 1,
+                                                    '&:hover': {
+                                                        cursor: 'pointer',
+                                                    },
+                                                }}
+                                                alt="Image Upload by User"
+                                            />
+                                            {/* the last image (4th) and image uploaded has more than 4 images */}
+                                            {/* show the number of images after images 4th */}
+                                            {index === 3 && imageUrl.length > 4 && (
+                                                <Box
+                                                    sx={{
+                                                        position: 'absolute',
+                                                        top: 0,
+                                                        left: 0,
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        bgcolor: 'rgba(0, 0, 0, 0.5)',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        color: 'white',
+                                                        fontSize: '24px',
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
+                                                    +{imageUrl.length - 4}
+                                                </Box>
+                                            )}
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            ) : (
+                                <Grid
+                                    item
+                                    xs={6}
+                                    md={12}
+                                    lg={12}
+                                    sx={{
+                                        position: 'relative',
+                                        // bgcolor: blue[100],
+                                        // center for image
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        overflow: 'hidden',
+                                    }}
+                                >
+                                    <Avatar
+                                        src={imageUrl}
+                                        onClick={handleImageClick}
+                                        sx={{
+                                            height: '320px',
+                                            width: '100%',
+                                            borderRadius: '0',
+                                            // m: 1,
+                                            objectFit: 'cover',
+                                            '&:hover': {
+                                                cursor: 'pointer',
+                                            },
+                                        }}
+                                        alt="Image Upload by User"
+                                    />
+                                </Grid>
+                            )}
+                        </Box>
                     )}
 
                     {/* region for: reaction, comment and share - show icon is selected*/}

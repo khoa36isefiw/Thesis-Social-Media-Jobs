@@ -24,6 +24,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import { tabletScreen } from '../Theme/Theme';
 import { CommentTextField } from './CommentTextField';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewPosts } from '../../redux/ManagePost/managePostAction';
 
 const UploadActions = ({ children, title }) => {
     return (
@@ -54,6 +56,8 @@ const LightTooltip = styled(({ className, ...props }) => (
 }));
 
 function PostModal({ closeModal }) {
+    const dispatch = useDispatch();
+
     const startAPostTextFieldRef = useRef(null);
     const [editorText, setEditorText] = useState('');
     const [imageURL, setImageURL] = useState([]);
@@ -118,7 +122,29 @@ function PostModal({ closeModal }) {
     };
 
     const handleRemoveImageUploaded = () => {
-        setImageURL(null);
+        setImageURL([]);
+    };
+
+    const handlePostAnArticle = () => {
+        const articleText = startAPostTextFieldRef.current.value.trim(); // get the current text of textfield
+
+        let articleTextSent = null;
+        if (imageURL) {
+            articleTextSent = { articleText: articleText, listImage: imageURL };
+
+            dispatch(addNewPosts(articleTextSent));
+            startAPostTextFieldRef.current.value = '';
+            setIsEmptyCommentField(true);
+            setImageURL([]);
+        } else {
+            if (articleText !== '') {
+                // dispatch(addComment(postID, articleText));
+                dispatch(addNewPosts({ articleTextSent: articleText }));
+                // clear input after submitting
+                startAPostTextFieldRef.current.value = '';
+                setIsEmptyCommentField(true);
+            }
+        }
     };
 
     return (
@@ -235,13 +261,14 @@ function PostModal({ closeModal }) {
                 <Button
                     variant="contained"
                     // check if editor is empty --> disabled this Button
-                    disabled={!editorText.trim()}
+                    disabled={isEmptyCommentField}
                     sx={{
                         fontSize: '13px',
                         borderRadius: '24px',
                         padding: '8px 24px',
                         fontWeight: 'bold',
                     }}
+                    onClick={handlePostAnArticle}
                 >
                     Post
                 </Button>

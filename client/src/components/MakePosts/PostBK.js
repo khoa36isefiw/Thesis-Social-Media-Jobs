@@ -1,17 +1,6 @@
-import React, { useRef, useState } from 'react';
-import {
-    Box,
-    Container,
-    Typography,
-    Avatar,
-    Divider,
-    Modal,
-    IconButton,
-    TextField,
-    Icon,
-    InputAdornment,
-} from '@mui/material';
-import { mobileScreen, tabletScreen } from '../Theme/Theme';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Typography, Avatar, Divider, Modal, Button, IconButton, Grid } from '@mui/material';
+import { mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { addComment, setReactionOnPost } from '../../redux/ManagePost/managePostAction';
@@ -21,18 +10,21 @@ import CloseIcon from '@mui/icons-material/Close';
 import Liked from '../../assets/images/like.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
-import CommentModal, { CommentData } from './CommentModal';
+import CommentModal from './CommentModal';
 import PostMenuSettings from './PostMenuSettings';
 import HideThePost from './HideThePost';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import FilterComments from '../Messaging/FilterComments';
-import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import MoodIcon from '@mui/icons-material/Mood';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+
+import { CommentsData } from './CommentsData';
+
+import { postMenuSettings } from './Data/PostMenuSettingDatas';
+import { CommentTextField } from './CommentTextField';
+import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
 
 // definde typograph for this component
-const CustomTypography = ({ children }) => (
+export const CustomTypography = ({ children }) => (
     <Typography
         sx={{
             ml: '8px',
@@ -73,12 +65,22 @@ function Post({
     const [hideThePostSelected, setHideThePostSelected] = useState(false);
     const [isOpenCommentRegion, setIsOpenCommentRegion] = useState(false);
     const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
+    const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
+
     // upload image from comment
     const [imageURL, setImageURL] = useState(null);
+    const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
+    // get the number of comments
+    const commentList = useSelector((state) => state.managePost.comments[postID]);
+    const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
+
+    // console.log('getCommentListLength: ', getCommentListLength);
 
     const toggleExpanded = () => {
+        console.log('Before clicking: ', expanded);
         setExpanded(!expanded);
+        console.log('After clicking: ', expanded);
     };
 
     const handleImageClick = () => {
@@ -89,8 +91,10 @@ function Post({
         setOpenModal(false);
     };
 
-    const handleChooseReaction = (reaction) => {
-        setReactionOnPost(postID, reaction);
+    const handleChooseReaction = () => {
+        // dispatch(setReactionOnPost(postID, reaction));
+        dispatch(setReactionOnPost(postID));
+
         // console.log('Post has ID reaction on is: ', postID);
     };
 
@@ -131,21 +135,28 @@ function Post({
         setIsEmptyCommentField(commentTextValue.trim() === '');
     };
 
-    console.log('isEmptyCommentField:', isEmptyCommentField);
     // for text field
     const handleCommentSubmit = () => {
         const commentText = commentTextFieldRef.current.value.trim();
         // const commentText = commentTextFieldRef.current.value;
-        const commentSent = [commentText, imageURL.url];
-        console.log(commentText);
-        if (commentText !== '') {
-            // dispatch(addComment(postID, commentText));
-            dispatch(addComment(postID, commentSent));
+        let commentSent = null;
+        if (imageURL !== null) {
+            commentSent = [commentText, imageURL.url];
 
-            // clear input after submitting
+            dispatch(addComment(postID, commentSent));
             commentTextFieldRef.current.value = '';
             setIsEmptyCommentField(true);
+            setImageURL(null);
+        } else {
+            if (commentText !== '') {
+                // dispatch(addComment(postID, commentText));
+                dispatch(addComment(postID, commentText));
+                // clear input after submitting
+                commentTextFieldRef.current.value = '';
+                setIsEmptyCommentField(true);
+            }
         }
+        setShowIconUploadImage(true);
     };
 
     const handleKeyDown = (event) => {
@@ -162,22 +173,55 @@ function Post({
         const reader = new FileReader();
         reader.onload = () => {
             const imageDataURL = reader.result;
-            console.log('imageDataURL: ', imageDataURL);
             // get the name of the uploaded image
             const imageName = file.name;
-            console.log('imageDataURL: ', imageName);
-
             // store both the name and URL
             setImageURL({ name: imageName, url: imageDataURL });
+            setShowIconUploadImage(false);
         };
 
         if (file) {
             reader.readAsDataURL(file);
         }
+        setIsEmptyCommentField(false);
     };
 
-    console.log('Image data just uploaded: ', imageURL);
+    const handleRemoveImageUploaded = () => {
+        setImageURL(null);
+        setShowIconUploadImage(true);
+        setIsEmptyCommentField(true);
+    };
 
+    // add emoji
+    const handleEmojiClick = (event) => {
+        // const commentText = commentTextFieldRef.current.value + event.emoji;
+        if (commentTextFieldRef.current) {
+            const currentValue = commentTextFieldRef.current.value;
+            const newValue = currentValue + event.emoji;
+            commentTextFieldRef.current.value = newValue;
+        }
+        setIsEmptyCommentField(false);
+        setShowPicker(false);
+    };
+
+    const concatenateString = contentArray.length >= 2 ? contentArray[1] : '';
+    // console.log('concatenateString: ', concatenateString);
+    const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
+
+    const handleClicksTheNumberOfComments = () => {
+        setIsOpenCommentRegion(true);
+        // condition to check when button comment is clicked --> It will auto focus on textfield comment
+        setTimeout(() => {
+            // use this because this setIsOpenCommentRegion occures before commentTextFieldRef running
+            if (commentTextFieldRef.current) {
+                commentTextFieldRef.current.focus();
+            }
+        }, 0);
+    };
+
+    console.log('Image data received: ', imageUrl);
+    // console.log();
+    // console.log('Data of first element: ', imageUrl && imageUrl[0]);
     return (
         <Box>
             {hideThePostSelected ? (
@@ -241,57 +285,201 @@ function Post({
 
                             {/* content of post */}
                             <Box sx={{ mb: 2 }}>
-                                {contentArray.map((paragraph, index) => (
-                                    <Box key={index} sx={{ mb: 2 }}>
-                                        <Typography
-                                            variant="body1"
-                                            component="div" // Set component to "div" for line breaks
-                                            sx={{ fontSize: '14px', mt: 1, textAlign: 'justify' }}
-                                        >
-                                            {index < 2 || expanded ? paragraph : ''}
-                                        </Typography>
-                                        {/* show more content of this post */}
-                                    </Box>
-                                ))}
-                                {/* show more content of this post */}
-                                {!expanded && contentArray.length > 2 && (
-                                    <Typography
-                                        onClick={toggleExpanded}
-                                        sx={{
-                                            fontSize: '12.5px',
-                                            '&:hover': {
-                                                cursor: 'pointer',
-                                                textDecoration: 'underline',
-                                                fontWeight: 'bold',
-                                                color: 'blue',
-                                            },
-                                        }}
-                                    >
-                                        ...Show More
-                                    </Typography>
-                                )}
+                                <Typography
+                                    variant="body1"
+                                    component="div" // Set component to "div" for line breaks
+                                    sx={{
+                                        width: '100%',
+                                        fontSize: '14px',
+                                        mt: 1,
+                                        textAlign: 'justify',
+                                    }}
+                                >
+                                    {expanded ? (
+                                        <Box>
+                                            {contentArray.map((paragraph, index) => (
+                                                <Box key={index} sx={{ mb: 2 }}>
+                                                    <Typography
+                                                        variant="body1"
+                                                        component="div"
+                                                        sx={{
+                                                            fontSize: '14px',
+                                                            mt: 1,
+                                                            textAlign: 'justify',
+                                                            whiteSpace: 'pre-wrap', // maintain the space when we copy some text
+                                                        }}
+                                                    >
+                                                        {paragraph}
+                                                    </Typography>
+                                                </Box>
+                                            ))}
+                                            <Typography
+                                                component="span"
+                                                onClick={toggleExpanded}
+                                                sx={{
+                                                    fontSize: '12.5px',
+                                                    '&:hover': {
+                                                        cursor: 'pointer',
+                                                        textDecoration: 'underline',
+                                                        fontWeight: 'bold',
+                                                        color: 'blue',
+                                                    },
+                                                    display: 'flex',
+                                                    alignItems: 'end',
+                                                    justifyContent: 'flex-end',
+                                                }}
+                                            >
+                                                See Less
+                                            </Typography>
+                                        </Box>
+                                    ) : (
+                                        <Box>
+                                            <Typography
+                                                variant="body1"
+                                                component="div" // Set component to "div" for line breaks
+                                                sx={{
+                                                    fontSize: '14px',
+                                                    mt: 1,
+                                                    textAlign: 'justify',
+                                                    whiteSpace: 'pre-wrap',
+                                                }}
+                                            >
+                                                {MAX_CONTENT_LENGTH}
+                                                {MAX_CONTENT_LENGTH.length === 200 && (
+                                                    <Typography
+                                                        component="span"
+                                                        onClick={toggleExpanded}
+                                                        sx={{
+                                                            fontSize: '12.5px',
+                                                            '&:hover': {
+                                                                cursor: 'pointer',
+                                                                textDecoration: 'underline',
+                                                                fontWeight: 'bold',
+                                                                color: 'blue',
+                                                            },
+                                                        }}
+                                                    >
+                                                        ...See More
+                                                    </Typography>
+                                                )}
+                                            </Typography>
+                                        </Box>
+                                    )}
+                                </Typography>
                             </Box>
                         </Box>
                     </Box>
 
                     {/* Doesn't have image */}
                     {imageUrl && (
-                        <Avatar
-                            src={imageUrl}
-                            onClick={handleImageClick}
-                            sx={{
-                                height: '100%',
-                                width: '100%',
-                                borderRadius: '0',
-                                '&:hover': {
-                                    cursor: 'pointer',
-                                },
-                            }}
-                            alt="Image Upload by User"
-                        />
+                        <Box>
+                            {Array.isArray(imageUrl) && imageUrl.length >= 4 ? (
+                                <Grid container>
+                                    {/* just show 4 image from list image in post */}
+                                    {imageUrl.slice(0, 4).map((image, index) => (
+                                        <Grid
+                                            item
+                                            xs={6}
+                                            md={6}
+                                            lg={imageUrl.length >= 4 ? 6 : 12}
+                                            key={index}
+                                            sx={{
+                                                borderRight:
+                                                    (imageUrl.length >= 4 && index === 0) ||
+                                                    index === 2
+                                                        ? '2px solid white'
+                                                        : null,
+                                                borderBottom:
+                                                    (imageUrl.length >= 4 && index === 0) ||
+                                                    index === 1
+                                                        ? '2px solid white'
+                                                        : null,
+                                                position: 'relative',
+                                                bgcolor: blue[100],
+                                                // center for image
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                overflow: 'hidden',
+                                            }}
+                                        >
+                                            <Avatar
+                                                src={image.url}
+                                                onClick={handleImageClick}
+                                                sx={{
+                                                    height: '320px',
+                                                    width: '100%',
+                                                    borderRadius: '0',
+                                                    objectFit: 'cover',
+                                                    // m: 1,
+                                                    '&:hover': {
+                                                        cursor: 'pointer',
+                                                    },
+                                                }}
+                                                alt="Image Upload by User"
+                                            />
+                                            {/* the last image (4th) and image uploaded has more than 4 images */}
+                                            {/* show the number of images after images 4th */}
+                                            {index === 3 && imageUrl.length > 4 && (
+                                                <Box
+                                                    sx={{
+                                                        position: 'absolute',
+                                                        top: 0,
+                                                        left: 0,
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        bgcolor: 'rgba(0, 0, 0, 0.5)',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        color: 'white',
+                                                        fontSize: '24px',
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
+                                                    +{imageUrl.length - 4}
+                                                </Box>
+                                            )}
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            ) : (
+                                <Grid
+                                    item
+                                    xs={6}
+                                    md={12}
+                                    lg={12}
+                                    sx={{
+                                        position: 'relative',
+                                        // bgcolor: blue[100],
+                                        // center for image
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        overflow: 'hidden',
+                                    }}
+                                >
+                                    <Avatar
+                                        src={imageUrl}
+                                        onClick={handleImageClick}
+                                        sx={{
+                                            height: '320px',
+                                            width: '100%',
+                                            borderRadius: '0',
+                                            // m: 1,
+                                            objectFit: 'cover',
+                                            '&:hover': {
+                                                cursor: 'pointer',
+                                            },
+                                        }}
+                                        alt="Image Upload by User"
+                                    />
+                                </Grid>
+                            )}
+                        </Box>
                     )}
 
-                    {/* region for: reaction, comment and share */}
+                    {/* region for: reaction, comment and share - show icon is selected*/}
                     <Box sx={{ p: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '8px' }}>
                             <Box
@@ -344,10 +532,16 @@ function Post({
                                     <></>
                                 )}
                             </Box>
-                            <Box>
-                                {numberOfComment !== 0 ? (
-                                    <CustomTypography>{numberOfComment} comments</CustomTypography>
+                            {/* show the number of comments */}
+                            <Box onClick={handleClicksTheNumberOfComments}>
+                                {numberOfComment !== 0 || getCommentListLength !== 0 ? (
+                                    // show the number of comments
+                                    <CustomTypography>
+                                        {numberOfComment + getCommentListLength} comment
+                                        {numberOfComment + getCommentListLength > 1 ? 's' : ''}
+                                    </CustomTypography>
                                 ) : (
+                                    // doesn't show
                                     <></>
                                 )}
                             </Box>
@@ -384,37 +578,25 @@ function Post({
                                             isShowPlaceholder={true}
                                             handleKeyDown={handleKeyDown}
                                             imageURLUploaded={imageURL}
+                                            removeImageUploaded={handleRemoveImageUploaded}
                                         />
-                                        {/* {imageURL && (
-                                            <Box
-                                                sx={{
-                                                    mt: 1,
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                }}
-                                            >
-                                                <Avatar
-                                                    src={imageURL.url}
-                                                    alt="Uploaded Comment Image"
-                                                    sx={{
-                                                        width: '100px',
-                                                        height: '100px',
-                                                        borderRadius: '0',
-                                                    }}
-                                                />
-                                            </Box>
-                                        )} */}
+
                                         <CommentTextField
                                             disabled={true}
                                             isEmptyCommentField={isEmptyCommentField}
                                             submitFunction={handleCommentSubmit}
                                             uploadedImage={handleImageUpload}
+                                            showIconUploadImage={showIconUploadImage}
+                                            removeImageUploaded={handleRemoveImageUploaded}
+                                            setShowPicker={setShowPicker}
+                                            showPicker={showPicker}
+                                            handleEmojiClick={handleEmojiClick}
                                         />
                                     </Box>
                                 </Box>
 
                                 <FilterComments />
-                                <CommentData postId={postID} />
+                                <CommentsData postId={postID} imageUrl={imageUrl} />
                             </Box>
                         )}
                     </Box>
@@ -438,6 +620,7 @@ function Post({
                     <PostMenuSettings
                         openMenuStatus={menuStatus}
                         handleClosePostMenuSettings={handleClosePostMenuSettings}
+                        postMenuSettingsList={postMenuSettings}
                     />
                 </Box>
             )}
@@ -446,100 +629,3 @@ function Post({
 }
 
 export default Post;
-
-const CommentTextField = ({
-    disabled,
-    onChange,
-    inputRef,
-    isShowPlaceholder = false,
-    isEmptyCommentField,
-    submitFunction,
-    handleKeyDown,
-    uploadedImage,
-    imageURLUploaded,
-}) => {
-    return (
-        <Box>
-            <TextField
-                inputRef={inputRef}
-                onChange={onChange}
-                placeholder={isShowPlaceholder && 'Write your comment...'}
-                onKeyDown={handleKeyDown}
-                variant="outlined"
-                fullWidth
-                multiline
-                disabled={disabled}
-                sx={{
-                    ml: 1,
-                    '& .MuiOutlinedInput-root': {
-                        borderRadius: '24px',
-                        border: 'none',
-                        '& fieldset': {
-                            border: 'none',
-                        },
-                        '& .MuiInputBase-input::placeholder': {
-                            fontSize: '13px',
-                            color: 'gray',
-                        },
-                        '& .MuiInputBase-input': {
-                            fontSize: '13px',
-                        },
-                    },
-                    '& .Mui-disabled': {
-                        backgroundColor: 'transparent',
-                    },
-                }}
-                InputProps={{
-                    startAdornment: disabled && (
-                        <InputAdornment
-                            position="start"
-                            sx={{
-                                alignSelf: 'flex-end',
-                                marginTop: '8px',
-                            }}
-                        >
-                            <IconButton sx={{ padding: 0 }}>
-                                <MoodIcon sx={{ fontSize: '24px' }} />
-                            </IconButton>
-                            <label>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    style={{ display: 'none' }}
-                                    onChange={uploadedImage}
-                                    multiple
-                                />
-                                <IconButton component="span">
-                                    <InsertPhotoIcon sx={{ fontSize: '24px' }} />
-                                </IconButton>
-                            </label>
-                        </InputAdornment>
-                    ),
-                    endAdornment: disabled && (
-                        <InputAdornment
-                            position="end"
-                            sx={{
-                                alignSelf: 'flex-end',
-                                marginTop: '8px',
-                            }}
-                        >
-                            <IconButton
-                                onClick={submitFunction}
-                                disabled={isEmptyCommentField}
-                                sx={{ transform: 'rotate(-35deg)' }}
-                            >
-                                <SendRoundedIcon
-                                    sx={{
-                                        fontSize: '22px',
-                                        color: isEmptyCommentField ? 'gray' : blue[700],
-                                    }}
-                                />
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                }}
-            />
-            {imageURLUploaded && <Avatar src={imageURLUploaded.url} />}
-        </Box>
-    );
-};
