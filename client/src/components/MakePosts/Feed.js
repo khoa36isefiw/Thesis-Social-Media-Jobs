@@ -2,6 +2,7 @@ import React from 'react';
 import Post from './Post';
 import { Typography } from '@mui/material';
 import Mountain from '../../assets/images/MountainClouds.jpeg';
+import { useSelector } from 'react-redux';
 // import Beach from '../../assets/images/BeachSunset.jpeg';
 
 export const posts = [
@@ -10,7 +11,8 @@ export const posts = [
         avatarSrc: Mountain,
         displayName: 'Shawn Hoffman',
         followers: '14,123',
-        time: '1d',
+        // time: '1d',
+        time: '2024-06-22T18:18:19.309Z',
         hashtag: '#newyear',
         content: [
             '✨✨✨ Happy New Year of the Dragon!!!!\n',
@@ -31,7 +33,8 @@ export const posts = [
             'https://i.vietgiaitri.com/2018/10/15/husky-loai-cho-ngao-ngo-nhat-qua-dat-601208.jpg',
         displayName: 'John Doe',
         followers: '8,765',
-        time: '3h',
+        // time: '3h',
+        time: '2024-06-29T03:18:19.309Z',
         hashtag: '#sunset #beachlife',
         content: ['Enjoying a beautiful sunset at the beach.', '#sunset #beachlife'],
         numberOfReaction: 200,
@@ -44,7 +47,8 @@ export const posts = [
             'https://i.vietgiaitri.com/2018/10/15/husky-loai-cho-ngao-ngo-nhat-qua-dat-1312f4.jpg',
         displayName: 'Husky Siberian',
         followers: '12',
-        time: '21h',
+        // time: '21h',
+        time: '2024-06-29T01:18:19.309Z',
         hashtag: '',
         content: 'What should I do if I want to become a Front-End Developer?',
         numberOfReaction: 12,
@@ -57,7 +61,8 @@ export const posts = [
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4M9ivjYIFvfc8ZdvJRB9yfO5rLd9DuS4I1g&usqp=CAU',
         displayName: `Vanvietbooks' Page`,
         followers: '285,010',
-        time: '12h',
+        // time: '12h',
+        time: '2024-06-28T02:18:19.309Z',
         hashtag: '#quote_of_the_day #365ngayhanhphuc',
         content: [
             'Nếu phải lựa chọn giữa bóng tối và ánh sáng, tốt nhất bạn nên lựa chọn tin tưởng vào ánh sáng, bởi vì nó sẽ cho bạn nhìn thấy hy vọng, còn trong bóng tối vĩnh viễn chỉ có tuyệt vọng. Cho dù chưa từng nhìn thấy ánh sáng, nhưng bạn hãy cứ lựa chọn tin tưởng, bởi sống có tín ngưỡng sẽ khiến cuộc đời của bạn không phải là đầm nước c h ế t.\n',
@@ -75,6 +80,9 @@ export const posts = [
 ];
 
 function Feed() {
+    // redux
+    const getListDataArticlesPosted = useSelector((state) => state.managePost.listPostsData);
+    console.log('List Data: ', getListDataArticlesPosted);
     return (
         <div>
             {posts.map((post) => (
@@ -90,6 +98,32 @@ function Feed() {
                     numberOfReaction={post.numberOfReaction}
                     numberOfComment={post.numberOfComment}
                     imageUrl={post.imageUrl}
+                >
+                    {/* Tách nội dung thành các đoạn văn */}
+                    {Array.isArray(post.content) ? (
+                        post.content.map((paragraph, index) => <p key={index}>{paragraph}</p>)
+                    ) : (
+                        <Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                            {post.content}
+                        </Typography>
+                    )}
+                </Post>
+            ))}
+
+            {getListDataArticlesPosted.map((post) => (
+                <Post
+                    key={post.id}
+                    postID={'8'}
+                    avatarSrc={null}
+                    displayName={'Nutify'}
+                    followers={'6,969'}
+                    // time={'1h'}
+                    time={post.timestamp}
+                    hashtag={null}
+                    content={post.articleText}
+                    numberOfReaction={null}
+                    numberOfComment={null}
+                    imageUrl={post.listImage}
                 >
                     {/* Tách nội dung thành các đoạn văn */}
                     {Array.isArray(post.content) ? (
