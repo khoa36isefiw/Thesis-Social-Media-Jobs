@@ -1,8 +1,10 @@
 import {
     ADD_COMMENT,
     ADD_NEW_POSTS,
+    COMMENT_PRIVACY,
     GET_REACTION_IN_COMMENT_ON_POST,
     GET_REACTION_ON_POST,
+    POST_SETTINGS_PRIVACY,
 } from '../actionConstant';
 
 export const setReactionOnPost = (postId, reaction) => ({
@@ -30,4 +32,14 @@ export const addNewPosts = (postData) => ({
             timestamp: new Date().toISOString(), // thêm thời gian hiện tại
         },
     },
+});
+
+export const commentControlSelection = (privacy) => ({
+    type: COMMENT_PRIVACY,
+    payload: { privacy },
+});
+
+export const postSettingsPrivacySelection = (postPrivacy) => ({
+    type: POST_SETTINGS_PRIVACY,
+    payload: { postPrivacy },
 });

@@ -1,11 +1,22 @@
 import {
     ADD_COMMENT,
     ADD_NEW_POSTS,
+    COMMENT_PRIVACY,
     GET_REACTION_IN_COMMENT_ON_POST,
     GET_REACTION_ON_POST,
+    POST_SETTINGS_PRIVACY,
 } from '../actionConstant';
 
-const initialState = { reactions: {}, comments: {}, commentReactions: {}, listPostsData: [] };
+const initialState = {
+    reactions: {},
+    comments: {},
+    commentReactions: {},
+    listPostsData: [],
+    commentControlSelection: 'Anyone',
+    postSettingsPrivacySelection: 'Anyone',
+    
+
+};
 
 export const managePostReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -48,7 +59,18 @@ export const managePostReducer = (state = initialState, action) => {
                 ...state,
                 listPostsData: [...state.listPostsData, postData],
             };
-
+        case COMMENT_PRIVACY:
+            const { privacy } = action.payload;
+            return {
+                ...state,
+                commentControlSelection: privacy,
+            };
+        case POST_SETTINGS_PRIVACY:
+            const { postPrivacy } = action.payload;
+            return {
+                ...state,
+                postSettingsPrivacySelection: postPrivacy,
+            };
         default:
             return state;
     }
