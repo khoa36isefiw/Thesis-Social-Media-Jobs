@@ -11,6 +11,7 @@ import {
     styled,
     Button,
     Divider,
+    Modal,
 } from '@mui/material';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -26,6 +27,7 @@ import { tabletScreen } from '../Theme/Theme';
 import { CommentTextField } from './CommentTextField';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewPosts } from '../../redux/ManagePost/managePostAction';
+import PrivacyPostSettings from './PrivacyPostSettings/PrivacyPostSettings';
 
 const UploadActions = ({ children, title }) => {
     return (
@@ -57,7 +59,17 @@ const LightTooltip = styled(({ className, ...props }) => (
 
 function PostModal({ closeModal }) {
     const dispatch = useDispatch();
+    const [openPrivacyPostSettings, setOpenPrivacyPostSettings] = useState(false);
+    const getPostPrivacySelected = useSelector(
+        (state) => state.managePost.postSettingsPrivacySelection,
+    );
 
+    const handleCloseModal = () => {
+        setOpenPrivacyPostSettings(false);
+    };
+    const handleShowModal = () => {
+        setOpenPrivacyPostSettings(true);
+    };
     const startAPostTextFieldRef = useRef(null);
     const [editorText, setEditorText] = useState('');
     const [imageURL, setImageURL] = useState([]);
@@ -145,6 +157,7 @@ function PostModal({ closeModal }) {
                 setIsEmptyCommentField(true);
             }
         }
+        closeModal();
     };
 
     return (
@@ -184,16 +197,18 @@ function PostModal({ closeModal }) {
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'start',
+                        justifyContent: 'center',
                         borderRadius: '12px',
-                        maxWidth: '250px',
+                        maxWidth: '300px',
                         p: 2,
                         mb: 2,
                         '&:hover': {
                             cursor: 'pointer',
-                            backgroundColor: '#d3d3d3',
+                            // backgroundColor: '#d3d3d3',
+                            backgroundColor: '#00000014',
                         },
                     }}
+                    onClick={handleShowModal}
                 >
                     <Avatar
                         src={UserAvatar}
@@ -213,8 +228,9 @@ function PostModal({ closeModal }) {
                             >
                                 Huynh Dang Khoa
                             </Typography>
-                            <Typography sx={{ textAlign: 'left', fontSize: '14px' }}>
-                                Post to Anyone
+                            <Typography sx={{ textAlign: 'left', fontSize: '13px' }}>
+                                {/* Post to Anyone */}
+                                Post to {getPostPrivacySelected}
                             </Typography>
                         </Box>
                         <ArrowDropDownIcon fontSize="large" />
@@ -273,6 +289,24 @@ function PostModal({ closeModal }) {
                     Post
                 </Button>
             </Box>
+            <Modal open={openPrivacyPostSettings} onClose={handleCloseModal}>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        bgcolor: 'background.paper',
+                        borderRadius: '12px',
+                        boxShadow: '10px 5px 10px #605e5e',
+                        // p: 2,
+                        minHeight: '200px',
+                        width: '35%',
+                    }}
+                >
+                    <PrivacyPostSettings handleClose={handleCloseModal} />
+                </Box>
+            </Modal>
         </div>
     );
 }
