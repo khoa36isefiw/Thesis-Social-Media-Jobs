@@ -11,23 +11,44 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { commentControlSelection } from '../../../redux/ManagePost/managePostAction';
 
-function CommentControl({ handleClose, onSave, selectedOption, showCommentControlOption }) {
+function CommentControl({ handleClose, showCommentControlOption }) {
     const dispatch = useDispatch();
-    const [currentOption, setCurrentOption] = useState(
-        showCommentControlOption === 'Anyone' ? selectedOption : 'Connections only',
+    const getCommentControlPrivacySelected = useSelector(
+        (state) => state.managePost.commentControlSelection,
     );
-    console.log('selectedOption: ', selectedOption);
-    useEffect(() => {
-        setCurrentOption(selectedOption);
-    }, [selectedOption]);
+
+    const getCommentControlPrivateSelected = useSelector(
+        (state) => state.managePost.commentControlPrivateSelection,
+    );
+
+    const getPrivacySelected = useSelector((state) => state.managePost.savePrivacySelected);
+    // const [currentOption, setCurrentOption] = useState(getPrivacySelected === "Anyone" ?getCommentControlPrivacySelected:);
+    const [currentOption, setCurrentOption] = useState(
+        getPrivacySelected === 'Anyone'
+            ? getCommentControlPrivacySelected
+            : getCommentControlPrivateSelected,
+    );
+    const [currentOptionConnections, setCurrentOptionConnections] = useState(getPrivacySelected);
+    console.log('getCommentControlPrivacySelected: ', getCommentControlPrivacySelected);
 
     const handleOptionChoose = (textAction) => {
         setCurrentOption(textAction);
+        // if (getPrivacySelected === 'Anyone') {
+        //     setCurrentOption(textAction);
+        // } else if (getPrivacySelected === 'Connections only') {
+        //     setCurrentOptionConnections(textAction);
+        // }
     };
 
     const handleSave = () => {
-        onSave(currentOption);
+        // if (getPrivacySelected === 'Anyone') {
+        //     dispatch(commentControlSelection(currentOption));
+        // } else {
+        //     dispatch(commentControlSelection(currentOptionConnections));
+        // }
+
         dispatch(commentControlSelection(currentOption));
+        handleClose(); // close the current modal
     };
 
     return (
@@ -91,7 +112,7 @@ function CommentControl({ handleClose, onSave, selectedOption, showCommentContro
                 <Button
                     variant="contained"
                     // check if editor is empty --> disabled this Button
-                    disabled={currentOption !== 'Anyone' ? false : true}
+                    // disabled={currentOption !== 'Anyone' ? false : true}
                     sx={{
                         fontSize: '13px',
                         borderRadius: '24px',

@@ -10,21 +10,21 @@ import CommentControl from '../CommentControl/CommentControl';
 import { privacyPostSettingsData } from '../Data/PrivacyPostSettingsData';
 import { PrivacyButton } from '../PrivacyButton/PrivacyButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { postSettingsPrivacySelection } from '../../../redux/ManagePost/managePostAction';
+import {
+    postSettingsPrivacySelection,
+    privacySelected,
+} from '../../../redux/ManagePost/managePostAction';
 
 function PrivacyPostSettings({ handleClose }) {
     const dispatch = useDispatch();
+    // open commment settings modal
     const [openCommentControl, setOpenCommentControl] = useState(false);
     const getPostPrivacySelected = useSelector(
         (state) => state.managePost.postSettingsPrivacySelection,
     );
-    console.log('getPostPrivacySelected: ', getPostPrivacySelected);
+
     // default selected for post setting privacy
     const [selectedOptionPrivacy, setSelectedOptionPrivacy] = useState(getPostPrivacySelected);
-    const [commentControlOption, setCommentControlOption] = useState('Anyone'); // default comment control option
-
-    // console.log('getCommentPrivacySelected: ', getCommentPrivacySelected);
-
     const handleShowOpenCommentControlModal = () => {
         setOpenCommentControl(true);
     };
@@ -32,14 +32,10 @@ function PrivacyPostSettings({ handleClose }) {
         setOpenCommentControl(false);
     };
 
-    const handleSaveCommentControlOption = (option) => {
-        setCommentControlOption(option);
-        handleCloseOpenCommentControlModal();
-    };
-
     // for settings privacy
     const handleOptionChoose = (textAction) => {
         setSelectedOptionPrivacy(textAction);
+        dispatch(privacySelected(textAction));
     };
 
     const handleDoneSelection = () => {
@@ -53,18 +49,7 @@ function PrivacyPostSettings({ handleClose }) {
                 <CustomizeTypography fw={true} fs={'20px'} sx={{ flexGrow: 1 }}>
                     Post Settings
                 </CustomizeTypography>
-                <IconButton
-                    onClick={handleClose}
-                    disableTouchRipple
-                    sx={
-                        {
-                            // padding: 0,
-                            // '&:hover': {
-                            //     backgroundColor: 'transparent',
-                            // },
-                        }
-                    }
-                >
+                <IconButton onClick={handleClose} disableTouchRipple>
                     <CloseIcon sx={{ fontSize: '24px' }}></CloseIcon>
                 </IconButton>
             </Box>
@@ -167,8 +152,6 @@ function PrivacyPostSettings({ handleClose }) {
                 >
                     <CommentControl
                         handleClose={handleCloseOpenCommentControlModal}
-                        onSave={handleSaveCommentControlOption}
-                        selectedOption={commentControlOption}
                         showCommentControlOption={selectedOptionPrivacy}
                     />
                 </Box>
