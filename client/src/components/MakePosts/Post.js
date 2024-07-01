@@ -57,6 +57,7 @@ function Post({
     numberOfReaction,
     numberOfComment,
     imageUrl,
+    viewPostPermission,
 }) {
     // Check content is always an array?
     const dispatch = useDispatch();
@@ -289,11 +290,13 @@ function Post({
                                         }}
                                     />
                                     <IconButton sx={{ padding: 0 }}>
-                                        {getPrivacySelected === 'Anyone' ? (
+                                        {/* {getPrivacySelected === 'Anyone' ? (
                                             <PublicIcon />
                                         ) : (
                                             <Diversity3Icon />
-                                        )}
+                                        )} */}
+                                        {/* based on posted data*/}
+                                        {viewPostPermission ? <PublicIcon /> : <Diversity3Icon />}
                                     </IconButton>
                                 </Box>
                             </Box>
