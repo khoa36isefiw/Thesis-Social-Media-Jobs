@@ -5,6 +5,7 @@ import {
     GET_REACTION_IN_COMMENT_ON_POST,
     GET_REACTION_ON_POST,
     POST_SETTINGS_PRIVACY,
+    SAVE_PRIVACY_SELECTED,
 } from '../actionConstant';
 
 export const setReactionOnPost = (postId, reaction) => ({
@@ -42,4 +43,9 @@ export const commentControlSelection = (privacy) => ({
 export const postSettingsPrivacySelection = (postPrivacy) => ({
     type: POST_SETTINGS_PRIVACY,
     payload: { postPrivacy },
+});
+
+export const privacySelected = (privacySelected) => ({
+    type: SAVE_PRIVACY_SELECTED,
+    payload: { privacySelected },
 });

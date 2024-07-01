@@ -24,6 +24,9 @@ import { CommentTextField } from './CommentTextField';
 import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
 import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 
+import PublicIcon from '@mui/icons-material/Public';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
+
 // definde typograph for this component
 export const CustomTypography = ({ children }) => (
     <Typography
@@ -76,6 +79,8 @@ function Post({
     // get the number of comments
     const commentList = useSelector((state) => state.managePost.comments[postID]);
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
+
+    const getPrivacySelected = useSelector((state) => state.managePost.savePrivacySelected);
 
     // console.log('getCommentListLength: ', getCommentListLength);
 
@@ -268,11 +273,29 @@ function Post({
                                 <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
                                     {followers} followers
                                 </Typography>
-                                <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
-                                    {/* {time} */}
-                                    {/* update and show the current of posts */}
-                                    {calculateTimeElapsed(time)}
-                                </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
+                                        {/* {time} */}
+                                        {/* update and show the current of posts */}
+                                        {calculateTimeElapsed(time)}
+                                    </Typography>
+                                    <Box
+                                        sx={{
+                                            width: '5px',
+                                            height: '5px',
+                                            backgroundColor: 'gray',
+                                            borderRadius: '50%',
+                                            mx: '4px',
+                                        }}
+                                    />
+                                    <IconButton sx={{ padding: 0 }}>
+                                        {getPrivacySelected === 'Anyone' ? (
+                                            <PublicIcon />
+                                        ) : (
+                                            <Diversity3Icon />
+                                        )}
+                                    </IconButton>
+                                </Box>
                             </Box>
                             <IconButton onClick={handleOpenPostMenuSettings}>
                                 <MoreHorizIcon sx={{ fontSize: '24px' }} />

@@ -12,6 +12,7 @@ import {
     Button,
     Divider,
     Modal,
+    Grow,
 } from '@mui/material';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -289,7 +290,36 @@ function PostModal({ closeModal }) {
                     Post
                 </Button>
             </Box>
+
             <Modal open={openPrivacyPostSettings} onClose={handleCloseModal}>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '35%',
+                        minHeight: '200px',
+                    }}
+                >
+                    <Grow in={openPrivacyPostSettings}>
+                        <Box
+                            sx={{
+                                bgcolor: 'background.paper',
+                                borderRadius: '12px',
+                                boxShadow: '10px 5px 10px #605e5e',
+                                // p: 2,
+
+                                // animation: `${spin} 1s infinite ease`,
+                            }}
+                        >
+                            <PrivacyPostSettings handleClose={handleCloseModal} />
+                        </Box>
+                    </Grow>
+                </Box>
+            </Modal>
+
+            {/* <Modal open={openPrivacyPostSettings} onClose={handleCloseModal}>
                 <Box
                     sx={{
                         position: 'absolute',
@@ -306,7 +336,7 @@ function PostModal({ closeModal }) {
                 >
                     <PrivacyPostSettings handleClose={handleCloseModal} />
                 </Box>
-            </Modal>
+            </Modal> */}
         </div>
     );
 }

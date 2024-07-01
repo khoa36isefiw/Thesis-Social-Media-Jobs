@@ -1,4 +1,15 @@
-import { Box, Button, Divider, IconButton, Modal, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    Divider,
+    IconButton,
+    Modal,
+    Typography,
+    Grow,
+    Slide,
+    Grid,
+    keyframes,
+} from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypography';
 import CloseIcon from '@mui/icons-material/Close';
@@ -10,21 +21,21 @@ import CommentControl from '../CommentControl/CommentControl';
 import { privacyPostSettingsData } from '../Data/PrivacyPostSettingsData';
 import { PrivacyButton } from '../PrivacyButton/PrivacyButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { postSettingsPrivacySelection } from '../../../redux/ManagePost/managePostAction';
+import {
+    postSettingsPrivacySelection,
+    privacySelected,
+} from '../../../redux/ManagePost/managePostAction';
 
 function PrivacyPostSettings({ handleClose }) {
     const dispatch = useDispatch();
+    // open commment settings modal
     const [openCommentControl, setOpenCommentControl] = useState(false);
     const getPostPrivacySelected = useSelector(
         (state) => state.managePost.postSettingsPrivacySelection,
     );
-    console.log('getPostPrivacySelected: ', getPostPrivacySelected);
+
     // default selected for post setting privacy
     const [selectedOptionPrivacy, setSelectedOptionPrivacy] = useState(getPostPrivacySelected);
-    const [commentControlOption, setCommentControlOption] = useState('Anyone'); // default comment control option
-
-    // console.log('getCommentPrivacySelected: ', getCommentPrivacySelected);
-
     const handleShowOpenCommentControlModal = () => {
         setOpenCommentControl(true);
     };
@@ -32,14 +43,10 @@ function PrivacyPostSettings({ handleClose }) {
         setOpenCommentControl(false);
     };
 
-    const handleSaveCommentControlOption = (option) => {
-        setCommentControlOption(option);
-        handleCloseOpenCommentControlModal();
-    };
-
     // for settings privacy
     const handleOptionChoose = (textAction) => {
         setSelectedOptionPrivacy(textAction);
+        dispatch(privacySelected(textAction));
     };
 
     const handleDoneSelection = () => {
@@ -53,18 +60,7 @@ function PrivacyPostSettings({ handleClose }) {
                 <CustomizeTypography fw={true} fs={'20px'} sx={{ flexGrow: 1 }}>
                     Post Settings
                 </CustomizeTypography>
-                <IconButton
-                    onClick={handleClose}
-                    disableTouchRipple
-                    sx={
-                        {
-                            // padding: 0,
-                            // '&:hover': {
-                            //     backgroundColor: 'transparent',
-                            // },
-                        }
-                    }
-                >
+                <IconButton onClick={handleClose} disableTouchRipple>
                     <CloseIcon sx={{ fontSize: '24px' }}></CloseIcon>
                 </IconButton>
             </Box>
@@ -131,7 +127,7 @@ function PrivacyPostSettings({ handleClose }) {
                         fontWeight: 'bold',
                         mr: 2,
                     }}
-                    // onClick={handlePostAnArticle}
+                    onClick={handleClose}
                 >
                     Back
                 </Button>
@@ -150,6 +146,8 @@ function PrivacyPostSettings({ handleClose }) {
                     Done
                 </Button>
             </Box>
+
+            {/* case 1: it's okay, but it's too long */}
             <Modal open={openCommentControl} onClose={handleCloseOpenCommentControlModal}>
                 <Box
                     sx={{
@@ -157,24 +155,68 @@ function PrivacyPostSettings({ handleClose }) {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        bgcolor: 'background.paper',
-                        borderRadius: '12px',
-                        boxShadow: '10px 5px 10px #605e5e',
-                        // p: 2,
-                        minHeight: '200px',
                         width: '35%',
+                        minHeight: '200px',
                     }}
                 >
-                    <CommentControl
-                        handleClose={handleCloseOpenCommentControlModal}
-                        onSave={handleSaveCommentControlOption}
-                        selectedOption={commentControlOption}
-                        showCommentControlOption={selectedOptionPrivacy}
-                    />
+                    <Grow in={openCommentControl}>
+                        <Box
+                            sx={{
+                                bgcolor: 'background.paper',
+                                borderRadius: '12px',
+                                boxShadow: '10px 5px 10px #605e5e',
+                                // p: 2,
+
+                                // animation: `${spin} 1s infinite ease`,
+                            }}
+                        >
+                            <CommentControl
+                                handleClose={handleCloseOpenCommentControlModal}
+                                showCommentControlOption={selectedOptionPrivacy}
+                            />
+                        </Box>
+                    </Grow>
                 </Box>
             </Modal>
+
+            {/* case 2: it's okay, but can't turn of when click outside the modal */}
+            {/* <Modal open={openCommentControl} onClose={handleCloseOpenCommentControlModal}>
+                <Grow in={openCommentControl}>
+                    <Grid
+                        container
+                        justifyContent="center"
+                        alignItems="center"
+                        style={{ minHeight: '100vh' }}
+                    >
+                        <Grid sx={{ width: '35%' }}>
+                            <Box
+                                sx={{
+                                    bgcolor: 'background.paper',
+                                    borderRadius: '12px',
+                                    boxShadow: 24,
+                                    minHeight: '200px',
+                                }}
+                            >
+                                <CommentControl
+                                    handleClose={handleCloseOpenCommentControlModal}
+                                    showCommentControlOption={selectedOptionPrivacy}
+                                />
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Grow>
+            </Modal> */}
         </Box>
     );
 }
 
 export default PrivacyPostSettings;
+
+const spin = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
