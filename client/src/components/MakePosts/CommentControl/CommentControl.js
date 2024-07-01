@@ -28,25 +28,14 @@ function CommentControl({ handleClose, showCommentControlOption }) {
             ? getCommentControlPrivacySelected
             : getCommentControlPrivateSelected,
     );
-    const [currentOptionConnections, setCurrentOptionConnections] = useState(getPrivacySelected);
+
     console.log('getCommentControlPrivacySelected: ', getCommentControlPrivacySelected);
 
     const handleOptionChoose = (textAction) => {
         setCurrentOption(textAction);
-        // if (getPrivacySelected === 'Anyone') {
-        //     setCurrentOption(textAction);
-        // } else if (getPrivacySelected === 'Connections only') {
-        //     setCurrentOptionConnections(textAction);
-        // }
     };
 
     const handleSave = () => {
-        // if (getPrivacySelected === 'Anyone') {
-        //     dispatch(commentControlSelection(currentOption));
-        // } else {
-        //     dispatch(commentControlSelection(currentOptionConnections));
-        // }
-
         dispatch(commentControlSelection(currentOption));
         handleClose(); // close the current modal
     };

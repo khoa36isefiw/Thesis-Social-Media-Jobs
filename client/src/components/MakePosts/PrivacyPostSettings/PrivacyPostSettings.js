@@ -1,4 +1,15 @@
-import { Box, Button, Divider, IconButton, Modal, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    Divider,
+    IconButton,
+    Modal,
+    Typography,
+    Grow,
+    Slide,
+    Grid,
+    keyframes,
+} from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypography';
 import CloseIcon from '@mui/icons-material/Close';
@@ -116,7 +127,7 @@ function PrivacyPostSettings({ handleClose }) {
                         fontWeight: 'bold',
                         mr: 2,
                     }}
-                    // onClick={handlePostAnArticle}
+                    onClick={handleClose}
                 >
                     Back
                 </Button>
@@ -135,6 +146,8 @@ function PrivacyPostSettings({ handleClose }) {
                     Done
                 </Button>
             </Box>
+
+            {/* case 1: it's okay, but it's too long */}
             <Modal open={openCommentControl} onClose={handleCloseOpenCommentControlModal}>
                 <Box
                     sx={{
@@ -142,22 +155,68 @@ function PrivacyPostSettings({ handleClose }) {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        bgcolor: 'background.paper',
-                        borderRadius: '12px',
-                        boxShadow: '10px 5px 10px #605e5e',
-                        // p: 2,
-                        minHeight: '200px',
                         width: '35%',
+                        minHeight: '200px',
                     }}
                 >
-                    <CommentControl
-                        handleClose={handleCloseOpenCommentControlModal}
-                        showCommentControlOption={selectedOptionPrivacy}
-                    />
+                    <Grow in={openCommentControl}>
+                        <Box
+                            sx={{
+                                bgcolor: 'background.paper',
+                                borderRadius: '12px',
+                                boxShadow: '10px 5px 10px #605e5e',
+                                // p: 2,
+
+                                // animation: `${spin} 1s infinite ease`,
+                            }}
+                        >
+                            <CommentControl
+                                handleClose={handleCloseOpenCommentControlModal}
+                                showCommentControlOption={selectedOptionPrivacy}
+                            />
+                        </Box>
+                    </Grow>
                 </Box>
             </Modal>
+
+            {/* case 2: it's okay, but can't turn of when click outside the modal */}
+            {/* <Modal open={openCommentControl} onClose={handleCloseOpenCommentControlModal}>
+                <Grow in={openCommentControl}>
+                    <Grid
+                        container
+                        justifyContent="center"
+                        alignItems="center"
+                        style={{ minHeight: '100vh' }}
+                    >
+                        <Grid sx={{ width: '35%' }}>
+                            <Box
+                                sx={{
+                                    bgcolor: 'background.paper',
+                                    borderRadius: '12px',
+                                    boxShadow: 24,
+                                    minHeight: '200px',
+                                }}
+                            >
+                                <CommentControl
+                                    handleClose={handleCloseOpenCommentControlModal}
+                                    showCommentControlOption={selectedOptionPrivacy}
+                                />
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Grow>
+            </Modal> */}
         </Box>
     );
 }
 
 export default PrivacyPostSettings;
+
+const spin = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
