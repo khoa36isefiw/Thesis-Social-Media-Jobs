@@ -15,15 +15,36 @@ import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography'
 import { Link, useNavigate } from 'react-router-dom';
 import ImageLogin from '../../assets/images/imgLogin.png';
 import { mobileScreen, tabletScreen } from '../Theme/Theme';
+import { useSelector } from 'react-redux';
+import { useRef } from 'react';
 
 function Login() {
     const navigate = useNavigate();
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
+    const listAccount = useSelector((state) => state.manageAccounts.accountsList);
     const [isShow, setIsShow] = useState(true);
 
     const handleShowPassword = () => {
         setIsShow(!isShow);
     };
 
+    const handleSignIn = () => {
+        // userName or email is the same
+        const email = emailRef.current.value.trim();
+        const password = passwordRef.current.value.trim();
+        const user = listAccount.find(
+            (account) => account.userName === email && account.password === password,
+        );
+
+        if (user) {
+            // login successfully
+            console.log('login successfully ');
+            navigate('/signed-in');
+        } else {
+            console.log('Make show message snackbar');
+        }
+    };
     return (
         <Container
             sx={{
@@ -55,13 +76,14 @@ function Login() {
                             <CustomizeTypography sx={{ fontWeight: 'bold' }}>
                                 Email
                             </CustomizeTypography>
-                            <CustomizeTextField sx={{ width: '100%' }} />
+                            <CustomizeTextField inputRef={emailRef} sx={{ width: '100%' }} />
                         </Box>
                         <Box sx={{ maxWidth: '400px', mb: 2 }}>
                             <CustomizeTypography sx={{ fontWeight: 'bold' }}>
                                 Password
                             </CustomizeTypography>
                             <CustomizeTextField
+                                inputRef={passwordRef}
                                 type={!isShow ? 'text' : 'password'}
                                 sx={{ width: '100%', fontSize: '16px' }}
                                 InputProps={{
@@ -110,6 +132,7 @@ function Login() {
                                 maxWidth: '400px',
                             }}
                             variant="contained"
+                            onClick={handleSignIn}
                         >
                             Sign In
                         </Button>
