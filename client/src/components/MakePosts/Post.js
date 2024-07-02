@@ -487,7 +487,7 @@ function Post({
                             ) : (
                                 <Grid
                                     item
-                                    xs={6}
+                                    xs={12}
                                     md={12}
                                     lg={12}
                                     sx={{
