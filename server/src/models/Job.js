@@ -26,6 +26,7 @@ const PostSchema = new Schema(
         description: { type: String, required: true },
         skillRequirement: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Skill' }],
         receiveApplicantMethod: { type: String },
+        status: { type: String },
     },
     {
         timestamps: true,
