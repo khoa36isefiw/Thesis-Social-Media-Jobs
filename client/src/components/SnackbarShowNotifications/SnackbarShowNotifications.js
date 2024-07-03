@@ -1,18 +1,22 @@
-import * as React from 'react';
-import { Typography, Button, Snackbar, IconButton, Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Typography, Snackbar, IconButton, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { blue, green } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
 
-export default function SnackbarShowNotifications({ mainText, subText, isOpen, setIsOpen }) {
-    console.log('get isOpen in Snack : ', isOpen);
+export default function SnackbarShowNotifications({ mainText, subText, isOpen, onClose }) {
+    const [open, setOpen] = useState(isOpen);
+
+    useEffect(() => {
+        setOpen(isOpen);
+    }, [isOpen]);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-        setIsOpen(!isOpen);
-        // console.log('');
+        setOpen(false);
+        onClose();
     };
 
     const action = (
@@ -28,10 +32,7 @@ export default function SnackbarShowNotifications({ mainText, subText, isOpen, s
             <IconButton>
                 <CheckCircleIcon sx={{ fontSize: '24px', color: 'green' }} />
             </IconButton>
-            <Typography sx={{ fontSize: '13.5px', color: 'black' }}>
-                {/* This post is saved! */}
-                {mainText}
-            </Typography>
+            <Typography sx={{ fontSize: '13.5px', color: 'black' }}>{mainText}</Typography>
             {subText && (
                 <Typography
                     sx={{
@@ -45,7 +46,6 @@ export default function SnackbarShowNotifications({ mainText, subText, isOpen, s
                         ml: '4px',
                     }}
                 >
-                    {/* See saved posts */}
                     {subText}
                 </Typography>
             )}
@@ -63,8 +63,8 @@ export default function SnackbarShowNotifications({ mainText, subText, isOpen, s
                     width: '350px',
                 },
             }}
-            open={isOpen}
-            autoHideDuration={4000}
+            open={open}
+            autoHideDuration={1500}
             onClose={handleClose}
             message={messageShow}
             action={action}
