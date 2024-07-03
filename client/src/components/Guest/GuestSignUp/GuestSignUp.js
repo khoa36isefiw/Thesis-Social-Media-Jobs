@@ -17,6 +17,7 @@ import { mobileScreen } from '../../Theme/Theme';
 import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveAccountRegistered } from '../../../redux/ManageAccount/manageAccountAction';
+import SnackbarShowNotifications from '../../SnackbarShowNotifications/SnackbarShowNotifications';
 function GuestLogin() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function GuestLogin() {
     const passwordRef = useRef(null);
     const [isShow, setIsShow] = useState(true);
     const listAccount = useSelector((state) => state.manageAccounts.accountsList);
+    const [showNotifications, setShowNotifications] = useState(false);
 
     const handleShowPassword = () => {
         setIsShow(!isShow);
@@ -34,9 +36,14 @@ function GuestLogin() {
         const password = passwordRef.current.value.trim();
 
         dispatch(saveAccountRegistered({ userName, password }));
+        setShowNotifications(true);
     };
 
     console.log('listAccount: ', listAccount);
+
+    const handleCloseSnackbar = () => {
+        setShowNotifications(false);
+    };
     return (
         <Box sx={{ minHeight: '100vh' }}>
             <Container>
@@ -213,6 +220,12 @@ function GuestLogin() {
                         </Typography>
                     </Box>
                 </Container>
+
+                <SnackbarShowNotifications
+                    mainText={'Tesst oepn'}
+                    isOpen={showNotifications}
+                    onClose={handleCloseSnackbar}
+                />
             </Container>
         </Box>
     );
