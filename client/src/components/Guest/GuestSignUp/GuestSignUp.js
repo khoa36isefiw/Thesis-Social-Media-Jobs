@@ -14,13 +14,36 @@ import { useNavigate } from 'react-router-dom';
 import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypography';
 import { CustomizeTextField } from '../../CustomizeTextField/CustomizeTextField';
 import { mobileScreen } from '../../Theme/Theme';
+import { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveAccountRegistered } from '../../../redux/ManageAccount/manageAccountAction';
+import SnackbarShowNotifications from '../../SnackbarShowNotifications/SnackbarShowNotifications';
 function GuestLogin() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
     const [isShow, setIsShow] = useState(true);
+    const listAccount = useSelector((state) => state.manageAccounts.accountsList);
+    const [showNotifications, setShowNotifications] = useState(false);
 
     const handleShowPassword = () => {
         setIsShow(!isShow);
     };
-    const navigate = useNavigate();
+
+    const handleSignUp = () => {
+        const userName = emailRef.current.value.trim();
+        const password = passwordRef.current.value.trim();
+
+        dispatch(saveAccountRegistered({ userName, password }));
+        setShowNotifications(true);
+    };
+
+    console.log('listAccount: ', listAccount);
+
+    const handleCloseSnackbar = () => {
+        setShowNotifications(false);
+    };
     return (
         <Box sx={{ minHeight: '100vh' }}>
             <Container>
@@ -56,6 +79,7 @@ function GuestLogin() {
                             Email
                         </CustomizeTypography>
                         <TextField
+                            inputRef={emailRef}
                             id="outlined-basic"
                             variant="outlined"
                             fullWidth={true}
@@ -74,6 +98,7 @@ function GuestLogin() {
                             Password
                         </CustomizeTypography>
                         <TextField
+                            inputRef={passwordRef}
                             type={!isShow ? 'text' : 'password'}
                             fullWidth={true}
                             sx={{
@@ -100,6 +125,7 @@ function GuestLogin() {
                                                 // <VisibilityIcon />
                                                 <Typography
                                                     sx={{
+                                                        fontSize: '13px',
                                                         fontWeight: 'bold',
                                                         color: 'blue',
                                                         '&:hover': {
@@ -113,6 +139,7 @@ function GuestLogin() {
                                                 // <VisibilityOffIcon />
                                                 <Typography
                                                     sx={{
+                                                        fontSize: '13px',
                                                         fontWeight: 'bold',
                                                         color: 'blue',
                                                         '&:hover': {
@@ -144,6 +171,7 @@ function GuestLogin() {
                             borderRadius: '24px',
                         }}
                         fullWidth={true}
+                        onClick={handleSignUp}
                     >
                         Agree and Join
                     </Button>
@@ -192,6 +220,12 @@ function GuestLogin() {
                         </Typography>
                     </Box>
                 </Container>
+
+                <SnackbarShowNotifications
+                    mainText={'Tesst oepn'}
+                    isOpen={showNotifications}
+                    onClose={handleCloseSnackbar}
+                />
             </Container>
         </Box>
     );

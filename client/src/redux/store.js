@@ -7,6 +7,7 @@ import { isMessageRepliedReducer } from './ReplyMessage/replyMessageReducer';
 import { mutePersonReducer } from './MutePerson/mutePersonReducer';
 import { addChatMessageReducer } from './AddChatMessage/addChatMessageReducer';
 import { managePostReducer } from './ManagePost/managePostReducer';
+import { manageAccountReducer } from './ManageAccount/manageAccountReducer';
 const rootReducer = combineReducers({
     buttonSendMessage: sendReducer,
     // starred users
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     replyMessage: isMessageRepliedReducer,
     startAMessage: addChatMessageReducer,
     managePost: managePostReducer,
+    manageAccounts: manageAccountReducer,
 });
 
 const store = createStore(rootReducer);

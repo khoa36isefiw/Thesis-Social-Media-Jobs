@@ -26,6 +26,7 @@ export const posts = [
         // imageUrl: Mountain,
         imageUrl:
             'https://people.com/thmb/JyE3_wRjlG6r3jlsVPgl0gbVXJ0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(999x0:1001x2)/year-of-the-dragon-020624-tout-f82b60115a9d462dbf2a40256e40c7ae.jpg',
+        viewPostPermission: true,
     },
     {
         id: 2,
@@ -40,6 +41,7 @@ export const posts = [
         numberOfReaction: 200,
         numberOfComment: 45,
         imageUrl: 'https://www.surfertoday.com/images/stories/beach-sunset.jpg',
+        viewPostPermission: true,
     },
     {
         id: 3,
@@ -54,6 +56,7 @@ export const posts = [
         numberOfReaction: 12,
         numberOfComment: 0,
         imageUrl: null,
+        viewPostPermission: true,
     },
     {
         id: 4,
@@ -76,6 +79,7 @@ export const posts = [
         numberOfComment: 0,
         imageUrl:
             'https://lightingequipmentsales.com/wp-content/uploads/2018/03/Daylight-Illuminance-740x416.jpg',
+        viewPostPermission: false, // show icon public or connections only
     },
 ];
 
@@ -98,6 +102,7 @@ function Feed() {
                     numberOfReaction={post.numberOfReaction}
                     numberOfComment={post.numberOfComment}
                     imageUrl={post.imageUrl}
+                    viewPostPermission={post.viewPostPermission}
                 >
                     {/* Tách nội dung thành các đoạn văn */}
                     {Array.isArray(post.content) ? (
@@ -124,6 +129,7 @@ function Feed() {
                     numberOfReaction={null}
                     numberOfComment={null}
                     imageUrl={post.listImage}
+                    viewPostPermission={post.viewPostPermission}
                 >
                     {/* Tách nội dung thành các đoạn văn */}
                     {Array.isArray(post.content) ? (

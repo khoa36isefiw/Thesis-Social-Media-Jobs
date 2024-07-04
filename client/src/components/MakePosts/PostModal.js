@@ -81,6 +81,7 @@ function PostModal({ closeModal }) {
     const editorRef = useRef(null);
     const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
+    const getPrivacySelected = useSelector((state) => state.managePost.savePrivacySelected);
 
     // upload for multiple images
     const handleImageUpload = (event) => {
@@ -140,10 +141,10 @@ function PostModal({ closeModal }) {
 
     const handlePostAnArticle = () => {
         const articleText = startAPostTextFieldRef.current.value.trim(); // get the current text of textfield
-
+        const viewPostPermission = getPrivacySelected === 'Anyone' ? true : false;
         let articleTextSent = null;
         if (imageURL) {
-            articleTextSent = { articleText: articleText, listImage: imageURL };
+            articleTextSent = { articleText: articleText, listImage: imageURL, viewPostPermission };
 
             dispatch(addNewPosts(articleTextSent));
             startAPostTextFieldRef.current.value = '';
@@ -152,7 +153,7 @@ function PostModal({ closeModal }) {
         } else {
             if (articleText !== '') {
                 // dispatch(addComment(postID, articleText));
-                dispatch(addNewPosts({ articleTextSent: articleText }));
+                dispatch(addNewPosts({ articleTextSent: articleText, viewPostPermission }));
                 // clear input after submitting
                 startAPostTextFieldRef.current.value = '';
                 setIsEmptyCommentField(true);
