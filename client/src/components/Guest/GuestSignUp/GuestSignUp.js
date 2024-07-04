@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveAccountRegistered } from '../../../redux/ManageAccount/manageAccountAction';
 import SnackbarShowNotifications from '../../SnackbarShowNotifications/SnackbarShowNotifications';
 import WarningIcon from '@mui/icons-material/Warning';
-function GuestLogin() {
+function GuestSignUp() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const emailRef = useRef(null);
@@ -241,4 +241,4 @@ function GuestLogin() {
     );
 }
 
-export default GuestLogin;
+export default GuestSignUp;
