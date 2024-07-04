@@ -152,7 +152,8 @@ function HomePageHeader() {
                          */}
                         <Button
                             variant="outlined"
-                            onClick={() => navigate('/signed-in')}
+                            // onClick={() => navigate('/signed-in')}
+                            onClick={() => navigate('/sign-in')}
                             sx={{
                                 [mobileScreen]: {
                                     borderRadius: '24px',

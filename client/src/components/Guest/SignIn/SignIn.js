@@ -12,32 +12,88 @@ import Logo from '../../../assets/images/aikotoba-job.png';
 import { useNavigate } from 'react-router-dom';
 import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypography';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../../Theme/Theme';
+import { useRef } from 'react';
+import { useSelector } from 'react-redux';
+import SnackbarShowNotifications from '../../SnackbarShowNotifications/SnackbarShowNotifications';
+import WarningIcon from '@mui/icons-material/Warning';
+import checkValidation from '../../CheckValidation/CheckValidation';
 function SignIn() {
     const [isShow, setIsShow] = useState(true);
+    const navigate = useNavigate();
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [emailValidation, setEmailValidation] = useState(false);
+    const [passwordValidation, setPasswordValidation] = useState(false);
+    const [checkLogin, setCheckLogin] = useState(true);
+
+    const checkEmailValidation = checkValidation({ value: '' });
+
+    const listAccount = useSelector((state) => state.manageAccounts.accountsList);
 
     const handleShowPassword = () => {
         setIsShow(!isShow);
     };
-    const navigate = useNavigate();
-    return (
-        <Box sx={{ backgroundColor: '#f3f2f0', minHeight: '80vh' }}>
-            <Container>
-                {/* <Box onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
-                    <img src={Logo} alt="Logo" style={{ height: '100px', width: '100px' }} />
-                </Box> */}
 
+    const handleSignIn = () => {
+        const isEmailValid = checkEmailValidation.validateEmail();
+        console.log('isEmailValid: ', isEmailValid);
+        // userName or email is the same
+        const email = emailRef.current.value.trim();
+        const password = passwordRef.current.value.trim();
+        const user = listAccount.find(
+            (account) => account.userName === email && account.password === password,
+        );
+
+        if (email === '') {
+            setEmailValidation(true);
+        } else if (password === '') {
+            setPasswordValidation(true);
+        } else {
+            if (!email.includes('@')) {
+                setEmailValidation(true);
+            } else {
+                setEmailValidation(false);
+                setPasswordValidation(false);
+                if (user) {
+                    // login successfully
+
+                    console.log('login successfully ');
+                    navigate('/signed-in');
+                } else {
+                    // can't login
+                    setCheckLogin(false);
+                    setShowNotifications(true);
+                }
+            }
+        }
+    };
+
+    const handleCloseSnackbar = () => {
+        setShowNotifications(false);
+    };
+    return (
+        <Box
+            sx={{
+                backgroundColor: '#f3f2f0',
+                minHeight: '80vh',
+            }}
+        >
+            <Container>
                 <Container
                     sx={{
                         width: '420px',
                         minhHeight: '420px',
-                        backgroundColor: '#ffffff',
-                        borderRadius: '6px',
+                        backgroundColor: '#fff',
+                        borderRadius: '8px',
                         p: 2,
                         mt: 8,
                         [mobileScreen]: {
                             width: '100%',
                             height: '100%',
                         },
+
+                        boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
                     }}
                 >
                     <Box>
@@ -51,15 +107,40 @@ function SignIn() {
                             Email
                         </CustomizeTypography>
                         <TextField
+                            error={emailValidation}
+                            // error={emailValidation ? true : !checkLogin ? false : true}
+                            // helperText={
+                            //     emailValidation && (
+                            //         <Typography sx={{ color: 'red', fontSize: '12.5px' }}>
+                            //             Please enter an email address or phone number
+                            //         </Typography>
+                            //     )
+                            // }
+
+                            // define validation
+                            helperText={checkEmailValidation.state.message}
+                            onChange={(e) => {
+                                checkEmailValidation.setState({
+                                    ...checkEmailValidation.state,
+                                    value: e.target.value,
+                                });
+                            }}
+                            inputRef={emailRef}
                             id="outlined-email"
                             variant="outlined"
                             fullWidth={true}
                             sx={{
                                 flexGrow: 2,
                                 '.MuiInputBase-root': {
-                                    borderColor: '#333',
-                                    fontSize: '16px',
+                                    borderColor: !emailValidation ? '#333' : 'red',
+                                    fontSize: '14px',
                                     height: '40px',
+                                },
+
+                                '& .MuiFormHelperText-root': {
+                                    fontSize: '12.5px',
+                                    color: 'red',
+                                    mx: 1,
                                 },
                             }}
                         />
@@ -69,9 +150,25 @@ function SignIn() {
                             Password
                         </CustomizeTypography>
                         <TextField
+                            error={passwordValidation}
+                            // error={passwordValidation ? true : !checkLogin ? true : false}
+                            helperText={
+                                passwordValidation && (
+                                    <Typography sx={{ color: 'red', fontSize: '12.5px' }}>
+                                        Please enter a password
+                                    </Typography>
+                                )
+                            }
+                            inputRef={passwordRef}
                             type={!isShow ? 'text' : 'password'}
                             fullWidth={true}
-                            sx={{ fontSize: '16px' }}
+                            sx={{
+                                '.MuiInputBase-root': {
+                                    borderColor: '#333',
+                                    fontSize: '14px',
+                                    height: '40px',
+                                },
+                            }}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
@@ -89,6 +186,7 @@ function SignIn() {
                                                 // <VisibilityIcon />
                                                 <Typography
                                                     sx={{
+                                                        fontSize: '13px',
                                                         fontWeight: 'bold',
                                                         color: 'blue',
                                                         '&:hover': {
@@ -102,6 +200,7 @@ function SignIn() {
                                                 // <VisibilityOffIcon />
                                                 <Typography
                                                     sx={{
+                                                        fontSize: '13px',
                                                         fontWeight: 'bold',
                                                         color: 'blue',
                                                         '&:hover': {
@@ -119,6 +218,30 @@ function SignIn() {
                             }}
                         />
                     </Box>
+                    {!checkLogin && (
+                        <Typography
+                            // onClick={() => navigate('/forgot-password')}
+                            sx={{
+                                fontSize: '13px',
+                                mt: 2,
+                                color: 'red',
+                            }}
+                        >
+                            Wrong email or password. Try again or{' '}
+                            <Box
+                                component={'span'}
+                                sx={{
+                                    fontWeight: 'bold',
+                                    textDecoration: 'underline',
+                                    '&:hover': {
+                                        cursor: 'pointer',
+                                    },
+                                }}
+                            >
+                                create an account
+                            </Box>
+                        </Typography>
+                    )}
                     <Typography
                         onClick={() => navigate('/forgot-password')}
                         sx={{
@@ -144,6 +267,7 @@ function SignIn() {
                             borderRadius: '24px',
                         }}
                         fullWidth={true}
+                        onClick={handleSignIn}
                     >
                         Sign In
                     </Button>
@@ -192,6 +316,13 @@ function SignIn() {
                         </Typography>
                     </Box>
                 </Container>
+                <SnackbarShowNotifications
+                    mainText={'Login failed! Please try again'}
+                    isOpen={showNotifications}
+                    onClose={handleCloseSnackbar}
+                    warning={true}
+                    icon={<WarningIcon sx={{ fontSize: '24px', color: 'orange' }} />}
+                />
             </Container>
         </Box>
     );

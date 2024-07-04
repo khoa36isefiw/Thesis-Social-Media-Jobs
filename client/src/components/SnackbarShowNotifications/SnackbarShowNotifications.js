@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, Snackbar, IconButton, Box } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { blue } from '@mui/material/colors';
 
-export default function SnackbarShowNotifications({ mainText, subText, isOpen, onClose }) {
+import CloseIcon from '@mui/icons-material/Close';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
+export default function SnackbarShowNotifications({
+    mainText,
+    subText,
+    isOpen,
+    onClose,
+    warning,
+    icon,
+}) {
     const [open, setOpen] = useState(isOpen);
 
     useEffect(() => {
@@ -30,7 +38,7 @@ export default function SnackbarShowNotifications({ mainText, subText, isOpen, o
     const messageShow = (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton>
-                <CheckCircleIcon sx={{ fontSize: '24px', color: 'green' }} />
+                {warning ? icon : <CheckCircleIcon sx={{ fontSize: '24px', color: 'green' }} />}
             </IconButton>
             <Typography sx={{ fontSize: '13.5px', color: 'black' }}>{mainText}</Typography>
             {subText && (
@@ -54,6 +62,7 @@ export default function SnackbarShowNotifications({ mainText, subText, isOpen, o
 
     return (
         <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             sx={{
                 '.MuiPaper-root': {
                     bgcolor: '#fff',

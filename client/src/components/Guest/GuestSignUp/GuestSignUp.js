@@ -18,13 +18,15 @@ import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveAccountRegistered } from '../../../redux/ManageAccount/manageAccountAction';
 import SnackbarShowNotifications from '../../SnackbarShowNotifications/SnackbarShowNotifications';
-function GuestLogin() {
+import WarningIcon from '@mui/icons-material/Warning';
+function GuestSignUp() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const [isShow, setIsShow] = useState(true);
     const listAccount = useSelector((state) => state.manageAccounts.accountsList);
+    const [isEmpty, setIsEmpty] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
 
     const handleShowPassword = () => {
@@ -33,9 +35,15 @@ function GuestLogin() {
 
     const handleSignUp = () => {
         const userName = emailRef.current.value.trim();
+        console.log(userName);
         const password = passwordRef.current.value.trim();
+        if (userName !== '' && password !== '') {
+            dispatch(saveAccountRegistered({ userName, password }));
+            setIsEmpty(false);
+        } else {
+            setIsEmpty(true);
+        }
 
-        dispatch(saveAccountRegistered({ userName, password }));
         setShowNotifications(true);
     };
 
@@ -222,13 +230,15 @@ function GuestLogin() {
                 </Container>
 
                 <SnackbarShowNotifications
-                    mainText={'Tesst oepn'}
+                    mainText={isEmpty ? 'Not allowed null' : 'Tesst oepn'}
                     isOpen={showNotifications}
                     onClose={handleCloseSnackbar}
+                    warning={isEmpty}
+                    icon={<WarningIcon sx={{ fontSize: '24px', color: 'orange' }} />}
                 />
             </Container>
         </Box>
     );
 }
 
-export default GuestLogin;
+export default GuestSignUp;
