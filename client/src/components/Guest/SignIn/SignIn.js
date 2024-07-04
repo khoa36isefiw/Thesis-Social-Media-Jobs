@@ -20,24 +20,28 @@ function SignIn() {
     };
     const navigate = useNavigate();
     return (
-        <Box sx={{ backgroundColor: '#f3f2f0', minHeight: '80vh' }}>
+        <Box
+            sx={{
+                backgroundColor: '#f3f2f0',
+                minHeight: '80vh',
+            }}
+        >
             <Container>
-                {/* <Box onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
-                    <img src={Logo} alt="Logo" style={{ height: '100px', width: '100px' }} />
-                </Box> */}
-
                 <Container
                     sx={{
                         width: '420px',
                         minhHeight: '420px',
-                        backgroundColor: '#ffffff',
-                        borderRadius: '6px',
+                        backgroundColor: '#fff',
+                        borderRadius: '8px',
                         p: 2,
                         mt: 8,
                         [mobileScreen]: {
                             width: '100%',
                             height: '100%',
                         },
+                        // boxShadow:
+                        //     '0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)',
+                        boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
                     }}
                 >
                     <Box>
