@@ -1,15 +1,25 @@
 require('dotenv').config();
 require('./config/connectDB');
+require('./config/passport');
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const passport = require('passport');
 const route = require('./routes');
-const PORT = process.env.PORT;
+const cookieSession = require('cookie-session');
 
+const PORT = process.env.PORT;
 const app = express();
 app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+    cookieSession({
+        name: 'session',
+        keys: ['secret'],
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    }),
+);
 app.use(
     cors({
         origin: ['http://localhost:3000'],
@@ -18,7 +28,8 @@ app.use(
         credentials: true, // Cho phép truy cập với thông tin chứng thực
     }),
 );
-
+app.use(passport.initialize());
+app.use(passport.session());
 route(app);
 
 app.listen(PORT, () => {
