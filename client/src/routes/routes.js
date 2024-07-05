@@ -25,12 +25,14 @@ import PageIsFollowing from '../components/PageIsFollowing/PageIsFollowing';
 import MyHashtags from '../components/MyHashtags/MyHashtags';
 import Messaging from '../components/Messaging/Messaging';
 import MessageLayout from '../layouts/MessageLayout/MessageLayout';
+import SignUpAccount from '../components/SignUpAccount/SignUpAccount';
 
 // not sign into this website
 const publicRoutes = [
     { path: '/', component: GuestHomePage, layout: GuestLayouts },
     { path: '/sign-in', component: SignIn, layout: GuestLayouts },
     { path: '/sign-up', component: LoginPage, layout: GuestLayouts },
+    { path: '/sign-up-account', component: SignUpAccount, layout: GuestLayouts },
     { path: '/forgot-password', component: ForgotPassword, layout: GuestLayouts },
 ];
 
