@@ -34,6 +34,7 @@ function GuestSignUp() {
     };
 
     const handleSignUp = () => {
+        
         const userName = emailRef.current.value.trim();
         console.log(userName);
         const password = passwordRef.current.value.trim();
