@@ -53,7 +53,7 @@ function GuestSignUp() {
         setShowNotifications(false);
     };
     return (
-        <Box sx={{ minHeight: '100vh' }}>
+        <Box sx={{ minHeight: '100vh', backgroundColor: '#f3f2f0' }}>
             <Container>
                 <Typography
                     sx={{
@@ -74,7 +74,8 @@ function GuestSignUp() {
                         width: '420px',
                         height: '420px',
                         backgroundColor: '#f9f9f9',
-                        borderRadius: '6px',
+                        borderRadius: '8px',
+                        boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
                         p: 2,
                         [mobileScreen]: {
                             width: '100%',

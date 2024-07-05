@@ -16,7 +16,8 @@ import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import SnackbarShowNotifications from '../../SnackbarShowNotifications/SnackbarShowNotifications';
 import WarningIcon from '@mui/icons-material/Warning';
-import checkValidation from '../../CheckValidation/CheckValidation';
+import CheckValidation from '../../CheckValidation/CheckValidation';
+
 function SignIn() {
     const [isShow, setIsShow] = useState(true);
     const navigate = useNavigate();
@@ -27,8 +28,6 @@ function SignIn() {
     const [passwordValidation, setPasswordValidation] = useState(false);
     const [checkLogin, setCheckLogin] = useState(true);
 
-    const checkEmailValidation = checkValidation({ value: '' });
-
     const listAccount = useSelector((state) => state.manageAccounts.accountsList);
 
     const handleShowPassword = () => {
@@ -36,8 +35,6 @@ function SignIn() {
     };
 
     const handleSignIn = () => {
-        const isEmailValid = checkEmailValidation.validateEmail();
-        console.log('isEmailValid: ', isEmailValid);
         // userName or email is the same
         const email = emailRef.current.value.trim();
         const password = passwordRef.current.value.trim();
@@ -52,6 +49,7 @@ function SignIn() {
         } else {
             if (!email.includes('@')) {
                 setEmailValidation(true);
+            } else if (email.startsWith('@')) {
             } else {
                 setEmailValidation(false);
                 setPasswordValidation(false);
@@ -109,22 +107,9 @@ function SignIn() {
                         <TextField
                             error={emailValidation}
                             // error={emailValidation ? true : !checkLogin ? false : true}
-                            // helperText={
-                            //     emailValidation && (
-                            //         <Typography sx={{ color: 'red', fontSize: '12.5px' }}>
-                            //             Please enter an email address or phone number
-                            //         </Typography>
-                            //     )
-                            // }
-
-                            // define validation
-                            helperText={checkEmailValidation.state.message}
-                            onChange={(e) => {
-                                checkEmailValidation.setState({
-                                    ...checkEmailValidation.state,
-                                    value: e.target.value,
-                                });
-                            }}
+                            helperText={
+                                emailValidation && 'Please enter an email address or phone number'
+                            }
                             inputRef={emailRef}
                             id="outlined-email"
                             variant="outlined"
@@ -237,6 +222,7 @@ function SignIn() {
                                         cursor: 'pointer',
                                     },
                                 }}
+                                onClick={() => navigate('/sign-up')}
                             >
                                 create an account
                             </Box>
