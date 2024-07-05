@@ -128,21 +128,22 @@ function SignUpAccount() {
                         mt: 6,
                         boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
                         [mobileScreen]: {
-                            width: '100%',
-                            height: '100%',
+                            // width: '100%',
+                            // height: '100%',
                         },
                     }}
                 >
-                    <Grid lg={12} sx={{ px: 1 }}>
+                    <Grid sm={12} md={12} lg={12} sx={{ px: 1 }}>
                         <Typography sx={{ fontSize: '26px', fontWeight: 'bold' }}>
                             Sign Up
                         </Typography>
                         <Typography sx={{ fontSize: '16px', mb: 2 }}>
-                            Stay updated on your professional world. It's quick and easy
+                            Stay updated on your professional world.{' '}
+                            <CustomizeTypography>It's quick and easy</CustomizeTypography>
                         </Typography>
                     </Grid>
-                    <Grid container lg={12}>
-                        <Grid lg={6}>
+                    <Grid container md={12} lg={12}>
+                        <Grid md={12} lg={6}>
                             <InputField
                                 inputText={'First Name'}
                                 emailValidation={firstNameValidation}
@@ -150,7 +151,7 @@ function SignUpAccount() {
                                 handleEmailBlur={handleFirstNameBlur}
                             />
                         </Grid>
-                        <Grid lg={6}>
+                        <Grid md={12} lg={6}>
                             <InputField
                                 inputText={'Last Name'}
                                 emailValidation={lastNameValidation}
@@ -159,7 +160,7 @@ function SignUpAccount() {
                             />
                         </Grid>
                     </Grid>
-                    <Grid lg={12} sx={{ px: 1 }}>
+                    <Grid md={12} lg={12} sx={{ px: 1 }}>
                         <StudyDate />
                     </Grid>
                     <Grid lg={12}>
@@ -199,7 +200,7 @@ function SignUpAccount() {
                             handleEmailBlur={handleEmailBlur}
                         />
                     </Grid>
-                    <Grid lg={12}>
+                    <Grid md={12} lg={12}>
                         <PasswordTextField
                             passwordValidation={passwordValidation}
                             isShow={isShow}
@@ -208,35 +209,8 @@ function SignUpAccount() {
                             handlePasswordBlur={handlePasswordBlur}
                         />
                     </Grid>
-                    {!checkLogin && (
-                        <Typography sx={{ fontSize: '13px', mt: 2, color: 'red' }}>
-                            Wrong email or password. Try again or{' '}
-                            <Box
-                                component="span"
-                                sx={{
-                                    fontWeight: 'bold',
-                                    textDecoration: 'underline',
-                                    '&:hover': { cursor: 'pointer' },
-                                }}
-                                onClick={() => navigate('/sign-up')}
-                            >
-                                create an account
-                            </Box>
-                        </Typography>
-                    )}
+
                     <Grid sx={{ p: 1 }} lg={12}>
-                        <CustomizeTypography
-                            onClick={() => navigate('/forgot-password')}
-                            sx={{
-                                fontSize: '14px',
-                                mt: 2,
-                                fontWeight: 'bold',
-                                color: 'blue',
-                                '&:hover': { textDecoration: 'underline', cursor: 'pointer' },
-                            }}
-                        >
-                            Forgot Password?
-                        </CustomizeTypography>
                         <Button
                             variant="contained"
                             sx={{
@@ -249,52 +223,8 @@ function SignUpAccount() {
                             fullWidth
                             onClick={handleSignIn}
                         >
-                            Sign In
+                            Sign Up
                         </Button>
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: 2,
-                                mb: 2,
-                                mt: 2,
-                            }}
-                        >
-                            <Box
-                                sx={{ borderBottom: 1, borderColor: 'text.secondary', flexGrow: 1 }}
-                            />
-
-                            <CustomizeTypography variant="body2" sx={{ fontWeight: '600' }}>
-                                or
-                            </CustomizeTypography>
-                            <Box
-                                sx={{ borderBottom: 1, borderColor: 'text.secondary', flexGrow: 1 }}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                textAlign: 'center',
-                                justifyContent: 'center',
-                                mt: 4,
-                            }}
-                        >
-                            <Typography sx={{ fontSize: '14px' }}>New to Aikotoba?</Typography>
-                            <Typography
-                                onClick={() => navigate('/sign-up')}
-                                sx={{
-                                    color: 'blue',
-                                    fontWeight: 'bold',
-                                    fontSize: '14px',
-                                    ml: 1,
-                                    '&:hover': { textDecoration: 'underline', cursor: 'pointer' },
-                                }}
-                            >
-                                Join Now
-                            </Typography>
-                        </Box>
                     </Grid>
                 </Grid>
                 {showNotifications && (
