@@ -15,6 +15,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import { validateEmail, validatePassword } from '../../CheckValidation/CheckValidation';
 
 import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypography';
+import { mobileScreen } from '../../Theme/Theme';
 
 function SignIn() {
     const [isShow, setIsShow] = useState(true);
@@ -79,7 +80,7 @@ function SignIn() {
         <Box
             sx={{
                 backgroundColor: '#f3f2f0',
-                minHeight: '80vh',
+                minHeight: '100vh',
             }}
         >
             <Container>
@@ -92,6 +93,10 @@ function SignIn() {
                         p: 2,
                         mt: 8,
                         boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
+                        [mobileScreen]: {
+                            width: '100%',
+                            height: '100%',
+                        },
                     }}
                 >
                     <Box>
