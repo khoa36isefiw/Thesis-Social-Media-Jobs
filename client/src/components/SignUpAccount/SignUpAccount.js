@@ -18,16 +18,24 @@ import WarningIcon from '@mui/icons-material/Warning';
 
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { mobileScreen } from '../Theme/Theme';
-import { validateEmail, validatePassword } from '../CheckValidation/CheckValidation';
+import {
+    validateEmail,
+    validatePassword,
+    validateRequiredWithDigits,
+} from '../CheckValidation/CheckValidation';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
 import { StudyDate } from '../EducationContent/EducationContent';
 
 function SignUpAccount() {
     const [isShow, setIsShow] = useState(true);
     const navigate = useNavigate();
+    const firstNameRef = useRef(null);
+    const lastNameRef = useRef(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const [showNotifications, setShowNotifications] = useState(false);
+    const [firstNameValidation, setFirstNameValidation] = useState('');
+    const [lastNameValidation, setLastNameValidation] = useState('');
     const [emailValidation, setEmailValidation] = useState('');
     const [passwordValidation, setPasswordValidation] = useState('');
     const [checkLogin, setCheckLogin] = useState(true);
@@ -39,9 +47,13 @@ function SignUpAccount() {
     };
 
     const handleSignIn = () => {
+        const firstName = firstNameRef.current.value.trim();
+        const lastName = lastNameRef.current.value.trim();
         const email = emailRef.current.value.trim();
         const password = passwordRef.current.value.trim();
 
+        const firstNameError = validateRequiredWithDigits(firstName);
+        const lastNameError = validateRequiredWithDigits(lastName);
         const emailError = validateEmail(email);
         const passwordError = validatePassword(password);
 
@@ -49,6 +61,10 @@ function SignUpAccount() {
             setEmailValidation(emailError);
         } else if (passwordError) {
             setPasswordValidation(passwordError);
+        } else if (firstNameError) {
+            setFirstNameValidation(firstNameError);
+        } else if (lastNameError) {
+            setLastNameValidation(lastNameError);
         } else {
             const user = listAccount.find(
                 (account) => account.userName === email && account.password === password,
@@ -75,6 +91,17 @@ function SignUpAccount() {
         const password = passwordRef.current.value.trim();
         const passwordError = validatePassword(password);
         setPasswordValidation(passwordError);
+    };
+
+    const handleFirstNameBlur = () => {
+        const firstName = firstNameRef.current.value.trim();
+        const firstNameError = validateRequiredWithDigits(firstName);
+        setFirstNameValidation(firstNameError);
+    };
+    const handleLastNameBlur = () => {
+        const lastName = lastNameRef.current.value.trim();
+        const lastNameError = validateRequiredWithDigits(lastName);
+        setLastNameValidation(lastNameError);
     };
 
     const handleCloseSnackbar = () => {
@@ -116,10 +143,20 @@ function SignUpAccount() {
                     </Grid>
                     <Grid container lg={12}>
                         <Grid lg={6}>
-                            <InputField inputText={'First Name'} />
+                            <InputField
+                                inputText={'First Name'}
+                                emailValidation={firstNameValidation}
+                                emailRef={firstNameRef}
+                                handleEmailBlur={handleFirstNameBlur}
+                            />
                         </Grid>
                         <Grid lg={6}>
-                            <InputField inputText={'Last Name'} />
+                            <InputField
+                                inputText={'Last Name'}
+                                emailValidation={lastNameValidation}
+                                emailRef={lastNameRef}
+                                handleEmailBlur={handleLastNameBlur}
+                            />
                         </Grid>
                     </Grid>
                     <Grid lg={12} sx={{ px: 1 }}>
