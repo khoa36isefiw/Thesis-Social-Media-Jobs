@@ -1,191 +1,60 @@
-import React, { useState } from 'react';
+export const validateEmail = (email) => {
+    const specialCharList = [
+        '!',
+        '#',
+        '$',
+        '%',
+        '^',
+        '&',
+        '*',
+        '(',
+        ')',
+        '?',
+        ':',
+        '{',
+        '}',
+        '|',
+        '<',
+        '>',
+        '`',
+        '~',
+    ];
+    const specialChars = [];
 
-const CheckValidation = (initialState) => {
-    const [state, setState] = useState({
-        value: initialState.value || '',
-        message: '',
-        isShow: initialState.isShow || false,
-    });
-
-    const validateRequired = () => {
-        //  trường hợp có kí tự đặc biệt
-        // const specialCharRegex = /[!@#$%^&*(),.?":{}|<>`~]/;
-        const specialCharRegex = /[!@#$%^&*()?":{}|<>`~]/;
-
-        // not fill information
-        if (state.value.trim() === '') {
-            setState({
-                ...state,
-                message: 'This field is required.',
-            });
-            return false;
+    // check for special characters in email except "@" and "."
+    for (let char of email) {
+        if (specialCharList.includes(char) && !['@', '.'].includes(char)) {
+            specialChars.push(char);
         }
+    }
 
-        // check if exist specialCharRegex in text field
-        if (specialCharRegex.test(state.value)) {
-            setState({
-                ...state,
-                message: 'This field should not contain special characters.',
-            });
-            return false;
-        }
+    if (specialChars.length > 0) {
+        return `Email must not contain special characters: ${specialChars.join(', ')}`;
+    }
 
-        // Nếu không có vấn đề gì, trả về true
-        setState({
-            ...state,
-            message: '',
-        });
-        return true;
-    };
+    // other validations
+    if (!email || typeof email !== 'string') return 'Email is required';
+    if (!email.includes('@')) return 'Email must include @';
+    if (specialCharList.includes(email.charAt(0)))
+        return 'Email must not start with special characters';
+    if (/^\d/.test(email)) return 'Email must not start with a number';
 
-    const validateEmail = () => {
-        if (state.value.trim() === '') {
-            // empty
-            setState({
-                ...state,
-                message: 'Please enter an email address.',
-            });
-            return false;
-        } else {
-            let validEmail = state.value.toLowerCase().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/); // @ and .
-            if (validEmail) {
-                // Additional check for Gmail
-                if (state.value.toLowerCase().endsWith('@gmail.com')) {
-                    setState({
-                        ...state,
-                        message: '',
-                    });
-                    return true;
-                } else {
-                    setState({
-                        ...state,
-                        message: 'Must includes @gmail.com in your email',
-                    });
-                    return false;
-                }
-            } else {
-                setState({
-                    ...state,
-                    message: 'Invalid email address. Email does not contain special characters',
-                });
-                return false;
-            }
-        }
-    };
-
-    const validatePassword = () => {
-        if (state.value === '') {
-            setState({
-                ...state,
-                message: 'Please enter a password.',
-            });
-            return false;
-        } else if (state.value.length < 6) {
-            setState({
-                ...state,
-                message: 'Password must be at least 6 characters long.',
-            });
-            return false;
-        }
-        setState({
-            ...state,
-            message: '',
-        });
-        return true;
-    };
-
-    const validateConfirmPassword = (password) => {
-        const trimmedPassword = String(password).trim();
-        const trimmedConfirmPassword = state.value.trim();
-
-        if (trimmedConfirmPassword === '') {
-            setState({
-                ...state,
-                message: 'Please confirm your password.',
-            });
-            return false;
-        } else if (trimmedConfirmPassword !== trimmedPassword) {
-            setState({
-                ...state,
-                message: 'Passwords do not match.',
-            });
-            return false;
-        }
-
-        setState({
-            ...state,
-            message: '',
-        });
-        return true;
-    };
-
-    const validatePhone = () => {
-        if (state.value === '') {
-            setState({
-                ...state,
-                message: 'Vui Lòng Nhập Số Điện Thoại',
-            });
-            return false;
-        } else {
-            // Check for exactly 10 digits and no special characters
-            let validPhone = state.value.match(/^(0[3|5|7|8|9])[0-9]{8}$/);
-
-            if (validPhone) {
-                setState({
-                    ...state,
-                    message: '',
-                });
-                return true;
-            } else {
-                setState({
-                    ...state,
-                    message: 'Số Điện Chỉ Có 10 Số và Không Chứa Ký Tự Đặc Biệt!',
-                });
-                return false;
-            }
-        }
-    };
-
-    const validateRequiredWithoutDigits = () => {
-        // Allow letters, spaces, and accented characters
-        if (/[\d!@#$%^&*()_+={};':"\\|,.<>/?`~]+/.test(state.value)) {
-            setState({
-                ...state,
-                message: 'Không Được Tồn Tại Số Hoặc Kí Tự Đặc Biệt Trong Tên!',
-            });
-            return false;
-        } else if (state.value.trim() === '') {
-            setState({
-                ...state,
-                message: 'This field is required.',
-            });
-            return false;
-        }
-        setState({
-            ...state,
-            message: '',
-        });
-        return true;
-    };
-
-    const handleShow = () => {
-        setState({
-            ...state,
-            isShow: !state.isShow,
-        });
-    };
-
-    return {
-        state,
-        setState,
-        validateRequired,
-        validateEmail,
-        validatePassword,
-        validateConfirmPassword,
-        validatePhone,
-        validateRequiredWithoutDigits,
-        handleShow,
-    };
+    return '';
 };
 
-export default CheckValidation;
+export const validatePassword = (password) => {
+    if (!password || typeof password !== 'string') return 'Password is required';
+    if (password.length < 6) return 'Password must be at least 6 characters long';
+
+    return '';
+};
+
+// require for normal textfield
+export const validateRequiredWithDigits = (text) => {
+    const specialCharRegex = /[\d!@#$%^&*()_+={};':"\\|,.<>/?`~]+/;
+    if (!text || typeof text !== 'string') return 'This field is required';
+    if (specialCharRegex.test(text))
+        return 'This field is not contain numbers or special characters.';
+    // if (/^\d/.test(text)) return 'This field is not contain a number';
+    return '';
+};

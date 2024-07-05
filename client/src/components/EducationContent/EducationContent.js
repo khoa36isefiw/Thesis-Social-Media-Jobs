@@ -50,7 +50,7 @@ function EducationContent() {
 
 export default EducationContent;
 
-const StudyDate = ({ timeStudy }) => {
+export const StudyDate = ({ timeStudy }) => {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
 
@@ -102,7 +102,7 @@ const StudyDate = ({ timeStudy }) => {
                         style={{
                             borderRadius: 5,
                             padding: '5px 10px',
-                            backgroundColor: '#FAFAFA',
+                            // backgroundColor: '#FAFAFA',
                             border: '1px solid #ccc',
                             marginRight: 10,
                             width: '100%',
@@ -123,7 +123,7 @@ const StudyDate = ({ timeStudy }) => {
                         style={{
                             borderRadius: 5,
                             padding: '5px 10px',
-                            backgroundColor: '#FAFAFA',
+                            // backgroundColor: '#FAFAFA',
                             border: '1px solid #ccc',
                             width: '100%',
                         }}
