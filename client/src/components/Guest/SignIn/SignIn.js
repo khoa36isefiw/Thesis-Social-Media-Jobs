@@ -49,6 +49,7 @@ function SignIn() {
             );
 
             if (user) {
+                setShowNotifications(false);
                 console.log('login successfully');
                 navigate('/signed-in');
             } else {
@@ -60,7 +61,7 @@ function SignIn() {
 
     const handleEmailBlur = () => {
         const email = emailRef.current.value.trim();
-        const emailError = validateEmail(email);
+        const emailError = validateEmail(email); // check validate data input
         setEmailValidation(emailError);
     };
 
@@ -191,10 +192,10 @@ function SignIn() {
                                     textDecoration: 'underline',
                                     '&:hover': { cursor: 'pointer' },
                                 }}
+                                onClick={() => navigate('/sign-up')}
                             >
                                 create an account
                             </Box>
-                            onClick={() => navigate('/sign-up')}
                         </Typography>
                     )}
                     <CustomizeTypography
@@ -264,13 +265,15 @@ function SignIn() {
                         </Typography>
                     </Box>
                 </Container>
-                <SnackbarShowNotifications
-                    mainText="Login failed! Please try again"
-                    isOpen={showNotifications}
-                    onClose={handleCloseSnackbar}
-                    warning
-                    icon={<WarningIcon sx={{ fontSize: '24px', color: 'orange' }} />}
-                />
+                {showNotifications && (
+                    <SnackbarShowNotifications
+                        mainText="Login failed! Please try again"
+                        isOpen={showNotifications}
+                        onClose={handleCloseSnackbar}
+                        warning
+                        icon={<WarningIcon sx={{ fontSize: '24px', color: 'orange' }} />}
+                    />
+                )}
             </Container>
         </Box>
     );
