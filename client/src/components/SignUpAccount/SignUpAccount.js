@@ -109,123 +109,94 @@ function SignUpAccount() {
     };
 
     return (
-        <Box
+        <Container
             sx={{
-                backgroundColor: '#f3f2f0',
-                minHeight: '100vh',
+                flexGrow: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '60vh',
             }}
         >
-            <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Grid
-                    container
-                    spacing={2}
-                    sx={{
-                        width: '500px',
-                        minHeight: '420px',
-                        backgroundColor: '#fff',
-                        borderRadius: '8px',
-                        p: 2,
-                        mt: 6,
-                        boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
-                        [mobileScreen]: {
-                            // width: '100%',
-                            // height: '100%',
-                        },
-                    }}
-                >
-                    <Grid sm={12} md={12} lg={12} sx={{ px: 1 }}>
-                        <Typography sx={{ fontSize: '26px', fontWeight: 'bold' }}>
-                            Sign Up
-                        </Typography>
-                        <Typography sx={{ fontSize: '16px', mb: 2 }}>
-                            Stay updated on your professional world.{' '}
-                            <CustomizeTypography>It's quick and easy</CustomizeTypography>
-                        </Typography>
-                    </Grid>
-                    <Grid container md={12} lg={12}>
-                        <Grid md={12} lg={6}>
-                            <InputField
-                                inputText={'First Name'}
-                                emailValidation={firstNameValidation}
-                                emailRef={firstNameRef}
-                                handleEmailBlur={handleFirstNameBlur}
-                            />
-                        </Grid>
-                        <Grid md={12} lg={6}>
-                            <InputField
-                                inputText={'Last Name'}
-                                emailValidation={lastNameValidation}
-                                emailRef={lastNameRef}
-                                handleEmailBlur={handleLastNameBlur}
-                            />
-                        </Grid>
-                    </Grid>
-                    <Grid md={12} lg={12} sx={{ px: 1 }}>
-                        <StudyDate />
-                    </Grid>
-                    <Grid lg={12}>
-                        {/* <CustomizeTypography sx={{ fontWeight: 'bold', mb: '2px' }}>
-                            Email
-                        </CustomizeTypography>
-                        <TextField
-                            error={!!emailValidation}
-                            helperText={
-                                emailValidation && (
-                                    <Typography sx={{ color: 'red', fontSize: '12.5px' }}>
-                                        {emailValidation}
-                                    </Typography>
-                                )
-                            }
-                            inputRef={emailRef}
-                            variant="outlined"
-                            fullWidth
-                            sx={{
-                                '.MuiInputBase-root': {
-                                    borderColor: emailValidation ? 'red' : '#333',
-                                    fontSize: '14px',
-                                    height: '40px',
-                                },
-                                '& .MuiFormHelperText-root': {
-                                    fontSize: '12.5px',
-                                    color: 'red',
-                                    mx: 1,
-                                },
-                            }}
-                            onBlur={handleEmailBlur}
-                        /> */}
-                        <InputField
-                            inputText={'Email'}
-                            emailValidation={emailValidation}
-                            emailRef={emailRef}
-                            handleEmailBlur={handleEmailBlur}
-                        />
-                    </Grid>
-                    <Grid md={12} lg={12}>
-                        <PasswordTextField
-                            passwordValidation={passwordValidation}
-                            isShow={isShow}
-                            passwordRef={passwordRef}
-                            handleShowPassword={handleShowPassword}
-                            handlePasswordBlur={handlePasswordBlur}
-                        />
-                    </Grid>
+            <Grid
+                items
+                container
+                spacing={2}
+                sx={{
+                    width: '500px',
+                    minHeight: '420px',
+                    backgroundColor: '#fff',
+                    borderRadius: '8px',
+                    p: 2,
+                    my: 6,
+                    boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
+                    [mobileScreen]: {
+                        // width: '100%',
+                        // height: '100%',
+                    },
+                }}
+            >
+                <Grid xs={12} sm={12} md={12} lg={12} sx={{ px: 1 }}>
+                    <Typography sx={{ fontSize: '26px', fontWeight: 'bold' }}>Sign Up</Typography>
+                    <Typography sx={{ fontSize: '16px', mb: 2 }}>
+                        Stay updated on your professional world.{' '}
+                        <CustomizeTypography>It's quick and easy</CustomizeTypography>
+                    </Typography>
+                </Grid>
 
-                    <Grid sx={{ p: 1 }} lg={12}>
-                        <Button
-                            variant="contained"
-                            sx={{
-                                mt: 2,
-                                fontWeight: 'bold',
-                                fontSize: '14px',
-                                textTransform: 'capitalize',
-                                borderRadius: '24px',
-                            }}
-                            fullWidth
-                            onClick={handleSignIn}
-                        >
-                            Sign Up
-                        </Button>
-                    </Grid>
+                <Grid xs={12} sm={12} md={12} lg={6}>
+                    <InputField
+                        inputText={'First Name'}
+                        emailValidation={firstNameValidation}
+                        emailRef={firstNameRef}
+                        handleEmailBlur={handleFirstNameBlur}
+                    />
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={6}>
+                    <InputField
+                        inputText={'Last Name'}
+                        emailValidation={lastNameValidation}
+                        emailRef={lastNameRef}
+                        handleEmailBlur={handleLastNameBlur}
+                    />
+                </Grid>
+
+                <Grid xs={12} sm={12} md={12} lg={12} sx={{ px: 1 }}>
+                    <StudyDate />
+                </Grid>
+                <Grid xs={12} sm={12} lg={12}>
+                    <InputField
+                        inputText={'Email'}
+                        emailValidation={emailValidation}
+                        emailRef={emailRef}
+                        handleEmailBlur={handleEmailBlur}
+                    />
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                    <PasswordTextField
+                        passwordValidation={passwordValidation}
+                        isShow={isShow}
+                        passwordRef={passwordRef}
+                        handleShowPassword={handleShowPassword}
+                        handlePasswordBlur={handlePasswordBlur}
+                    />
+                </Grid>
+
+                <Grid sx={{ p: 1 }} lg={12}>
+                    <Button
+                        variant="contained"
+                        sx={{
+                            mt: 2,
+                            fontWeight: 'bold',
+                            fontSize: '14px',
+                            textTransform: 'capitalize',
+                            borderRadius: '24px',
+                        }}
+                        fullWidth
+                        onClick={handleSignIn}
+                    >
+                        Sign Up
+                    </Button>
                 </Grid>
                 {showNotifications && (
                     <SnackbarShowNotifications
@@ -236,8 +207,8 @@ function SignUpAccount() {
                         icon={<WarningIcon sx={{ fontSize: '24px', color: 'orange' }} />}
                     />
                 )}
-            </Container>
-        </Box>
+            </Grid>
+        </Container>
     );
 }
 
