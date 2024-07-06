@@ -282,6 +282,8 @@ import { BirthDate } from '../../BirthDate/BirthDate';
 function GuestSignUp() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
     const [isShow, setIsShow] = useState(true);
     const firstNameRef = useRef(null);
     const lastNameRef = useRef(null);
@@ -320,6 +322,9 @@ function GuestSignUp() {
             setFirstNameValidation(firstNameError);
         } else if (lastNameError) {
             setLastNameValidation(lastNameError);
+        } else if (currentYear - getBirthYear) {
+            setShowNotifications(true);
+            setNotificationMessage('Age must be greater than or equal to 18!');
         } else if (getBirthDay === '' || getBirthYear === '' || getBirthMonth === '') {
             setShowNotifications(true);
             setNotificationMessage('Please select a valid birthday!');
