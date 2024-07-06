@@ -322,7 +322,7 @@ function GuestSignUp() {
             setFirstNameValidation(firstNameError);
         } else if (lastNameError) {
             setLastNameValidation(lastNameError);
-        } else if (currentYear - getBirthYear) {
+        } else if (currentYear - getBirthYear < 18) {
             setShowNotifications(true);
             setNotificationMessage('Age must be greater than or equal to 18!');
         } else if (getBirthDay === '' || getBirthYear === '' || getBirthMonth === '') {
@@ -452,6 +452,7 @@ function GuestSignUp() {
                         emailValidation={emailValidation}
                         emailRef={emailRef}
                         handleEmailBlur={handleEmailBlur}
+                        textType={true}
                     />
                 </Grid>
                 <Grid xs={12} sm={12} md={12} lg={12}>
@@ -557,11 +558,22 @@ function GuestSignUp() {
 
 export default GuestSignUp;
 
-const InputField = ({ inputText, emailValidation, emailRef, handleEmailBlur }) => {
+const InputField = ({
+    inputText,
+    emailValidation,
+    emailRef,
+    handleEmailBlur,
+    textType = false,
+}) => {
     return (
         <Box sx={{ px: 1 }}>
             {/* First Name, Last Name */}
-            <CustomizeTypography sx={{ fontWeight: 'bold', mb: '2px' }}>
+            <CustomizeTypography
+                sx={{
+                    fontWeight: 'bold',
+                    mb: '2px',
+                }}
+            >
                 {inputText}
             </CustomizeTypography>
             <TextField
@@ -581,7 +593,12 @@ const InputField = ({ inputText, emailValidation, emailRef, handleEmailBlur }) =
                         borderColor: emailValidation ? 'red' : '#333',
                         fontSize: '14px',
                         height: '40px',
+                        textTransform: 'capitalize',
                     },
+                    '.MuiInputBase-input': {
+                        textTransform: textType ? 'lowercase' : 'capitalize',
+                    },
+
                     '& .MuiFormHelperText-root': {
                         fontSize: '12.5px',
                         color: 'red',
