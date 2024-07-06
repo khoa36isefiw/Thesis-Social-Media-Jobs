@@ -120,7 +120,7 @@ function Feed() {
                     key={post.id}
                     postID={'8'}
                     avatarSrc={null}
-                    displayName={'Nutify'}
+                    displayName={post.userName}
                     followers={'6,969'}
                     // time={'1h'}
                     time={post.timestamp}

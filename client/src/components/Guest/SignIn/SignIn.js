@@ -9,25 +9,28 @@ import {
     Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SnackbarShowNotifications from '../../SnackbarShowNotifications/SnackbarShowNotifications';
 import WarningIcon from '@mui/icons-material/Warning';
 import { validateEmail, validatePassword } from '../../CheckValidation/CheckValidation';
 
 import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypography';
 import { mobileScreen } from '../../Theme/Theme';
+import { setLoggedInUser } from '../../../redux/ManageAccount/manageAccountAction';
 
 function SignIn() {
-    const [isShow, setIsShow] = useState(true);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
+    const [isShow, setIsShow] = useState(true);
     const [showNotifications, setShowNotifications] = useState(false);
     const [emailValidation, setEmailValidation] = useState('');
     const [passwordValidation, setPasswordValidation] = useState('');
     const [checkLogin, setCheckLogin] = useState(true);
 
     const listAccount = useSelector((state) => state.manageAccounts.accountsList);
+    console.log('current list: ', listAccount);
 
     const handleShowPassword = () => {
         setIsShow(!isShow);
@@ -51,6 +54,7 @@ function SignIn() {
 
             if (user) {
                 setShowNotifications(false);
+                dispatch(setLoggedInUser(user));
                 console.log('login successfully');
                 navigate('/signed-in');
             } else {

@@ -28,6 +28,7 @@ import EditUserProfile from '../../EditUserProfile/EditUserProfile';
 import { mobileScreen, tabletScreen, theme } from '../../Theme/Theme';
 import { useDispatch, useSelector } from 'react-redux';
 import { startAChatMessage } from '../../../redux/AddChatMessage/addChatMessageAction';
+import EditUserImageModal from '../../EditUserImageModal/EditUserImageModal';
 
 // define
 const CustomizeTypography = styled(Typography)(({ fontSize, isBold = false }) => ({
@@ -63,7 +64,9 @@ export function UserProfile() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
     const listUserInfor = useSelector((state) => state.startAMessage.listUserInformation);
-    console.log('listUserInfor: ', listUserInfor);
+
+    // get User Name
+    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -211,6 +214,7 @@ export function UserProfile() {
                             mt: -8,
                         },
                     }}
+                    onClick={() => handleOpenModal('editUserAvatar')}
                 />
 
                 <IconButton
@@ -268,17 +272,33 @@ export function UserProfile() {
                         }}
                     >
                         <Box>
-                            <CustomizeTypography
-                                fontSize="20px"
-                                isBold={true}
-                                sx={{
-                                    [mobileScreen]: {
-                                        mt: -1,
-                                    },
-                                }}
-                            >
-                                Huynh Dang Khoa
-                            </CustomizeTypography>
+                            {userLoggedInInformation.firstName ? (
+                                <CustomizeTypography
+                                    fontSize="20px"
+                                    isBold={true}
+                                    sx={{
+                                        [mobileScreen]: {
+                                            mt: -1,
+                                        },
+                                    }}
+                                >
+                                    {userLoggedInInformation.lastName}{' '}
+                                    {userLoggedInInformation.firstName}
+                                </CustomizeTypography>
+                            ) : (
+                                <CustomizeTypography
+                                    fontSize="20px"
+                                    isBold={true}
+                                    sx={{
+                                        [mobileScreen]: {
+                                            mt: -1,
+                                        },
+                                    }}
+                                >
+                                    {/* default name */}
+                                    {userLoggedInInformation}
+                                </CustomizeTypography>
+                            )}
                             {/* studied at */}
                             <CustomizeTypography sx={{ mt: '-4px' }}>
                                 Student at HCMUT
@@ -492,6 +512,11 @@ export function UserProfile() {
             {/* <Modal open={activeModal === 'editUserProfile'} onClose={handleCloseModal}> */}
             <Modal open={activeModal === 'editUserProfile'}>
                 <EditUserProfile handleClose={handleCloseModal} />
+            </Modal>
+
+            {/* edit user image/ user avatar/ user photo */}
+            <Modal open={activeModal === 'editUserAvatar'}>
+                <EditUserImageModal handleClose={handleCloseModal} />
             </Modal>
         </Box>
     );
