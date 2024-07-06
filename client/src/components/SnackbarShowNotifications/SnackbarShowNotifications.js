@@ -69,7 +69,7 @@ export default function SnackbarShowNotifications({
                     borderRadius: '8px',
                     px: 1,
                     py: 0,
-                    minWidth: '350px',
+                    minWidth: '50px',
                 },
             }}
             open={open}
