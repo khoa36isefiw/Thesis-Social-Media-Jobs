@@ -28,6 +28,7 @@ import EditUserProfile from '../../EditUserProfile/EditUserProfile';
 import { mobileScreen, tabletScreen, theme } from '../../Theme/Theme';
 import { useDispatch, useSelector } from 'react-redux';
 import { startAChatMessage } from '../../../redux/AddChatMessage/addChatMessageAction';
+import EditUserImageModal from '../../EditUserImageModal/EditUserImageModal';
 
 // define
 const CustomizeTypography = styled(Typography)(({ fontSize, isBold = false }) => ({
@@ -213,6 +214,7 @@ export function UserProfile() {
                             mt: -8,
                         },
                     }}
+                    onClick={() => handleOpenModal('editUserAvatar')}
                 />
 
                 <IconButton
@@ -510,6 +512,11 @@ export function UserProfile() {
             {/* <Modal open={activeModal === 'editUserProfile'} onClose={handleCloseModal}> */}
             <Modal open={activeModal === 'editUserProfile'}>
                 <EditUserProfile handleClose={handleCloseModal} />
+            </Modal>
+
+            {/* edit user image/ user avatar/ user photo */}
+            <Modal open={activeModal === 'editUserAvatar'}>
+                <EditUserImageModal handleClose={handleCloseModal} />
             </Modal>
         </Box>
     );
