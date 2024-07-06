@@ -58,7 +58,7 @@ export const validatePassword = (password) => {
 
 // require for normal textfield
 export const validateRequiredWithDigits = (text) => {
-    const specialCharRegex = /[\d!@#$%^&*()_+={};':"\\|,.<>/?`~]+/;
+    const specialCharRegex = /[\d!-@#$%^&*()_+={};':"\\|,.<>/?`~]+/;
     if (!text || typeof text !== 'string') return 'This field is required';
     if (specialCharRegex.test(text))
         return 'This field is not contain numbers or special characters.';
