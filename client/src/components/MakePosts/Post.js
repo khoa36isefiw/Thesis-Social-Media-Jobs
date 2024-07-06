@@ -81,7 +81,8 @@ function Post({
     const commentList = useSelector((state) => state.managePost.comments[postID]);
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
 
-    const getPrivacySelected = useSelector((state) => state.managePost.savePrivacySelected);
+    // get User Name
+    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
     // console.log('getCommentListLength: ', getCommentListLength);
 

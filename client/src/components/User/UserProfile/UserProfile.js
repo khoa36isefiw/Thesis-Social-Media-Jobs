@@ -63,7 +63,9 @@ export function UserProfile() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
     const listUserInfor = useSelector((state) => state.startAMessage.listUserInformation);
-    console.log('listUserInfor: ', listUserInfor);
+
+    // get User Name
+    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -268,17 +270,33 @@ export function UserProfile() {
                         }}
                     >
                         <Box>
-                            <CustomizeTypography
-                                fontSize="20px"
-                                isBold={true}
-                                sx={{
-                                    [mobileScreen]: {
-                                        mt: -1,
-                                    },
-                                }}
-                            >
-                                Huynh Dang Khoa
-                            </CustomizeTypography>
+                            {userLoggedInInformation.firstName ? (
+                                <CustomizeTypography
+                                    fontSize="20px"
+                                    isBold={true}
+                                    sx={{
+                                        [mobileScreen]: {
+                                            mt: -1,
+                                        },
+                                    }}
+                                >
+                                    {userLoggedInInformation.lastName}{' '}
+                                    {userLoggedInInformation.firstName}
+                                </CustomizeTypography>
+                            ) : (
+                                <CustomizeTypography
+                                    fontSize="20px"
+                                    isBold={true}
+                                    sx={{
+                                        [mobileScreen]: {
+                                            mt: -1,
+                                        },
+                                    }}
+                                >
+                                    {/* default name */}
+                                    {userLoggedInInformation}
+                                </CustomizeTypography>
+                            )}
                             {/* studied at */}
                             <CustomizeTypography sx={{ mt: '-4px' }}>
                                 Student at HCMUT
