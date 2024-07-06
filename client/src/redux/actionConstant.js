@@ -39,6 +39,7 @@ export const ADD_COMMENT = 'ADD_COMMENT';
 
 // sign up account
 export const SAVE_ACCOUNT_SIGNUP = 'SAVE_ACCOUNT_SIGNUP';
+export const USER_LOGGED_IN_INFORMATION = 'USER_LOGGED_IN_INFORMATION';
 export const GET_DAY = 'GET_DAY';
 export const GET_MONTH = 'GET_MONTH';
 export const GET_YEAR = 'GET_YEAR';

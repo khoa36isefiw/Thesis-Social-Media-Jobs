@@ -4,9 +4,17 @@ import {
     GET_MONTH,
     GET_YEAR,
     SAVE_ACCOUNT_SIGNUP,
+    USER_LOGGED_IN_INFORMATION,
 } from '../actionConstant';
 
-const initialState = { accountsList: [], birthDate: '', day: '', month: '', year: '' };
+const initialState = {
+    accountsList: [],
+    loggedInUser: 'Luna Kei',
+    birthDate: '',
+    day: '',
+    month: '',
+    year: '',
+};
 
 export const manageAccountReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -16,6 +24,12 @@ export const manageAccountReducer = (state = initialState, action) => {
             return {
                 ...state,
                 accountsList: [...state.accountsList, account],
+            };
+        case USER_LOGGED_IN_INFORMATION:
+            const { user } = action.payload;
+            return {
+                ...state,
+                loggedInUser: user,
             };
 
         case GET_BIRTH_DATE:

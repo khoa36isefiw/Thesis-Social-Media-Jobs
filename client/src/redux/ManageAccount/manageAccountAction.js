@@ -4,11 +4,18 @@ import {
     GET_MONTH,
     GET_YEAR,
     SAVE_ACCOUNT_SIGNUP,
+    USER_LOGGED_IN_INFORMATION,
 } from '../actionConstant';
 
+// SAVE LIST ACCOUNTS
 export const saveAccountRegistered = (account) => ({
     type: SAVE_ACCOUNT_SIGNUP,
     payload: { account },
+});
+
+export const setLoggedInUser = (user) => ({
+    type: USER_LOGGED_IN_INFORMATION,
+    payload: { user },
 });
 
 export const getBirthDate = (birthday) => ({
