@@ -5,12 +5,18 @@ import UserAvatar from '../../assets/images/avatar.jpeg';
 import { blue } from '@mui/material/colors';
 import { scrollToTop } from '../ScrollToTop/ScrollToTop';
 import { mobileScreen } from '../Theme/Theme';
+import { useSelector } from 'react-redux';
 function UserInformation() {
     const navigate = useNavigate();
     const handleNavigateToProfile = () => {
         navigate('/user-profile');
         scrollToTop();
     };
+
+    // get Name of user
+    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+    console.log('User Information: ', userLoggedInInformation);
+    // const getUserInformation = getListUsers.find()
     return (
         <Box
             sx={{
@@ -55,7 +61,7 @@ function UserInformation() {
                     }}
                 />
 
-                <Typography
+                {/* <Typography
                     onClick={handleNavigateToProfile}
                     sx={{
                         fontSize: '16px',
@@ -69,8 +75,46 @@ function UserInformation() {
                         },
                     }}
                 >
-                    Huynh Dang Khoa
-                </Typography>
+                    {userLoggedInInformation.lastName} {userLoggedInInformation.firstName}
+                </Typography> */}
+
+                {userLoggedInInformation.firstName ? (
+                    <Typography
+                        onClick={handleNavigateToProfile}
+                        sx={{
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+
+                            mt: '4px',
+                            '&:hover': {
+                                cursor: 'pointer',
+                                color: blue[800],
+                                textDecoration: 'underline',
+                            },
+                        }}
+                    >
+                        {/* Huynh Dang Khoa */}
+                        {userLoggedInInformation.lastName} {userLoggedInInformation.firstName}
+                    </Typography>
+                ) : (
+                    <Typography
+                        onClick={handleNavigateToProfile}
+                        sx={{
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+
+                            mt: '4px',
+                            '&:hover': {
+                                cursor: 'pointer',
+                                color: blue[800],
+                                textDecoration: 'underline',
+                            },
+                        }}
+                    >
+                        {/* Huynh Dang Khoa */}
+                        {userLoggedInInformation}
+                    </Typography>
+                )}
                 <Typography sx={{ fontSize: '14px', mb: '8px' }}>Student at HCMUTE</Typography>
                 <Box sx={{ width: '100%', height: '1px', bgcolor: '#d9d9d9' }}></Box>
             </Box>

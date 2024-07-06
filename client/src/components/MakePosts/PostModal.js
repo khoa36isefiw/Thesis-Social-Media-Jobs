@@ -83,6 +83,9 @@ function PostModal({ closeModal }) {
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const getPrivacySelected = useSelector((state) => state.managePost.savePrivacySelected);
 
+    // get User Name
+    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+
     // upload for multiple images
     const handleImageUpload = (event) => {
         const files = event.target.files; // Get the list of selected files
@@ -142,9 +145,18 @@ function PostModal({ closeModal }) {
     const handlePostAnArticle = () => {
         const articleText = startAPostTextFieldRef.current.value.trim(); // get the current text of textfield
         const viewPostPermission = getPrivacySelected === 'Anyone' ? true : false;
+        const userName = userLoggedInInformation.lastName
+            ? userLoggedInInformation.lastName + ' ' + userLoggedInInformation.firstName
+            : userLoggedInInformation;
+        // console.log('userName in Post Modal:', userName);
         let articleTextSent = null;
         if (imageURL) {
-            articleTextSent = { articleText: articleText, listImage: imageURL, viewPostPermission };
+            articleTextSent = {
+                userName: userName,
+                articleText: articleText,
+                listImage: imageURL,
+                viewPostPermission,
+            };
 
             dispatch(addNewPosts(articleTextSent));
             startAPostTextFieldRef.current.value = '';
@@ -153,7 +165,13 @@ function PostModal({ closeModal }) {
         } else {
             if (articleText !== '') {
                 // dispatch(addComment(postID, articleText));
-                dispatch(addNewPosts({ articleTextSent: articleText, viewPostPermission }));
+                dispatch(
+                    addNewPosts({
+                        userName: userName,
+                        articleTextSent: articleText,
+                        viewPostPermission,
+                    }),
+                );
                 // clear input after submitting
                 startAPostTextFieldRef.current.value = '';
                 setIsEmptyCommentField(true);
