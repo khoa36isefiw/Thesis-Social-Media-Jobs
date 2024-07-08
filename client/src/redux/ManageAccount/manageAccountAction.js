@@ -3,6 +3,7 @@ import {
     GET_DAY,
     GET_MONTH,
     GET_YEAR,
+    PHOTO_VIEWING_RIGHTS,
     SAVE_ACCOUNT_SIGNUP,
     USER_LOGGED_IN_INFORMATION,
 } from '../actionConstant';
