@@ -14,6 +14,7 @@ import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography'
 import Media from '../../assets/images/picture.png';
 import Events from '../../assets/images/calendar.png';
 import PostModal from './PostModal';
+import { useSelector } from 'react-redux';
 
 const CustomAvatarWithText = ({ src, alt, children }) => (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
@@ -29,6 +30,7 @@ const CustomAvatarWithText = ({ src, alt, children }) => (
 function MakePosts() {
     const inputRef = React.useRef();
     const [showModal, setShowModal] = useState(false);
+    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
     const [openModal, setOpenModal] = useState(false);
 
@@ -43,7 +45,7 @@ function MakePosts() {
         <div>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Avatar
-                    src={UserAvatar}
+                    src={userLoggedInInformation.userPhoto}
                     alt="User Avatar"
                     sx={{ mr: 2, height: '48px', width: '48px' }}
                 />

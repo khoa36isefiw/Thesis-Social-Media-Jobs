@@ -50,7 +50,7 @@ function UserInformation() {
                     }}
                 />
                 <Avatar
-                    src={UserAvatar}
+                    src={userLoggedInInformation.userPhoto}
                     alt="User Avatar"
                     sx={{
                         height: '80px',
