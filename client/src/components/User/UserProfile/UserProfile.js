@@ -28,7 +28,7 @@ import EditUserProfile from '../../EditUserProfile/EditUserProfile';
 import { mobileScreen, tabletScreen, theme } from '../../Theme/Theme';
 import { useDispatch, useSelector } from 'react-redux';
 import { startAChatMessage } from '../../../redux/AddChatMessage/addChatMessageAction';
-import EditUserImageModal from '../../EditUserImageModal/EditUserImageModal';
+import EditUserProfilePhotoModal from '../../EditUserProfilePhotoModal/EditUserProfilePhotoModal';
 
 // default image
 // https://t3.ftcdn.net/jpg/00/64/67/52/360_F_64675209_7ve2XQANuzuHjMZXP3aIYIpsDKEbF5dD.jpg
@@ -195,7 +195,11 @@ export function UserProfile() {
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Avatar
                     // src={UserAvatar}
-                    src={userLoggedInInformation.userPhoto}
+                    src={
+                        userLoggedInInformation.userPhoto
+                            ? userLoggedInInformation.userPhoto
+                            : UserAvatar
+                    }
                     alt="User Avatar"
                     sx={{
                         mx: 3,
@@ -520,8 +524,12 @@ export function UserProfile() {
 
             {/* edit user image/ user avatar/ user photo */}
             <Modal open={activeModal === 'editUserAvatar'}>
-                <EditUserImageModal
-                    userImageURL={userLoggedInInformation.userPhoto}
+                <EditUserProfilePhotoModal
+                    userImageURL={
+                        userLoggedInInformation.userPhoto
+                            ? userLoggedInInformation.userPhoto
+                            : UserAvatar
+                    }
                     handleClose={handleCloseModal}
                 />
             </Modal>
