@@ -341,6 +341,9 @@ function GuestSignUp() {
                     birthDate: getBirthDate,
                     userName: email,
                     password: password,
+                    // default image
+                    userPhoto:
+                        'https://t3.ftcdn.net/jpg/00/64/67/52/360_F_64675209_7ve2XQANuzuHjMZXP3aIYIpsDKEbF5dD.jpg',
                 }),
             );
             setIsCreatedAccount(true);
