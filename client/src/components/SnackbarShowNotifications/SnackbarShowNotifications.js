@@ -14,6 +14,7 @@ export default function SnackbarShowNotifications({
     icon,
 }) {
     const [open, setOpen] = useState(isOpen);
+    console.log('Show Nè!:');
 
     useEffect(() => {
         setOpen(isOpen);
@@ -64,6 +65,7 @@ export default function SnackbarShowNotifications({
         <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             sx={{
+                zIndex: 999999999,
                 '.MuiPaper-root': {
                     bgcolor: '#fff',
                     borderRadius: '8px',
