@@ -1,13 +1,41 @@
-import React from 'react';
-import { Box, IconButton, Typography, Button, Divider, Avatar } from '@mui/material';
+import React, { useState, useRef } from 'react';
+import { Box, IconButton, Divider, Button, Avatar, Modal } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import { modalAnimation } from '../AnimationEffects/AnimationEffects';
-// define modal animation
+import EditPhoto from '../EditPhoto/EditPhoto';
 
 function ChangePhoto({ imgUrl, handleCloseChange }) {
+    const fileInputRef = useRef(null);
+    const [imageURL, setImageURL] = useState(null);
+    const [openEditPhotoModal, setOpenEditPhotoModal] = useState(false);
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0]; // Get the list of selected file
+        const reader = new FileReader();
+        reader.onload = () => {
+            const imageDataURL = reader.result;
+            // get the name of the uploaded image
+            const imageName = file.name;
+            // store both the name and URL
+            setImageURL({ name: imageName, url: imageDataURL });
+            setOpenEditPhotoModal(true);
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleUploadClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleCloseEditPhotoModal = () => {
+        setOpenEditPhotoModal(false);
+    };
+
     return (
         <Box
             sx={{
@@ -19,7 +47,6 @@ function ChangePhoto({ imgUrl, handleCloseChange }) {
                 mt: '64px',
                 borderRadius: '8px',
                 boxShadow: '0 4px 4px #333',
-                //  close icon doesn't overflow
                 overflow: 'hidden',
                 [ipadProScreen]: {
                     width: '70%',
@@ -72,8 +99,8 @@ function ChangePhoto({ imgUrl, handleCloseChange }) {
                 }}
             >
                 <Avatar
-                    src={DefaultBackgroundImage}
-                    alt="Default User Background Image"
+                    src={imgUrl || DefaultBackgroundImage}
+                    alt="Default User Image"
                     sx={{
                         height: '248px',
                         width: '248px',
@@ -100,7 +127,16 @@ function ChangePhoto({ imgUrl, handleCloseChange }) {
                 </Box>
             </Box>
             <Divider sx={{ mt: 2, mb: 2 }} />
+
             <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+                <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleImageUpload}
+                />
+
                 <Button
                     variant="contained"
                     sx={{
@@ -113,10 +149,17 @@ function ChangePhoto({ imgUrl, handleCloseChange }) {
                         mx: 2,
                         mr: '20px',
                     }}
+                    onClick={handleUploadClick}
                 >
                     Upload photo
                 </Button>
             </Box>
+            <Modal open={openEditPhotoModal} onClose={handleCloseEditPhotoModal}>
+                <EditPhoto
+                    imgUrl={imageURL !== null && imageURL.url}
+                    handleCloseChange={handleCloseEditPhotoModal}
+                />
+            </Modal>
         </Box>
     );
 }
