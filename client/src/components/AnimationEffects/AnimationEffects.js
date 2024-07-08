@@ -9,3 +9,12 @@ export const modalAnimation = {
     },
     animation: 'fadeInSlideInTop 0.5s ease-in-out',
 };
+
+export const fadeInScale = {
+    '@keyframes fadeInScale': {
+        '0%': { opacity: 0, transform: 'scale(0.9)' },
+        '100%': { opacity: 1, transform: 'scale(1)' },
+    },
+
+    animation: 'fadeInScale 0.5s ease-in-out',
+};

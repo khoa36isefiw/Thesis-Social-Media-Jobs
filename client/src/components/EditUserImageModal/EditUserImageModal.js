@@ -1,43 +1,25 @@
 import React, { useState } from 'react';
-import {
-    Box,
-    IconButton,
-    Typography,
-    Button,
-    Divider,
-    Avatar,
-    Modal,
-    Menu,
-    keyframes,
-} from '@mui/material';
+import { Box, IconButton, Typography, Button, Divider, Avatar, Modal, Menu } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
-
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SatelliteIcon from '@mui/icons-material/Satellite';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import styled from '@emotion/styled';
 import ChangePhoto from '../ChangeUserPhoto/ChangeUserPhoto';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import UserPhotoAvatarPrivacy from '../UserPhotoAvatarPrivacy/UserPhotoAvatarPrivacy';
-
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
-import Stack from '@mui/material/Stack';
 import Close from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from 'react-redux';
-import { setViewingRights } from '../../redux/ManageUserRights/manageUserRightsAction';
+import DeleteSomething from '../DeleteSomething/DeleteSomething';
 
 function EditUserImageModal({ handleClose }) {
     const [activeModal, setActiveModal] = useState(null);
-    const [showSettings, setShowSettings] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
     const handleOpenModal = (modalType) => {
         setActiveModal(modalType);
     };
@@ -45,13 +27,8 @@ function EditUserImageModal({ handleClose }) {
     const handleCloseModal = () => {
         setActiveModal(null);
     };
-
-    const handleShowSettings = () => {
-        setShowSettings(true);
-    };
-
-    const handleCloseSettings = () => {
-        setShowSettings(false);
+    const handleShowDeleteConfirm = () => {
+        setShowDeleteConfirm(true);
     };
 
     const modalAnimation = {
@@ -167,6 +144,7 @@ function EditUserImageModal({ handleClose }) {
                     <ProfileButton
                         icon={<DeleteIcon sx={{ color: '#fff', fontSize: '28px' }} />}
                         textAction={'Delete'}
+                        handleClick={() => handleOpenModal('deletePhoto')}
                     />
                 </Box>
 
@@ -176,6 +154,10 @@ function EditUserImageModal({ handleClose }) {
 
                 <Modal open={activeModal === 'photoSettings'} onClose={handleCloseModal}>
                     <UserPhotoAvatarPrivacy handleClose={handleCloseModal} />
+                </Modal>
+
+                <Modal open={activeModal === 'deletePhoto'} onClose={handleCloseModal}>
+                    <DeleteSomething handleClose={handleCloseModal} />
                 </Modal>
             </Box>
         </Modal>
