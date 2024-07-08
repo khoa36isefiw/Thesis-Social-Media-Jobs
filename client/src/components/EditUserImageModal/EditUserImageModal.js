@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Box, IconButton, Typography, Button, Divider, Avatar, Modal, Menu } from '@mui/material';
+import {
+    Box,
+    IconButton,
+    Typography,
+    Button,
+    Divider,
+    Avatar,
+    Modal,
+    Menu,
+    keyframes,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
 
@@ -22,6 +32,8 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Stack from '@mui/material/Stack';
 import Close from '@mui/icons-material/Close';
+import { useDispatch, useSelector } from 'react-redux';
+import { setViewingRights } from '../../redux/ManageUserRights/manageUserRightsAction';
 
 function EditUserImageModal({ handleClose }) {
     const [activeModal, setActiveModal] = useState(null);
@@ -42,6 +54,13 @@ function EditUserImageModal({ handleClose }) {
         setShowSettings(false);
     };
 
+    const modalAnimation = {
+        '@keyframes fadeInScale': {
+            '0%': { opacity: 0, transform: 'scale(0.9)' },
+            '100%': { opacity: 1, transform: 'scale(1)' },
+        },
+        animation: 'fadeInScale 0.5s ease-in-out',
+    };
     return (
         <Modal open onClose={handleClose}>
             <Box
@@ -66,6 +85,7 @@ function EditUserImageModal({ handleClose }) {
                         width: '100%',
                         height: '460px',
                     },
+                    ...modalAnimation,
                 }}
             >
                 <Box
@@ -118,33 +138,7 @@ function EditUserImageModal({ handleClose }) {
 
                 {/* set permission? for whom can see it */}
 
-                {/* <IconButton>
-                        <VisibilityIcon sx={{ color: '#fff', fontSize: '16px' }} />
-                    </IconButton>
-                    <CustomizeTypography sx={{ color: '#fff' }}>Anyone</CustomizeTypography> */}
-                {/* <Button
-                    startIcon={<VisibilityIcon sx={{ color: '#fff', fontSize: '14px' }} />}
-                    sx={{
-                        px: 2,
-                        padding: '2px 12px',
-                        fontSize: '16px',
-                        color: '#fff',
-                        borderRadius: '24px',
-                        border: '1px solid #fff',
-                        fontWeight: 'bold',
-                        textTransform: 'capitalize',
-                        '&:hover': {
-                            bgcolor: '#525455',
-                            boxShadow: '2px 1px 0px #fff',
-                        },
-                        ml: 2,
-                    }}
-                    onClick={() => handleOpenModal('photoSettings')}
-                >
-                    Anyone
-                </Button> */}
-
-                <PositionedMenu />
+                <ViewingRights />
 
                 <Divider sx={{ mt: 2, borderColor: '#fff' }} />
                 <Box
@@ -175,9 +169,11 @@ function EditUserImageModal({ handleClose }) {
                         textAction={'Delete'}
                     />
                 </Box>
+
                 <Modal open={activeModal === 'changePhoto'} onClose={handleCloseModal}>
                     <ChangePhoto handleCloseChange={handleCloseModal} />
                 </Modal>
+
                 <Modal open={activeModal === 'photoSettings'} onClose={handleCloseModal}>
                     <UserPhotoAvatarPrivacy handleClose={handleCloseModal} />
                 </Modal>
@@ -212,9 +208,26 @@ const ProfileButton = ({ icon, textAction, handleClick }) => {
     );
 };
 
-function PositionedMenu() {
+const viewingRightsData = [
+    {
+        textAction: 'All Aikotoba members',
+        subTextAction: 'Members signed into Aikotoba, including everyone in your network.',
+    },
+    {
+        textAction: 'Your network',
+        subTextAction: 'Only people follow you in Aikotoba.',
+    },
+];
+
+function ViewingRights() {
+    const dispatch = useDispatch();
+
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [selectedRight, setSelectedRight] = React.useState(viewingRightsData[0]);
+    const getViewingRights = useSelector((state) => state.manageRights.setViewingRights);
     const open = Boolean(anchorEl);
+
+    // show menu
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -222,8 +235,16 @@ function PositionedMenu() {
         setAnchorEl(null);
     };
 
+    // get value of menu
+    const handleMenuItemClick = (right) => {
+        setSelectedRight(right);
+        handleClose();
+    };
+
+    console.log('selectedRight: ', selectedRight);
+
     return (
-        <div>
+        <Box>
             <Button
                 onClick={handleClick}
                 startIcon={<VisibilityIcon sx={{ color: '#fff', fontSize: '14px' }} />}
@@ -236,16 +257,14 @@ function PositionedMenu() {
                     border: '1px solid #fff',
                     fontWeight: 'bold',
                     textTransform: 'capitalize',
-                    //make animation smoother
                     transition: 'box-shadow 0.3s ease-in-out',
                     '&:hover': {
-                        // increase border color for button
                         boxShadow: '0 0 0 2px #fff',
                     },
                     ml: 2,
                 }}
             >
-                Anyone
+                {selectedRight.textAction}
             </Button>
             <Menu
                 anchorEl={anchorEl}
@@ -283,6 +302,7 @@ function PositionedMenu() {
                                 bgcolor: 'transparent',
                             },
                         }}
+                        onClick={handleClose}
                     >
                         <Close sx={{ fontSize: '24px' }} />
                     </IconButton>
@@ -293,29 +313,27 @@ function PositionedMenu() {
                 </CustomizeTypography>
 
                 <Divider />
-                <MenuItem
-                    onClick={handleClose}
-                    sx={{
-                        '&:hover': {
-                            bgcolor: 'transparent',
-                        },
-                        px: 1,
-                    }}
-                >
-                    <PrivacyButtonPhoto
-                        textAction={'All Aikotoba members'}
-                        subTextAction={
-                            'Members signed into Aikotoba, including everyone in your network.'
-                        }
-                    />
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleClose} sx={{ px: 1 }}>
-                    <PrivacyButtonPhoto
-                        textAction={'Your network'}
-                        subTextAction={'Only people follow you in Aikotoba'}
-                    />
-                </MenuItem>
+                {viewingRightsData.map((right, index) => (
+                    <Box key={index}>
+                        <MenuItem
+                            onClick={() => handleMenuItemClick(right)}
+                            sx={{
+                                '&:hover': {
+                                    bgcolor: 'transparent',
+                                },
+                                px: 1,
+                            }}
+                        >
+                            <PrivacyButtonPhoto
+                                textAction={right.textAction}
+                                subTextAction={right.subTextAction}
+                                selected={selectedRight === viewingRightsData[index]}
+                            />
+                        </MenuItem>
+                        {viewingRightsData.length - 1 !== index && <Divider />}
+                    </Box>
+                ))}
+                {/* 
                 <Box
                     sx={{
                         px: 2,
@@ -336,13 +354,14 @@ function PositionedMenu() {
                     >
                         Save
                     </Button>
-                </Box>
+                </Box> */}
             </Menu>
-        </div>
+        </Box>
     );
 }
 
-const PrivacyButtonPhoto = ({ icon, handleOnClick, textAction, subTextAction, selected }) => {
+const PrivacyButtonPhoto = ({ handleOnClick, textAction, subTextAction, selected }) => {
+    console.log('selected in Edit: ', selected);
     return (
         <Box>
             <Box
@@ -356,8 +375,8 @@ const PrivacyButtonPhoto = ({ icon, handleOnClick, textAction, subTextAction, se
             >
                 <Box
                     sx={{
-                        width: '15px',
-                        height: '15px',
+                        width: '20px',
+                        height: '20px',
                         // color: theme.palette.bgButtonHover,
                         bgcolor: selected ? 'green' : '#fff',
                         borderRadius: '50%',
