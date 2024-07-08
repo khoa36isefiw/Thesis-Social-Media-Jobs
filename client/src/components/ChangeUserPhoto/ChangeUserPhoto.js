@@ -4,6 +4,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
+import { modalAnimation } from '../AnimationEffects/AnimationEffects';
+// define modal animation
+
 function ChangePhoto({ imgUrl, handleCloseChange }) {
     return (
         <Box
@@ -28,6 +31,7 @@ function ChangePhoto({ imgUrl, handleCloseChange }) {
                     width: '100%',
                     height: '460px',
                 },
+                ...modalAnimation,
             }}
         >
             <Box
