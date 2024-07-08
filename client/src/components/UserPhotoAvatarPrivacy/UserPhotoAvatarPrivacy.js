@@ -1,27 +1,24 @@
-import {
-    Box,
-    Button,
-    Divider,
-    IconButton,
-    Modal,
-    Typography,
-    Grow,
-    Slide,
-    Grid,
-    keyframes,
-} from '@mui/material';
+import { Box, Button, Divider, IconButton, keyframes } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
-import PublicIcon from '@mui/icons-material/Public';
-import Diversity3Icon from '@mui/icons-material/Diversity3';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import { PrivacyButton } from '../MakePosts/PrivacyButton/PrivacyButton';
 import { privacyPostSettingsData } from '../MakePosts/Data/PrivacyPostSettingsData';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
 
 function UserPhotoAvatarPrivacy({ handleClose }) {
     const dispatch = useDispatch();
@@ -74,6 +71,7 @@ function UserPhotoAvatarPrivacy({ handleClose }) {
                     width: '100%',
                     height: '460px',
                 },
+                animation: `${fadeIn} 10s ease-in-out`,
             }}
         >
             <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>

@@ -119,7 +119,7 @@ function Feed() {
                 <Post
                     key={post.id}
                     postID={'8'}
-                    avatarSrc={null}
+                    avatarSrc={post.userPhoto}
                     displayName={post.userName}
                     followers={'6,969'}
                     // time={'1h'}

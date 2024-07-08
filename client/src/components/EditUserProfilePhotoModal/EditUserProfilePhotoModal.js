@@ -2,30 +2,26 @@ import React, { useState } from 'react';
 import { Box, IconButton, Typography, Button, Divider, Avatar, Modal, Menu } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
-
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SatelliteIcon from '@mui/icons-material/Satellite';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import styled from '@emotion/styled';
 import ChangePhoto from '../ChangeUserPhoto/ChangeUserPhoto';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import UserPhotoAvatarPrivacy from '../UserPhotoAvatarPrivacy/UserPhotoAvatarPrivacy';
-
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
-import Stack from '@mui/material/Stack';
 import Close from '@mui/icons-material/Close';
+import { useDispatch, useSelector } from 'react-redux';
+import DeleteSomething from '../DeleteSomething/DeleteSomething';
+import EditPhoto from '../EditPhoto/EditPhoto';
+import { ProfileButton } from '../ProfileButton/ProfileButton';
 
-function EditUserImageModal({ handleClose }) {
+function EditUserProfilePhotoModal({ userImageURL, handleClose }) {
     const [activeModal, setActiveModal] = useState(null);
-    const [showSettings, setShowSettings] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
     const handleOpenModal = (modalType) => {
         setActiveModal(modalType);
     };
@@ -33,15 +29,17 @@ function EditUserImageModal({ handleClose }) {
     const handleCloseModal = () => {
         setActiveModal(null);
     };
-
-    const handleShowSettings = () => {
-        setShowSettings(true);
+    const handleShowDeleteConfirm = () => {
+        setShowDeleteConfirm(true);
     };
 
-    const handleCloseSettings = () => {
-        setShowSettings(false);
+    const modalAnimation = {
+        '@keyframes fadeInScale': {
+            '0%': { opacity: 0, transform: 'scale(0.9)' },
+            '100%': { opacity: 1, transform: 'scale(1)' },
+        },
+        animation: 'fadeInScale 0.5s ease-in-out',
     };
-
     return (
         <Modal open onClose={handleClose}>
             <Box
@@ -66,6 +64,7 @@ function EditUserImageModal({ handleClose }) {
                         width: '100%',
                         height: '460px',
                     },
+                    ...modalAnimation,
                 }}
             >
                 <Box
@@ -103,8 +102,9 @@ function EditUserImageModal({ handleClose }) {
                     }}
                 >
                     <Avatar
-                        src={DefaultBackgroundImage}
-                        alt="Default User Background Image"
+                        // src={DefaultBackgroundImage}
+                        src={userImageURL}
+                        alt="Default User Image"
                         sx={{
                             height: '300px',
                             width: '300px',
@@ -118,33 +118,7 @@ function EditUserImageModal({ handleClose }) {
 
                 {/* set permission? for whom can see it */}
 
-                {/* <IconButton>
-                        <VisibilityIcon sx={{ color: '#fff', fontSize: '16px' }} />
-                    </IconButton>
-                    <CustomizeTypography sx={{ color: '#fff' }}>Anyone</CustomizeTypography> */}
-                {/* <Button
-                    startIcon={<VisibilityIcon sx={{ color: '#fff', fontSize: '14px' }} />}
-                    sx={{
-                        px: 2,
-                        padding: '2px 12px',
-                        fontSize: '16px',
-                        color: '#fff',
-                        borderRadius: '24px',
-                        border: '1px solid #fff',
-                        fontWeight: 'bold',
-                        textTransform: 'capitalize',
-                        '&:hover': {
-                            bgcolor: '#525455',
-                            boxShadow: '2px 1px 0px #fff',
-                        },
-                        ml: 2,
-                    }}
-                    onClick={() => handleOpenModal('photoSettings')}
-                >
-                    Anyone
-                </Button> */}
-
-                <PositionedMenu />
+                <ViewingRights />
 
                 <Divider sx={{ mt: 2, borderColor: '#fff' }} />
                 <Box
@@ -159,6 +133,7 @@ function EditUserImageModal({ handleClose }) {
                         <ProfileButton
                             icon={<EditIcon sx={{ color: '#fff', fontSize: '28px' }} />}
                             textAction={'Edit'}
+                            handleClick={() => handleOpenModal('editPhoto')}
                         />
                         <ProfileButton
                             icon={<CameraAltIcon sx={{ color: '#fff', fontSize: '28px' }} />}
@@ -173,48 +148,52 @@ function EditUserImageModal({ handleClose }) {
                     <ProfileButton
                         icon={<DeleteIcon sx={{ color: '#fff', fontSize: '28px' }} />}
                         textAction={'Delete'}
+                        handleClick={() => handleOpenModal('deletePhoto')}
                     />
                 </Box>
+
                 <Modal open={activeModal === 'changePhoto'} onClose={handleCloseModal}>
-                    <ChangePhoto handleCloseChange={handleCloseModal} />
+                    <ChangePhoto imgUrl={userImageURL} handleCloseChange={handleCloseModal} />
                 </Modal>
+
                 <Modal open={activeModal === 'photoSettings'} onClose={handleCloseModal}>
                     <UserPhotoAvatarPrivacy handleClose={handleCloseModal} />
+                </Modal>
+
+                <Modal open={activeModal === 'deletePhoto'} onClose={handleCloseModal}>
+                    <DeleteSomething handleClose={handleCloseModal} />
+                </Modal>
+
+                <Modal open={activeModal === 'editPhoto'} onClose={handleCloseModal}>
+                    <EditPhoto imgUrl={userImageURL} handleCloseChange={handleCloseModal} />
                 </Modal>
             </Box>
         </Modal>
     );
 }
 
-export default EditUserImageModal;
+export default EditUserProfilePhotoModal;
 
-const ProfileButton = ({ icon, textAction, handleClick }) => {
-    return (
-        <Box
-            onClick={handleClick}
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                mr: 2,
-                // mb: 1,
-                borderRadius: 1,
-                p: 1,
-                '&:hover': {
-                    bgcolor: '#525455',
-                    cursor: 'pointer',
-                },
-            }}
-        >
-            <IconButton>{icon}</IconButton>
-            <CustomizeTypography sx={{ color: '#fff' }}>{textAction}</CustomizeTypography>
-        </Box>
-    );
-};
+const viewingRightsData = [
+    {
+        textAction: 'All Aikotoba members',
+        subTextAction: 'Members signed into Aikotoba, including everyone in your network.',
+    },
+    {
+        textAction: 'Your network',
+        subTextAction: 'Only people follow you in Aikotoba.',
+    },
+];
 
-function PositionedMenu() {
+export function ViewingRights({ changeColor = false }) {
+    const dispatch = useDispatch();
+
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [selectedRight, setSelectedRight] = React.useState(viewingRightsData[0]);
+    const getViewingRights = useSelector((state) => state.manageRights.setViewingRights);
     const open = Boolean(anchorEl);
+
+    // show menu
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -222,30 +201,40 @@ function PositionedMenu() {
         setAnchorEl(null);
     };
 
+    // get value of menu
+    const handleMenuItemClick = (right) => {
+        setSelectedRight(right);
+        handleClose();
+    };
+
+    console.log('selectedRight: ', selectedRight);
+
     return (
-        <div>
+        <Box>
             <Button
                 onClick={handleClick}
-                startIcon={<VisibilityIcon sx={{ color: '#fff', fontSize: '14px' }} />}
+                startIcon={
+                    <VisibilityIcon
+                        sx={{ color: changeColor ? 'black' : '#fff', fontSize: '14px' }}
+                    />
+                }
                 sx={{
                     px: 2,
                     padding: '2px 12px',
                     fontSize: '16px',
-                    color: '#fff',
+                    color: changeColor ? 'black' : '#fff',
                     borderRadius: '24px',
                     border: '1px solid #fff',
                     fontWeight: 'bold',
                     textTransform: 'capitalize',
-                    //make animation smoother
                     transition: 'box-shadow 0.3s ease-in-out',
                     '&:hover': {
-                        // increase border color for button
                         boxShadow: '0 0 0 2px #fff',
                     },
                     ml: 2,
                 }}
             >
-                Anyone
+                {selectedRight.textAction}
             </Button>
             <Menu
                 anchorEl={anchorEl}
@@ -283,6 +272,7 @@ function PositionedMenu() {
                                 bgcolor: 'transparent',
                             },
                         }}
+                        onClick={handleClose}
                     >
                         <Close sx={{ fontSize: '24px' }} />
                     </IconButton>
@@ -293,29 +283,27 @@ function PositionedMenu() {
                 </CustomizeTypography>
 
                 <Divider />
-                <MenuItem
-                    onClick={handleClose}
-                    sx={{
-                        '&:hover': {
-                            bgcolor: 'transparent',
-                        },
-                        px: 1,
-                    }}
-                >
-                    <PrivacyButtonPhoto
-                        textAction={'All Aikotoba members'}
-                        subTextAction={
-                            'Members signed into Aikotoba, including everyone in your network.'
-                        }
-                    />
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleClose} sx={{ px: 1 }}>
-                    <PrivacyButtonPhoto
-                        textAction={'Your network'}
-                        subTextAction={'Only people follow you in Aikotoba'}
-                    />
-                </MenuItem>
+                {viewingRightsData.map((right, index) => (
+                    <Box key={index}>
+                        <MenuItem
+                            onClick={() => handleMenuItemClick(right)}
+                            sx={{
+                                '&:hover': {
+                                    bgcolor: 'transparent',
+                                },
+                                px: 1,
+                            }}
+                        >
+                            <PrivacyButtonPhoto
+                                textAction={right.textAction}
+                                subTextAction={right.subTextAction}
+                                selected={selectedRight === viewingRightsData[index]}
+                            />
+                        </MenuItem>
+                        {viewingRightsData.length - 1 !== index && <Divider />}
+                    </Box>
+                ))}
+                {/* 
                 <Box
                     sx={{
                         px: 2,
@@ -336,13 +324,14 @@ function PositionedMenu() {
                     >
                         Save
                     </Button>
-                </Box>
+                </Box> */}
             </Menu>
-        </div>
+        </Box>
     );
 }
 
-const PrivacyButtonPhoto = ({ icon, handleOnClick, textAction, subTextAction, selected }) => {
+const PrivacyButtonPhoto = ({ handleOnClick, textAction, subTextAction, selected }) => {
+    console.log('selected in Edit: ', selected);
     return (
         <Box>
             <Box
@@ -356,8 +345,8 @@ const PrivacyButtonPhoto = ({ icon, handleOnClick, textAction, subTextAction, se
             >
                 <Box
                     sx={{
-                        width: '15px',
-                        height: '15px',
+                        width: '20px',
+                        height: '20px',
                         // color: theme.palette.bgButtonHover,
                         bgcolor: selected ? 'green' : '#fff',
                         borderRadius: '50%',

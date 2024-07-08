@@ -8,6 +8,7 @@ import { mutePersonReducer } from './MutePerson/mutePersonReducer';
 import { addChatMessageReducer } from './AddChatMessage/addChatMessageReducer';
 import { managePostReducer } from './ManagePost/managePostReducer';
 import { manageAccountReducer } from './ManageAccount/manageAccountReducer';
+import { manageUserRightsReducer } from './ManageUserRights/manageUserRightsReducer';
 const rootReducer = combineReducers({
     buttonSendMessage: sendReducer,
     // starred users
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
     startAMessage: addChatMessageReducer,
     managePost: managePostReducer,
     manageAccounts: manageAccountReducer,
+    manageRights: manageUserRightsReducer,
 });
 
 const store = createStore(rootReducer);

@@ -54,6 +54,7 @@ function SignIn() {
 
             if (user) {
                 setShowNotifications(false);
+                // get user information and save it who logged into website
                 dispatch(setLoggedInUser(user));
                 console.log('login successfully');
                 navigate('/signed-in');

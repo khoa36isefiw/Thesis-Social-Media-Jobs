@@ -44,3 +44,6 @@ export const GET_DAY = 'GET_DAY';
 export const GET_MONTH = 'GET_MONTH';
 export const GET_YEAR = 'GET_YEAR';
 export const GET_BIRTH_DATE = 'GET_BIRTH_DATE';
+
+// user photo
+export const PHOTO_VIEWING_RIGHTS = 'PHOTO_VIEWING_RIGHTS';

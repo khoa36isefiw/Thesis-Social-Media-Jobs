@@ -3,6 +3,7 @@ import {
     GET_DAY,
     GET_MONTH,
     GET_YEAR,
+    PHOTO_VIEWING_RIGHTS,
     SAVE_ACCOUNT_SIGNUP,
     USER_LOGGED_IN_INFORMATION,
 } from '../actionConstant';
@@ -14,6 +15,7 @@ const initialState = {
     day: '',
     month: '',
     year: '',
+    setViewingRights: 'All Aikotoba members',
 };
 
 export const manageAccountReducer = (state = initialState, action) => {
@@ -57,6 +59,12 @@ export const manageAccountReducer = (state = initialState, action) => {
             return {
                 ...state,
                 year: year,
+            };
+        case PHOTO_VIEWING_RIGHTS:
+            const { viewing } = action.payload;
+            return {
+                ...state,
+                setViewingRights: viewing,
             };
 
         default:

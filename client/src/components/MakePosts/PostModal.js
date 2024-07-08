@@ -148,11 +148,13 @@ function PostModal({ closeModal }) {
         const userName = userLoggedInInformation.lastName
             ? userLoggedInInformation.lastName + ' ' + userLoggedInInformation.firstName
             : userLoggedInInformation;
+        const userAvatar = userLoggedInInformation.userPhoto;
         // console.log('userName in Post Modal:', userName);
         let articleTextSent = null;
         if (imageURL) {
             articleTextSent = {
                 userName: userName,
+                userPhoto: userAvatar,
                 articleText: articleText,
                 listImage: imageURL,
                 viewPostPermission,
@@ -168,6 +170,7 @@ function PostModal({ closeModal }) {
                 dispatch(
                     addNewPosts({
                         userName: userName,
+                        userPhoto: userAvatar,
                         articleTextSent: articleText,
                         viewPostPermission,
                     }),
@@ -231,7 +234,8 @@ function PostModal({ closeModal }) {
                     onClick={handleShowModal}
                 >
                     <Avatar
-                        src={UserAvatar}
+                        // src={UserAvatar}
+                        src={userLoggedInInformation.userPhoto}
                         alt="User Avatar"
                         sx={{ height: '48px', width: '48px', mr: 1 }}
                     />
@@ -246,7 +250,9 @@ function PostModal({ closeModal }) {
                             <Typography
                                 sx={{ textAlign: 'left', fontSize: '16px', fontWeight: 'bold' }}
                             >
-                                Huynh Dang Khoa
+                                {/* Huynh Dang Khoa */}
+                                {userLoggedInInformation.firstName}{' '}
+                                {userLoggedInInformation.lastName}
                             </Typography>
                             <Typography sx={{ textAlign: 'left', fontSize: '13px' }}>
                                 {/* Post to Anyone */}
