@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, IconButton, Divider, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
@@ -7,15 +7,27 @@ import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography'
 
 function DeleteSomething({ handleClose, showDeleteConfirm }) {
     const [confirmOpen, setConfirmOpen] = useState(showDeleteConfirm);
+    const [animationClass, setAnimationClass] = useState('animate__fadeIn'); // default to start an animation
 
     const handleConfirmClose = () => {
-        setConfirmOpen(false);
-        handleClose();
+        // setConfirmOpen(false);
+        // handleClose();
+        setAnimationClass('animate__zoomOut'); // exist
+        setTimeout(() => {
+            setConfirmOpen(false);
+            handleClose();
+        }, 500); // Match the animation duration
     };
 
     const handleModalClose = () => {
         setConfirmOpen(true);
     };
+
+    useEffect(() => {
+        if (confirmOpen) {
+            setAnimationClass('animate__fadeIn');
+        }
+    }, [confirmOpen]);
 
     return (
         <Box
@@ -42,7 +54,8 @@ function DeleteSomething({ handleClose, showDeleteConfirm }) {
                 },
             }}
             // use animation from animate.css
-            className="animate__animated animate__fadeIn"
+            // className="animate__animated animate__fadeIn"
+            className={`animate__animated ${animationClass}`}
         >
             <Box
                 sx={{
@@ -84,7 +97,11 @@ function DeleteSomething({ handleClose, showDeleteConfirm }) {
                 }}
             >
                 <DeleteButton variant={'outlined'} deleteText={'Cancel'} />
-                <DeleteButton variant={'contained'} deleteText={'Delete'} />
+                <DeleteButton
+                    variant={'contained'}
+                    deleteText={'Delete'}
+                    handleClickDelete={handleConfirmClose}
+                />
             </Box>
         </Box>
     );
