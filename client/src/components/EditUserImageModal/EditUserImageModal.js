@@ -16,7 +16,7 @@ import Close from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteSomething from '../DeleteSomething/DeleteSomething';
 
-function EditUserImageModal({ handleClose }) {
+function EditUserImageModal({ userImageURL, handleClose }) {
     const [activeModal, setActiveModal] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -100,8 +100,9 @@ function EditUserImageModal({ handleClose }) {
                     }}
                 >
                     <Avatar
-                        src={DefaultBackgroundImage}
-                        alt="Default User Background Image"
+                        // src={DefaultBackgroundImage}
+                        src={userImageURL}
+                        alt="Default User Image"
                         sx={{
                             height: '300px',
                             width: '300px',
