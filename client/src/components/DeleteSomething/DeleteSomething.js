@@ -42,7 +42,7 @@ function DeleteSomething({ handleClose, showDeleteConfirm }) {
                 },
             }}
             // use animation from animate.css
-            className="animate__animated animate__fadeInUp"
+            className="animate__animated animate__fadeIn"
         >
             <Box
                 sx={{
