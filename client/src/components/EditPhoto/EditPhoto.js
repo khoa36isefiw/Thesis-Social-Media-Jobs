@@ -9,10 +9,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLoggedInUser } from '../../redux/ManageAccount/manageAccountAction';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
 import WarningIcon from '@mui/icons-material/Warning';
+import RotateRightIcon from '@mui/icons-material/RotateRight';
+import RotateLeftIcon from '@mui/icons-material/RotateLeft';
+import { RotateButton } from '../RotateButton/RotateButton';
+
+const filterList = [
+    { filterName: 'Original', filterStyle: null },
+    { filterName: 'Brightness', filterStyle: 'brightness(1.75)' },
+    { filterName: 'Contrast', filterStyle: 'contrast(2)' },
+    { filterName: 'Sepia', filterStyle: 'sepia(60%)' },
+    { filterName: 'Saturate', filterStyle: 'saturate(200%)' },
+];
 function EditPhoto({ imgUrl, handleCloseChange }) {
     const dispatch = useDispatch();
     const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
     const [showNotifications, setShowNotifications] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState(0);
+    const [rotationAngle, setRotationAngle] = useState(0);
     const [notificationMessage, setNotificationMessage] = useState('');
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
@@ -31,6 +44,18 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
 
     const handleCloseSnackbar = () => {
         setShowNotifications(false);
+    };
+
+    const handleSelectedFilters = (index) => {
+        setSelectedFilter(index);
+    };
+
+    const handleRotateLeft = () => {
+        // update the state based on its previous value
+        setRotationAngle((prevAngle) => prevAngle - 90);
+    };
+    const handleRotateRight = () => {
+        setRotationAngle((prevAngle) => prevAngle + 90);
     };
 
     return (
@@ -94,6 +119,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                     justifyContent: 'center',
                     // bgcolor: '#333',
                     backgroundColor: '#1b1f23',
+
                     p: 1,
                 }}
             >
@@ -102,8 +128,11 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                     src={imgUrl}
                     alt="Default User Image"
                     sx={{
-                        height: '300px',
-                        width: '300px',
+                        height: '350px',
+                        width: '350px',
+                        // borderRadius: 0,
+                        transform: `rotate(${rotationAngle}deg)`,
+                        transition: 'transform 0.5s ease-in-out',
                         [mobileScreen]: {
                             height: '200px',
                             width: '200px',
@@ -114,6 +143,77 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
             <CustomizeTypography sx={{ textAlign: 'center', py: 2 }}>
                 Show your styles to Anyone
             </CustomizeTypography>
+            {/* List images are filtered */}
+
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex' }}>
+                    {filterList.map((filter, index) => (
+                        <Box
+                            key={index}
+                            sx={{
+                                ml: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                '&:hover': {
+                                    cursor: 'pointer',
+                                },
+                            }}
+                            onClick={() => handleSelectedFilters(index)}
+                        >
+                            <Box
+                                sx={{
+                                    height: '56px',
+                                    width: '56px',
+                                    border:
+                                        selectedFilter === index
+                                            ? '1px solid #333'
+                                            : '1px solid transparent',
+                                    // Smooth transition for border and box-shadow
+                                    transition: 'border 0.3s, box-shadow 0.3s',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    boxShadow:
+                                        selectedFilter === index
+                                            ? '0 0 0 3px #fff'
+                                            : '0 0 0 0 transparent',
+                                }}
+                            >
+                                <Avatar
+                                    src={imgUrl}
+                                    alt="Default User Image"
+                                    sx={{
+                                        height: '55px',
+                                        width: '55px',
+
+                                        boxShadow:
+                                            selectedFilter === index
+                                                ? '0 0 0 3px #fff'
+                                                : '0 0 0 0 transparent',
+                                        transition: 'box-shadow 0.3s',
+                                        filter: filter.filterStyle,
+                                    }}
+                                />
+                            </Box>
+                            <Typography sx={{ fontSize: '14px', mt: '4px' }}>
+                                {filter.filterName}
+                            </Typography>
+                        </Box>
+                    ))}
+                </Box>
+                <Box>
+                    <RotateButton
+                        icon={<RotateRightIcon sx={{ color: 'black', fontSize: '20px' }} />}
+                        handleClick={handleRotateRight}
+                    />
+                    <RotateButton
+                        icon={<RotateLeftIcon sx={{ color: 'black', fontSize: '20px' }} />}
+                        handleClick={handleRotateLeft}
+                    />
+                </Box>
+            </Box>
+
             <Divider sx={{ mt: 2, mb: 2 }} />
             <Box
                 sx={{
@@ -141,13 +241,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                     Save
                 </Button>
             </Box>
-            {/* {showNotifications && (
-                <SnackbarShowNotifications
-                    mainText={notificationMessage}
-                    isOpen={showNotifications}
-                    onClose={handleCloseSnackbar}
-                />
-            )} */}
+
             {showNotifications && (
                 <SnackbarShowNotifications
                     // mainText="Create account successfully!"

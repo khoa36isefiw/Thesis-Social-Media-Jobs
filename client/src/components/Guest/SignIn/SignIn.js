@@ -138,6 +138,9 @@ function SignIn() {
                                     color: 'red',
                                     mx: 1,
                                 },
+                                '.MuiInputBase-input': {
+                                    textTransform: 'lowercase',
+                                },
                             }}
                             onBlur={handleEmailBlur}
                         />
