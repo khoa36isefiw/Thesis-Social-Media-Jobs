@@ -85,6 +85,7 @@ function PostModal({ closeModal }) {
 
     // get User Name
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+    // console.log('userLoggedInInformation: ', userLoggedInInformation);
 
     // upload for multiple images
     const handleImageUpload = (event) => {
@@ -247,13 +248,23 @@ function PostModal({ closeModal }) {
                         }}
                     >
                         <Box>
-                            <Typography
-                                sx={{ textAlign: 'left', fontSize: '16px', fontWeight: 'bold' }}
-                            >
-                                {/* Huynh Dang Khoa */}
-                                {userLoggedInInformation.firstName}{' '}
-                                {userLoggedInInformation.lastName}
-                            </Typography>
+                            {userLoggedInInformation.firstName ? (
+                                <Typography
+                                    sx={{ textAlign: 'left', fontSize: '16px', fontWeight: 'bold' }}
+                                >
+                                    {/* Huynh Dang Khoa */}
+                                    {userLoggedInInformation.firstName}{' '}
+                                    {userLoggedInInformation.lastName}
+                                </Typography>
+                            ) : (
+                                <Typography
+                                    sx={{ textAlign: 'left', fontSize: '16px', fontWeight: 'bold' }}
+                                >
+                                    {/* Huynh Dang Khoa */}
+                                    {userLoggedInInformation}
+                                </Typography>
+                            )}
+
                             <Typography sx={{ textAlign: 'left', fontSize: '13px' }}>
                                 {/* Post to Anyone */}
                                 Post to {getPostPrivacySelected}
