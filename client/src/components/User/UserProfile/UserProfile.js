@@ -288,6 +288,7 @@ export function UserProfile() {
                                         [mobileScreen]: {
                                             mt: -1,
                                         },
+                                        textTransform: 'capitalize',
                                     }}
                                 >
                                     {userLoggedInInformation.lastName}{' '}
