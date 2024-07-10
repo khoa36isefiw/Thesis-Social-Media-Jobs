@@ -32,7 +32,16 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
     console.log('user logged in before changing image: ', userLoggedInInformation);
     const handleSavePhotoEdited = () => {
         // update for userPhoto field
-        dispatch(setLoggedInUser({ ...userLoggedInInformation, userPhoto: imgUrl }));
+        // dispatch(setLoggedInUser({ ...userLoggedInInformation, userPhoto: imgUrl }));
+        dispatch(
+            setLoggedInUser({
+                ...userLoggedInInformation,
+                userPhoto: {
+                    imgUrl,
+                    imageStyle: filterList[selectedFilter].filterStyle,
+                },
+            }),
+        );
         setAnimationClass('animate__zoomOut');
         setShowNotifications(true);
         setNotificationMessage('Change your photo successfully');
@@ -58,6 +67,8 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
         setRotationAngle((prevAngle) => prevAngle + 90);
     };
 
+    console.log('selectedFilter: ', selectedFilter);
+
     return (
         <Box
             sx={{
@@ -66,7 +77,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                 width: '40%',
                 minHeight: '350px',
                 margin: 'auto',
-                mt: '64px',
+                mt: '12px',
                 borderRadius: '8px',
                 boxShadow: '0 4px 4px #333',
                 //  close icon doesn't overflow
@@ -125,7 +136,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
             >
                 <Avatar
                     // src={DefaultBackgroundImage}
-                    src={imgUrl}
+                    src={imgUrl.imgUrl}
                     alt="Default User Image"
                     sx={{
                         height: '350px',
@@ -137,6 +148,8 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                             height: '200px',
                             width: '200px',
                         },
+                        // show filter image is selected
+                        filter: filterList[selectedFilter].filterStyle,
                     }}
                 />
             </Box>
@@ -181,7 +194,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                                 }}
                             >
                                 <Avatar
-                                    src={imgUrl}
+                                    src={imgUrl.imgUrl}
                                     alt="Default User Image"
                                     sx={{
                                         height: '55px',
