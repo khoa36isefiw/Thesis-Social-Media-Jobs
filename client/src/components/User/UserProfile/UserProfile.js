@@ -197,7 +197,7 @@ export function UserProfile() {
                     // src={UserAvatar}
                     src={
                         userLoggedInInformation.userPhoto
-                            ? userLoggedInInformation.userPhoto
+                            ? userLoggedInInformation.userPhoto.imgUrl
                             : UserAvatar
                     }
                     alt="User Avatar"
@@ -221,6 +221,9 @@ export function UserProfile() {
                             width: '120px',
                             mt: -8,
                         },
+                        filter:
+                            userLoggedInInformation.userPhoto &&
+                            userLoggedInInformation.userPhoto.imageStyle,
                     }}
                     onClick={() => handleOpenModal('editUserAvatar')}
                 />
