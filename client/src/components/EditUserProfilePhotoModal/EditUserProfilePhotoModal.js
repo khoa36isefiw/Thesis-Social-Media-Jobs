@@ -19,6 +19,7 @@ import EditPhoto from '../EditPhoto/EditPhoto';
 import { ProfileButton } from '../ProfileButton/ProfileButton';
 
 function EditUserProfilePhotoModal({ userImageURL, handleClose }) {
+    console.log('userImageURL: ', userImageURL);
     const [activeModal, setActiveModal] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -103,7 +104,7 @@ function EditUserProfilePhotoModal({ userImageURL, handleClose }) {
                 >
                     <Avatar
                         // src={DefaultBackgroundImage}
-                        src={userImageURL}
+                        src={userImageURL.imgUrl}
                         alt="Default User Image"
                         sx={{
                             height: '300px',
@@ -112,6 +113,7 @@ function EditUserProfilePhotoModal({ userImageURL, handleClose }) {
                                 height: '200px',
                                 width: '200px',
                             },
+                            filter: userImageURL.imageStyle,
                         }}
                     />
                 </Box>

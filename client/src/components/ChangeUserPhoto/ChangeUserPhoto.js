@@ -99,7 +99,7 @@ function ChangePhoto({ imgUrl, handleCloseChange }) {
                 }}
             >
                 <Avatar
-                    src={imgUrl || DefaultBackgroundImage}
+                    src={imgUrl.imgUrl || DefaultBackgroundImage}
                     alt="Default User Image"
                     sx={{
                         height: '248px',
@@ -108,6 +108,7 @@ function ChangePhoto({ imgUrl, handleCloseChange }) {
                             height: '200px',
                             width: '200px',
                         },
+                        filter: imgUrl.imageFilter,
                     }}
                 />
                 <Box
