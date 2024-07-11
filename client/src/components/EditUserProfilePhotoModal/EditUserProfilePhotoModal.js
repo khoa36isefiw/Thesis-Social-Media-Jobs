@@ -167,7 +167,7 @@ function EditUserProfilePhotoModal({ userImageURL, handleClose }) {
                 </Modal>
 
                 <Modal open={activeModal === 'editPhoto'} onClose={handleCloseModal}>
-                    <EditPhoto imgUrl={userImageURL} handleCloseChange={handleCloseModal} />
+                    <EditPhoto imgUrl={userImageURL.imgUrl} handleCloseChange={handleCloseModal} />
                 </Modal>
             </Box>
         </Modal>

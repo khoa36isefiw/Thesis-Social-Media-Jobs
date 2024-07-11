@@ -115,6 +115,8 @@ export function UserProfile() {
         // console.log('USER ID: ', Math.floor(Math.random() * 100));
     };
 
+    console.log('userLoggedInInformation in User Profile: ', userLoggedInInformation);
+
     return (
         <Box
             sx={{

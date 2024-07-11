@@ -29,7 +29,6 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
     const [notificationMessage, setNotificationMessage] = useState('');
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
-    console.log('user logged in before changing image: ', userLoggedInInformation);
     const handleSavePhotoEdited = () => {
         // update for userPhoto field
         // dispatch(setLoggedInUser({ ...userLoggedInInformation, userPhoto: imgUrl }));
@@ -68,6 +67,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
     };
 
     console.log('selectedFilter: ', selectedFilter);
+    console.log('imgUrl in Edit Photo: ', imgUrl);
 
     return (
         <Box
@@ -136,7 +136,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
             >
                 <Avatar
                     // src={DefaultBackgroundImage}
-                    src={imgUrl.imgUrl}
+                    src={imgUrl}
                     alt="Default User Image"
                     sx={{
                         height: '350px',
@@ -194,7 +194,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                                 }}
                             >
                                 <Avatar
-                                    src={imgUrl.imgUrl}
+                                    src={imgUrl}
                                     alt="Default User Image"
                                     sx={{
                                         height: '55px',

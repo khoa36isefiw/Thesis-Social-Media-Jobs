@@ -108,7 +108,7 @@ function ChangePhoto({ imgUrl, handleCloseChange }) {
                             height: '200px',
                             width: '200px',
                         },
-                        filter: imgUrl.imageFilter,
+                        filter: imgUrl.imageStyle,
                     }}
                 />
                 <Box
