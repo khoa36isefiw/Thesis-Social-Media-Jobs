@@ -5,6 +5,7 @@ import {
     GET_YEAR,
     PHOTO_VIEWING_RIGHTS,
     SAVE_ACCOUNT_SIGNUP,
+    SET_SELECTED_FILTER_INDEX,
     USER_LOGGED_IN_INFORMATION,
 } from '../actionConstant';
 
@@ -16,6 +17,7 @@ const initialState = {
     month: '',
     year: '',
     setViewingRights: 'All Aikotoba members',
+    selectedFilterIndex: 0,
 };
 
 export const manageAccountReducer = (state = initialState, action) => {
@@ -66,7 +68,11 @@ export const manageAccountReducer = (state = initialState, action) => {
                 ...state,
                 setViewingRights: viewing,
             };
-
+        case SET_SELECTED_FILTER_INDEX:
+            return {
+                ...state,
+                selectedFilterIndex: action.payload,
+            };
         default:
             return state;
     }

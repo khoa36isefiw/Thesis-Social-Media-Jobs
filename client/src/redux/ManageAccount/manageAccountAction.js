@@ -4,6 +4,7 @@ import {
     GET_MONTH,
     GET_YEAR,
     SAVE_ACCOUNT_SIGNUP,
+    SET_SELECTED_FILTER_INDEX,
     USER_LOGGED_IN_INFORMATION,
 } from '../actionConstant';
 
@@ -36,4 +37,9 @@ export const getMonth = (month) => ({
 export const getYear = (year) => ({
     type: GET_YEAR,
     payload: { year },
+});
+
+export const setSelectedFilterIndex = (index) => ({
+    type: SET_SELECTED_FILTER_INDEX,
+    payload: index,
 });
