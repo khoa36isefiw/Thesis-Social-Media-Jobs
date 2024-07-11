@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     setLoggedInUser,
     setSelectedFilterIndex,
+    setSelectedImageRotationAngle,
 } from '../../redux/ManageAccount/manageAccountAction';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -26,11 +27,14 @@ const filterList = [
 function EditPhoto({ imgUrl, handleCloseChange }) {
     const dispatch = useDispatch();
     const indexFilterImage = useSelector((state) => state.manageAccounts.selectedFilterIndex);
+    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
 
     const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
     const [showNotifications, setShowNotifications] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState(indexFilterImage);
-    const [rotationAngle, setRotationAngle] = useState(0);
+    // const [rotationAngle, setRotationAngle] = useState(0);
+    const [rotationAngle, setRotationAngle] = useState(rotationAngleImage);
+
     const [notificationMessage, setNotificationMessage] = useState('');
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
@@ -43,11 +47,13 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                 userPhoto: {
                     imgUrl,
                     imageStyle: filterList[selectedFilter].filterStyle,
+                    imageRotationAngle: rotationAngle,
                 },
             }),
         );
         setAnimationClass('animate__zoomOut');
         dispatch(setSelectedFilterIndex(selectedFilter)); // save index of image selected filter
+        dispatch(setSelectedImageRotationAngle(rotationAngle));
         // setShowNotifications(true);
         // setNotificationMessage('Change your photo successfully');
 
@@ -72,8 +78,8 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
         setRotationAngle((prevAngle) => prevAngle + 90);
     };
 
-    console.log('selectedFilter: ', selectedFilter);
-    console.log('after change: ', indexFilterImage);
+    console.log('rotationAngle: ', rotationAngle);
+    console.log('rotationAngleImage: ', rotationAngleImage);
     return (
         <Box
             sx={{
