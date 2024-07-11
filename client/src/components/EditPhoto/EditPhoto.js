@@ -6,7 +6,10 @@ import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography'
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import { ViewingRights } from '../EditUserProfilePhotoModal/EditUserProfilePhotoModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoggedInUser } from '../../redux/ManageAccount/manageAccountAction';
+import {
+    setLoggedInUser,
+    setSelectedFilterIndex,
+} from '../../redux/ManageAccount/manageAccountAction';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
 import WarningIcon from '@mui/icons-material/Warning';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
@@ -22,9 +25,11 @@ const filterList = [
 ];
 function EditPhoto({ imgUrl, handleCloseChange }) {
     const dispatch = useDispatch();
+    const indexFilterImage = useSelector((state) => state.manageAccounts.selectedFilterIndex);
+
     const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
     const [showNotifications, setShowNotifications] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState(0);
+    const [selectedFilter, setSelectedFilter] = useState(indexFilterImage);
     const [rotationAngle, setRotationAngle] = useState(0);
     const [notificationMessage, setNotificationMessage] = useState('');
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
@@ -42,8 +47,9 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
             }),
         );
         setAnimationClass('animate__zoomOut');
-        setShowNotifications(true);
-        setNotificationMessage('Change your photo successfully');
+        dispatch(setSelectedFilterIndex(selectedFilter)); // save index of image selected filter
+        // setShowNotifications(true);
+        // setNotificationMessage('Change your photo successfully');
 
         setTimeout(() => {
             handleCloseChange();
@@ -67,8 +73,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
     };
 
     console.log('selectedFilter: ', selectedFilter);
-    console.log('imgUrl in Edit Photo: ', imgUrl);
-
+    console.log('after change: ', indexFilterImage);
     return (
         <Box
             sx={{
@@ -156,8 +161,8 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
             <CustomizeTypography sx={{ textAlign: 'center', py: 2 }}>
                 Show your styles to Anyone
             </CustomizeTypography>
-            {/* List images are filtered */}
 
+            {/* List images are filtered */}
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex' }}>
                     {filterList.map((filter, index) => (
