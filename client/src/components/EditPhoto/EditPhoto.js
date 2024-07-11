@@ -6,7 +6,11 @@ import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography'
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import { ViewingRights } from '../EditUserProfilePhotoModal/EditUserProfilePhotoModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoggedInUser } from '../../redux/ManageAccount/manageAccountAction';
+import {
+    setLoggedInUser,
+    setSelectedFilterIndex,
+    setSelectedImageRotationAngle,
+} from '../../redux/ManageAccount/manageAccountAction';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
 import WarningIcon from '@mui/icons-material/Warning';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
@@ -22,14 +26,18 @@ const filterList = [
 ];
 function EditPhoto({ imgUrl, handleCloseChange }) {
     const dispatch = useDispatch();
+    const indexFilterImage = useSelector((state) => state.manageAccounts.selectedFilterIndex);
+    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
+
     const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
     const [showNotifications, setShowNotifications] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState(0);
-    const [rotationAngle, setRotationAngle] = useState(0);
+    const [selectedFilter, setSelectedFilter] = useState(indexFilterImage);
+    // const [rotationAngle, setRotationAngle] = useState(0);
+    const [rotationAngle, setRotationAngle] = useState(rotationAngleImage);
+
     const [notificationMessage, setNotificationMessage] = useState('');
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
-    console.log('user logged in before changing image: ', userLoggedInInformation);
     const handleSavePhotoEdited = () => {
         // update for userPhoto field
         // dispatch(setLoggedInUser({ ...userLoggedInInformation, userPhoto: imgUrl }));
@@ -39,12 +47,15 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                 userPhoto: {
                     imgUrl,
                     imageStyle: filterList[selectedFilter].filterStyle,
+                    imageRotationAngle: rotationAngle,
                 },
             }),
         );
         setAnimationClass('animate__zoomOut');
-        setShowNotifications(true);
-        setNotificationMessage('Change your photo successfully');
+        dispatch(setSelectedFilterIndex(selectedFilter)); // save index of image selected filter
+        dispatch(setSelectedImageRotationAngle(rotationAngle));
+        // setShowNotifications(true);
+        // setNotificationMessage('Change your photo successfully');
 
         setTimeout(() => {
             handleCloseChange();
@@ -67,8 +78,8 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
         setRotationAngle((prevAngle) => prevAngle + 90);
     };
 
-    console.log('selectedFilter: ', selectedFilter);
-
+    console.log('rotationAngle: ', rotationAngle);
+    console.log('rotationAngleImage: ', rotationAngleImage);
     return (
         <Box
             sx={{
@@ -136,7 +147,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
             >
                 <Avatar
                     // src={DefaultBackgroundImage}
-                    src={imgUrl.imgUrl}
+                    src={imgUrl}
                     alt="Default User Image"
                     sx={{
                         height: '350px',
@@ -156,8 +167,8 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
             <CustomizeTypography sx={{ textAlign: 'center', py: 2 }}>
                 Show your styles to Anyone
             </CustomizeTypography>
-            {/* List images are filtered */}
 
+            {/* List images are filtered */}
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex' }}>
                     {filterList.map((filter, index) => (
@@ -194,7 +205,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                                 }}
                             >
                                 <Avatar
-                                    src={imgUrl.imgUrl}
+                                    src={imgUrl}
                                     alt="Default User Image"
                                     sx={{
                                         height: '55px',

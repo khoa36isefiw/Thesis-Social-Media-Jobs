@@ -31,6 +31,7 @@ function MakePosts() {
     const inputRef = React.useRef();
     const [showModal, setShowModal] = useState(false);
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
 
     const [openModal, setOpenModal] = useState(false);
 
@@ -45,9 +46,20 @@ function MakePosts() {
         <div>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Avatar
-                    src={userLoggedInInformation.userPhoto}
+                    src={
+                        userLoggedInInformation.userPhoto &&
+                        userLoggedInInformation.userPhoto.imgUrl
+                    }
                     alt="User Avatar"
-                    sx={{ mr: 2, height: '48px', width: '48px' }}
+                    sx={{
+                        mr: 2,
+                        height: '48px',
+                        width: '48px',
+                        filter:
+                            userLoggedInInformation.userPhoto &&
+                            userLoggedInInformation.userPhoto.imageStyle,
+                        transform: `rotate(${rotationAngleImage}deg)`,
+                    }}
                 />
 
                 <Button

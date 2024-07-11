@@ -2,8 +2,10 @@ import {
     GET_BIRTH_DATE,
     GET_DAY,
     GET_MONTH,
+    SET_SELECTED_IMAGE_ROTATION_ANGLE,
     GET_YEAR,
     SAVE_ACCOUNT_SIGNUP,
+    SET_SELECTED_FILTER_INDEX,
     USER_LOGGED_IN_INFORMATION,
 } from '../actionConstant';
 
@@ -36,4 +38,14 @@ export const getMonth = (month) => ({
 export const getYear = (year) => ({
     type: GET_YEAR,
     payload: { year },
+});
+
+export const setSelectedFilterIndex = (index) => ({
+    type: SET_SELECTED_FILTER_INDEX,
+    payload: index,
+});
+
+export const setSelectedImageRotationAngle = (angle) => ({
+    type: SET_SELECTED_IMAGE_ROTATION_ANGLE,
+    payload: angle,
 });

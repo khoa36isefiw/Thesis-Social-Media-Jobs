@@ -9,6 +9,11 @@ export const posts = [
     {
         id: 1,
         avatarSrc: Mountain,
+        avatarSrc: {
+            imgUrl: Mountain,
+            imageStyle: null,
+            imageRotationAngle: 0,
+        },
         displayName: 'Shawn Hoffman',
         followers: '14,123',
         // time: '1d',
@@ -30,8 +35,13 @@ export const posts = [
     },
     {
         id: 2,
-        avatarSrc:
-            'https://i.vietgiaitri.com/2018/10/15/husky-loai-cho-ngao-ngo-nhat-qua-dat-601208.jpg',
+        avatarSrc: {
+            imgUrl: 'https://i.vietgiaitri.com/2018/10/15/husky-loai-cho-ngao-ngo-nhat-qua-dat-601208.jpg',
+            imageStyle: null,
+            imageRotationAngle: 0,
+        },
+        // avatarSrc:
+        //     'https://i.vietgiaitri.com/2018/10/15/husky-loai-cho-ngao-ngo-nhat-qua-dat-601208.jpg',
         displayName: 'John Doe',
         followers: '8,765',
         // time: '3h',
@@ -45,8 +55,13 @@ export const posts = [
     },
     {
         id: 3,
-        avatarSrc:
-            'https://i.vietgiaitri.com/2018/10/15/husky-loai-cho-ngao-ngo-nhat-qua-dat-1312f4.jpg',
+        // avatarSrc:
+        //     'https://i.vietgiaitri.com/2018/10/15/husky-loai-cho-ngao-ngo-nhat-qua-dat-1312f4.jpg',
+        avatarSrc: {
+            imgUrl: 'https://i.vietgiaitri.com/2018/10/15/husky-loai-cho-ngao-ngo-nhat-qua-dat-1312f4.jpg',
+            imageStyle: null,
+            imageRotationAngle: 0,
+        },
         displayName: 'Husky Siberian',
         followers: '12',
         // time: '21h',
@@ -60,8 +75,11 @@ export const posts = [
     },
     {
         id: 4,
-        avatarSrc:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4M9ivjYIFvfc8ZdvJRB9yfO5rLd9DuS4I1g&usqp=CAU',
+        avatarSrc: {
+            imgUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4M9ivjYIFvfc8ZdvJRB9yfO5rLd9DuS4I1g&usqp=CAU',
+            imageStyle: null,
+            imageRotationAngle: 180,
+        },
         displayName: `Vanvietbooks' Page`,
         followers: '285,010',
         // time: '12h',

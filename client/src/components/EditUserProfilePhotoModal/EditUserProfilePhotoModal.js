@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, IconButton, Typography, Button, Divider, Avatar, Modal, Menu } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import UserAvatar from '../../assets/images/avatar.jpeg';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
@@ -18,7 +19,7 @@ import DeleteSomething from '../DeleteSomething/DeleteSomething';
 import EditPhoto from '../EditPhoto/EditPhoto';
 import { ProfileButton } from '../ProfileButton/ProfileButton';
 
-function EditUserProfilePhotoModal({ userImageURL, handleClose }) {
+function EditUserProfilePhotoModal({ userImageURL, handleClose, imageRotationAngle }) {
     console.log('userImageURL: ', userImageURL);
     const [activeModal, setActiveModal] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -104,16 +105,18 @@ function EditUserProfilePhotoModal({ userImageURL, handleClose }) {
                 >
                     <Avatar
                         // src={DefaultBackgroundImage}
-                        src={userImageURL.imgUrl}
+                        src={userImageURL ? userImageURL.imgUrl : UserAvatar}
+                        // src={userImageURL.imgUrl}
                         alt="Default User Image"
                         sx={{
                             height: '300px',
                             width: '300px',
+                            transform: `rotate(${imageRotationAngle}deg)`,
+                            filter: userImageURL.imageStyle,
                             [mobileScreen]: {
                                 height: '200px',
                                 width: '200px',
                             },
-                            filter: userImageURL.imageStyle,
                         }}
                     />
                 </Box>
@@ -155,7 +158,11 @@ function EditUserProfilePhotoModal({ userImageURL, handleClose }) {
                 </Box>
 
                 <Modal open={activeModal === 'changePhoto'} onClose={handleCloseModal}>
-                    <ChangePhoto imgUrl={userImageURL} handleCloseChange={handleCloseModal} />
+                    <ChangePhoto
+                        imgUrl={userImageURL}
+                        handleCloseChange={handleCloseModal}
+                        imageRotationAngle={imageRotationAngle}
+                    />
                 </Modal>
 
                 <Modal open={activeModal === 'photoSettings'} onClose={handleCloseModal}>
@@ -167,7 +174,7 @@ function EditUserProfilePhotoModal({ userImageURL, handleClose }) {
                 </Modal>
 
                 <Modal open={activeModal === 'editPhoto'} onClose={handleCloseModal}>
-                    <EditPhoto imgUrl={userImageURL} handleCloseChange={handleCloseModal} />
+                    <EditPhoto imgUrl={userImageURL.imgUrl} handleCloseChange={handleCloseModal} />
                 </Modal>
             </Box>
         </Modal>
