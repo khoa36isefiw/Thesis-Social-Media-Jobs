@@ -85,6 +85,8 @@ function PostModal({ closeModal }) {
 
     // get User Name
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+    // get image rotation
+    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
     // console.log('userLoggedInInformation: ', userLoggedInInformation);
 
     // upload for multiple images
@@ -236,9 +238,20 @@ function PostModal({ closeModal }) {
                 >
                     <Avatar
                         // src={UserAvatar}
-                        src={userLoggedInInformation.userPhoto}
+                        src={
+                            userLoggedInInformation.userPhoto &&
+                            userLoggedInInformation.userPhoto.imgUrl
+                        }
                         alt="User Avatar"
-                        sx={{ height: '48px', width: '48px', mr: 1 }}
+                        sx={{
+                            height: '48px',
+                            width: '48px',
+                            mr: 1,
+                            filter:
+                                userLoggedInInformation.userPhoto &&
+                                userLoggedInInformation.userPhoto.imageStyle,
+                            transform: `rotate(${rotationAngleImage}deg)`,
+                        }}
                     />
                     <Box
                         sx={{
@@ -250,7 +263,12 @@ function PostModal({ closeModal }) {
                         <Box>
                             {userLoggedInInformation.firstName ? (
                                 <Typography
-                                    sx={{ textAlign: 'left', fontSize: '16px', fontWeight: 'bold' }}
+                                    sx={{
+                                        textAlign: 'left',
+                                        fontSize: '16px',
+                                        fontWeight: 'bold',
+                                        textTransform: 'capitalize',
+                                    }}
                                 >
                                     {/* Huynh Dang Khoa */}
                                     {userLoggedInInformation.firstName}{' '}

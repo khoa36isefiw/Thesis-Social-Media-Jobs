@@ -67,6 +67,7 @@ export function UserProfile() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
     const listUserInfor = useSelector((state) => state.startAMessage.listUserInformation);
+    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
 
     // get User Name
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
@@ -210,6 +211,10 @@ export function UserProfile() {
                         mt: -13,
                         zIndex: 4,
                         border: '4px solid #fff',
+                        filter:
+                            userLoggedInInformation.userPhoto &&
+                            userLoggedInInformation.userPhoto.imageStyle,
+                        transform: `rotate(${rotationAngleImage}deg)`,
                         '&:hover': {
                             cursor: 'pointer',
                         },
@@ -223,9 +228,6 @@ export function UserProfile() {
                             width: '120px',
                             mt: -8,
                         },
-                        filter:
-                            userLoggedInInformation.userPhoto &&
-                            userLoggedInInformation.userPhoto.imageStyle,
                     }}
                     onClick={() => handleOpenModal('editUserAvatar')}
                 />
@@ -537,6 +539,7 @@ export function UserProfile() {
                             : UserAvatar
                     }
                     handleClose={handleCloseModal}
+                    imageRotationAngle={rotationAngleImage}
                 />
             </Modal>
         </Box>

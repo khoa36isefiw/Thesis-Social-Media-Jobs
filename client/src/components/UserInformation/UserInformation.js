@@ -15,6 +15,8 @@ function UserInformation() {
 
     // get Name of user
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
+
     console.log('User Information: ', userLoggedInInformation);
     // const getUserInformation = getListUsers.find()
     return (
@@ -50,7 +52,10 @@ function UserInformation() {
                     }}
                 />
                 <Avatar
-                    src={userLoggedInInformation.userPhoto}
+                    src={
+                        userLoggedInInformation.userPhoto &&
+                        userLoggedInInformation.userPhoto.imgUrl
+                    }
                     alt="User Avatar"
                     sx={{
                         height: '80px',
@@ -58,6 +63,10 @@ function UserInformation() {
                         mt: '-40px',
                         border: '4px solid #fff',
                         zIndex: 7,
+                        filter:
+                            userLoggedInInformation.userPhoto &&
+                            userLoggedInInformation.userPhoto.imageStyle,
+                        transform: `rotate(${rotationAngleImage}deg)`,
                     }}
                 />
 
@@ -84,7 +93,7 @@ function UserInformation() {
                         sx={{
                             fontSize: '16px',
                             fontWeight: 'bold',
-
+                            textTransform: 'capitalize',
                             mt: '4px',
                             '&:hover': {
                                 cursor: 'pointer',

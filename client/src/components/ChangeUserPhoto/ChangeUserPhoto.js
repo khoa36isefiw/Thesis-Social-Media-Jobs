@@ -7,7 +7,7 @@ import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import { modalAnimation } from '../AnimationEffects/AnimationEffects';
 import EditPhoto from '../EditPhoto/EditPhoto';
 
-function ChangePhoto({ imgUrl, handleCloseChange }) {
+function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
     const fileInputRef = useRef(null);
     const [imageURL, setImageURL] = useState(null);
     const [openEditPhotoModal, setOpenEditPhotoModal] = useState(false);
@@ -104,11 +104,12 @@ function ChangePhoto({ imgUrl, handleCloseChange }) {
                     sx={{
                         height: '248px',
                         width: '248px',
+                        filter: imgUrl.imageStyle,
+                        transform: `rotate(${imageRotationAngle}deg)`,
                         [mobileScreen]: {
                             height: '200px',
                             width: '200px',
                         },
-                        filter: imgUrl.imageStyle,
                     }}
                 />
                 <Box

@@ -263,12 +263,25 @@ function Post({
                     <Box sx={{ p: 2 }}>
                         <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
                             <Avatar
-                                src={avatarSrc}
-                                sx={{ height: '48px', width: '48px' }}
+                                src={avatarSrc && avatarSrc.imgUrl}
+                                sx={{
+                                    height: '48px',
+                                    width: '48px',
+                                    filter: avatarSrc && avatarSrc.imageStyle,
+                                    transform: `rotate(${
+                                        avatarSrc && avatarSrc.imageRotationAngle
+                                    }deg)`,
+                                }}
                                 alt="User Avatar"
                             />
                             <Box sx={{ ml: 2, flexGrow: 1 }}>
-                                <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                                <Typography
+                                    sx={{
+                                        fontSize: '14px',
+                                        fontWeight: 'bold',
+                                        textTransform: 'capitalize',
+                                    }}
+                                >
                                     {displayName}
                                 </Typography>
 
