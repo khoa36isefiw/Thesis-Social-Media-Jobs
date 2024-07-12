@@ -30,6 +30,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { CustomTypography } from './Post';
 import { addComment } from '../../redux/ManagePost/managePostAction';
+import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 // Customize styles for Typography in this Component
 export const ActionsTypography = styled(Typography)(({}) => ({
     color: '#000000BF',
@@ -64,16 +65,20 @@ function CommentModal({
     const [originalWidth, setOriginalWidth] = useState(null);
     const [originalHeight, setOriginalHeight] = useState(null);
     const [isMobileScreen, setIsMobileScreen] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postId]);
     const [imageURL, setImageURL] = useState(null);
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const [isEmptyCommentModalField, setIsEmptyCommentModalField] = useState(true);
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
-
+    const [expanded, setExpanded] = useState(false);
     const concatenateString = contentArray.length >= 2 ? contentArray[1] : '';
     // concatenate 2 strings and concat them max 200 characters
     const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
+    // only shows the first image uploaded
+    const currentImage = Array.isArray(imageUrl) ? imageUrl[currentImageIndex] : imageUrl;
+    console.log('currentImage: ', currentImage);
 
     useEffect(() => {
         const handleResize = () => {
@@ -88,39 +93,36 @@ function CommentModal({
 
     useEffect(() => {
         const img = new Image();
-        img.src = imageUrl;
+        img.src =
+            Array.isArray(imageUrl) && imageUrl.length > 0
+                ? imageUrl[currentImageIndex].url
+                : imageUrl;
         img.onload = () => {
             let newHeight = img.naturalHeight;
             let newWidth = img.naturalWidth;
-            // console.log('Original height and width for image: ', newHeight, newWidth);
+
             if (newHeight >= 650) {
                 newHeight = 650;
             }
             if (newWidth >= 700) {
                 newWidth = 680;
             }
-
             setOriginalWidth(newWidth);
             setOriginalHeight(newHeight);
         };
 
-        // close modal when user press ESC
+        // Close modal when user presses ESC
         const handleKeydown = (e) => {
-            // ESC is 27
             if (e.keyCode === 27) {
                 handleClose();
             }
         };
-        // add event
         window.addEventListener('keydown', handleKeydown);
 
-        // clear function
         return () => {
-            //unmount
             window.removeEventListener('keydown', handleKeydown);
         };
-    }, [imageUrl]);
-    const [expanded, setExpanded] = useState(false);
+    }, [imageUrl, currentImageIndex]);
 
     const toggleExpanded = () => {
         setExpanded(!expanded);
@@ -203,6 +205,23 @@ function CommentModal({
         setShowIconUploadImage(true);
     };
 
+    const handleNextImage = () => {
+        // if it is clicked, get the current + 1 to show the next image
+        // if we are in the last image --> set 0 to loop back to the first image
+        // prevIndex means currentIndex which image we are in
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === imageUrl.length - 1 ? 0 : prevIndex + 1,
+        );
+    };
+
+    const handlePrevImage = () => {
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === 0 ? imageUrl.length - 1 : prevIndex - 1,
+        );
+    };
+
+    console.log('image url: ', imageUrl);
+
     return (
         <Box
             sx={{
@@ -258,93 +277,180 @@ function CommentModal({
                         },
                     }}
                 >
-                    {imageUrl && (
+                    {/* {imageUrl && (
                         <Box
                             sx={{
                                 textAlign: 'center',
+                                bgColor: '#fff',
                             }}
                         >
-                            <Box
-                                component="img"
-                                src={imageUrl}
-                                alt="Posted Image"
-                                sx={{
-                                    maxWidth: originalWidth,
-                                    height: originalHeight,
-                                    objectFit: 'cover',
-                                    mt: '6px',
-                                    [ipadProScreen]: {
+                            {Array.isArray(imageUrl) ? (
+                                <>
+                                    {imageUrl.slice(0, 1).map((image, index) => (
+                                        <Box
+                                            component="img"
+                                            src={image.url}
+                                            alt="Posted Image"
+                                            sx={{
+                                                // maxWidth: originalWidth,
+                                                // height: originalHeight,
+                                                width: '100%',
+                                                height: 'auto',
+                                                objectFit: 'cover',
+                                                mt: '6px',
+                                                [ipadProScreen]: {
+                                                    width: '100%',
+                                                    height: 'auto',
+                                                },
+                                                [tabletScreen]: {
+                                                    width: '100%',
+                                                    height: 'auto',
+                                                },
+                                            }}
+                                        />
+                                    ))}
+                                </>
+                            ) : (
+                                <Box
+                                    component="img"
+                                    src={imageUrl.url}
+                                    alt="Posted Image"
+                                    sx={{
+                                        // maxWidth: originalWidth,
+                                        // height: originalHeight,
                                         width: '100%',
                                         height: 'auto',
-                                    },
-                                    [tabletScreen]: {
-                                        width: '100%',
-                                        height: 'auto',
-                                    },
-                                }}
-                            />
+                                        objectFit: 'cover',
+                                        mt: '6px',
+                                        [ipadProScreen]: {
+                                            width: '100%',
+                                            height: 'auto',
+                                        },
+                                        [tabletScreen]: {
+                                            width: '100%',
+                                            height: 'auto',
+                                        },
+                                    }}
+                                />
+                            )}
                         </Box>
-                    )}
-
-                    <IconButton
+                    )} */}
+                    <Box
                         sx={{
-                            position: 'absolute',
-                            width: '48px',
-                            height: '48px',
-                            // backgroundColor: '#fff',
-                            backgroundColor: theme.palette.bgButtonHover,
-                            top: '50%',
-                            left: '1%',
-                            transition: 'left 0.3s ease-in-out',
-
-                            transition: 'transform 0.3s ease-in-out',
-                            transform: 'translateX(0)', // initial state
-
-                            '&:hover': {
-                                backgroundColor: '#fff',
-                                transform: 'translateX(-5px)', // slide to the left on hover
-                            },
-                            '&:not(:hover)': {
-                                transform: 'translateX(0)', // return to original position when not hovered
+                            // display: 'flex',
+                            // flexDirection: 'column',
+                            // alignItems: 'center',
+                            // justifyContent: 'center',
+                            position: 'relative',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'black',
+                            width: '700px',
+                            height: '650px',
+                            borderTopLeftRadius: '8px',
+                            borderBottomLeftRadius: '8px',
+                            [mobileScreen]: {
+                                width: '100%',
+                                height: '350px',
+                                borderRadius: 0,
                             },
                         }}
                     >
-                        <ArrowBackIosNewIcon
+                        <Box
+                            component="img"
+                            src={Array.isArray(imageUrl) ? currentImage.url : imageUrl}
+                            alt="Profile Image"
                             sx={{
-                                fontSize: '24px',
-                                mr: '4px',
+                                width: originalWidth,
+                                height: originalHeight,
+                                objectFit: 'cover',
+                                mt: '6px',
+                                [ipadProScreen]: {
+                                    width: '100%',
+                                    height: 'auto',
+                                },
+                                [tabletScreen]: {
+                                    width: '100%',
+                                    height: 'auto',
+                                },
                             }}
                         />
-                    </IconButton>
+                        {Array.isArray(imageUrl) && imageUrl.length > 1 && (
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    width: '100%',
+                                    position: 'absolute',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                }}
+                            >
+                                <IconButton
+                                    sx={{
+                                        position: 'absolute',
+                                        width: '48px',
+                                        height: '48px',
+                                        // backgroundColor: '#fff',
+                                        backgroundColor: theme.palette.bgButtonHover,
+                                        top: '50%',
+                                        left: '1%',
+                                        transition: 'left 0.3s ease-in-out',
 
-                    <IconButton
-                        sx={{
-                            position: 'absolute',
-                            width: '48px',
-                            height: '48px',
-                            // backgroundColor: '#fff',
-                            backgroundColor: theme.palette.bgButtonHover,
-                            top: '50%',
-                            right: '1%',
+                                        transition: 'transform 0.3s ease-in-out',
+                                        transform: 'translateX(0)', // initial state
 
-                            transition: 'transform 0.3s ease-in-out',
-                            transform: 'translateX(0)', // initial state
+                                        '&:hover': {
+                                            backgroundColor: '#fff',
+                                            transform: 'translateX(-5px)', // slide to the left on hover
+                                        },
+                                        '&:not(:hover)': {
+                                            transform: 'translateX(0)', // return to original position when not hovered
+                                        },
+                                    }}
+                                    onClick={handlePrevImage}
+                                >
+                                    <ArrowBackIosNewIcon
+                                        sx={{
+                                            fontSize: '24px',
+                                            mr: '4px',
+                                        }}
+                                    />
+                                </IconButton>
 
-                            '&:hover': {
-                                backgroundColor: '#fff',
-                                transform: 'translateX(5px)', // slide to the left on hover
-                            },
-                            '&:not(:hover)': {
-                                transform: 'translateX(0)', // return to original position when not hovered
-                            },
-                        }}
-                    >
-                        <ArrowForwardIosIcon
-                            sx={{
-                                fontSize: '24px',
-                            }}
-                        />
-                    </IconButton>
+                                <IconButton
+                                    sx={{
+                                        position: 'absolute',
+                                        width: '48px',
+                                        height: '48px',
+                                        // backgroundColor: '#fff',
+                                        backgroundColor: theme.palette.bgButtonHover,
+                                        top: '50%',
+                                        right: '1%',
+
+                                        transition: 'transform 0.3s ease-in-out',
+                                        transform: 'translateX(0)', // initial state
+
+                                        '&:hover': {
+                                            backgroundColor: '#fff',
+                                            transform: 'translateX(5px)', // slide to the left on hover
+                                        },
+                                        '&:not(:hover)': {
+                                            transform: 'translateX(0)', // return to original position when not hovered
+                                        },
+                                    }}
+                                    onClick={handleNextImage}
+                                >
+                                    <ArrowForwardIosIcon
+                                        sx={{
+                                            fontSize: '24px',
+                                        }}
+                                    />
+                                </IconButton>
+                            </Box>
+                        )}
+                    </Box>
                 </Box>
 
                 {/* Comment Input */}
@@ -383,9 +489,14 @@ function CommentModal({
                                 {userAvatar && (
                                     <Box sx={{ textAlign: 'center', mb: 2 }}>
                                         <Avatar
-                                            src={userAvatar}
+                                            src={userAvatar.imgUrl}
                                             alt="User Avatar"
-                                            sx={{ height: '48px', width: '48px' }}
+                                            sx={{
+                                                height: '48px',
+                                                width: '48px',
+                                                transform: `rotate(${userAvatar.imageRotationAngle}deg)`,
+                                                filter: userAvatar.imageStyle,
+                                            }}
                                         />
                                     </Box>
                                 )}
@@ -398,6 +509,7 @@ function CommentModal({
                                             sx={{
                                                 fontSize: '13px',
                                                 fontWeight: 'bold',
+                                                textTransform: 'capitalize',
                                             }}
                                         >
                                             {userName}
@@ -426,7 +538,7 @@ function CommentModal({
                                                 fontWeight: '500',
                                             }}
                                         >
-                                            {time}
+                                            {calculateTimeElapsed(time)}
                                         </Typography>
                                     )}
                                 </Box>
