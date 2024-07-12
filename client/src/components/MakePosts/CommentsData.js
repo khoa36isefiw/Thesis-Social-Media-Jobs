@@ -57,7 +57,7 @@ export function CommentsData({ postId, imageUrl }) {
     };
     // console.log('List comment in$`{postId}` : ', commentList);
     // console.log(`List comment in ${postId}: `, commentList);
-    console.log(`List reactions in ${postId}: `, reactionList);
+    // console.log(`List reactions in ${postId}: `, reactionList);
     const renderReactionIcon = (commentId) => {
         const reaction = reactionList?.[commentId]; // get data from object
         const reactionCount = reaction ? 1 : 0;

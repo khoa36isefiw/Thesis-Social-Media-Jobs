@@ -30,34 +30,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addNewPosts } from '../../redux/ManagePost/managePostAction';
 import PrivacyPostSettings from './PrivacyPostSettings/PrivacyPostSettings';
 
-const UploadActions = ({ children, title }) => {
-    return (
-        <LightTooltip
-            title={title}
-            arrow={true}
-            placement="top"
-            sx={{
-                '& .MuiTooltip-arrow': {
-                    color: 'white',
-                },
-            }}
-        >
-            {children}
-        </LightTooltip>
-    );
-};
-
-const LightTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltip}`]: {
-        backgroundColor: theme.palette.common.white,
-        color: 'rgba(0, 0, 0, 0.87)',
-        boxShadow: theme.shadows[1],
-        fontSize: 11,
-    },
-}));
-
 function PostModal({ closeModal }) {
     const dispatch = useDispatch();
     const [openPrivacyPostSettings, setOpenPrivacyPostSettings] = useState(false);
