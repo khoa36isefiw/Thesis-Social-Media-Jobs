@@ -76,7 +76,7 @@ function CommentModal({
     // concatenate 2 strings and concat them max 200 characters
     const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
-    // only shows the first image uploaded
+    // get the first image uploaded
     const currentImage = Array.isArray(imageUrl) ? imageUrl[currentImageIndex] : imageUrl;
     console.log('currentImage: ', currentImage);
 
@@ -376,6 +376,7 @@ function CommentModal({
                                 },
                             }}
                         />
+                        {/* 2 buttons: next and previous image */}
                         {Array.isArray(imageUrl) && imageUrl.length > 1 && (
                             <Box
                                 sx={{
