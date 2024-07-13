@@ -41,6 +41,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
     const handleSavePhotoEdited = () => {
         // update for userPhoto field
         // dispatch(setLoggedInUser({ ...userLoggedInInformation, userPhoto: imgUrl }));
+
         dispatch(
             setLoggedInUser({
                 ...userLoggedInInformation,

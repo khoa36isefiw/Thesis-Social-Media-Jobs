@@ -1,29 +1,8 @@
 import React, { useState, useRef } from 'react';
-import {
-    Avatar,
-    Box,
-    Container,
-    IconButton,
-    Typography,
-    TextField,
-    Tooltip,
-    tooltipClasses,
-    styled,
-    Button,
-    Divider,
-    Modal,
-    Grow,
-} from '@mui/material';
+import { Avatar, Box, IconButton, Typography, Button, Divider, Modal, Grow } from '@mui/material';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import Picker from 'emoji-picker-react';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import ImageIcon from '@mui/icons-material/Image';
-import VideoInput from './VideoInput';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ClearIcon from '@mui/icons-material/Clear';
-import EditIcon from '@mui/icons-material/Edit';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import { CommentTextField } from './CommentTextField';
 import { useDispatch, useSelector } from 'react-redux';
