@@ -66,14 +66,14 @@ function DeleteSomething({ handleClose, showDeleteConfirm }) {
                 //  close icon doesn't overflow
                 overflow: 'hidden',
                 [ipadProScreen]: {
-                    width: '70%',
+                    width: '40%',
                 },
                 [tabletScreen]: {
-                    width: '90%',
+                    width: '50%',
                 },
                 [mobileScreen]: {
                     width: '100%',
-                    height: '460px',
+                    // height: '460px',
                 },
             }}
             // use animation from animate.css
