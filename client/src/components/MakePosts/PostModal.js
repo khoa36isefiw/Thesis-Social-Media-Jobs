@@ -24,7 +24,7 @@ import VideoInput from './VideoInput';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
-import { tabletScreen } from '../Theme/Theme';
+import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import { CommentTextField } from './CommentTextField';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewPosts } from '../../redux/ManagePost/managePostAction';
@@ -159,117 +159,147 @@ function PostModal({ closeModal }) {
     };
 
     return (
-        <div>
-            <Box
-                sx={{
-                    width: '650px',
-                    height: '450px',
-                    // width: '80%',
-                    // height: '450px',
-                    position: 'relative',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'start',
-                    alignItems: 'start',
-                    // [tabletScreen]: { width: '100%' },
-                }}
-            >
-                <IconButton
-                    sx={{
-                        position: 'absolute',
-                        top: '0',
-                        right: '0',
-                        opacity: '0.65',
-                        '&:hover': {
-                            backgroundColor: 'transparent',
-                            opacity: '1',
-                        },
-                    }}
-                    onClick={closeModal}
-                    disableTouchRipple
-                >
-                    <ClearIcon fontSize="large" />
-                </IconButton>
-
+        <Box
+            sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                width: '650px',
+                height: '550px',
+                transform: 'translate(-50%, -50%)',
+                backgroundColor: '#fff',
+                borderRadius: '8px',
+                boxShadow: '0 8px 4px #333',
+                p: 2,
+                // width: '90%',
+                // height: '90%',
+                [ipadProScreen]: {
+                    top: '30%',
+                    width: '70%',
+                },
+                [tabletScreen]: {
+                    top: '35%',
+                    width: '85%',
+                },
+                [mobileScreen]: {
+                    top: '40%',
+                    width: '100%',
+                    borderRadius: 0,
+                },
+            }}
+        >
+            <Box>
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: '12px',
-                        maxWidth: '300px',
-                        p: 2,
-                        mb: 2,
-                        '&:hover': {
-                            cursor: 'pointer',
-                            // backgroundColor: '#d3d3d3',
-                            backgroundColor: '#00000014',
-                        },
+                        justifyContent: 'space-between',
                     }}
-                    onClick={handleShowModal}
                 >
-                    <Avatar
-                        // src={UserAvatar}
-                        src={
-                            userLoggedInInformation.userPhoto &&
-                            userLoggedInInformation.userPhoto.imgUrl
-                        }
-                        alt="User Avatar"
-                        sx={{
-                            height: '48px',
-                            width: '48px',
-                            mr: 1,
-                            filter:
-                                userLoggedInInformation.userPhoto &&
-                                userLoggedInInformation.userPhoto.imageStyle,
-                            transform: `rotate(${rotationAngleImage}deg)`,
-                        }}
-                    />
                     <Box
                         sx={{
                             display: 'flex',
-                            justifyContent: 'start',
-                            alignItems: 'start',
-                        }}
-                    >
-                        <Box>
-                            {userLoggedInInformation.firstName ? (
-                                <Typography
-                                    sx={{
-                                        textAlign: 'left',
-                                        fontSize: '16px',
-                                        fontWeight: 'bold',
-                                        textTransform: 'capitalize',
-                                    }}
-                                >
-                                    {/* Huynh Dang Khoa */}
-                                    {userLoggedInInformation.firstName}{' '}
-                                    {userLoggedInInformation.lastName}
-                                </Typography>
-                            ) : (
-                                <Typography
-                                    sx={{ textAlign: 'left', fontSize: '16px', fontWeight: 'bold' }}
-                                >
-                                    {/* Huynh Dang Khoa */}
-                                    {userLoggedInInformation}
-                                </Typography>
-                            )}
+                            alignItems: 'center',
+                            // justifyContent: 'center',
+                            borderRadius: '12px',
+                            // minWidth: '50px',
+                            p: 2,
+                            mb: 2,
 
-                            <Typography sx={{ textAlign: 'left', fontSize: '13px' }}>
-                                {/* Post to Anyone */}
-                                Post to {getPostPrivacySelected}
-                            </Typography>
+                            '&:hover': {
+                                cursor: 'pointer',
+                                // backgroundColor: '#d3d3d3',
+                                backgroundColor: '#00000014',
+                            },
+                        }}
+                        onClick={handleShowModal}
+                    >
+                        <Avatar
+                            // src={UserAvatar}
+                            src={
+                                userLoggedInInformation.userPhoto &&
+                                userLoggedInInformation.userPhoto.imgUrl
+                            }
+                            alt="User Avatar"
+                            sx={{
+                                height: '48px',
+                                width: '48px',
+                                mr: 1,
+                                filter:
+                                    userLoggedInInformation.userPhoto &&
+                                    userLoggedInInformation.userPhoto.imageStyle,
+                                transform: `rotate(${rotationAngleImage}deg)`,
+                            }}
+                        />
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'start',
+                                alignItems: 'start',
+                            }}
+                        >
+                            <Box>
+                                {userLoggedInInformation.firstName ? (
+                                    <Typography
+                                        sx={{
+                                            textAlign: 'left',
+                                            fontSize: '16px',
+                                            fontWeight: 'bold',
+                                            textTransform: 'capitalize',
+                                        }}
+                                    >
+                                        {/* Huynh Dang Khoa */}
+                                        {userLoggedInInformation.firstName}{' '}
+                                        {userLoggedInInformation.lastName}
+                                    </Typography>
+                                ) : (
+                                    <Typography
+                                        sx={{
+                                            textAlign: 'left',
+                                            fontSize: '16px',
+                                            fontWeight: 'bold',
+                                        }}
+                                    >
+                                        {/* Huynh Dang Khoa */}
+                                        {userLoggedInInformation}
+                                    </Typography>
+                                )}
+
+                                <Typography sx={{ textAlign: 'left', fontSize: '13px' }}>
+                                    {/* Post to Anyone */}
+                                    Post to {getPostPrivacySelected}
+                                </Typography>
+                            </Box>
+                            <ArrowDropDownIcon fontSize="large" />
                         </Box>
-                        <ArrowDropDownIcon fontSize="large" />
                     </Box>
+                    <IconButton
+                        sx={{
+                            position: 'absolute',
+                            top: '2%',
+                            right: '0',
+                            px: 2,
+                            opacity: '0.65',
+                            '&:hover': {
+                                backgroundColor: 'transparent',
+                                opacity: '1',
+                            },
+                        }}
+                        onClick={closeModal}
+                        disableTouchRipple
+                    >
+                        <ClearIcon fontSize="large" />
+                    </IconButton>
                 </Box>
 
                 <Box
                     sx={{
                         borderRadius: '8px',
-                        minHeight: '300px',
+                        height: '300px',
+                        // bgcolor: '#fff',
                         width: '100%',
-                        overflow: 'scroll',
+
+                        overflowY: 'scroll',
                     }}
                     onChange={handleChange}
                 >
@@ -363,7 +393,7 @@ function PostModal({ closeModal }) {
                     <PrivacyPostSettings handleClose={handleCloseModal} />
                 </Box>
             </Modal> */}
-        </div>
+        </Box>
     );
 }
 
