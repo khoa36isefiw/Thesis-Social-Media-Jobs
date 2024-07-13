@@ -52,11 +52,13 @@ function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
                     width: '70%',
                 },
                 [tabletScreen]: {
-                    width: '90%',
+                    width: '80%',
                 },
                 [mobileScreen]: {
                     width: '100%',
                     height: '460px',
+                    mt: '32px',
+                    borderRadius: 0,
                 },
                 ...modalAnimation,
             }}
@@ -85,8 +87,26 @@ function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
                 </IconButton>
             </Box>
 
-            <Divider sx={{ mb: 2 }} />
-            <CustomizeTypography fs="18px" sx={{ color: '#191919', textAlign: 'center', py: 2 }}>
+            <Divider
+                sx={{
+                    mb: 2,
+                    [mobileScreen]: {
+                        mb: 1,
+                    },
+                }}
+            />
+            <CustomizeTypography
+                fs="18px"
+                sx={{
+                    color: '#191919',
+                    textAlign: 'center',
+                    py: 2,
+                    [mobileScreen]: {
+                        fontSize: '16px',
+                        py: 1,
+                    },
+                }}
+            >
                 Huynh, help others recognize you!
             </CustomizeTypography>
 
@@ -120,15 +140,43 @@ function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
                         [mobileScreen]: { textAlign: 'left', width: '90%' },
                     }}
                 >
-                    <CustomizeTypography fs="18px" sx={{ color: '#191919' }}>
+                    <CustomizeTypography
+                        fs="18px"
+                        sx={{
+                            color: '#191919',
+                            textAlign: 'center',
+                            [mobileScreen]: {
+                                fontSize: '14px',
+                            },
+                        }}
+                    >
                         Showcase your personality, interests, team moments or notable milestones
                     </CustomizeTypography>
-                    <CustomizeTypography fs="13px" sx={{ color: 'text.primary', mt: 2 }}>
+                    <CustomizeTypography
+                        fs="13px"
+                        sx={{
+                            color: 'text.primary',
+                            mt: 2,
+                            textAlign: 'center',
+                            [mobileScreen]: {
+                                fontSize: '14px',
+                                mt: 0,
+                            },
+                        }}
+                    >
                         A good photo will help you stand out.
                     </CustomizeTypography>
                 </Box>
             </Box>
-            <Divider sx={{ mt: 2, mb: 2 }} />
+            <Divider
+                sx={{
+                    mt: 2,
+                    mb: 2,
+                    [mobileScreen]: {
+                        my: '14px',
+                    },
+                }}
+            />
 
             <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
                 <input

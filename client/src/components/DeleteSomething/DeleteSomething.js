@@ -3,24 +3,47 @@ import { Box, IconButton, Divider, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    setLoggedInUser,
+    setSelectedImageRotationAngle,
+} from '../../redux/ManageAccount/manageAccountAction';
 // import 'animate.css';
 
 function DeleteSomething({ handleClose, showDeleteConfirm }) {
+    const dispatch = useDispatch();
     const [confirmOpen, setConfirmOpen] = useState(showDeleteConfirm);
     const [animationClass, setAnimationClass] = useState('animate__fadeIn'); // default to start an animation
+    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
+    console.log('Before deleting: ', rotationAngleImage);
 
-    const handleConfirmClose = () => {
-        // setConfirmOpen(false);
-        // handleClose();
+    const handleConfirmDelete = () => {
+        dispatch(setSelectedImageRotationAngle(0));
+        // delete image
+        dispatch(
+            setLoggedInUser({
+                ...userLoggedInInformation,
+                userPhoto: {
+                    imgUrl: null,
+                    imageStyle: null,
+                },
+            }),
+        );
         setAnimationClass('animate__zoomOut'); // exist
         setTimeout(() => {
             setConfirmOpen(false);
             handleClose();
         }, 500); // Match the animation duration
+        console.log('After deleting: ', rotationAngleImage);
     };
 
     const handleModalClose = () => {
-        setConfirmOpen(true);
+        setAnimationClass('animate__zoomOut'); // exist
+        setTimeout(() => {
+            handleClose();
+        }, 500); // Match the animation duration
+        handleClose();
     };
 
     useEffect(() => {
@@ -43,14 +66,14 @@ function DeleteSomething({ handleClose, showDeleteConfirm }) {
                 //  close icon doesn't overflow
                 overflow: 'hidden',
                 [ipadProScreen]: {
-                    width: '70%',
+                    width: '40%',
                 },
                 [tabletScreen]: {
-                    width: '90%',
+                    width: '50%',
                 },
                 [mobileScreen]: {
                     width: '100%',
-                    height: '460px',
+                    // height: '460px',
                 },
             }}
             // use animation from animate.css
@@ -96,11 +119,15 @@ function DeleteSomething({ handleClose, showDeleteConfirm }) {
                     mb: 2,
                 }}
             >
-                <DeleteButton variant={'outlined'} deleteText={'Cancel'} />
+                <DeleteButton
+                    variant={'outlined'}
+                    deleteText={'Cancel'}
+                    handleClickDelete={handleModalClose}
+                />
                 <DeleteButton
                     variant={'contained'}
                     deleteText={'Delete'}
-                    handleClickDelete={handleConfirmClose}
+                    handleClickDelete={handleConfirmDelete}
                 />
             </Box>
         </Box>

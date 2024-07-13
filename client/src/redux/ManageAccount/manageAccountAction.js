@@ -7,6 +7,7 @@ import {
     SAVE_ACCOUNT_SIGNUP,
     SET_SELECTED_FILTER_INDEX,
     USER_LOGGED_IN_INFORMATION,
+    HIDE_MODAL,
 } from '../actionConstant';
 
 // SAVE LIST ACCOUNTS
@@ -48,4 +49,8 @@ export const setSelectedFilterIndex = (index) => ({
 export const setSelectedImageRotationAngle = (angle) => ({
     type: SET_SELECTED_IMAGE_ROTATION_ANGLE,
     payload: angle,
+});
+
+export const hideModal = () => ({
+    type: HIDE_MODAL,
 });

@@ -2,9 +2,11 @@ import React from 'react';
 import { Box, IconButton, Typography, Button, Divider, Avatar } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
-
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
+
+import Modal from '@mui/material/Modal';
+
 function EditUserBackgroundImage({ imgUrl, handleClose }) {
     return (
         <Box

@@ -1,5 +1,6 @@
 import { Box, IconButton } from '@mui/material';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
+import { mobileScreen } from '../Theme/Theme';
 
 export const ProfileButton = ({ icon, textAction, handleClick }) => {
     return (
@@ -16,6 +17,9 @@ export const ProfileButton = ({ icon, textAction, handleClick }) => {
                 '&:hover': {
                     bgcolor: '#525455',
                     cursor: 'pointer',
+                },
+                [mobileScreen]: {
+                    p: '4px',
                 },
             }}
         >

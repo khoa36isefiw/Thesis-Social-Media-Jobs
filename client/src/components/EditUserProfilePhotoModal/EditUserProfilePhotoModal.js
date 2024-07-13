@@ -42,6 +42,7 @@ function EditUserProfilePhotoModal({ userImageURL, handleClose, imageRotationAng
         },
         animation: 'fadeInScale 0.5s ease-in-out',
     };
+
     return (
         <Modal open onClose={handleClose}>
             <Box
@@ -101,6 +102,7 @@ function EditUserProfilePhotoModal({ userImageURL, handleClose, imageRotationAng
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        [mobileScreen]: { p: 1 },
                     }}
                 >
                     <Avatar
@@ -125,36 +127,93 @@ function EditUserProfilePhotoModal({ userImageURL, handleClose, imageRotationAng
 
                 <ViewingRights />
 
-                <Divider sx={{ mt: 2, borderColor: '#fff' }} />
+                <Divider
+                    sx={{
+                        mt: 2,
+                        borderColor: '#fff',
+                    }}
+                />
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         px: 2,
+                        [mobileScreen]: {
+                            display: 'block',
+                        },
                     }}
                 >
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <ProfileButton
-                            icon={<EditIcon sx={{ color: '#fff', fontSize: '28px' }} />}
+                            icon={
+                                <EditIcon
+                                    sx={{
+                                        color: '#fff',
+                                        fontSize: '28px',
+                                        [mobileScreen]: {
+                                            fontSize: '24px',
+                                        },
+                                    }}
+                                />
+                            }
                             textAction={'Edit'}
                             handleClick={() => handleOpenModal('editPhoto')}
                         />
                         <ProfileButton
-                            icon={<CameraAltIcon sx={{ color: '#fff', fontSize: '28px' }} />}
+                            icon={
+                                <CameraAltIcon
+                                    sx={{
+                                        color: '#fff',
+                                        fontSize: '28px',
+                                        [mobileScreen]: {
+                                            fontSize: '24px',
+                                        },
+                                    }}
+                                />
+                            }
                             textAction={'Add photo'}
+                            // changePhoto
                             handleClick={() => handleOpenModal('changePhoto')}
                         />
                         <ProfileButton
-                            icon={<SatelliteIcon sx={{ color: '#fff', fontSize: '28px' }} />}
+                            icon={
+                                <SatelliteIcon
+                                    sx={{
+                                        color: '#fff',
+                                        fontSize: '28px',
+                                        [mobileScreen]: {
+                                            fontSize: '24px',
+                                        },
+                                    }}
+                                />
+                            }
                             textAction={'Frames'}
                         />
                     </Box>
-                    <ProfileButton
-                        icon={<DeleteIcon sx={{ color: '#fff', fontSize: '28px' }} />}
-                        textAction={'Delete'}
-                        handleClick={() => handleOpenModal('deletePhoto')}
-                    />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'flex-end',
+                            justifyContent: 'flex-end',
+                        }}
+                    >
+                        <ProfileButton
+                            icon={
+                                <DeleteIcon
+                                    sx={{
+                                        color: '#fff',
+                                        fontSize: '28px',
+                                        [mobileScreen]: {
+                                            fontSize: '24px',
+                                        },
+                                    }}
+                                />
+                            }
+                            textAction={'Delete'}
+                            handleClick={() => handleOpenModal('deletePhoto')}
+                        />
+                    </Box>
                 </Box>
 
                 <Modal open={activeModal === 'changePhoto'} onClose={handleCloseModal}>
@@ -228,7 +287,7 @@ export function ViewingRights({ changeColor = false }) {
                     />
                 }
                 sx={{
-                    px: 2,
+                    // px: 2,
                     padding: '2px 12px',
                     fontSize: '16px',
                     color: changeColor ? 'black' : '#fff',
@@ -241,6 +300,9 @@ export function ViewingRights({ changeColor = false }) {
                         boxShadow: '0 0 0 2px #fff',
                     },
                     ml: 2,
+                    [mobileScreen]: {
+                        fontSize: '14px',
+                    },
                 }}
             >
                 {selectedRight.textAction}
@@ -287,7 +349,15 @@ export function ViewingRights({ changeColor = false }) {
                     </IconButton>
                 </Box>
 
-                <CustomizeTypography fs="14px" sx={{ p: 1 }}>
+                <CustomizeTypography
+                    fs="14px"
+                    sx={{
+                        p: 1,
+                        [mobileScreen]: {
+                            fontSize: '12.5px',
+                        },
+                    }}
+                >
                     Choose who can see your profile photo
                 </CustomizeTypography>
 
@@ -381,7 +451,16 @@ const PrivacyButtonPhoto = ({ handleOnClick, textAction, subTextAction, selected
                         />
                     )}
                 </Box>
-                <CustomizeTypography fw={true} fs={'14.5px'} sx={{ flexGrow: 1 }}>
+                <CustomizeTypography
+                    fw={true}
+                    sx={{
+                        flexGrow: 1,
+                        fontSize: '14.5px',
+                        [mobileScreen]: {
+                            fontSize: '13px',
+                        },
+                    }}
+                >
                     {/* Connections Only */}
                     {textAction}
                 </CustomizeTypography>

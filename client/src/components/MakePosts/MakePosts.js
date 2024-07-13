@@ -102,13 +102,8 @@ function MakePosts() {
                 {/* Show Post Modal */}
             </Container>
 
-            <Modal
-                open={openModal}
-                onClose={handleCloseModal}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box
+            <Modal open={openModal} onClose={handleCloseModal}>
+                {/* <Box
                     sx={{
                         position: 'absolute',
                         top: '50%',
@@ -121,7 +116,9 @@ function MakePosts() {
                     }}
                 >
                     <PostModal closeModal={handleCloseModal} />
-                </Box>
+                </Box> */}
+
+                <PostModal closeModal={handleCloseModal} />
             </Modal>
         </div>
     );

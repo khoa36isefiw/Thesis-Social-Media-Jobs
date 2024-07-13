@@ -476,24 +476,12 @@ export function UserProfile() {
                     sx={{
                         ml: 1,
                     }}
-                    id="basic-button"
-                    aria-controls={open ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
                     onClick={handleClick}
                     endIcon={<MoreVertIcon />}
                 >
                     More
                 </CustomizeButton>
-                <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                    }}
-                >
+                <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                     <MenuList>
                         {moreActionLists.map((item, index) => (
                             <MenuItem key={index} onClick={handleClose}>
