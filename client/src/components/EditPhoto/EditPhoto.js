@@ -89,7 +89,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                 width: '40%',
                 minHeight: '350px',
                 margin: 'auto',
-                mt: '12px',
+                mt: '32px',
                 borderRadius: '8px',
                 boxShadow: '0 4px 4px #333',
                 //  close icon doesn't overflow
@@ -102,7 +102,8 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                 },
                 [mobileScreen]: {
                     width: '100%',
-                    height: '460px',
+                    height: '550px',
+                    borderRadius: 0,
                 },
                 // ...modalAnimation,
             }}
@@ -131,9 +132,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                     <CloseIcon fontSize="large" />
                 </IconButton>
             </Box>
-
             <Divider />
-
             <Box
                 sx={{
                     display: 'flex',
@@ -170,7 +169,14 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
             </CustomizeTypography>
 
             {/* List images are filtered */}
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    [mobileScreen]: { display: 'block' },
+                }}
+            >
                 <Box sx={{ display: 'flex' }}>
                     {filterList.map((filter, index) => (
                         <Box
@@ -227,7 +233,16 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                         </Box>
                     ))}
                 </Box>
-                <Box>
+                <Box
+                    sx={{
+                        [mobileScreen]: {
+                            display: 'flex',
+
+                            justifyContent: 'flex-end',
+                            mt: 2,
+                        },
+                    }}
+                >
                     <RotateButton
                         icon={<RotateRightIcon sx={{ color: 'black', fontSize: '20px' }} />}
                         handleClick={handleRotateRight}
