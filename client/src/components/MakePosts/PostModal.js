@@ -103,6 +103,7 @@ function PostModal({ closeModal }) {
             ? userLoggedInInformation.lastName + ' ' + userLoggedInInformation.firstName
             : userLoggedInInformation;
         const userAvatar = userLoggedInInformation.userPhoto;
+        const numberOfFollowers = userLoggedInInformation.followers;
         // console.log('userName in Post Modal:', userName);
         let articleTextSent = null;
         if (imageURL) {
@@ -112,6 +113,7 @@ function PostModal({ closeModal }) {
                 articleText: articleText,
                 listImage: imageURL,
                 viewPostPermission,
+                numberOfFollowers,
             };
 
             dispatch(addNewPosts(articleTextSent));
@@ -127,6 +129,7 @@ function PostModal({ closeModal }) {
                         userPhoto: userAvatar,
                         articleTextSent: articleText,
                         viewPostPermission,
+                        numberOfFollowers,
                     }),
                 );
                 // clear input after submitting

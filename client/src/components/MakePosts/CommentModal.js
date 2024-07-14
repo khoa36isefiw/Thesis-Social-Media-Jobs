@@ -277,181 +277,100 @@ function CommentModal({
                         },
                     }}
                 >
-                    {/* {imageUrl && (
-                        <Box
-                            sx={{
-                                textAlign: 'center',
-                                bgColor: '#fff',
-                            }}
-                        >
-                            {Array.isArray(imageUrl) ? (
-                                <>
-                                    {imageUrl.slice(0, 1).map((image, index) => (
-                                        <Box
-                                            component="img"
-                                            src={image.url}
-                                            alt="Posted Image"
-                                            sx={{
-                                                // maxWidth: originalWidth,
-                                                // height: originalHeight,
-                                                width: '100%',
-                                                height: 'auto',
-                                                objectFit: 'cover',
-                                                mt: '6px',
-                                                [ipadProScreen]: {
-                                                    width: '100%',
-                                                    height: 'auto',
-                                                },
-                                                [tabletScreen]: {
-                                                    width: '100%',
-                                                    height: 'auto',
-                                                },
-                                            }}
-                                        />
-                                    ))}
-                                </>
-                            ) : (
-                                <Box
-                                    component="img"
-                                    src={imageUrl.url}
-                                    alt="Posted Image"
-                                    sx={{
-                                        // maxWidth: originalWidth,
-                                        // height: originalHeight,
-                                        width: '100%',
-                                        height: 'auto',
-                                        objectFit: 'cover',
-                                        mt: '6px',
-                                        [ipadProScreen]: {
-                                            width: '100%',
-                                            height: 'auto',
-                                        },
-                                        [tabletScreen]: {
-                                            width: '100%',
-                                            height: 'auto',
-                                        },
-                                    }}
-                                />
-                            )}
-                        </Box>
-                    )} */}
                     <Box
+                        component="img"
+                        src={Array.isArray(imageUrl) ? currentImage.url : imageUrl}
+                        alt="Profile Image"
                         sx={{
-                            // display: 'flex',
-                            // flexDirection: 'column',
-                            // alignItems: 'center',
-                            // justifyContent: 'center',
-                            position: 'relative',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: 'black',
-                            width: '700px',
-                            height: '650px',
-                            borderTopLeftRadius: '8px',
-                            borderBottomLeftRadius: '8px',
-                            [mobileScreen]: {
+                            width: originalWidth,
+                            height: originalHeight,
+                            objectFit: 'cover',
+                            mt: '6px',
+                            [ipadProScreen]: {
                                 width: '100%',
-                                height: '350px',
-                                borderRadius: 0,
+                                height: 'auto',
+                            },
+                            [tabletScreen]: {
+                                width: '100%',
+                                height: 'auto',
                             },
                         }}
-                    >
+                    />
+                    {/* 2 buttons: next and previous image */}
+                    {Array.isArray(imageUrl) && imageUrl.length > 1 && (
                         <Box
-                            component="img"
-                            src={Array.isArray(imageUrl) ? currentImage.url : imageUrl}
-                            alt="Profile Image"
                             sx={{
-                                width: originalWidth,
-                                height: originalHeight,
-                                objectFit: 'cover',
-                                mt: '6px',
-                                [ipadProScreen]: {
-                                    width: '100%',
-                                    height: 'auto',
-                                },
-                                [tabletScreen]: {
-                                    width: '100%',
-                                    height: 'auto',
-                                },
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                                position: 'absolute',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
                             }}
-                        />
-                        {/* 2 buttons: next and previous image */}
-                        {Array.isArray(imageUrl) && imageUrl.length > 1 && (
-                            <Box
+                        >
+                            <IconButton
                                 sx={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    width: '100%',
                                     position: 'absolute',
+                                    width: '48px',
+                                    height: '48px',
+                                    // backgroundColor: '#fff',
+                                    backgroundColor: theme.palette.bgButtonHover,
                                     top: '50%',
-                                    transform: 'translateY(-50%)',
+                                    left: '1%',
+                                    transition: 'left 0.3s ease-in-out',
+
+                                    transition: 'transform 0.3s ease-in-out',
+                                    transform: 'translateX(0)', // initial state
+
+                                    '&:hover': {
+                                        backgroundColor: '#fff',
+                                        transform: 'translateX(-5px)', // slide to the left on hover
+                                    },
+                                    '&:not(:hover)': {
+                                        transform: 'translateX(0)', // return to original position when not hovered
+                                    },
                                 }}
+                                onClick={handlePrevImage}
                             >
-                                <IconButton
+                                <ArrowBackIosNewIcon
                                     sx={{
-                                        position: 'absolute',
-                                        width: '48px',
-                                        height: '48px',
-                                        // backgroundColor: '#fff',
-                                        backgroundColor: theme.palette.bgButtonHover,
-                                        top: '50%',
-                                        left: '1%',
-                                        transition: 'left 0.3s ease-in-out',
-
-                                        transition: 'transform 0.3s ease-in-out',
-                                        transform: 'translateX(0)', // initial state
-
-                                        '&:hover': {
-                                            backgroundColor: '#fff',
-                                            transform: 'translateX(-5px)', // slide to the left on hover
-                                        },
-                                        '&:not(:hover)': {
-                                            transform: 'translateX(0)', // return to original position when not hovered
-                                        },
+                                        fontSize: '24px',
+                                        mr: '4px',
                                     }}
-                                    onClick={handlePrevImage}
-                                >
-                                    <ArrowBackIosNewIcon
-                                        sx={{
-                                            fontSize: '24px',
-                                            mr: '4px',
-                                        }}
-                                    />
-                                </IconButton>
+                                />
+                            </IconButton>
 
-                                <IconButton
+                            <IconButton
+                                sx={{
+                                    position: 'absolute',
+                                    width: '48px',
+                                    height: '48px',
+                                    // backgroundColor: '#fff',
+                                    backgroundColor: theme.palette.bgButtonHover,
+                                    top: '50%',
+                                    right: '1%',
+
+                                    transition: 'transform 0.3s ease-in-out',
+                                    transform: 'translateX(0)', // initial state
+
+                                    '&:hover': {
+                                        backgroundColor: '#fff',
+                                        transform: 'translateX(5px)', // slide to the left on hover
+                                    },
+                                    '&:not(:hover)': {
+                                        transform: 'translateX(0)', // return to original position when not hovered
+                                    },
+                                }}
+                                onClick={handleNextImage}
+                            >
+                                <ArrowForwardIosIcon
                                     sx={{
-                                        position: 'absolute',
-                                        width: '48px',
-                                        height: '48px',
-                                        // backgroundColor: '#fff',
-                                        backgroundColor: theme.palette.bgButtonHover,
-                                        top: '50%',
-                                        right: '1%',
-
-                                        transition: 'transform 0.3s ease-in-out',
-                                        transform: 'translateX(0)', // initial state
-
-                                        '&:hover': {
-                                            backgroundColor: '#fff',
-                                            transform: 'translateX(5px)', // slide to the left on hover
-                                        },
-                                        '&:not(:hover)': {
-                                            transform: 'translateX(0)', // return to original position when not hovered
-                                        },
+                                        fontSize: '24px',
                                     }}
-                                    onClick={handleNextImage}
-                                >
-                                    <ArrowForwardIosIcon
-                                        sx={{
-                                            fontSize: '24px',
-                                        }}
-                                    />
-                                </IconButton>
-                            </Box>
-                        )}
-                    </Box>
+                                />
+                            </IconButton>
+                        </Box>
+                    )}
                 </Box>
 
                 {/* Comment Input */}
