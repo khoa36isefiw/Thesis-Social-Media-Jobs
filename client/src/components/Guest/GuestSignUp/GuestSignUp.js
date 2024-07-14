@@ -91,6 +91,7 @@ function GuestSignUp() {
                         imageStyle: null,
                         imageRotationAngle: 0,
                     },
+                    followers: 0,
                 }),
             );
             setIsCreatedAccount(true);
