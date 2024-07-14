@@ -139,8 +139,7 @@ function Feed() {
                     postID={'8'}
                     avatarSrc={post.userPhoto}
                     displayName={post.userName}
-                    followers={'6,969'}
-                    // time={'1h'}
+                    followers={post.numberOfFollowers}
                     time={post.timestamp}
                     hashtag={null}
                     content={post.articleText}
