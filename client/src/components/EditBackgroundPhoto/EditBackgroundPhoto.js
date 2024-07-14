@@ -1,0 +1,348 @@
+import React, { useState } from 'react';
+import { Box, IconButton, Typography, Button, Divider, Avatar } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+
+import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
+import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
+import { ViewingRights } from '../EditUserProfilePhotoModal/EditUserProfilePhotoModal';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    setLoggedInUser,
+    setSelectedFilterIndex,
+    setSelectedImageRotationAngle,
+} from '../../redux/ManageAccount/manageAccountAction';
+import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
+import WarningIcon from '@mui/icons-material/Warning';
+import RotateRightIcon from '@mui/icons-material/RotateRight';
+import RotateLeftIcon from '@mui/icons-material/RotateLeft';
+import { RotateButton } from '../RotateButton/RotateButton';
+
+const filterList = [
+    { filterName: 'Original', filterStyle: null },
+    { filterName: 'Brightness', filterStyle: 'brightness(1.75)' },
+    { filterName: 'Contrast', filterStyle: 'contrast(2)' },
+    { filterName: 'Sepia', filterStyle: 'sepia(60%)' },
+    { filterName: 'Saturate', filterStyle: 'saturate(200%)' },
+];
+function EditBackgroundPhoto({ imgUrl, handleCloseChange }) {
+    const dispatch = useDispatch();
+    const indexFilterImage = useSelector((state) => state.manageAccounts.selectedFilterIndex);
+    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
+
+    const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState(indexFilterImage);
+    // const [rotationAngle, setRotationAngle] = useState(0);
+    const [rotationAngle, setRotationAngle] = useState(rotationAngleImage);
+
+    const [notificationMessage, setNotificationMessage] = useState('');
+    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+
+    const handleSavePhotoEdited = () => {
+        // update for userPhoto field
+        // dispatch(setLoggedInUser({ ...userLoggedInInformation, userPhoto: imgUrl }));
+
+        dispatch(
+            setLoggedInUser({
+                ...userLoggedInInformation,
+                userPhoto: {
+                    imgUrl,
+                    imageStyle: filterList[selectedFilter].filterStyle,
+                    imageRotationAngle: rotationAngle,
+                },
+            }),
+        );
+        setAnimationClass('animate__zoomOut');
+        dispatch(setSelectedFilterIndex(selectedFilter)); // save index of image selected filter
+        dispatch(setSelectedImageRotationAngle(rotationAngle));
+        // setShowNotifications(true);
+        // setNotificationMessage('Change your photo successfully');
+
+        setTimeout(() => {
+            handleCloseChange();
+        }, 500);
+    };
+
+    const handleCloseSnackbar = () => {
+        setShowNotifications(false);
+    };
+
+    const handleSelectedFilters = (index) => {
+        setSelectedFilter(index);
+    };
+
+    const handleRotateLeft = () => {
+        // update the state based on its previous value
+        setRotationAngle((prevAngle) => prevAngle - 90);
+    };
+    const handleRotateRight = () => {
+        setRotationAngle((prevAngle) => prevAngle + 90);
+    };
+
+    console.log('rotationAngle: ', rotationAngle);
+    console.log('rotationAngleImage: ', rotationAngleImage);
+    return (
+        <Box
+            sx={{
+                position: 'relative',
+                backgroundColor: '#fff',
+                width: '60%',
+                minHeight: '350px',
+                margin: 'auto',
+                mt: '32px',
+                borderRadius: '8px',
+                boxShadow: '0 4px 4px #333',
+                //  close icon doesn't overflow
+                overflow: 'hidden',
+                [ipadProScreen]: {
+                    width: '70%',
+                },
+                [tabletScreen]: {
+                    width: '90%',
+                },
+                [mobileScreen]: {
+                    width: '100%',
+                    height: '550px',
+                    borderRadius: 0,
+                },
+                // ...modalAnimation,
+            }}
+            className={`animate__animated ${animationClass}`}
+        >
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    p: 1,
+                }}
+            >
+                <CustomizeTypography fs={'20px'} fw={true}>
+                    Edit Background Photo
+                </CustomizeTypography>
+                <IconButton
+                    disableFocusRipple
+                    sx={{
+                        '&:hover': {
+                            backgroundColor: '#d9d9d9',
+                        },
+                    }}
+                    onClick={handleCloseChange}
+                >
+                    <CloseIcon fontSize="large" />
+                </IconButton>
+            </Box>
+            <Divider />
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    // bgcolor: '#333',
+                    backgroundColor: '#1b1f23',
+                }}
+            >
+                {/* <Avatar
+                    // src={DefaultBackgroundImage}
+                    src={imgUrl}
+                    alt="Default User Image"
+                    sx={{
+                        height: '350px',
+                        width: '450px',
+                        borderRadius: 0,
+                        transform: `rotate(${rotationAngle}deg)`,
+                        transition: 'transform 0.5s ease-in-out',
+                        [mobileScreen]: {
+                            height: '200px',
+                            width: '200px',
+                        },
+                        // show filter image is selected
+                        filter: filterList[selectedFilter].filterStyle,
+                    }}
+                /> */}
+                <Box
+                    component={'img'}
+                    // src={DefaultBackgroundImage}
+                    src={imgUrl}
+                    alt="Default User Image"
+                    sx={{
+                        height: '350px',
+                        width: '100%',
+                        objectFit: 'fill',
+                        // bgcolor: '#fff',
+                        transform: `rotate(${rotationAngle}deg)`,
+                        transition: 'transform 0.5s ease-in-out',
+                        [mobileScreen]: {
+                            height: '200px',
+                            width: '200px',
+                        },
+                        // show filter image is selected
+                        filter: filterList[selectedFilter].filterStyle,
+                    }}
+                />
+            </Box>
+            <CustomizeTypography sx={{ textAlign: 'center', py: 2 }}>
+                Show your styles to Anyone
+            </CustomizeTypography>
+
+            {/* List images are filtered */}
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    [mobileScreen]: { display: 'block' },
+                }}
+            >
+                <Box sx={{ display: 'flex' }}>
+                    {filterList.map((filter, index) => (
+                        <Box
+                            key={index}
+                            sx={{
+                                ml: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                '&:hover': {
+                                    cursor: 'pointer',
+                                },
+                            }}
+                            onClick={() => handleSelectedFilters(index)}
+                        >
+                            <Box
+                                sx={{
+                                    height: '56px',
+                                    width: '56px',
+                                    // border: '1px solid #d0d0d0',
+                                    border:
+                                        selectedFilter === index
+                                            ? '1px solid #333'
+                                            : '1px solid transparent',
+                                    // Smooth transition for border and box-shadow
+                                    transition: 'border 0.3s, box-shadow 0.3s',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    boxShadow:
+                                        selectedFilter === index
+                                            ? '0 0 0 3px #fff'
+                                            : '0 0 0 0 transparent',
+                                }}
+                            >
+                                <Avatar
+                                    src={imgUrl}
+                                    alt="Default User Image"
+                                    sx={{
+                                        height: '55px',
+                                        width: '55px',
+                                        borderRadius: 0,
+
+                                        // boxShadow:
+                                        //     selectedFilter === index
+                                        //         ? '0 0 0 3px #fff'
+                                        //         : '0 0 0 0 transparent',
+                                        transition: 'box-shadow 0.3s',
+                                        filter: filter.filterStyle,
+                                    }}
+                                />
+                            </Box>
+                            <Typography sx={{ fontSize: '14px', mt: '4px' }}>
+                                {filter.filterName}
+                            </Typography>
+                        </Box>
+                    ))}
+                </Box>
+                <Box
+                    sx={{
+                        [mobileScreen]: {
+                            display: 'flex',
+
+                            justifyContent: 'flex-end',
+                            mt: 2,
+                        },
+                    }}
+                >
+                    <RotateButton
+                        icon={<RotateRightIcon sx={{ color: 'black', fontSize: '20px' }} />}
+                        handleClick={handleRotateRight}
+                    />
+                    <RotateButton
+                        icon={<RotateLeftIcon sx={{ color: 'black', fontSize: '20px' }} />}
+                        handleClick={handleRotateLeft}
+                    />
+                </Box>
+            </Box>
+
+            <Divider sx={{ mt: 2, mb: 2 }} />
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    mb: 2,
+                }}
+            >
+                {/* <ViewingRights changeColor={true} /> */}
+                <Button
+                    variant="outlined"
+                    sx={{
+                        fontSize: '14px',
+                        textTransform: 'initial',
+                        fontWeight: 'bold',
+                        padding: '4px 24px',
+                        borderRadius: '24px',
+                        // mb: 2,
+                        mx: 1,
+                        // mr: '20px',
+                    }}
+                    onClick={handleSavePhotoEdited}
+                >
+                    Change photo
+                </Button>
+                <Button
+                    variant="contained"
+                    sx={{
+                        fontSize: '14px',
+                        textTransform: 'initial',
+                        fontWeight: 'bold',
+                        padding: '4px 24px',
+                        borderRadius: '24px',
+                        // mb: 2,
+                        mx: 1,
+                        // mr: '20px',
+                    }}
+                    onClick={handleSavePhotoEdited}
+                >
+                    Save
+                </Button>
+            </Box>
+
+            {showNotifications && (
+                <SnackbarShowNotifications
+                    // mainText="Create account successfully!"
+                    // isOpen={showNotifications}
+                    // onClose={handleCloseSnackbar}
+                    // // warning
+                    // // icon={<WarningIcon sx={{ fontSize: '24px', color: 'orange' }} />}
+                    mainText={notificationMessage}
+                    isOpen={showNotifications}
+                    onClose={handleCloseSnackbar}
+                    warning={notificationMessage !== 'Create account successfully!'}
+                    icon={
+                        notificationMessage !== 'Create account successfully!' && (
+                            <WarningIcon
+                                sx={{
+                                    fontSize: '24px',
+                                    color: 'orange',
+                                }}
+                            />
+                        )
+                    }
+                />
+            )}
+        </Box>
+    );
+}
+
+export default EditBackgroundPhoto;
