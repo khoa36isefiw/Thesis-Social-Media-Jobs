@@ -140,7 +140,7 @@ function GuestSignUp() {
     };
 
     return (
-        <Container
+        <Box
             sx={{
                 flexGrow: 1,
                 display: 'flex',
@@ -151,7 +151,7 @@ function GuestSignUp() {
         >
             <Grid
                 items
-                container
+                // container
                 spacing={2}
                 sx={{
                     width: '500px',
@@ -162,6 +162,7 @@ function GuestSignUp() {
                     my: 6,
                     boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
                     [mobileScreen]: {
+                        borderRadius: '0',
                         // width: '100%',
                         // height: '100%',
                     },
@@ -216,7 +217,7 @@ function GuestSignUp() {
                     />
                 </Grid>
 
-                <Grid sx={{ p: 1 }} lg={12}>
+                <Grid sx={{ p: 1 }} xs={12} sm={12} md={12} lg={12}>
                     <Button
                         variant="contained"
                         sx={{
@@ -232,7 +233,7 @@ function GuestSignUp() {
                         Sign Up
                     </Button>
                 </Grid>
-                <Grid lg={12}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
                     <Box
                         sx={{
                             display: 'flex',
@@ -303,7 +304,7 @@ function GuestSignUp() {
                     />
                 )}
             </Grid>
-        </Container>
+        </Box>
     );
 }
 
