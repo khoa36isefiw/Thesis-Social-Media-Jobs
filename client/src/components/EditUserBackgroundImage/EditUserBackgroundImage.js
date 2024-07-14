@@ -28,6 +28,7 @@ function EditUserBackgroundImage({ imgUrl, handleClose }) {
                     width: '90%',
                 },
                 [mobileScreen]: {
+                    borderRadius: 0,
                     width: '100%',
                     height: '460px',
                 },
