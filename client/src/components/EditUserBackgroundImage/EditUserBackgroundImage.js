@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, IconButton, Typography, Button, Divider, Avatar } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
@@ -7,7 +7,17 @@ import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 
 import Modal from '@mui/material/Modal';
 
+import EditBackgroundPhoto from '../EditBackgroundPhoto/EditBackgroundPhoto';
+
 function EditUserBackgroundImage({ imgUrl, handleClose }) {
+    const [openChangeBackgroundImage, setOpenChangeBackgroundImage] = useState(false);
+    const handleOpenModal = () => {
+        setOpenChangeBackgroundImage(true);
+    };
+
+    const handleCloseModal = () => {
+        setOpenChangeBackgroundImage(false);
+    };
     return (
         <Box
             sx={{
@@ -109,10 +119,17 @@ function EditUserBackgroundImage({ imgUrl, handleClose }) {
                         mx: 2,
                         mr: '20px',
                     }}
+                    onClick={handleOpenModal}
                 >
                     Edit profile background
                 </Button>
             </Box>
+            <Modal open={openChangeBackgroundImage} onClose={handleCloseModal}>
+                <EditBackgroundPhoto
+                    imgUrl={imgUrl !== null}
+                    handleCloseChange={handleCloseModal}
+                />
+            </Modal>
         </Box>
     );
 }
