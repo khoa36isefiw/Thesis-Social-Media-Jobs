@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, userId } from 'react';
 import { Box, IconButton, Typography, Button, Divider, Avatar } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -40,8 +40,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
 
     const handleSavePhotoEdited = () => {
         // update for userPhoto field
-        // dispatch(setLoggedInUser({ ...userLoggedInInformation, userPhoto: imgUrl }));
-
+        const userId = userLoggedInInformation.userId;
         dispatch(
             setLoggedInUser({
                 ...userLoggedInInformation,
@@ -54,7 +53,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
         );
         setAnimationClass('animate__zoomOut');
         dispatch(setSelectedFilterIndex(selectedFilter)); // save index of image selected filter
-        dispatch(setSelectedImageRotationAngle(rotationAngle));
+        dispatch(setSelectedImageRotationAngle({ angle: rotationAngle, userId }));
         // setShowNotifications(true);
         // setNotificationMessage('Change your photo successfully');
 
