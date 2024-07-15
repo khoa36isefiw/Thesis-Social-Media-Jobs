@@ -22,13 +22,14 @@ import SendIcon from '@mui/icons-material/Send';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import UserAvatar from '../../../assets/images/avatar.jpeg';
-import BackgroundImageModal from '../../BackgroundImageModal/BackgroundImageModal';
-import EditUserBackgroundImage from '../../EditUserBackgroundImage/EditUserBackgroundImage';
+
+import UploadUserBackgroundImage from '../../UploadUserBackgroundImage/UploadUserBackgroundImage';
 import EditUserProfile from '../../EditUserProfile/EditUserProfile';
-import { mobileScreen, tabletScreen, theme } from '../../Theme/Theme';
+import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../../Theme/Theme';
 import { useDispatch, useSelector } from 'react-redux';
 import { startAChatMessage } from '../../../redux/AddChatMessage/addChatMessageAction';
 import EditUserProfilePhotoModal from '../../EditUserProfilePhotoModal/EditUserProfilePhotoModal';
+import ViewBackgroundImageModal from '../../ViewBackgroundImageModal/ViewBackgroundImageModal';
 
 // default image
 // https://t3.ftcdn.net/jpg/00/64/67/52/360_F_64675209_7ve2XQANuzuHjMZXP3aIYIpsDKEbF5dD.jpg
@@ -68,6 +69,11 @@ export function UserProfile() {
     const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
     const listUserInfor = useSelector((state) => state.startAMessage.listUserInformation);
     const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
+    const rotationAngleBackground = useSelector(
+        (state) => state.manageAccounts.selectedBackgroundAngle,
+    );
+
+    console.log('rotationAngleBackground: ', rotationAngleBackground);
 
     // get User Name
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
@@ -137,7 +143,9 @@ export function UserProfile() {
                     onClick={() => handleOpenModal('userBackground')}
                     // src={UserBackgroundImage}
                     src={
-                        'https://media.istockphoto.com/id/835370890/photo/sunset-sunrise-with-clouds-light-rays-and-other-atmospheric-effect.jpg?s=612x612&w=0&k=20&c=zGDOBYVFY74wX2gUgkonYGtNl1zenev5mPotAqUlJbM='
+                        userLoggedInInformation.userBackgroundPhoto
+                            ? userLoggedInInformation.userBackgroundPhoto.bgUrl
+                            : 'https://media.istockphoto.com/id/835370890/photo/sunset-sunrise-with-clouds-light-rays-and-other-atmospheric-effect.jpg?s=612x612&w=0&k=20&c=zGDOBYVFY74wX2gUgkonYGtNl1zenev5mPotAqUlJbM='
                     }
                     alt="User Backgorund Image"
                     sx={{
@@ -149,6 +157,10 @@ export function UserProfile() {
                         height: '200px',
                         objectFit: 'contain',
                         zIndex: 2,
+                        transform: `rotate(${rotationAngleBackground}deg)`,
+                        filter:
+                            userLoggedInInformation.userBackgroundPhoto &&
+                            userLoggedInInformation.userBackgroundPhoto.bgStyle,
                         '&:hover': {
                             cursor: 'pointer',
                         },
@@ -269,7 +281,11 @@ export function UserProfile() {
                 }}
             >
                 {/* User Information */}
-                <Box sx={{ px: 3 }}>
+                <Box
+                    sx={{
+                        px: 3,
+                    }}
+                >
                     {/* Name */}
                     <Box
                         sx={{
@@ -325,7 +341,13 @@ export function UserProfile() {
                                 display: 'flex',
                                 px: 3,
                                 alignItems: 'center',
+                                [ipadProScreen]: {
+                                    px: 0,
+                                },
                                 [mobileScreen]: {
+                                    px: 0,
+                                },
+                                [tabletScreen]: {
                                     px: 0,
                                 },
                             }}
@@ -355,6 +377,10 @@ export function UserProfile() {
                                 sx={{
                                     width: '200px',
                                     ml: 1,
+                                    [ipadProScreen]: {
+                                        width: '100%',
+                                        ml: 0,
+                                    },
                                     [mobileScreen]: {
                                         width: '100%',
                                         ml: 0,
@@ -496,18 +522,37 @@ export function UserProfile() {
                     </MenuList>
                 </Menu>
             </Box>
+
             {/* Open user background image - show the backgroud image of user */}
             <Modal open={activeModal === 'userBackground'} onClose={handleCloseModal}>
-                <BackgroundImageModal
-                    imgUrl={
-                        'https://media.istockphoto.com/id/835370890/photo/sunset-sunrise-with-clouds-light-rays-and-other-atmospheric-effect.jpg?s=612x612&w=0&k=20&c=zGDOBYVFY74wX2gUgkonYGtNl1zenev5mPotAqUlJbM='
+                <ViewBackgroundImageModal
+                    bgImgURL={
+                        userLoggedInInformation.userBackgroundPhoto
+                            ? userLoggedInInformation.userBackgroundPhoto.bgUrl
+                            : 'https://media.istockphoto.com/id/835370890/photo/sunset-sunrise-with-clouds-light-rays-and-other-atmospheric-effect.jpg?s=612x612&w=0&k=20&c=zGDOBYVFY74wX2gUgkonYGtNl1zenev5mPotAqUlJbM='
+                    }
+                    bgStyle={
+                        userLoggedInInformation.userBackgroundPhoto &&
+                        userLoggedInInformation.userBackgroundPhoto.bgStyle
                     }
                     handleClose={handleCloseModal}
                 />
             </Modal>
             {/* edit user background image */}
             <Modal open={activeModal === 'editUserBackground'} onClose={handleCloseModal}>
-                <EditUserBackgroundImage handleClose={handleCloseModal} />
+                <UploadUserBackgroundImage
+                    handleClose={handleCloseModal}
+                    bgImageURL={
+                        userLoggedInInformation.userBackgroundPhoto
+                            ? userLoggedInInformation.userBackgroundPhoto.bgUrl
+                            : 'https://media.istockphoto.com/id/835370890/photo/sunset-sunrise-with-clouds-light-rays-and-other-atmospheric-effect.jpg?s=612x612&w=0&k=20&c=zGDOBYVFY74wX2gUgkonYGtNl1zenev5mPotAqUlJbM='
+                    }
+                    bgRotateAngle={userLoggedInInformation.userBackgroundPhoto.bgRotationAngle}
+                    bgStyle={
+                        userLoggedInInformation.userBackgroundPhoto &&
+                        userLoggedInInformation.userBackgroundPhoto.bgStyle
+                    }
+                />
             </Modal>
             {/* Open modal to edit user profile/ information */}
 
