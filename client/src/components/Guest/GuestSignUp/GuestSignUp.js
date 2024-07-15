@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useId } from 'react';
 import {
     Box,
     Container,
@@ -25,6 +25,7 @@ import { BirthDate } from '../../BirthDate/BirthDate';
 import DefaultBackgroundImage from '../../../assets/images/DefaultBackgroundImage.jpeg';
 
 function GuestSignUp() {
+    const userId = useId();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentDate = new Date();
@@ -81,6 +82,7 @@ function GuestSignUp() {
             // save user information
             dispatch(
                 saveAccountRegistered({
+                    userId,
                     firstName,
                     lastName,
                     birthDate: getBirthDate,
