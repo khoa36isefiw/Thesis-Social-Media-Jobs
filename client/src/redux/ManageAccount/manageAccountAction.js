@@ -8,6 +8,8 @@ import {
     SET_SELECTED_FILTER_INDEX,
     USER_LOGGED_IN_INFORMATION,
     HIDE_MODAL,
+    SET_SELECTED_FILTER_INDEX_BG,
+    SET_SELECTED_BG_ROTATION_ANGLE,
 } from '../actionConstant';
 
 // SAVE LIST ACCOUNTS
@@ -41,6 +43,7 @@ export const getYear = (year) => ({
     payload: { year },
 });
 
+// for user photo
 export const setSelectedFilterIndex = (index) => ({
     type: SET_SELECTED_FILTER_INDEX,
     payload: index,
@@ -49,6 +52,17 @@ export const setSelectedFilterIndex = (index) => ({
 export const setSelectedImageRotationAngle = (angle) => ({
     type: SET_SELECTED_IMAGE_ROTATION_ANGLE,
     payload: angle,
+});
+
+// for user background image photo
+export const setSelectedBackgroundFilterIndex = (bgIndex) => ({
+    type: SET_SELECTED_FILTER_INDEX_BG,
+    payload: bgIndex,
+});
+
+export const setSelectedBackgroundRotationAngle = (bgAngle) => ({
+    type: SET_SELECTED_BG_ROTATION_ANGLE,
+    payload: bgAngle,
 });
 
 export const hideModal = () => ({

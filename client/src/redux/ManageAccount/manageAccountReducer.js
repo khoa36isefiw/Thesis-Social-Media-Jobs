@@ -8,11 +8,60 @@ import {
     SAVE_ACCOUNT_SIGNUP,
     SET_SELECTED_FILTER_INDEX,
     USER_LOGGED_IN_INFORMATION,
+    SET_SELECTED_FILTER_INDEX_BG,
+    SET_SELECTED_BG_ROTATION_ANGLE,
 } from '../actionConstant';
-
+import DefaultBackgroundImage from '../../assets/images/DefaultBackgroundImage.jpeg';
 const initialState = {
-    accountsList: [],
-    loggedInUser: 'Luna Kei',
+    // accountsList: [], // initial state
+    // use for testing data
+    accountsList: [
+        {
+            firstName: 'Tido',
+            lastName: 'Kang',
+            birthDate: '12-6-2000',
+            userName: 'tido',
+            password: 'tido',
+            // default image
+            userPhoto: {
+                imgUrl: 'https://t3.ftcdn.net/jpg/00/64/67/52/360_F_64675209_7ve2XQANuzuHjMZXP3aIYIpsDKEbF5dD.jpg',
+                imageStyle: null,
+                imageRotationAngle: 0,
+            },
+            // default background image/ photo for user who logged in
+            userBackgroundPhoto: {
+                bgUrl: DefaultBackgroundImage,
+                bgStyle: null,
+                bgRotationAngle: 0,
+            },
+
+            followers: 0,
+        },
+    ],
+    // loggedInUser: 'Luna Kei', // initial state
+    loggedInUser: {
+        // use for test data
+        firstName: 'Tido',
+        lastName: 'Kang',
+        birthDate: '12-6-2000',
+        userName: 'tido',
+        password: 'tido',
+        // default image
+        userPhoto: {
+            imgUrl: 'https://t3.ftcdn.net/jpg/00/64/67/52/360_F_64675209_7ve2XQANuzuHjMZXP3aIYIpsDKEbF5dD.jpg',
+            imageStyle: null,
+            imageRotationAngle: 0,
+        },
+        // default background image/ photo for user who logged in
+        userBackgroundPhoto: {
+            bgUrl: DefaultBackgroundImage,
+            bgStyle: null,
+            bgRotationAngle: 0,
+        },
+
+        followers: 0,
+    },
+
     birthDate: '',
     day: '',
     month: '',
@@ -20,6 +69,8 @@ const initialState = {
     setViewingRights: 'All Aikotoba members',
     selectedFilterIndex: 0,
     selectedImageAngle: 0,
+    selectedBackgroundFilterIndex: 0,
+    selectedBackgroundAngle: 0,
 };
 
 export const manageAccountReducer = (state = initialState, action) => {
@@ -79,6 +130,16 @@ export const manageAccountReducer = (state = initialState, action) => {
             return {
                 ...state,
                 selectedImageAngle: action.payload,
+            };
+        case SET_SELECTED_FILTER_INDEX_BG:
+            return {
+                ...state,
+                selectedBackgroundFilterIndex: action.payload,
+            };
+        case SET_SELECTED_BG_ROTATION_ANGLE:
+            return {
+                ...state,
+                selectedBackgroundAngle: action.payload,
             };
         default:
             return state;
