@@ -22,6 +22,7 @@ import {
 import SnackbarShowNotifications from '../../SnackbarShowNotifications/SnackbarShowNotifications';
 import { saveAccountRegistered } from '../../../redux/ManageAccount/manageAccountAction';
 import { BirthDate } from '../../BirthDate/BirthDate';
+import DefaultBackgroundImage from '../../../assets/images/DefaultBackgroundImage.jpeg';
 
 function GuestSignUp() {
     const dispatch = useDispatch();
@@ -91,6 +92,13 @@ function GuestSignUp() {
                         imageStyle: null,
                         imageRotationAngle: 0,
                     },
+                    // default background image/ photo for user who logged in
+                    userBackgroundPhoto: {
+                        bgUrl: DefaultBackgroundImage,
+                        bgStyle: null,
+                        bgRotationAngle: 0,
+                    },
+
                     followers: 0,
                 }),
             );
