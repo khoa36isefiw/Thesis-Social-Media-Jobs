@@ -28,6 +28,7 @@ import SmsIcon from '@mui/icons-material/Sms';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Logout from '@mui/icons-material/Logout';
+import { useSelector } from 'react-redux';
 
 // Define a variable for the media query condition
 const mobileScreen = '@media only screen and (max-width: 46.1875em)';
@@ -322,6 +323,8 @@ const authenticatedActions = [
 function AccountMenu() {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState(null);
+    // get User logged in information
+    const authenticatedInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -349,14 +352,33 @@ function AccountMenu() {
                 <Box onClick={handleClick}>
                     <IconButton
                         size="small"
-                        sx={{ ml: 2 }}
-                        aria-controls={open ? 'account-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
+                        sx={{
+                            ml: 2,
+                            '&:hover': {
+                                bgcolor: 'transparent',
+                            },
+                        }}
                     >
-                        <Avatar sx={{ width: '36px', height: '36px' }}>
+                        <Avatar
+                            src={authenticatedInformation.userPhoto.imgUrl}
+                            alt="User Avatar"
+                            sx={{
+                                width: '36px',
+                                height: '36px',
+                                zIndex: 4,
+                                border: '1px solid #b9b9b9',
+                                filter:
+                                    authenticatedInformation.userPhoto &&
+                                    authenticatedInformation.userPhoto.imageStyle,
+                                transform: `rotate(${authenticatedInformation.userPhoto.imageRotationAngle}deg)`,
+                                '&:hover': {
+                                    cursor: 'pointer',
+                                },
+                            }}
+                        />
+                        {/* <Avatar sx={{ width: '36px', height: '36px' }}>
                             <img src={UserAvatar} className="authenticated_user" />
-                        </Avatar>
+                        </Avatar> */}
                     </IconButton>
 
                     <Box
@@ -429,11 +451,15 @@ function AccountMenu() {
                         onClick={() => navigate('/user-profile')}
                     >
                         <Avatar
-                            src={UserAvatar}
+                            src={authenticatedInformation.userPhoto.imgUrl}
                             alt="User Avatar"
                             sx={{
                                 zIndex: 4,
                                 border: '4px solid #fff',
+                                filter:
+                                    authenticatedInformation.userPhoto &&
+                                    authenticatedInformation.userPhoto.imageStyle,
+                                transform: `rotate(${authenticatedInformation.userPhoto.imageRotationAngle}deg)`,
                                 '&:hover': {
                                     cursor: 'pointer',
                                 },
@@ -441,7 +467,8 @@ function AccountMenu() {
                         />
                         <Box>
                             <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-                                Huynh Dang Khoa
+                                {authenticatedInformation.firstName}{' '}
+                                {authenticatedInformation.lastName}
                             </Typography>
                             <Typography sx={{ fontSize: '12px' }}>Student at HCMUT</Typography>
                         </Box>

@@ -572,7 +572,7 @@ export function UserProfile() {
                             : UserAvatar
                     }
                     handleClose={handleCloseModal}
-                    imageRotationAngle={rotationAngleImage}
+                    imageRotationAngle={userLoggedInInformation.userPhoto.imageRotationAngle}
                 />
             </Modal>
         </Box>
