@@ -49,9 +49,15 @@ export const setSelectedFilterIndex = (index) => ({
     payload: index,
 });
 
-export const setSelectedImageRotationAngle = (angle) => ({
+// export const setSelectedImageRotationAngle = (angle) => ({
+//     type: SET_SELECTED_IMAGE_ROTATION_ANGLE,
+//     payload: angle,
+// });
+
+// with userId
+export const setSelectedImageRotationAngle = ({ angle, userId }) => ({
     type: SET_SELECTED_IMAGE_ROTATION_ANGLE,
-    payload: angle,
+    payload: { angle, userId },
 });
 
 // for user background image photo
