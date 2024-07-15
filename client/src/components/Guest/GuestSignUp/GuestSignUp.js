@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useId } from 'react';
 import {
     Box,
     Container,
@@ -22,8 +22,10 @@ import {
 import SnackbarShowNotifications from '../../SnackbarShowNotifications/SnackbarShowNotifications';
 import { saveAccountRegistered } from '../../../redux/ManageAccount/manageAccountAction';
 import { BirthDate } from '../../BirthDate/BirthDate';
+import DefaultBackgroundImage from '../../../assets/images/DefaultBackgroundImage.jpeg';
 
 function GuestSignUp() {
+    const userId = useId();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentDate = new Date();
@@ -80,6 +82,7 @@ function GuestSignUp() {
             // save user information
             dispatch(
                 saveAccountRegistered({
+                    userId,
                     firstName,
                     lastName,
                     birthDate: getBirthDate,
@@ -91,6 +94,13 @@ function GuestSignUp() {
                         imageStyle: null,
                         imageRotationAngle: 0,
                     },
+                    // default background image/ photo for user who logged in
+                    userBackgroundPhoto: {
+                        bgUrl: DefaultBackgroundImage,
+                        bgStyle: null,
+                        bgRotationAngle: 0,
+                    },
+
                     followers: 0,
                 }),
             );

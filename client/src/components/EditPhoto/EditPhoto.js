@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, userId } from 'react';
 import { Box, IconButton, Typography, Button, Divider, Avatar } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -28,20 +28,22 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
     const dispatch = useDispatch();
     const indexFilterImage = useSelector((state) => state.manageAccounts.selectedFilterIndex);
     const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
+    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+    console.log('rotationAngleImage: ', rotationAngleImage);
 
     const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
     const [showNotifications, setShowNotifications] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState(indexFilterImage);
     // const [rotationAngle, setRotationAngle] = useState(0);
-    const [rotationAngle, setRotationAngle] = useState(rotationAngleImage);
+    const [rotationAngle, setRotationAngle] = useState(
+        userLoggedInInformation.userPhoto.imageRotationAngle,
+    );
 
     const [notificationMessage, setNotificationMessage] = useState('');
-    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
     const handleSavePhotoEdited = () => {
         // update for userPhoto field
-        // dispatch(setLoggedInUser({ ...userLoggedInInformation, userPhoto: imgUrl }));
-
+        const userId = userLoggedInInformation.userId;
         dispatch(
             setLoggedInUser({
                 ...userLoggedInInformation,
@@ -54,7 +56,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
         );
         setAnimationClass('animate__zoomOut');
         dispatch(setSelectedFilterIndex(selectedFilter)); // save index of image selected filter
-        dispatch(setSelectedImageRotationAngle(rotationAngle));
+        dispatch(setSelectedImageRotationAngle({ angle: rotationAngle, userId }));
         // setShowNotifications(true);
         // setNotificationMessage('Change your photo successfully');
 
@@ -153,6 +155,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                         height: '350px',
                         width: '350px',
                         // borderRadius: 0,
+                        // transform: `rotate(${rotationAngle}deg)`,
                         transform: `rotate(${rotationAngle}deg)`,
                         transition: 'transform 0.5s ease-in-out',
                         [mobileScreen]: {

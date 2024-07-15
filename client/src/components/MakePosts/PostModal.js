@@ -210,7 +210,7 @@ function PostModal({ closeModal }) {
                                 filter:
                                     userLoggedInInformation.userPhoto &&
                                     userLoggedInInformation.userPhoto.imageStyle,
-                                transform: `rotate(${rotationAngleImage}deg)`,
+                                transform: `rotate(${userLoggedInInformation.userPhoto.imageRotationAngle}deg)`,
                             }}
                         />
                         <Box

@@ -2,7 +2,11 @@ import React from 'react';
 import { Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
-function BackgroundImageModal({ imgUrl, handleClose }) {
+import { useSelector } from 'react-redux';
+function ViewBackgroundImageModal({ bgImgURL, bgStyle, handleClose }) {
+    const rotationAngleBackground = useSelector(
+        (state) => state.manageAccounts.selectedBackgroundAngle,
+    );
     return (
         <Box
             sx={{
@@ -56,10 +60,10 @@ function BackgroundImageModal({ imgUrl, handleClose }) {
                     alignItems: 'center',
                 }}
             >
-                {imgUrl && (
+                {bgImgURL && (
                     <Box
                         component={'img'}
-                        src={imgUrl}
+                        src={bgImgURL}
                         sx={{
                             padding: 4,
                             // mb: 2,
@@ -67,6 +71,8 @@ function BackgroundImageModal({ imgUrl, handleClose }) {
                             width: '900px',
                             height: '350px',
                             objectFit: 'fill',
+                            transform: `rotate(${rotationAngleBackground}deg)`,
+                            filter: bgStyle,
                             [mobileScreen]: {
                                 width: '100%',
                                 height: '100%',
@@ -80,4 +86,4 @@ function BackgroundImageModal({ imgUrl, handleClose }) {
     );
 }
 
-export default BackgroundImageModal;
+export default ViewBackgroundImageModal;

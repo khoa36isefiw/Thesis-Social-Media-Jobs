@@ -8,11 +8,84 @@ import {
     SAVE_ACCOUNT_SIGNUP,
     SET_SELECTED_FILTER_INDEX,
     USER_LOGGED_IN_INFORMATION,
+    SET_SELECTED_FILTER_INDEX_BG,
+    SET_SELECTED_BG_ROTATION_ANGLE,
 } from '../actionConstant';
-
+import DefaultBackgroundImage from '../../assets/images/DefaultBackgroundImage.jpeg';
 const initialState = {
-    accountsList: [],
-    loggedInUser: 'Luna Kei',
+    // accountsList: [], // initial state
+    // use for testing data
+    accountsList: [
+        {
+            userId: 'ro',
+            firstName: 'Tido',
+            lastName: 'Kang',
+            birthDate: '12-6-2000',
+            userName: 'tido',
+            password: 'tido',
+            // default image
+            userPhoto: {
+                imgUrl: 'https://i.ytimg.com/vi/03m73QN8pc4/maxresdefault.jpg',
+                imageStyle: null,
+                imageRotationAngle: 0,
+            },
+            // default background image/ photo for user who logged in
+            userBackgroundPhoto: {
+                bgUrl: DefaultBackgroundImage,
+                bgStyle: null,
+                bgRotationAngle: 0,
+            },
+
+            followers: 0,
+        },
+        {
+            userId: 'r11',
+            firstName: 'Mahiru',
+            lastName: 'Shiina',
+            birthDate: '12-6-2003',
+            userName: 'shiina',
+            password: 'shiina',
+            // default image
+            userPhoto: {
+                imgUrl: 'https://product.hstatic.net/200000294254/product/resize_image__14__dd47143553f24606b633b898d98d5a4c_master.jpg',
+                imageStyle: null,
+                imageRotationAngle: 0,
+            },
+            // default background image/ photo for user who logged in
+            userBackgroundPhoto: {
+                bgUrl: DefaultBackgroundImage,
+                bgStyle: null,
+                bgRotationAngle: 0,
+            },
+
+            followers: 0,
+        },
+    ],
+    // loggedInUser: 'Luna Kei', // initial state
+    loggedInUser: {
+        // use for test data
+        userId: 'ro',
+        firstName: 'Tido',
+        lastName: 'Kang',
+        birthDate: '12-6-2000',
+        userName: 'tido',
+        password: 'tido',
+        // default image
+        userPhoto: {
+            imgUrl: 'https://i.ytimg.com/vi/03m73QN8pc4/maxresdefault.jpg',
+            imageStyle: null,
+            imageRotationAngle: 0,
+        },
+        // default background image/ photo for user who logged in
+        userBackgroundPhoto: {
+            bgUrl: DefaultBackgroundImage,
+            bgStyle: null,
+            bgRotationAngle: 0,
+        },
+
+        followers: 0,
+    },
+
     birthDate: '',
     day: '',
     month: '',
@@ -20,6 +93,8 @@ const initialState = {
     setViewingRights: 'All Aikotoba members',
     selectedFilterIndex: 0,
     selectedImageAngle: 0,
+    selectedBackgroundFilterIndex: 0,
+    selectedBackgroundAngle: 0,
 };
 
 export const manageAccountReducer = (state = initialState, action) => {
@@ -76,9 +151,44 @@ export const manageAccountReducer = (state = initialState, action) => {
                 selectedFilterIndex: action.payload,
             };
         case SET_SELECTED_IMAGE_ROTATION_ANGLE:
+            // return {
+            //     ...state,
+            //     selectedImageAngle: action.payload,
+            // };
+            const { angle, userId } = action.payload;
             return {
                 ...state,
-                selectedImageAngle: action.payload,
+                accountsList: state.accountsList.map((account) =>
+                    account.userId === userId
+                        ? {
+                              ...account,
+                              userPhoto: {
+                                  ...account.userPhoto,
+                                  imageRotationAngle: angle,
+                              },
+                          }
+                        : account,
+                ),
+                loggedInUser:
+                    state.loggedInUser.userId === userId
+                        ? {
+                              ...state.loggedInUser,
+                              userPhoto: {
+                                  ...state.loggedInUser.userPhoto,
+                                  imageRotationAngle: angle,
+                              },
+                          }
+                        : state.loggedInUser,
+            };
+        case SET_SELECTED_FILTER_INDEX_BG:
+            return {
+                ...state,
+                selectedBackgroundFilterIndex: action.payload,
+            };
+        case SET_SELECTED_BG_ROTATION_ANGLE:
+            return {
+                ...state,
+                selectedBackgroundAngle: action.payload,
             };
         default:
             return state;

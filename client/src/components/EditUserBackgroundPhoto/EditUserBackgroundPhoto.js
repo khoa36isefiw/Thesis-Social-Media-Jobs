@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Box, IconButton, Typography, Button, Divider, Avatar } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -8,10 +8,10 @@ import { ViewingRights } from '../EditUserProfilePhotoModal/EditUserProfilePhoto
 import { useDispatch, useSelector } from 'react-redux';
 import {
     setLoggedInUser,
-    setSelectedFilterIndex,
-    setSelectedImageRotationAngle,
+    setSelectedBackgroundFilterIndex,
+    setSelectedBackgroundRotationAngle,
 } from '../../redux/ManageAccount/manageAccountAction';
-import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
+
 import WarningIcon from '@mui/icons-material/Warning';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
@@ -24,37 +24,42 @@ const filterList = [
     { filterName: 'Sepia', filterStyle: 'sepia(60%)' },
     { filterName: 'Saturate', filterStyle: 'saturate(200%)' },
 ];
-function EditBackgroundPhoto({ imgUrl, handleCloseChange }) {
+function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
     const dispatch = useDispatch();
-    const indexFilterImage = useSelector((state) => state.manageAccounts.selectedFilterIndex);
-    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
-
+    const fileInputRef = useRef(null);
+    const [imageURL, setImageURL] = useState(null);
+    const indexFilterBackground = useSelector(
+        (state) => state.manageAccounts.selectedBackgroundFilterIndex,
+    );
+    const rotationAngleBackground = useSelector(
+        (state) => state.manageAccounts.selectedBackgroundAngle,
+    );
     const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
     const [showNotifications, setShowNotifications] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState(indexFilterImage);
+    const [selectedFilter, setSelectedFilter] = useState(indexFilterBackground);
     // const [rotationAngle, setRotationAngle] = useState(0);
-    const [rotationAngle, setRotationAngle] = useState(rotationAngleImage);
+    const [rotationAngle, setRotationAngle] = useState(rotationAngleBackground);
 
     const [notificationMessage, setNotificationMessage] = useState('');
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
-    const handleSavePhotoEdited = () => {
+    const handleSaveBgPhotoEdited = () => {
         // update for userPhoto field
-        // dispatch(setLoggedInUser({ ...userLoggedInInformation, userPhoto: imgUrl }));
+        // dispatch(setLoggedInUser({ ...userLoggedInInformation, userPhoto: bgImgUrl }));
 
         dispatch(
             setLoggedInUser({
                 ...userLoggedInInformation,
-                userPhoto: {
-                    imgUrl,
-                    imageStyle: filterList[selectedFilter].filterStyle,
-                    imageRotationAngle: rotationAngle,
+                userBackgroundPhoto: {
+                    bgUrl: imageURL ? imageURL.bgUrl : bgImgUrl,
+                    bgStyle: filterList[selectedFilter].filterStyle,
+                    bgRotationAngle: rotationAngle,
                 },
             }),
         );
         setAnimationClass('animate__zoomOut');
-        dispatch(setSelectedFilterIndex(selectedFilter)); // save index of image selected filter
-        dispatch(setSelectedImageRotationAngle(rotationAngle));
+        dispatch(setSelectedBackgroundFilterIndex(selectedFilter)); // save index of image selected filter
+        dispatch(setSelectedBackgroundRotationAngle(rotationAngle));
         // setShowNotifications(true);
         // setNotificationMessage('Change your photo successfully');
 
@@ -73,14 +78,43 @@ function EditBackgroundPhoto({ imgUrl, handleCloseChange }) {
 
     const handleRotateLeft = () => {
         // update the state based on its previous value
-        setRotationAngle((prevAngle) => prevAngle - 90);
+        setRotationAngle((prevAngle) => prevAngle - 180);
     };
     const handleRotateRight = () => {
-        setRotationAngle((prevAngle) => prevAngle + 90);
+        setRotationAngle((prevAngle) => prevAngle + 180);
     };
 
-    console.log('rotationAngle: ', rotationAngle);
-    console.log('rotationAngleImage: ', rotationAngleImage);
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0]; // Get the list of selected file
+        const reader = new FileReader();
+        reader.onload = () => {
+            const imageDataURL = reader.result;
+            // get the name of the uploaded image
+            const imageName = file.name;
+            // store both the name and URL
+            setImageURL({ name: imageName, bgUrl: imageDataURL });
+        };
+
+        dispatch(
+            setLoggedInUser({
+                ...userLoggedInInformation,
+                userBackgroundPhoto: {
+                    bgUrl: imageURL ? imageURL.bgUrl : bgImgUrl,
+                    bgStyle: null,
+                    bgRotationAngle: 0,
+                },
+            }),
+        );
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleUploadClick = () => {
+        fileInputRef.current.click();
+    };
+
     return (
         <Box
             sx={{
@@ -143,28 +177,10 @@ function EditBackgroundPhoto({ imgUrl, handleCloseChange }) {
                     backgroundColor: '#1b1f23',
                 }}
             >
-                {/* <Avatar
-                    // src={DefaultBackgroundImage}
-                    src={imgUrl}
-                    alt="Default User Image"
-                    sx={{
-                        height: '350px',
-                        width: '450px',
-                        borderRadius: 0,
-                        transform: `rotate(${rotationAngle}deg)`,
-                        transition: 'transform 0.5s ease-in-out',
-                        [mobileScreen]: {
-                            height: '200px',
-                            width: '200px',
-                        },
-                        // show filter image is selected
-                        filter: filterList[selectedFilter].filterStyle,
-                    }}
-                /> */}
                 <Box
                     component={'img'}
                     // src={DefaultBackgroundImage}
-                    src={imgUrl}
+                    src={imageURL ? imageURL.bgUrl : bgImgUrl}
                     alt="Default User Image"
                     sx={{
                         height: '350px',
@@ -217,32 +233,23 @@ function EditBackgroundPhoto({ imgUrl, handleCloseChange }) {
                                     // border: '1px solid #d0d0d0',
                                     border:
                                         selectedFilter === index
-                                            ? '1px solid #333'
+                                            ? '3px solid #333'
                                             : '1px solid transparent',
                                     // Smooth transition for border and box-shadow
-                                    transition: 'border 0.3s, box-shadow 0.3s',
+                                    transition: 'border 0.3s',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    boxShadow:
-                                        selectedFilter === index
-                                            ? '0 0 0 3px #fff'
-                                            : '0 0 0 0 transparent',
                                 }}
                             >
                                 <Avatar
-                                    src={imgUrl}
+                                    src={bgImgUrl}
                                     alt="Default User Image"
                                     sx={{
                                         height: '55px',
                                         width: '55px',
                                         borderRadius: 0,
 
-                                        // boxShadow:
-                                        //     selectedFilter === index
-                                        //         ? '0 0 0 3px #fff'
-                                        //         : '0 0 0 0 transparent',
-                                        transition: 'box-shadow 0.3s',
                                         filter: filter.filterStyle,
                                     }}
                                 />
@@ -284,22 +291,33 @@ function EditBackgroundPhoto({ imgUrl, handleCloseChange }) {
                 }}
             >
                 {/* <ViewingRights changeColor={true} /> */}
-                <Button
-                    variant="outlined"
-                    sx={{
-                        fontSize: '14px',
-                        textTransform: 'initial',
-                        fontWeight: 'bold',
-                        padding: '4px 24px',
-                        borderRadius: '24px',
-                        // mb: 2,
-                        mx: 1,
-                        // mr: '20px',
-                    }}
-                    onClick={handleSavePhotoEdited}
-                >
-                    Change photo
-                </Button>
+                <Box>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={handleImageUpload}
+                    />
+
+                    <Button
+                        variant="outlined"
+                        sx={{
+                            fontSize: '14px',
+                            textTransform: 'initial',
+                            fontWeight: 'bold',
+                            padding: '4px 24px',
+                            borderRadius: '24px',
+                            // mb: 2,
+                            mx: 1,
+                            // mr: '20px',
+                        }}
+                        onClick={handleUploadClick}
+                    >
+                        Change photo
+                    </Button>
+                </Box>
+
                 <Button
                     variant="contained"
                     sx={{
@@ -312,37 +330,13 @@ function EditBackgroundPhoto({ imgUrl, handleCloseChange }) {
                         mx: 1,
                         // mr: '20px',
                     }}
-                    onClick={handleSavePhotoEdited}
+                    onClick={handleSaveBgPhotoEdited}
                 >
-                    Save
+                    Apply
                 </Button>
             </Box>
-
-            {showNotifications && (
-                <SnackbarShowNotifications
-                    // mainText="Create account successfully!"
-                    // isOpen={showNotifications}
-                    // onClose={handleCloseSnackbar}
-                    // // warning
-                    // // icon={<WarningIcon sx={{ fontSize: '24px', color: 'orange' }} />}
-                    mainText={notificationMessage}
-                    isOpen={showNotifications}
-                    onClose={handleCloseSnackbar}
-                    warning={notificationMessage !== 'Create account successfully!'}
-                    icon={
-                        notificationMessage !== 'Create account successfully!' && (
-                            <WarningIcon
-                                sx={{
-                                    fontSize: '24px',
-                                    color: 'orange',
-                                }}
-                            />
-                        )
-                    }
-                />
-            )}
         </Box>
     );
 }
 
-export default EditBackgroundPhoto;
+export default EditUserBackgroundPhoto;

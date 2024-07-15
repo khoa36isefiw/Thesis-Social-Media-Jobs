@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Box, IconButton, Typography, Button, Divider, Avatar } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
@@ -7,9 +7,12 @@ import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 
 import Modal from '@mui/material/Modal';
 
-import EditBackgroundPhoto from '../EditBackgroundPhoto/EditBackgroundPhoto';
+import ChangeUserBackgroundPhoto from '../EditUserBackgroundPhoto/EditUserBackgroundPhoto';
 
-function EditUserBackgroundImage({ imgUrl, handleClose }) {
+function UploadUserBackgroundImage({ bgImageURL, bgStyle, bgRotateAngle, handleClose }) {
+    const fileInputRef = useRef(null);
+    const [imageURL, setImageURL] = useState(null);
+
     const [openChangeBackgroundImage, setOpenChangeBackgroundImage] = useState(false);
     const handleOpenModal = () => {
         setOpenChangeBackgroundImage(true);
@@ -18,6 +21,28 @@ function EditUserBackgroundImage({ imgUrl, handleClose }) {
     const handleCloseModal = () => {
         setOpenChangeBackgroundImage(false);
     };
+
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0]; // Get the list of selected file
+        const reader = new FileReader();
+        reader.onload = () => {
+            const imageDataURL = reader.result;
+            // get the name of the uploaded image
+            const imageName = file.name;
+            // store both the name and URL
+            setImageURL({ name: imageName, url: imageDataURL });
+            setOpenChangeBackgroundImage(true);
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleUploadClick = () => {
+        fileInputRef.current.click();
+    };
+
     return (
         <Box
             sx={{
@@ -78,11 +103,13 @@ function EditUserBackgroundImage({ imgUrl, handleClose }) {
                 }}
             >
                 <Avatar
-                    src={DefaultBackgroundImage}
+                    src={bgImageURL}
                     alt="Default User Background Image"
                     sx={{
                         height: '256px',
                         width: '256px',
+                        filter: bgStyle,
+                        transform: `rotate(${bgRotateAngle}deg)`,
                         [mobileScreen]: {
                             height: '200px',
                             width: '200px',
@@ -106,7 +133,30 @@ function EditUserBackgroundImage({ imgUrl, handleClose }) {
                 </Box>
             </Box>
             <Divider sx={{ mt: 2, mb: 2 }} />
-            <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                <Button
+                    variant="outlined"
+                    sx={{
+                        fontSize: '14px',
+                        textTransform: 'initial',
+                        fontWeight: 'bold',
+                        padding: '4px 24px',
+                        borderRadius: '24px',
+                        mb: 2,
+                        mx: 1,
+                        // mr: '20px',
+                    }}
+                    onClick={handleOpenModal}
+                >
+                    Edit Background
+                </Button>
+                <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleImageUpload}
+                />
                 <Button
                     variant="contained"
                     sx={{
@@ -117,16 +167,17 @@ function EditUserBackgroundImage({ imgUrl, handleClose }) {
                         borderRadius: '24px',
                         mb: 2,
                         mx: 2,
-                        mr: '20px',
+                        // mr: '20px',
                     }}
-                    onClick={handleOpenModal}
+                    onClick={handleUploadClick}
                 >
-                    Edit profile background
+                    Upload Background
                 </Button>
             </Box>
+
             <Modal open={openChangeBackgroundImage} onClose={handleCloseModal}>
-                <EditBackgroundPhoto
-                    imgUrl={imgUrl !== null}
+                <ChangeUserBackgroundPhoto
+                    bgImgUrl={imageURL !== null ? imageURL.url : bgImageURL}
                     handleCloseChange={handleCloseModal}
                 />
             </Modal>
@@ -134,4 +185,4 @@ function EditUserBackgroundImage({ imgUrl, handleClose }) {
     );
 }
 
-export default EditUserBackgroundImage;
+export default UploadUserBackgroundImage;
