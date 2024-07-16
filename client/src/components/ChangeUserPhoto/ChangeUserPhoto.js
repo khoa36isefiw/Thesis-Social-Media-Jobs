@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useId, useEffect } from 'react';
 import { Box, IconButton, Divider, Button, Avatar, Modal } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
@@ -6,11 +6,25 @@ import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography'
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import { modalAnimation } from '../AnimationEffects/AnimationEffects';
 import EditPhoto from '../EditPhoto/EditPhoto';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    setLoggedInUser,
+    setSelectedFilterIndex,
+    setSelectedImageRotationAngle,
+} from '../../redux/ManageAccount/manageAccountAction';
 
 function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
+    const dispatch = useDispatch();
+
     const fileInputRef = useRef(null);
     const [imageURL, setImageURL] = useState(null);
+
     const [openEditPhotoModal, setOpenEditPhotoModal] = useState(false);
+    const authenticatedInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+    // get the rotate of image, if user uploads image then set the rotate angle to zero
+    // new image is uploaded into edit photo
+    const [rotate, setRotate] = useState(authenticatedInformation.userPhoto.imageRotationAngle); // get the current image rotate angle
+
     const handleImageUpload = (event) => {
         const file = event.target.files[0]; // Get the list of selected file
         const reader = new FileReader();
@@ -19,7 +33,9 @@ function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
             // get the name of the uploaded image
             const imageName = file.name;
             // store both the name and URL
-            setImageURL({ name: imageName, url: imageDataURL });
+            setImageURL({ name: imageName, url: imageDataURL }); // initial state
+
+            setRotate(0); // rotate = 0 when new image is uploaded
             setOpenEditPhotoModal(true);
         };
 
@@ -35,6 +51,11 @@ function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
     const handleCloseEditPhotoModal = () => {
         setOpenEditPhotoModal(false);
     };
+
+    // // af
+    // useEffect(() => {
+    //     setRotate(0);
+    // }, [handleImageUpload]);
 
     return (
         <Box
@@ -206,8 +227,10 @@ function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
             </Box>
             <Modal open={openEditPhotoModal} onClose={handleCloseEditPhotoModal}>
                 <EditPhoto
-                    imgUrl={imageURL !== null && imageURL.url}
+                    imageUrl={imageURL && imageURL.url}
+                    // imageUrl={imageURL && imageURL}
                     handleCloseChange={handleCloseEditPhotoModal}
+                    rotate={rotate}
                 />
             </Modal>
         </Box>

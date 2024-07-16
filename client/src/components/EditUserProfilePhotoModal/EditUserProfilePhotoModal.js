@@ -20,7 +20,7 @@ import EditPhoto from '../EditPhoto/EditPhoto';
 import { ProfileButton } from '../ProfileButton/ProfileButton';
 
 function EditUserProfilePhotoModal({ userImageURL, handleClose, imageRotationAngle }) {
-    console.log('userImageURL: ', userImageURL);
+    // console.log('userImageURL: ', userImageURL);
     const [activeModal, setActiveModal] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -233,7 +233,10 @@ function EditUserProfilePhotoModal({ userImageURL, handleClose, imageRotationAng
                 </Modal>
 
                 <Modal open={activeModal === 'editPhoto'} onClose={handleCloseModal}>
-                    <EditPhoto imgUrl={userImageURL.imgUrl} handleCloseChange={handleCloseModal} />
+                    <EditPhoto
+                        imageUrl={userImageURL.imgUrl}
+                        handleCloseChange={handleCloseModal}
+                    />
                 </Modal>
             </Box>
         </Modal>
@@ -275,7 +278,7 @@ export function ViewingRights({ changeColor = false }) {
         handleClose();
     };
 
-    console.log('selectedRight: ', selectedRight);
+    // console.log('selectedRight: ', selectedRight);
 
     return (
         <Box>
@@ -410,7 +413,7 @@ export function ViewingRights({ changeColor = false }) {
 }
 
 const PrivacyButtonPhoto = ({ handleOnClick, textAction, subTextAction, selected }) => {
-    console.log('selected in Edit: ', selected);
+    // console.log('selected in Edit: ', selected);
     return (
         <Box>
             <Box

@@ -1,4 +1,4 @@
-import React, { useState, userId } from 'react';
+import React, { useEffect, useState, userId } from 'react';
 import { Box, IconButton, Typography, Button, Divider, Avatar } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -24,22 +24,26 @@ const filterList = [
     { filterName: 'Sepia', filterStyle: 'sepia(60%)' },
     { filterName: 'Saturate', filterStyle: 'saturate(200%)' },
 ];
-function EditPhoto({ imgUrl, handleCloseChange }) {
+function EditPhoto({ imageUrl, handleCloseChange, rotate }) {
+    console.log('rotate: ', rotate);
     const dispatch = useDispatch();
     const indexFilterImage = useSelector((state) => state.manageAccounts.selectedFilterIndex);
     const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
-    console.log('rotationAngleImage: ', rotationAngleImage);
+    // console.log('rotationAngleImage: ', rotationAngleImage);
 
     const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
     const [showNotifications, setShowNotifications] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState(indexFilterImage);
     // const [rotationAngle, setRotationAngle] = useState(0);
-    const [rotationAngle, setRotationAngle] = useState(
-        userLoggedInInformation.userPhoto.imageRotationAngle,
-    );
-
     const [notificationMessage, setNotificationMessage] = useState('');
+    // show the current rotation of user image in edit modal
+
+    // if rotate is undefine uses userLoggedInInformation.userPhoto.imageRotationAngle
+    // else (new image uploaded) --> set rotationangle = 0
+    const [rotationAngle, setRotationAngle] = useState(
+        rotate !== undefined ? rotate : userLoggedInInformation.userPhoto.imageRotationAngle,
+    );
 
     const handleSavePhotoEdited = () => {
         // update for userPhoto field
@@ -48,7 +52,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
             setLoggedInUser({
                 ...userLoggedInInformation,
                 userPhoto: {
-                    imgUrl,
+                    imgUrl: imageUrl,
                     imageStyle: filterList[selectedFilter].filterStyle,
                     imageRotationAngle: rotationAngle,
                 },
@@ -81,8 +85,13 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
         setRotationAngle((prevAngle) => prevAngle + 90);
     };
 
-    console.log('rotationAngle: ', rotationAngle);
-    console.log('rotationAngleImage: ', rotationAngleImage);
+    // const handleCloseEditPhotoModal = () => {
+    //     setRotationAngle(userLoggedInInformation.userPhoto.imageRotationAngle);
+    //     handleCloseChange();
+    // };
+
+    // console.log('rotationAngle: ', rotationAngle);
+    // console.log('rotationAngleImage: ', rotationAngleImage);
     return (
         <Box
             sx={{
@@ -130,6 +139,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                         },
                     }}
                     onClick={handleCloseChange}
+                    // onClick={handleCloseEditPhotoModal}
                 >
                     <CloseIcon fontSize="large" />
                 </IconButton>
@@ -148,8 +158,8 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                 }}
             >
                 <Avatar
-                    // src={DefaultBackgroundImage}
-                    src={imgUrl}
+                    // src={imageUrl}
+                    src={imageUrl}
                     alt="Default User Image"
                     sx={{
                         height: '350px',
@@ -215,7 +225,7 @@ function EditPhoto({ imgUrl, handleCloseChange }) {
                                 }}
                             >
                                 <Avatar
-                                    src={imgUrl}
+                                    src={imageUrl}
                                     alt="Default User Image"
                                     sx={{
                                         height: '55px',

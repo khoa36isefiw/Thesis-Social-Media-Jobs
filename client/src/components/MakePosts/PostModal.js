@@ -24,6 +24,7 @@ function PostModal({ closeModal }) {
     };
     const startAPostTextFieldRef = useRef(null);
     const [editorText, setEditorText] = useState('');
+    // save both images and videos
     const [imageURL, setImageURL] = useState([]);
 
     const [videoUrl, setVideoUrl] = useState('');
@@ -139,6 +140,8 @@ function PostModal({ closeModal }) {
         }
         closeModal();
     };
+
+    console.log('Image url after upload: ', imageURL);
 
     return (
         <Box

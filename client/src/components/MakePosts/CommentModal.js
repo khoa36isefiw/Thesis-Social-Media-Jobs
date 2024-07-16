@@ -31,6 +31,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { CustomTypography } from './Post';
 import { addComment } from '../../redux/ManagePost/managePostAction';
 import { calculateTimeElapsed } from '../HandleTime/HandleTime';
+import ShowVideoUploaded from '../ShowVideoUploaded/ShowVideoUploaded';
 // Customize styles for Typography in this Component
 export const ActionsTypography = styled(Typography)(({}) => ({
     color: '#000000BF',
@@ -76,7 +77,7 @@ function CommentModal({
     // concatenate 2 strings and concat them max 200 characters
     const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
-    // get the first image uploaded
+    // get the first image uploaded from imageUrl list
     const currentImage = Array.isArray(imageUrl) ? imageUrl[currentImageIndex] : imageUrl;
     console.log('currentImage: ', currentImage);
 
@@ -277,25 +278,30 @@ function CommentModal({
                         },
                     }}
                 >
-                    <Box
-                        component="img"
-                        src={Array.isArray(imageUrl) ? currentImage.url : imageUrl}
-                        alt="Profile Image"
-                        sx={{
-                            width: originalWidth,
-                            height: originalHeight,
-                            objectFit: 'cover',
-                            mt: '6px',
-                            [ipadProScreen]: {
-                                width: '100%',
-                                height: 'auto',
-                            },
-                            [tabletScreen]: {
-                                width: '100%',
-                                height: 'auto',
-                            },
-                        }}
-                    />
+                    {currentImage.url.includes('video') ? (
+                        <ShowVideoUploaded width={400} height={300} srcVideo={currentImage.url} />
+                    ) : (
+                        <Box
+                            component="img"
+                            src={Array.isArray(imageUrl) ? currentImage.url : imageUrl}
+                            alt="Profile Image"
+                            sx={{
+                                width: originalWidth,
+                                height: originalHeight,
+                                objectFit: 'cover',
+                                mt: '6px',
+                                [ipadProScreen]: {
+                                    width: '100%',
+                                    height: 'auto',
+                                },
+                                [tabletScreen]: {
+                                    width: '100%',
+                                    height: 'auto',
+                                },
+                            }}
+                        />
+                    )}
+
                     {/* 2 buttons: next and previous image */}
                     {Array.isArray(imageUrl) && imageUrl.length > 1 && (
                         <Box

@@ -92,7 +92,7 @@ const initialState = {
     year: '',
     setViewingRights: 'All Aikotoba members',
     selectedFilterIndex: 0,
-    selectedImageAngle: 0,
+    selectedImageAngle: 0, // get the angle of the selected image
     selectedBackgroundFilterIndex: 0,
     selectedBackgroundAngle: 0,
 };
@@ -158,6 +158,7 @@ export const manageAccountReducer = (state = initialState, action) => {
             const { angle, userId } = action.payload;
             return {
                 ...state,
+                // update angle for user
                 accountsList: state.accountsList.map((account) =>
                     account.userId === userId
                         ? {
@@ -169,6 +170,7 @@ export const manageAccountReducer = (state = initialState, action) => {
                           }
                         : account,
                 ),
+                // update angle for authenticated user
                 loggedInUser:
                     state.loggedInUser.userId === userId
                         ? {
