@@ -466,7 +466,13 @@ function AccountMenu() {
                             }}
                         />
                         <Box>
-                            <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                            <Typography
+                                sx={{
+                                    fontSize: '14px',
+                                    fontWeight: 'bold',
+                                    textTransform: 'capitalize',
+                                }}
+                            >
                                 {authenticatedInformation.firstName}{' '}
                                 {authenticatedInformation.lastName}
                             </Typography>
