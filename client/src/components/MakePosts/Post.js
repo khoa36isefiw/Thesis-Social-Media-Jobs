@@ -26,6 +26,7 @@ import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 
 import PublicIcon from '@mui/icons-material/Public';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
+import ShowVideoUploaded from '../ShowVideoUploaded/ShowVideoUploaded';
 
 // definde typograph for this component
 export const CustomTypography = ({ children }) => (
@@ -236,11 +237,7 @@ function Post({
         return () => clearInterval(intervalId);
     }, []);
 
-    // console.log('time: ', time);
-    // const d = new Date('2024-06-29T07:18:19.309Z');
-    // console.log('get Hours: ', d.getHours());
-    // console.log('get Minutes: ', d.getMinutes());
-    // console.log('get Seconds: ', d.getSeconds());
+    console.log('check list image posted: ', imageUrl);
 
     return (
         <Box>
@@ -290,7 +287,6 @@ function Post({
                                 </Typography>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
-                                        {/* {time} */}
                                         {/* update and show the current of posts */}
                                         {calculateTimeElapsed(time)}
                                     </Typography>
@@ -304,12 +300,6 @@ function Post({
                                         }}
                                     />
                                     <IconButton sx={{ padding: 0 }}>
-                                        {/* {getPrivacySelected === 'Anyone' ? (
-                                            <PublicIcon />
-                                        ) : (
-                                            <Diversity3Icon />
-                                        )} */}
-                                        {/* based on posted data*/}
                                         {viewPostPermission ? <PublicIcon /> : <Diversity3Icon />}
                                     </IconButton>
                                 </Box>
@@ -450,7 +440,7 @@ function Post({
                                                         ? '2px solid white'
                                                         : null,
                                                 position: 'relative',
-                                                bgcolor: blue[100],
+                                                // bgcolor: blue[100],
                                                 // center for image
                                                 display: 'flex',
                                                 alignItems: 'center',
@@ -458,21 +448,30 @@ function Post({
                                                 overflow: 'hidden',
                                             }}
                                         >
-                                            <Avatar
-                                                src={image.url}
-                                                onClick={handleImageClick}
-                                                sx={{
-                                                    height: '320px',
-                                                    width: '100%',
-                                                    borderRadius: '0',
-                                                    objectFit: 'cover',
-                                                    // m: 1,
-                                                    '&:hover': {
-                                                        cursor: 'pointer',
-                                                    },
-                                                }}
-                                                alt="Image Upload by User"
-                                            />
+                                            {image.url.includes('video') ? (
+                                                <ShowVideoUploaded
+                                                    width={400}
+                                                    height={300}
+                                                    srcVideo={image.url}
+                                                />
+                                            ) : (
+                                                <Avatar
+                                                    src={image.url}
+                                                    onClick={handleImageClick}
+                                                    sx={{
+                                                        height: '320px',
+                                                        width: '100%',
+                                                        borderRadius: '0',
+                                                        objectFit: 'cover',
+                                                        // m: 1,
+                                                        '&:hover': {
+                                                            cursor: 'pointer',
+                                                        },
+                                                    }}
+                                                    alt="Image Upload by User"
+                                                />
+                                            )}
+
                                             {/* the last image (4th) and image uploaded has more than 4 images */}
                                             {/* show the number of images after images 4th */}
                                             {index === 3 && imageUrl.length > 4 && (
