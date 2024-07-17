@@ -60,6 +60,7 @@ function CommentModal({
     // check if the content of post is an array
     const contentArray = Array.isArray(postContent) ? postContent : [postContent];
     const commentList = useSelector((state) => state.managePost.comments[postId]);
+
     const commentModalTextFieldRef = useRef(null);
     const location = useLocation();
     // get the initial width and height of the image
@@ -79,7 +80,6 @@ function CommentModal({
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
     // get the first image uploaded from imageUrl list
     const currentImage = Array.isArray(imageUrl) ? imageUrl[currentImageIndex] : imageUrl;
-    console.log('currentImage: ', currentImage);
 
     useEffect(() => {
         const handleResize = () => {

@@ -88,9 +88,9 @@ function Post({
     // console.log('getCommentListLength: ', getCommentListLength);
 
     const toggleExpanded = () => {
-        console.log('Before clicking: ', expanded);
+        // console.log('Before clicking: ', expanded);
         setExpanded(!expanded);
-        console.log('After clicking: ', expanded);
+        // console.log('After clicking: ', expanded);
     };
 
     const handleImageClick = () => {
@@ -237,7 +237,7 @@ function Post({
         return () => clearInterval(intervalId);
     }, []);
 
-    console.log('check list image posted: ', imageUrl);
+    // console.log('check list image posted: ', imageUrl);
 
     return (
         <Box>
