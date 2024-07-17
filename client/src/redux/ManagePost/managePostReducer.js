@@ -5,12 +5,15 @@ import {
     GET_REACTION_IN_COMMENT_ON_POST,
     GET_REACTION_ON_POST,
     POST_SETTINGS_PRIVACY,
+    REPLY_COMMENTS,
     SAVE_PRIVACY_SELECTED,
 } from '../actionConstant';
 
 const initialState = {
     reactions: {},
     comments: {},
+    repliedComments: {}, // initial state
+    // repliedComments: [],
     commentReactions: {},
     listPostsData: [],
     commentControlSelection: 'Anyone', // include 2 cases: Anyone, connections only, no one || connections only, no one
@@ -33,7 +36,8 @@ export const managePostReducer = (state = initialState, action) => {
             };
 
         case ADD_COMMENT:
-            const { postID, comment } = action.payload;
+            const { postID, comment, commentID, repliedComment } = action.payload;
+            console.log('previous comments: ', state.comments);
             return {
                 ...state,
                 comments: {
@@ -41,7 +45,26 @@ export const managePostReducer = (state = initialState, action) => {
                     [postID]: [...(state.comments[postID] || []), comment],
                 },
             };
-
+        case REPLY_COMMENTS:
+            // const { commentID: cmtID, replyComments: replyCmt } = action.payload;
+            // return {
+            //     ...state,
+            //     comments: {
+            //         ...state.comments,
+            //         repliedComments: {
+            //             ...state.repliedComments,
+            //             [cmtID]: [...(state.repliedComments[cmtID] || []), replyCmt],
+            //         },
+            //     },
+            // };
+            const { commentID: cmtID, replyComments: replyCmt } = action.payload;
+            return {
+                ...state,
+                repliedComments: {
+                    ...state.repliedComments,
+                    [cmtID]: [...(state.repliedComments[cmtID] || []), replyCmt],
+                },
+            };
         case GET_REACTION_IN_COMMENT_ON_POST:
             const { postID: pID, commentId, reaction: cReaction } = action.payload;
             return {

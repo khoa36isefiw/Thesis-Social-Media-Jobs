@@ -36,6 +36,7 @@ export const SAVE_PRIVACY_SELECTED = 'SAVE_PRIVACY_SELECTED';
 
 // comment on post
 export const ADD_COMMENT = 'ADD_COMMENT';
+export const REPLY_COMMENTS = 'REPLY_COMMENTS';
 
 // sign up account
 export const SAVE_ACCOUNT_SIGNUP = 'SAVE_ACCOUNT_SIGNUP';
