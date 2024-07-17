@@ -198,132 +198,140 @@ export function CommentsData({ postId, imageUrl }) {
     console.log('commentList: ', commentList);
     console.log('replyCommentList: ', replyCommentList);
 
-    const showResponsesCommentList = () => {
+    const showResponsesCommentList = (commentIdx) => {
         return (
             <React.Fragment>
                 {Object.entries(replyCommentList).map(([key, value]) =>
-                    value.map((reply, index) => (
-                        <Box
-                            sx={{ display: 'flex', flexDirection: 'column' }}
-                            key={`${key}-${index}`}
-                        >
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    mt: 1,
-                                    ml: 6,
-                                }}
-                            >
-                                {/* <Avatar
-                                    src={
-                                        'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
-                                    }
-                                    alt="User Image"
-                                    sx={{
-                                        height: '32px',
-                                        width: '32px',
-                                        objectFit: 'cover',
-                                    }}
-                                /> */}
-                                <Avatar
-                                    src={
-                                        authenticatedInformation.userPhoto &&
-                                        authenticatedInformation.userPhoto.imgUrl
-                                    }
-                                    alt="User Avatar"
-                                    sx={{
-                                        height: '36px',
-                                        width: '36px',
-                                        zIndex: 7,
-                                        filter:
-                                            authenticatedInformation.userPhoto &&
-                                            authenticatedInformation.userPhoto.imageStyle,
-                                        transform: `rotate(${authenticatedInformation.userPhoto.imageRotationAngle}deg)`,
-                                    }}
-                                />
+                    value.map((reply, index) => {
+                        // conver key of Object to a number
+                        console.log('type of key is: ', typeof key);
+                        // can't compare directly key here is a string not a number
+                        const keyAsNumber = Number(key);
+                        console.log('type of key after converting: ', typeof keyAsNumber);
+                        console.log('comment index: ', commentIdx);
+                        console.log('commentIdx === key: ', commentIdx === keyAsNumber);
 
-                                <Box
-                                    sx={{
-                                        border: '1px solid #f2f2f2',
-                                        maxHeight: '150px',
-                                        width: '100%',
-                                        p: 1,
-                                        borderRadius: '10px',
-                                        backgroundColor: '#f2f2f2',
-                                        ml: 1,
-                                    }}
-                                >
-                                    <ActionsOnComment
-                                        userName={
-                                            authenticatedInformation.firstName +
-                                            ' ' +
-                                            authenticatedInformation.lastName
-                                        }
-                                        timePostComment={'1m'}
-                                    />
-                                    <Box>
-                                        {/* if reply is an array */}
-                                        {Array.isArray(reply) ? (
-                                            reply.map((item, subIndex) => (
-                                                <React.Fragment key={subIndex}>
-                                                    <Typography
-                                                        component="span"
-                                                        sx={{
-                                                            display: 'block',
-                                                            wordBreak: 'break-word',
-                                                            whiteSpace: 'pre-wrap',
-                                                            fontSize: '14px',
-                                                            [tabletScreen]: {
-                                                                fontSize: '13.5px',
-                                                            },
-                                                        }}
-                                                    >
-                                                        {item}
-                                                    </Typography>
-                                                </React.Fragment>
-                                            ))
-                                        ) : (
-                                            <Typography
-                                                component="span"
+                        return (
+                            <Box
+                                sx={{ display: 'flex', flexDirection: 'column' }}
+                                key={`${key}-${index}`}
+                            >
+                                {commentIdx === keyAsNumber && (
+                                    <React.Fragment>
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                mt: 1,
+                                                ml: 6,
+                                            }}
+                                        >
+                                            <Avatar
+                                                src={
+                                                    authenticatedInformation.userPhoto &&
+                                                    authenticatedInformation.userPhoto.imgUrl
+                                                }
+                                                alt="User Avatar"
                                                 sx={{
-                                                    display: 'block',
-                                                    wordBreak: 'break-word',
-                                                    whiteSpace: 'pre-wrap',
-                                                    fontSize: '14px',
-                                                    [tabletScreen]: {
-                                                        fontSize: '13.5px',
-                                                    },
+                                                    height: '36px',
+                                                    width: '36px',
+                                                    zIndex: 7,
+                                                    filter:
+                                                        authenticatedInformation.userPhoto &&
+                                                        authenticatedInformation.userPhoto
+                                                            .imageStyle,
+                                                    transform: `rotate(${authenticatedInformation.userPhoto.imageRotationAngle}deg)`,
+                                                }}
+                                            />
+
+                                            <Box
+                                                sx={{
+                                                    border: '1px solid #f2f2f2',
+                                                    maxHeight: '150px',
+                                                    width: '100%',
+                                                    p: 1,
+                                                    borderRadius: '10px',
+                                                    backgroundColor: '#f2f2f2',
+                                                    ml: 1,
                                                 }}
                                             >
-                                                {reply}
-                                            </Typography>
-                                        )}
-                                    </Box>
-                                </Box>
+                                                <ActionsOnComment
+                                                    userName={
+                                                        authenticatedInformation.firstName +
+                                                        ' ' +
+                                                        authenticatedInformation.lastName
+                                                    }
+                                                    timePostComment={'1m'}
+                                                />
+                                                <Box>
+                                                    {/* if reply is an array */}
+                                                    {Array.isArray(reply) ? (
+                                                        reply.map((item, subIndex) => (
+                                                            <React.Fragment key={subIndex}>
+                                                                <Typography
+                                                                    component="span"
+                                                                    sx={{
+                                                                        display: 'block',
+                                                                        wordBreak: 'break-word',
+                                                                        whiteSpace: 'pre-wrap',
+                                                                        fontSize: '14px',
+                                                                        [tabletScreen]: {
+                                                                            fontSize: '13.5px',
+                                                                        },
+                                                                    }}
+                                                                >
+                                                                    {item}
+                                                                </Typography>
+                                                            </React.Fragment>
+                                                        ))
+                                                    ) : (
+                                                        <Typography
+                                                            component="span"
+                                                            sx={{
+                                                                display: 'block',
+                                                                wordBreak: 'break-word',
+                                                                whiteSpace: 'pre-wrap',
+                                                                fontSize: '14px',
+                                                                [tabletScreen]: {
+                                                                    fontSize: '13.5px',
+                                                                },
+                                                            }}
+                                                        >
+                                                            {reply}
+                                                        </Typography>
+                                                    )}
+                                                </Box>
+                                            </Box>
+                                        </Box>
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                ml: 11,
+                                                mt: '4px',
+                                                alignItems: 'center',
+                                                width: '220px',
+                                                // justifyContent: 'space-between',
+                                            }}
+                                        >
+                                            <ActionsTypography sx={{ ml: 1 }}>
+                                                Like
+                                            </ActionsTypography>
+                                            <Box
+                                                sx={{
+                                                    width: '1px',
+                                                    height: '21px',
+                                                    bgcolor: 'gray',
+                                                    ml: 2,
+                                                }}
+                                            />
+                                            <ActionsTypography sx={{ ml: 2 }}>
+                                                Reply
+                                            </ActionsTypography>
+                                        </Box>
+                                    </React.Fragment>
+                                )}
                             </Box>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    ml: 11,
-                                    mt: '4px',
-                                    alignItems: 'center',
-                                    width: '220px',
-                                    // justifyContent: 'space-between',
-                                }}
-                            >
-                                <ActionsTypography sx={{ ml: 1 }}>Like</ActionsTypography>
-                                <Box
-                                    sx={{
-                                        width: '1px',
-                                        height: '21px',
-                                        bgcolor: 'gray',
-                                        ml: 2,
-                                    }}
-                                />
-                                <ActionsTypography sx={{ ml: 2 }}>Reply</ActionsTypography>
-                            </Box>
-                        </Box>
-                    )),
+                        );
+                    }),
                 )}
             </React.Fragment>
         );
@@ -715,7 +723,7 @@ export function CommentsData({ postId, imageUrl }) {
                                 1 Reply
                             </ActionsTypography>
                         </Box>
-                        {showResponsesCommentList()}
+                        {showResponsesCommentList(index)}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Box
                                 sx={{
