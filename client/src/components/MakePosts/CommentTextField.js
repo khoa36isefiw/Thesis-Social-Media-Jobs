@@ -43,7 +43,7 @@ export const CommentTextField = ({
     const [openModalImage, setOpenModalImage] = useState(false);
     const [isBold, setIsBold] = useState(true);
 
-    console.log('imageURLUploaded: ', imageURLUploaded);
+    // console.log('imageURLUploaded: ', imageURLUploaded);
     useEffect(() => {
         if (inputRef && inputRef.current) {
             inputRef.current.focus();

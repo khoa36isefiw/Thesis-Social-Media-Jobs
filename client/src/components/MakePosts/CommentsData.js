@@ -9,17 +9,26 @@ import ImageDetailInMessage from '../Messaging/ImageDetailInMessage';
 import { ActionsTypography } from './CommentModal';
 import { blue } from '@mui/material/colors';
 import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
-import { setReactionOnCommentInPost } from '../../redux/ManagePost/managePostAction';
+import {
+    addComment,
+    replyComments,
+    setReactionOnCommentInPost,
+} from '../../redux/ManagePost/managePostAction';
 import { CommentTextField } from './CommentTextField';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import { commentMenuSettings } from './Data/PostMenuSettingDatas';
 import PostMenuSettings from './PostMenuSettings';
 import { ActionsOnComment } from './ActionsOnComment';
+import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 
 export function CommentsData({ postId, imageUrl }) {
+    const authenticatedInformation = useLoggedInUser();
     const dispatch = useDispatch();
     const replyTextFieldRef = useRef(null);
     const commentList = useSelector((state) => state.managePost.comments[postId]);
+    // get comment reply the comment in post
+    const replyCommentList = useSelector((state) => state.managePost.repliedComments);
+
     const reactionList = useSelector((state) => state.managePost.commentReactions[postId]);
     // const reactionList = useSelector((state) => state.managePost.commentReactions);
     const [hoverStatus, setHoverStatus] = useState({ postId: null, commentId: null });
@@ -61,7 +70,7 @@ export function CommentsData({ postId, imageUrl }) {
     const renderReactionIcon = (commentId) => {
         const reaction = reactionList?.[commentId]; // get data from object
         const reactionCount = reaction ? 1 : 0;
-        console.log('reaction: ', reaction);
+        // console.log('reaction: ', reaction);
         return reaction ? (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Box
@@ -149,6 +158,175 @@ export function CommentsData({ postId, imageUrl }) {
     const handleCloseCommentMenuSettings = () => {
         setMenuStatus(null);
         // setMenuStatus({ anchorEl: null, postId: null });
+    };
+
+    const handleCommentTextFieldChange = () => {
+        const commentTextValue = replyTextFieldRef.current.value;
+
+        setIsEmptyReplyField(commentTextValue.trim() === '');
+    };
+
+    const handleSubmitReplyComment = (commentId) => {
+        // get the current string in input
+        const replyCommentText = replyTextFieldRef.current.value.trim();
+
+        if (!replyCommentText && !imageURL) {
+            // If there's no text or image, do not proceed
+            return;
+        }
+
+        let repliedCommentsSent = null;
+        if (imageURL) {
+            // if it has image
+            repliedCommentsSent = [replyCommentText, imageURL.url];
+            setImageURL(null); // Clear the image URL after use
+        } else {
+            // doesn't have image
+            repliedCommentsSent = [replyCommentText];
+        }
+
+        // repliedCommentsSent is not an empty string before dispatching
+        if (repliedCommentsSent && repliedCommentsSent.length > 0) {
+            dispatch(replyComments(commentId, repliedCommentsSent));
+            replyTextFieldRef.current.value = ''; // remove the input after submitting
+        }
+
+        setShowIconUploadImage(true);
+        // console.log('comment reply the comment: ', replyCommentText);
+    };
+
+    console.log('commentList: ', commentList);
+    console.log('replyCommentList: ', replyCommentList);
+
+    const showResponsesCommentList = () => {
+        return (
+            <React.Fragment>
+                {Object.entries(replyCommentList).map(([key, value]) =>
+                    value.map((reply, index) => (
+                        <Box
+                            sx={{ display: 'flex', flexDirection: 'column' }}
+                            key={`${key}-${index}`}
+                        >
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    mt: 1,
+                                    ml: 6,
+                                }}
+                            >
+                                {/* <Avatar
+                                    src={
+                                        'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
+                                    }
+                                    alt="User Image"
+                                    sx={{
+                                        height: '32px',
+                                        width: '32px',
+                                        objectFit: 'cover',
+                                    }}
+                                /> */}
+                                <Avatar
+                                    src={
+                                        authenticatedInformation.userPhoto &&
+                                        authenticatedInformation.userPhoto.imgUrl
+                                    }
+                                    alt="User Avatar"
+                                    sx={{
+                                        height: '36px',
+                                        width: '36px',
+                                        zIndex: 7,
+                                        filter:
+                                            authenticatedInformation.userPhoto &&
+                                            authenticatedInformation.userPhoto.imageStyle,
+                                        transform: `rotate(${authenticatedInformation.userPhoto.imageRotationAngle}deg)`,
+                                    }}
+                                />
+
+                                <Box
+                                    sx={{
+                                        border: '1px solid #f2f2f2',
+                                        maxHeight: '150px',
+                                        width: '100%',
+                                        p: 1,
+                                        borderRadius: '10px',
+                                        backgroundColor: '#f2f2f2',
+                                        ml: 1,
+                                    }}
+                                >
+                                    <ActionsOnComment
+                                        userName={
+                                            authenticatedInformation.firstName +
+                                            ' ' +
+                                            authenticatedInformation.lastName
+                                        }
+                                        timePostComment={'1m'}
+                                    />
+                                    <Box>
+                                        {/* if reply is an array */}
+                                        {Array.isArray(reply) ? (
+                                            reply.map((item, subIndex) => (
+                                                <React.Fragment key={subIndex}>
+                                                    <Typography
+                                                        component="span"
+                                                        sx={{
+                                                            display: 'block',
+                                                            wordBreak: 'break-word',
+                                                            whiteSpace: 'pre-wrap',
+                                                            fontSize: '14px',
+                                                            [tabletScreen]: {
+                                                                fontSize: '13.5px',
+                                                            },
+                                                        }}
+                                                    >
+                                                        {item}
+                                                    </Typography>
+                                                </React.Fragment>
+                                            ))
+                                        ) : (
+                                            <Typography
+                                                component="span"
+                                                sx={{
+                                                    display: 'block',
+                                                    wordBreak: 'break-word',
+                                                    whiteSpace: 'pre-wrap',
+                                                    fontSize: '14px',
+                                                    [tabletScreen]: {
+                                                        fontSize: '13.5px',
+                                                    },
+                                                }}
+                                            >
+                                                {reply}
+                                            </Typography>
+                                        )}
+                                    </Box>
+                                </Box>
+                            </Box>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    ml: 11,
+                                    mt: '4px',
+                                    alignItems: 'center',
+                                    width: '220px',
+                                    // justifyContent: 'space-between',
+                                }}
+                            >
+                                <ActionsTypography sx={{ ml: 1 }}>Like</ActionsTypography>
+                                <Box
+                                    sx={{
+                                        width: '1px',
+                                        height: '21px',
+                                        bgcolor: 'gray',
+                                        ml: 2,
+                                    }}
+                                />
+                                <ActionsTypography sx={{ ml: 2 }}>Reply</ActionsTypography>
+                            </Box>
+                        </Box>
+                    )),
+                )}
+            </React.Fragment>
+        );
     };
 
     return (
@@ -537,6 +715,7 @@ export function CommentsData({ postId, imageUrl }) {
                                 1 Reply
                             </ActionsTypography>
                         </Box>
+                        {showResponsesCommentList()}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Box
                                 sx={{
@@ -628,6 +807,7 @@ export function CommentsData({ postId, imageUrl }) {
                                         >
                                             <CommentTextField
                                                 inputRef={replyTextFieldRef}
+                                                onChange={handleCommentTextFieldChange}
                                                 isShowPlaceholder={true}
                                                 imageURLUploaded={imageURL}
                                                 defaultValue={'Luna Kei'}
@@ -635,11 +815,15 @@ export function CommentsData({ postId, imageUrl }) {
                                             />
                                             <CommentTextField
                                                 disabled={true}
+                                                isEmptyCommentField={isEmptyReplyField}
                                                 showIconUploadImage={showIconUploadImage}
                                                 uploadedImage={handleImageUpload}
                                                 setShowPicker={setShowPicker}
                                                 showPicker={showPicker}
                                                 handleEmojiClick={handleEmojiClick}
+                                                submitFunction={() =>
+                                                    handleSubmitReplyComment(index)
+                                                }
                                             />
                                         </Box>
                                     </Box>

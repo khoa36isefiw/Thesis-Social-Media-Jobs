@@ -5,6 +5,7 @@ import {
     GET_REACTION_IN_COMMENT_ON_POST,
     GET_REACTION_ON_POST,
     POST_SETTINGS_PRIVACY,
+    REPLY_COMMENTS,
     SAVE_PRIVACY_SELECTED,
 } from '../actionConstant';
 
@@ -20,9 +21,9 @@ export const setReactionOnCommentInPost = (postID, commentId, reaction) => ({
     payload: { postID, commentId, reaction },
 });
 
-export const addComment = (postID, comment) => ({
+export const addComment = (postID, comment, commentID, repliedComment) => ({
     type: ADD_COMMENT,
-    payload: { postID, comment },
+    payload: { postID, comment, commentID, repliedComment },
 });
 
 export const addNewPosts = (postData) => ({
@@ -48,4 +49,9 @@ export const postSettingsPrivacySelection = (postPrivacy) => ({
 export const privacySelected = (privacySelected) => ({
     type: SAVE_PRIVACY_SELECTED,
     payload: { privacySelected },
+});
+
+export const replyComments = (commentID, replyComments) => ({
+    type: REPLY_COMMENTS,
+    payload: { commentID, replyComments },
 });
