@@ -20,6 +20,7 @@ import { commentMenuSettings } from './Data/PostMenuSettingDatas';
 import PostMenuSettings from './PostMenuSettings';
 import { ActionsOnComment } from './ActionsOnComment';
 import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
+import { ShowResponsesCommentList } from './ShowResponsesCommentList';
 
 export function CommentsData({ postId, imageUrl }) {
     const authenticatedInformation = useLoggedInUser();
@@ -28,6 +29,7 @@ export function CommentsData({ postId, imageUrl }) {
     const commentList = useSelector((state) => state.managePost.comments[postId]);
     // get comment reply the comment in post
     const replyCommentList = useSelector((state) => state.managePost.repliedComments);
+    console.log('replyCommentList: ', replyCommentList);
 
     const reactionList = useSelector((state) => state.managePost.commentReactions[postId]);
     // const reactionList = useSelector((state) => state.managePost.commentReactions);
@@ -41,6 +43,12 @@ export function CommentsData({ postId, imageUrl }) {
     const [isEmptyReplyField, setIsEmptyReplyField] = useState(true);
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
     const [imageURL, setImageURL] = useState(null);
+
+    // get reply comment on each post
+    const replyCommentListOnEachPost = useSelector(
+        (state) => state.managePost.repliedComments[postId],
+    );
+    console.log('replyCommentListOnEachPost: ', replyCommentListOnEachPost);
 
     const handleOpenImageModal = (postID, commentIndex) => {
         setOpenImageCommentModal({ postID, commentIndex });
@@ -166,7 +174,7 @@ export function CommentsData({ postId, imageUrl }) {
         setIsEmptyReplyField(commentTextValue.trim() === '');
     };
 
-    const handleSubmitReplyComment = (commentId) => {
+    const handleSubmitReplyComment = (postId, commentId) => {
         // get the current string in input
         const replyCommentText = replyTextFieldRef.current.value.trim();
 
@@ -187,7 +195,7 @@ export function CommentsData({ postId, imageUrl }) {
 
         // repliedCommentsSent is not an empty string before dispatching
         if (repliedCommentsSent && repliedCommentsSent.length > 0) {
-            dispatch(replyComments(commentId, repliedCommentsSent));
+            dispatch(replyComments(postId, commentId, repliedCommentsSent));
             replyTextFieldRef.current.value = ''; // remove the input after submitting
         }
 
@@ -197,145 +205,6 @@ export function CommentsData({ postId, imageUrl }) {
 
     console.log('commentList: ', commentList);
     console.log('replyCommentList: ', replyCommentList);
-
-    const showResponsesCommentList = (commentIdx) => {
-        return (
-            <React.Fragment>
-                {Object.entries(replyCommentList).map(([key, value]) =>
-                    value.map((reply, index) => {
-                        // conver key of Object to a number
-                        console.log('type of key is: ', typeof key);
-                        // can't compare directly key here is a string not a number
-                        const keyAsNumber = Number(key);
-                        console.log('type of key after converting: ', typeof keyAsNumber);
-                        console.log('comment index: ', commentIdx);
-                        console.log('commentIdx === key: ', commentIdx === keyAsNumber);
-
-                        return (
-                            <Box
-                                sx={{ display: 'flex', flexDirection: 'column' }}
-                                key={`${key}-${index}`}
-                            >
-                                {commentIdx === keyAsNumber && (
-                                    <React.Fragment>
-                                        <Box
-                                            sx={{
-                                                display: 'flex',
-                                                mt: 1,
-                                                ml: 6,
-                                            }}
-                                        >
-                                            <Avatar
-                                                src={
-                                                    authenticatedInformation.userPhoto &&
-                                                    authenticatedInformation.userPhoto.imgUrl
-                                                }
-                                                alt="User Avatar"
-                                                sx={{
-                                                    height: '36px',
-                                                    width: '36px',
-                                                    zIndex: 7,
-                                                    filter:
-                                                        authenticatedInformation.userPhoto &&
-                                                        authenticatedInformation.userPhoto
-                                                            .imageStyle,
-                                                    transform: `rotate(${authenticatedInformation.userPhoto.imageRotationAngle}deg)`,
-                                                }}
-                                            />
-
-                                            <Box
-                                                sx={{
-                                                    border: '1px solid #f2f2f2',
-                                                    maxHeight: '150px',
-                                                    width: '100%',
-                                                    p: 1,
-                                                    borderRadius: '10px',
-                                                    backgroundColor: '#f2f2f2',
-                                                    ml: 1,
-                                                }}
-                                            >
-                                                <ActionsOnComment
-                                                    userName={
-                                                        authenticatedInformation.firstName +
-                                                        ' ' +
-                                                        authenticatedInformation.lastName
-                                                    }
-                                                    timePostComment={'1m'}
-                                                />
-                                                <Box>
-                                                    {/* if reply is an array */}
-                                                    {Array.isArray(reply) ? (
-                                                        reply.map((item, subIndex) => (
-                                                            <React.Fragment key={subIndex}>
-                                                                <Typography
-                                                                    component="span"
-                                                                    sx={{
-                                                                        display: 'block',
-                                                                        wordBreak: 'break-word',
-                                                                        whiteSpace: 'pre-wrap',
-                                                                        fontSize: '14px',
-                                                                        [tabletScreen]: {
-                                                                            fontSize: '13.5px',
-                                                                        },
-                                                                    }}
-                                                                >
-                                                                    {item}
-                                                                </Typography>
-                                                            </React.Fragment>
-                                                        ))
-                                                    ) : (
-                                                        <Typography
-                                                            component="span"
-                                                            sx={{
-                                                                display: 'block',
-                                                                wordBreak: 'break-word',
-                                                                whiteSpace: 'pre-wrap',
-                                                                fontSize: '14px',
-                                                                [tabletScreen]: {
-                                                                    fontSize: '13.5px',
-                                                                },
-                                                            }}
-                                                        >
-                                                            {reply}
-                                                        </Typography>
-                                                    )}
-                                                </Box>
-                                            </Box>
-                                        </Box>
-                                        <Box
-                                            sx={{
-                                                display: 'flex',
-                                                ml: 11,
-                                                mt: '4px',
-                                                alignItems: 'center',
-                                                width: '220px',
-                                                // justifyContent: 'space-between',
-                                            }}
-                                        >
-                                            <ActionsTypography sx={{ ml: 1 }}>
-                                                Like
-                                            </ActionsTypography>
-                                            <Box
-                                                sx={{
-                                                    width: '1px',
-                                                    height: '21px',
-                                                    bgcolor: 'gray',
-                                                    ml: 2,
-                                                }}
-                                            />
-                                            <ActionsTypography sx={{ ml: 2 }}>
-                                                Reply
-                                            </ActionsTypography>
-                                        </Box>
-                                    </React.Fragment>
-                                )}
-                            </Box>
-                        );
-                    }),
-                )}
-            </React.Fragment>
-        );
-    };
 
     return (
         <>
@@ -723,7 +592,8 @@ export function CommentsData({ postId, imageUrl }) {
                                 1 Reply
                             </ActionsTypography>
                         </Box>
-                        {showResponsesCommentList(index)}
+                        {/* {showResponsesCommentList(postId, index)} */}
+                        <ShowResponsesCommentList postId={postId} commentIdx={index} />
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Box
                                 sx={{
@@ -830,7 +700,7 @@ export function CommentsData({ postId, imageUrl }) {
                                                 showPicker={showPicker}
                                                 handleEmojiClick={handleEmojiClick}
                                                 submitFunction={() =>
-                                                    handleSubmitReplyComment(index)
+                                                    handleSubmitReplyComment(postId, index)
                                                 }
                                             />
                                         </Box>
