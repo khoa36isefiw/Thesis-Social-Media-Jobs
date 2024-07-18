@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState } from 'react';
 import { Box, Avatar, Typography, Button, Container, Modal } from '@mui/material';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import Media from '../../assets/images/picture.png';
