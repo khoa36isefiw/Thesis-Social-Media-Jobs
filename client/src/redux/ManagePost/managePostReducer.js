@@ -36,7 +36,7 @@ export const managePostReducer = (state = initialState, action) => {
             };
 
         case ADD_COMMENT:
-            const { postID, comment, commentID, repliedComment } = action.payload;
+            const { postID, comment } = action.payload;
             console.log('previous comments: ', state.comments);
             return {
                 ...state,
@@ -46,23 +46,26 @@ export const managePostReducer = (state = initialState, action) => {
                 },
             };
         case REPLY_COMMENTS:
-            // const { commentID: cmtID, replyComments: replyCmt } = action.payload;
-            // return {
-            //     ...state,
-            //     comments: {
-            //         ...state.comments,
-            //         repliedComments: {
-            //             ...state.repliedComments,
-            //             [cmtID]: [...(state.repliedComments[cmtID] || []), replyCmt],
-            //         },
-            //     },
-            // };
-            const { commentID: cmtID, replyComments: replyCmt } = action.payload;
+            const { postID: pstID, commentID: cmtID, replyComments: replyCmt } = action.payload;
             return {
                 ...state,
+                // repliedComments: {
+                //     // [cmtID]: [...(state.repliedComments[cmtID] || []), replyCmt],
+                //     ...state.repliedComments,
+                //     [pstID]: {
+                //         // ...state.repliedComments,
+                //         [cmtID]: [...(state.repliedComments[cmtID] || []), replyCmt],
+                //     },
+                // },
+
                 repliedComments: {
                     ...state.repliedComments,
-                    [cmtID]: [...(state.repliedComments[cmtID] || []), replyCmt],
+                    [pstID]: {
+                        // accesses the current replies for the specific post and get all previous data.
+                        ...state.repliedComments[pstID],
+                        // accesses the current replies for the specific comment.
+                        [cmtID]: [...(state.repliedComments[pstID]?.[cmtID] || []), replyCmt],
+                    },
                 },
             };
         case GET_REACTION_IN_COMMENT_ON_POST:

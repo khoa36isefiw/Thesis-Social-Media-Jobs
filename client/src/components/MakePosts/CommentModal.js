@@ -278,7 +278,7 @@ function CommentModal({
                         },
                     }}
                 >
-                    {currentImage.url.includes('video') ? (
+                    {currentImage.url && currentImage.url.includes('video') ? (
                         <ShowVideoUploaded width={400} height={300} srcVideo={currentImage.url} />
                     ) : (
                         <Box

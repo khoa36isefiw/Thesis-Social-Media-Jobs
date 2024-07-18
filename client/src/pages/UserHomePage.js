@@ -1,8 +1,7 @@
 import React from 'react';
-import { styled, Box, Paper, Container } from '@mui/material';
+import { styled, Box, Paper } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import MakePosts from '../components/MakePosts/MakePosts';
-import Post from '../components/MakePosts/Post';
 import Feed from '../components/MakePosts/Feed';
 import { mobileScreen } from '../components/Theme/Theme';
 
@@ -33,8 +32,6 @@ function UserHomePage() {
                     >
                         <MakePosts />
                     </Item>
-
-                    {/* <Post /> */}
                     <Feed />
                 </Grid>
             </Grid>

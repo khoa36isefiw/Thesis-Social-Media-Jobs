@@ -51,7 +51,7 @@ export const privacySelected = (privacySelected) => ({
     payload: { privacySelected },
 });
 
-export const replyComments = (commentID, replyComments) => ({
+export const replyComments = (postID, commentID, replyComments) => ({
     type: REPLY_COMMENTS,
-    payload: { commentID, replyComments },
+    payload: { commentID, replyComments, postID },
 });

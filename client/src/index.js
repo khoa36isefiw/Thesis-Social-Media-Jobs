@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+
 import App from './App';
 import GlobalStyles from './layouts/GlobalStyles/GlobalStyles';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-
-// import { theme } from './components/Theme/Theme';
 import { ThemeProvider } from '@mui/material';
 import { unstable_createMuiStrictModeTheme } from '@mui/material/styles';
+// import { theme } from './components/Theme/Theme';
+
 import { theme } from './components/Theme/Theme';
 import store from './redux/store';
 

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Avatar, Box, IconButton, Typography, Button, Divider, Modal, Grow } from '@mui/material';
-import UserAvatar from '../../assets/images/avatar.jpeg';
+
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
@@ -23,22 +23,20 @@ function PostModal({ closeModal }) {
         setOpenPrivacyPostSettings(true);
     };
     const startAPostTextFieldRef = useRef(null);
-    const [editorText, setEditorText] = useState('');
+    // const [editorText, setEditorText] = useState('');
     // save both images and videos
     const [imageURL, setImageURL] = useState([]);
 
-    const [videoUrl, setVideoUrl] = useState('');
     // show emoij table
     const [showPicker, setShowPicker] = useState(false);
-    const editorRef = useRef(null);
+
     const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const getPrivacySelected = useSelector((state) => state.managePost.savePrivacySelected);
 
     // get User Name
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
-    // get image rotation
-    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
+
     // console.log('userLoggedInInformation: ', userLoggedInInformation);
 
     // upload for multiple images
@@ -84,9 +82,9 @@ function PostModal({ closeModal }) {
         setShowPicker(false);
     };
 
-    const handleChange = (event) => {
-        setEditorText(event.target.value);
-    };
+    // const handleChange = (event) => {
+    //     setEditorText(event.target.value);
+    // };
 
     const handleCommentTextFieldChange = () => {
         const postTextValue = startAPostTextFieldRef.current.value;
@@ -286,7 +284,7 @@ function PostModal({ closeModal }) {
 
                         overflowY: 'scroll',
                     }}
-                    onChange={handleChange}
+                    // onChange={handleChange}
                 >
                     <CommentTextField
                         inputRef={startAPostTextFieldRef}
