@@ -1,38 +1,24 @@
-import React, { useState } from 'react';
-import {
-    Box,
-    Avatar,
-    Typography,
-    IconButton,
-    Button,
-    TextField,
-    Container,
-    Modal,
-} from '@mui/material';
-import UserAvatar from '../../assets/images/avatar.jpeg';
+import React, { useState, forwardRef } from 'react';
+import { Box, Avatar, Typography, Button, Container, Modal } from '@mui/material';
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import Media from '../../assets/images/picture.png';
 import Events from '../../assets/images/calendar.png';
 import PostModal from './PostModal';
 import { useSelector } from 'react-redux';
 
-const CustomAvatarWithText = ({ src, alt, children }) => (
+const CustomAvatarWithText = ({ src, alt, text }) => (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
         <Avatar
             src={src}
             alt={alt}
             sx={{ mr: 2, height: '32px', width: '32px', borderRadius: '0px' }}
         />
-        {children}
+        <CustomizeTypography sx={{ fontWeight: 'bold' }}>{text}</CustomizeTypography>
     </Box>
 );
 
 function MakePosts() {
-    const inputRef = React.useRef();
-    const [showModal, setShowModal] = useState(false);
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
-    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
-
     const [openModal, setOpenModal] = useState(false);
 
     const handleCloseModal = () => {
@@ -43,7 +29,7 @@ function MakePosts() {
     };
 
     return (
-        <div>
+        <React.Fragment>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Avatar
                     src={
@@ -92,12 +78,12 @@ function MakePosts() {
                     mb: 1,
                 }}
             >
-                <CustomAvatarWithText src={Media} alt="Upload Images">
-                    <CustomizeTypography sx={{ fontWeight: 'bold' }}>Media</CustomizeTypography>
-                </CustomAvatarWithText>
-                <CustomAvatarWithText src={Events} alt="Upload Events">
+                <CustomAvatarWithText src={Media} alt="Upload Images" text="Media" />
+                <CustomAvatarWithText src={Events} alt="Upload Events" text="Events" />
+
+                {/* <CustomAvatarWithText src={Events} alt="Upload Events">
                     <CustomizeTypography sx={{ fontWeight: 'bold' }}>Events</CustomizeTypography>
-                </CustomAvatarWithText>
+                </CustomAvatarWithText> */}
 
                 {/* Show Post Modal */}
             </Container>
@@ -120,7 +106,7 @@ function MakePosts() {
 
                 <PostModal closeModal={handleCloseModal} />
             </Modal>
-        </div>
+        </React.Fragment>
     );
 }
 

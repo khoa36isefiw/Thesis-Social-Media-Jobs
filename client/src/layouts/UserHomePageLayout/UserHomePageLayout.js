@@ -1,28 +1,12 @@
 import React from 'react';
+import { Container, Grid, Box } from '@mui/material';
 
-import { Box, ThemeProvider } from '@mui/material';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
-import { styled, Paper, Container } from '@mui/material';
-import Grid from '@mui/material/Grid';
 import UserInformation from '../../components/UserInformation/UserInformation';
 import UserGroup from '../../components/UserGroup/UserGroup';
 import Advertising from '../../components/Advertising/Advertising';
-import {
-    desktopScreen,
-    ipadProScreen,
-    mobileScreen,
-    tabletScreen,
-    theme,
-} from '../../components/Theme/Theme';
-
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
+import { ipadProScreen, mobileScreen, tabletScreen } from '../../components/Theme/Theme';
 
 function UserHomePageLayout({ children }) {
     return (
@@ -37,7 +21,8 @@ function UserHomePageLayout({ children }) {
                     },
                 }}
             >
-                <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                {/* <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}> */}
+                <Grid container rowSpacing={3} columnSpacing={3}>
                     <Grid item xs={12} sm={4} md={3} lg={3}>
                         <UserInformation />
 
@@ -46,7 +31,7 @@ function UserHomePageLayout({ children }) {
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={8} md={9} lg={9} container>
-                        <Grid xs={12} sm={12} md={8} lg={8}>
+                        <Grid item xs={12} sm={12} md={8} lg={8}>
                             <Box
                                 sx={{
                                     minHeight: '10vh',
@@ -57,6 +42,7 @@ function UserHomePageLayout({ children }) {
                             </Box>
                         </Grid>
                         <Grid
+                            item
                             xs={12}
                             sm={12}
                             md={4}

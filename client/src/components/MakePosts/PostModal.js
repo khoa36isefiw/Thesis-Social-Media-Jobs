@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, forwardRef } from 'react';
 import { Avatar, Box, IconButton, Typography, Button, Divider, Modal, Grow } from '@mui/material';
 import UserAvatar from '../../assets/images/avatar.jpeg';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
