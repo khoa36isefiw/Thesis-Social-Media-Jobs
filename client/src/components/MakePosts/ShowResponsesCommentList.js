@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Avatar } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { tabletScreen } from '../Theme/Theme';
 import { ActionsTypography } from './CommentModal';
 import { ActionsOnComment } from './ActionsOnComment';
@@ -147,7 +147,7 @@ export const ShowResponsesCommentList = ({ postId, commentIdx }) => {
     const replyCommentListOnEachPost = useSelector(
         (state) => state.managePost.repliedComments[postId],
     );
-    console.log('replyCommentListOnEachPost: ', replyCommentListOnEachPost);
+    // console.log('replyCommentListOnEachPost: ', replyCommentListOnEachPost);
 
     return (
         <React.Fragment>
