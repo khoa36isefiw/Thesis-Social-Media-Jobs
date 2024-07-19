@@ -21,6 +21,7 @@ import PostMenuSettings from './PostMenuSettings';
 import { ActionsOnComment } from './ActionsOnComment';
 import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 import { ShowResponsesCommentList } from './ShowResponsesCommentList';
+import { calculateTimeComment } from '../HandleTime/HandleTime';
 
 export function CommentsData({ postId, imageUrl }) {
     const dispatch = useDispatch();
@@ -29,7 +30,6 @@ export function CommentsData({ postId, imageUrl }) {
     const commentLists = useSelector((state) => state.managePost.comments);
     // get comment reply the comment in post
 
-    console.log('commentLists: ', commentLists);
     const reactionList = useSelector((state) => state.managePost.commentReactions[postId]);
     // const reactionList = useSelector((state) => state.managePost.commentReactions);
     const [hoverStatus, setHoverStatus] = useState({ postId: null, commentId: null });
@@ -196,13 +196,16 @@ export function CommentsData({ postId, imageUrl }) {
         // console.log('comment reply the comment: ', replyCommentText);
     };
 
-    console.log('commentList: ', commentList);
+    console.log('commentList in each post: ', commentList && commentList);
+    console.log('Length of commentList: ', commentList && commentList.length);
 
     return (
         <>
             <Box sx={{ display: 'flex' }}>
                 <Avatar
-                    src={'https://cdn.mos.cms.futurecdn.net/xaycNDmeyxpHDrPqU6LmaD.jpg'}
+                    src={
+                        'https://media.istockphoto.com/id/1061786950/photo/sky-in-the-pink-and-blue-colors-effect-of-light-pastel-colored-of-sunset-clouds-cloud-on-the.jpg?s=612x612&w=0&k=20&c=arnDjpYMJA8Pb-sbqTbOPAZDfmmiezOY1YxnTH8Q9Ks='
+                    }
                     alt="User Image"
                     sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
                 />
@@ -398,9 +401,20 @@ export function CommentsData({ postId, imageUrl }) {
                                     >
                                         Luna Kei
                                     </Typography>
+
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                         {/* time comment */}
-                                        <Typography>1m</Typography>
+                                        {Array.isArray(comment) && comment.length === 3 && (
+                                            <Typography>
+                                                {calculateTimeComment(comment[2])}
+                                            </Typography>
+                                        )}
+
+                                        {Array.isArray(comment) && comment.length === 2 && (
+                                            <Typography>
+                                                {calculateTimeComment(comment[1])}
+                                            </Typography>
+                                        )}
                                         {/* More action with this comment */}
                                         <IconButton onClick={handleOpenCommentMenuSettings}>
                                             <MoreHoriz />
@@ -410,23 +424,15 @@ export function CommentsData({ postId, imageUrl }) {
 
                                 {/* check if comment is array */}
                                 <Box sx={{ width: '100%' }}>
-                                    {Array.isArray(comment) ? (
+                                    {Array.isArray(comment) && (
                                         <Box
                                             sx={{
                                                 overflow: 'scroll',
                                                 maxHeight: '250px',
                                             }}
                                         >
-                                            {/* If the comment array contains only an image */}
-                                            {comment.length === 1 && (
-                                                <Avatar
-                                                    src={comment[0]}
-                                                    alt="User Uploaded Image"
-                                                    sx={{ height: '100px', width: '100px', mt: 1 }}
-                                                />
-                                            )}
                                             {/* If the comment array contains both text and an image */}
-                                            {comment.length > 1 && (
+                                            {comment.length > 2 && (
                                                 <Box sx={{ width: '100%' }}>
                                                     <Typography
                                                         sx={{
@@ -439,6 +445,7 @@ export function CommentsData({ postId, imageUrl }) {
                                                         }}
                                                     >
                                                         {comment[0]}
+                                                        {/* {comment[2]} */}
                                                     </Typography>
 
                                                     <Box
@@ -479,21 +486,25 @@ export function CommentsData({ postId, imageUrl }) {
                                                     </Modal>
                                                 </Box>
                                             )}
+
+                                            {comment.length === 2 && (
+                                                <Box sx={{ width: '100%' }}>
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: {
+                                                                xs: '13.5px',
+                                                                md: '14px',
+                                                            },
+                                                            wordBreak: 'break-word',
+                                                            whiteSpace: 'pre-wrap',
+                                                        }}
+                                                    >
+                                                        {comment[0]}
+                                                        {/* {comment[2]} */}
+                                                    </Typography>
+                                                </Box>
+                                            )}
                                         </Box>
-                                    ) : (
-                                        // Not an array --> show comment
-                                        <Typography
-                                            sx={{
-                                                maxHeight: '250px',
-                                                overflow: 'scroll',
-                                                // if text in the line too long --> break the text overflow to new line
-                                                wordBreak: 'break-word',
-                                                whiteSpace: 'pre-wrap', // maintain the space when we copy some text
-                                                fontSize: { xs: '13.5px', md: '14px' },
-                                            }}
-                                        >
-                                            {comment}
-                                        </Typography>
                                     )}
                                 </Box>
                             </Box>
