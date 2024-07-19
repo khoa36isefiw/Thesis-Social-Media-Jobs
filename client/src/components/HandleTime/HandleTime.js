@@ -34,6 +34,23 @@ export const calculateTimeElapsed = (timestamp) => {
     } else if (diffInMins < 1440) {
         return `${Math.floor(diffInMins / 60)} hours ago`;
     } else {
-        return `${Math.floor(diffInMins / 1440)} days ago`;
+        return `${Math.floor(diffInMins / 1440)} day ago`;
+    }
+};
+
+export const calculateTimeComment = (timestamp) => {
+    const now = new Date();
+    const postTime = new Date(timestamp);
+    const diffInMs = now - postTime;
+    const diffInSecs = Math.floor(diffInMs / 1000); // convert to second
+    const diffInMins = Math.floor(diffInMs / (1000 * 60)); // convert to minute
+    if (diffInMins === 0) {
+        return `${diffInSecs} s`;
+    } else if (diffInMins < 60) {
+        return `${diffInMins} m`;
+    } else if (diffInMins < 1440) {
+        return `${Math.floor(diffInMins / 60)} h`;
+    } else {
+        return `${Math.floor(diffInMins / 1440)} d`;
     }
 };
