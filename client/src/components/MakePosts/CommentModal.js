@@ -221,6 +221,24 @@ function CommentModal({
         );
     };
 
+    // key press events for image
+    const handleKeyPressImage = (event) => {
+        if (event.key === 'ArrowRight') {
+            handleNextImage();
+        }
+        if (event.key === 'ArrowLeft') {
+            handlePrevImage();
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyPressImage);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyPressImage);
+        };
+    });
+
     console.log('image url: ', imageUrl);
 
     return (
@@ -305,6 +323,7 @@ function CommentModal({
                     {/* 2 buttons: next and previous image */}
                     {Array.isArray(imageUrl) && imageUrl.length > 1 && (
                         <Box
+                            onKeyDown={handleKeyPressImage}
                             sx={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
