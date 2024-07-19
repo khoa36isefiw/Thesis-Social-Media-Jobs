@@ -62,6 +62,7 @@ function Post({
 }) {
     // Check content is always an array?
     const dispatch = useDispatch();
+    const date = new Date();
     const commentTextFieldRef = useRef(null);
     const [editorText, setEditorText] = useState(''); // add text
     const [menuStatus, setMenuStatus] = useState(null);
@@ -147,20 +148,23 @@ function Post({
 
     // for text field
     const handleCommentSubmit = () => {
+        let timeStamp = date.toISOString();
+
         const commentText = commentTextFieldRef.current.value.trim();
         // const commentText = commentTextFieldRef.current.value;
         let commentSent = null;
         if (imageURL !== null) {
-            commentSent = [commentText, imageURL.url];
-
+            commentSent = [commentText, imageURL.url, timeStamp];
             dispatch(addComment(postID, commentSent));
             commentTextFieldRef.current.value = '';
             setIsEmptyCommentField(true);
             setImageURL(null);
         } else {
             if (commentText !== '') {
+                commentSent = [commentText, timeStamp];
+
                 // dispatch(addComment(postID, commentText));
-                dispatch(addComment(postID, commentText));
+                dispatch(addComment(postID, commentSent));
                 // clear input after submitting
                 commentTextFieldRef.current.value = '';
                 setIsEmptyCommentField(true);

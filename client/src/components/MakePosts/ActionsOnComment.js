@@ -4,6 +4,7 @@ import { Box, Typography, IconButton } from '@mui/material';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 
 import { tabletScreen } from '../Theme/Theme';
+import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 
 export const ActionsOnComment = ({ userName, timePostComment }) => {
     return (

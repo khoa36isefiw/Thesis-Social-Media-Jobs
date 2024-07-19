@@ -22,6 +22,11 @@ import { CommentsData } from './CommentsData';
 import { postMenuSettings } from './Data/PostMenuSettingDatas';
 import { CommentTextField } from './CommentTextField';
 import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
+import { calculateTimeElapsed } from '../HandleTime/HandleTime';
+
+import PublicIcon from '@mui/icons-material/Public';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
+import ShowVideoUploaded from '../ShowVideoUploaded/ShowVideoUploaded';
 
 // definde typograph for this component
 export const CustomTypography = ({ children }) => (
@@ -53,6 +58,7 @@ function Post({
     numberOfReaction,
     numberOfComment,
     imageUrl,
+    viewPostPermission,
 }) {
     // Check content is always an array?
     const dispatch = useDispatch();
@@ -66,21 +72,25 @@ function Post({
     const [isOpenCommentRegion, setIsOpenCommentRegion] = useState(false);
     const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
-
     // upload image from comment
     const [imageURL, setImageURL] = useState(null);
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
+    // update the current time for each posts
+    const [currentTimestamp, setCurrentTimestamp] = useState(new Date());
     // get the number of comments
     const commentList = useSelector((state) => state.managePost.comments[postID]);
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
 
+    // get User Name
+    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+
     // console.log('getCommentListLength: ', getCommentListLength);
 
     const toggleExpanded = () => {
-        console.log('Before clicking: ', expanded);
+        // console.log('Before clicking: ', expanded);
         setExpanded(!expanded);
-        console.log('After clicking: ', expanded);
+        // console.log('After clicking: ', expanded);
     };
 
     const handleImageClick = () => {
@@ -219,9 +229,16 @@ function Post({
         }, 0);
     };
 
-    console.log('Image data received: ', imageUrl);
-    // console.log();
-    // console.log('Data of first element: ', imageUrl && imageUrl[0]);
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentTimestamp(new Date());
+        }, 60000); // 60 seconds
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    // console.log('check list image posted: ', imageUrl);
+
     return (
         <Box>
             {hideThePostSelected ? (
@@ -243,21 +260,49 @@ function Post({
                     <Box sx={{ p: 2 }}>
                         <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
                             <Avatar
-                                src={avatarSrc}
-                                sx={{ height: '48px', width: '48px' }}
+                                src={avatarSrc && avatarSrc.imgUrl}
+                                sx={{
+                                    height: '48px',
+                                    width: '48px',
+                                    filter: avatarSrc && avatarSrc.imageStyle,
+                                    transform: `rotate(${
+                                        avatarSrc && avatarSrc.imageRotationAngle
+                                    }deg)`,
+                                }}
                                 alt="User Avatar"
                             />
                             <Box sx={{ ml: 2, flexGrow: 1 }}>
-                                <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                                <Typography
+                                    sx={{
+                                        fontSize: '14px',
+                                        fontWeight: 'bold',
+                                        textTransform: 'capitalize',
+                                    }}
+                                >
                                     {displayName}
                                 </Typography>
 
                                 <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
                                     {followers} followers
                                 </Typography>
-                                <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
-                                    {time}
-                                </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
+                                        {/* update and show the current of posts */}
+                                        {calculateTimeElapsed(time)}
+                                    </Typography>
+                                    <Box
+                                        sx={{
+                                            width: '5px',
+                                            height: '5px',
+                                            backgroundColor: 'gray',
+                                            borderRadius: '50%',
+                                            mx: '4px',
+                                        }}
+                                    />
+                                    <IconButton sx={{ padding: 0 }}>
+                                        {viewPostPermission ? <PublicIcon /> : <Diversity3Icon />}
+                                    </IconButton>
+                                </Box>
                             </Box>
                             <IconButton onClick={handleOpenPostMenuSettings}>
                                 <MoreHorizIcon sx={{ fontSize: '24px' }} />
@@ -373,91 +418,163 @@ function Post({
                     {/* Doesn't have image */}
                     {imageUrl && (
                         <Box>
-                            {Array.isArray(imageUrl) && imageUrl.length >= 4 ? (
+                            {Array.isArray(imageUrl) ? (
                                 <Grid container>
-                                    {/* just show 4 image from list image in post */}
-                                    {imageUrl.slice(0, 4).map((image, index) => (
-                                        <Grid
-                                            item
-                                            xs={6}
-                                            md={6}
-                                            lg={imageUrl.length >= 4 ? 6 : 12}
-                                            key={index}
-                                            sx={{
-                                                borderRight:
-                                                    (imageUrl.length >= 4 && index === 0) ||
-                                                    index === 2
-                                                        ? '2px solid white'
-                                                        : null,
-                                                borderBottom:
-                                                    (imageUrl.length >= 4 && index === 0) ||
-                                                    index === 1
-                                                        ? '2px solid white'
-                                                        : null,
-                                                position: 'relative',
-                                                bgcolor: blue[100],
-                                                // center for image
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                overflow: 'hidden',
-                                            }}
-                                        >
-                                            <Avatar
-                                                src={image.url}
-                                                onClick={handleImageClick}
-                                                sx={{
-                                                    height: '320px',
-                                                    width: '100%',
-                                                    borderRadius: '0',
-                                                    objectFit: 'cover',
-                                                    // m: 1,
-                                                    '&:hover': {
-                                                        cursor: 'pointer',
-                                                    },
-                                                }}
-                                                alt="Image Upload by User"
-                                            />
-                                            {/* the last image (4th) and image uploaded has more than 4 images */}
-                                            {/* show the number of images after images 4th */}
-                                            {index === 3 && imageUrl.length > 4 && (
-                                                <Box
+                                    {imageUrl.length >= 4 ? (
+                                        <React.Fragment>
+                                            {/* just show 4 image from list image in post */}
+                                            {imageUrl.slice(0, 4).map((image, index) => (
+                                                <Grid
+                                                    item
+                                                    xs={6}
+                                                    sm={6}
+                                                    md={6}
+                                                    lg={imageUrl.length >= 4 ? 6 : 12}
+                                                    key={index}
                                                     sx={{
-                                                        position: 'absolute',
-                                                        top: 0,
-                                                        left: 0,
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        bgcolor: 'rgba(0, 0, 0, 0.5)',
+                                                        borderRight:
+                                                            (imageUrl.length >= 4 && index === 0) ||
+                                                            index === 2
+                                                                ? '2px solid white'
+                                                                : null,
+                                                        borderBottom:
+                                                            (imageUrl.length >= 4 && index === 0) ||
+                                                            index === 1
+                                                                ? '2px solid white'
+                                                                : null,
+                                                        position: 'relative',
+                                                        // bgcolor: blue[100],
+                                                        // center for image
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         justifyContent: 'center',
-                                                        color: 'white',
-                                                        fontSize: '24px',
-                                                        fontWeight: 'bold',
+                                                        overflow: 'hidden',
                                                     }}
                                                 >
-                                                    +{imageUrl.length - 4}
-                                                </Box>
+                                                    {image.url.includes('video') ? (
+                                                        <ShowVideoUploaded
+                                                            width={400}
+                                                            height={300}
+                                                            srcVideo={image.url}
+                                                        />
+                                                    ) : (
+                                                        <Avatar
+                                                            src={image.url}
+                                                            onClick={handleImageClick}
+                                                            sx={{
+                                                                height: '320px',
+                                                                width: '100%',
+                                                                borderRadius: '0',
+                                                                objectFit: 'cover',
+                                                                // m: 1,
+                                                                '&:hover': {
+                                                                    cursor: 'pointer',
+                                                                },
+                                                            }}
+                                                            alt="Image Upload by User"
+                                                        />
+                                                    )}
+
+                                                    {/* the last image (4th) and image uploaded has more than 4 images */}
+                                                    {/* show the number of images after images 4th */}
+                                                    {index === 3 && imageUrl.length > 4 && (
+                                                        <Box
+                                                            sx={{
+                                                                position: 'absolute',
+                                                                top: 0,
+                                                                left: 0,
+                                                                width: '100%',
+                                                                height: '100%',
+                                                                bgcolor: 'rgba(0, 0, 0, 0.5)',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                color: 'white',
+                                                                fontSize: '24px',
+                                                                fontWeight: 'bold',
+                                                            }}
+                                                        >
+                                                            +{imageUrl.length - 4}
+                                                        </Box>
+                                                    )}
+                                                </Grid>
+                                            ))}
+                                        </React.Fragment>
+                                    ) : (
+                                        <React.Fragment>
+                                            {imageUrl.length === 3 ? (
+                                                <React.Fragment>
+                                                    {/* get 3 image */}
+                                                    {imageUrl.slice(0, 3).map((image, index) => (
+                                                        <Grid
+                                                            item
+                                                            xs={12}
+                                                            sm={6}
+                                                            md={6}
+                                                            lg={
+                                                                imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
+                                                                    ? 12
+                                                                    : 6
+                                                            }
+                                                            key={index}
+                                                            sx={{
+                                                                position: 'relative',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                overflow: 'hidden',
+                                                                borderRight:
+                                                                    index === 0 || index === 2
+                                                                        ? '2px solid white'
+                                                                        : null,
+                                                                borderBottom:
+                                                                    index === 0 || index === 1
+                                                                        ? '2px solid white'
+                                                                        : null,
+                                                            }}
+                                                        >
+                                                            <Avatar
+                                                                src={image.url}
+                                                                onClick={() =>
+                                                                    handleImageClick(index)
+                                                                }
+                                                                sx={{
+                                                                    height: '320px',
+                                                                    width: '100%',
+                                                                    borderRadius: '0',
+                                                                    objectFit: 'cover',
+                                                                    '&:hover': {
+                                                                        cursor: 'pointer',
+                                                                    },
+                                                                }}
+                                                                alt={`Uploaded image ${index + 1}`}
+                                                            />
+                                                        </Grid>
+                                                    ))}
+                                                </React.Fragment>
+                                            ) : (
+                                                <React.Fragment></React.Fragment>
                                             )}
-                                        </Grid>
-                                    ))}
+                                        </React.Fragment>
+                                    )}
                                 </Grid>
                             ) : (
                                 <Grid
                                     item
-                                    xs={6}
+                                    xs={12}
                                     md={12}
                                     lg={12}
-                                    sx={{
-                                        position: 'relative',
-                                        // bgcolor: blue[100],
-                                        // center for image
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        overflow: 'hidden',
-                                    }}
+                                    sx={
+                                        {
+                                            // position: 'relative',
+                                            // // bgcolor: blue[100],
+                                            // // center for image
+                                            // display: 'flex',
+                                            // alignItems: 'center',
+                                            // justifyContent: 'center',
+                                            // overflow: 'hidden',
+                                        }
+                                    }
                                 >
                                     <Avatar
                                         src={imageUrl}
@@ -477,6 +594,68 @@ function Post({
                                 </Grid>
                             )}
                         </Box>
+                    )}
+                    {imageUrl && imageUrl.length === 1 && (
+                        <React.Fragment>
+                            {imageUrl.map((image, index) => (
+                                <Grid container item sm={12} xs={12} md={12} lg={12} key={index}>
+                                    {image.url.includes('video') ? (
+                                        <ShowVideoUploaded
+                                            width={400}
+                                            height={300}
+                                            srcVideo={image.url}
+                                        />
+                                    ) : (
+                                        <Avatar
+                                            src={image.url}
+                                            onClick={handleImageClick}
+                                            sx={{
+                                                height: '250px',
+                                                width: '100%',
+                                                borderRadius: '0',
+                                                objectFit: 'cover',
+                                                // m: 1,
+                                                '&:hover': {
+                                                    cursor: 'pointer',
+                                                },
+                                            }}
+                                            alt="Image Upload by User"
+                                        />
+                                    )}
+                                </Grid>
+                            ))}
+                        </React.Fragment>
+                    )}
+                    {imageUrl && imageUrl.length === 2 && (
+                        <Grid container item>
+                            {imageUrl.map((image, index) => (
+                                <Grid sm={12} xs={12} md={6} lg={6} key={index}>
+                                    {image.url.includes('video') ? (
+                                        <ShowVideoUploaded
+                                            width={400}
+                                            height={300}
+                                            srcVideo={image.url}
+                                        />
+                                    ) : (
+                                        <Avatar
+                                            src={image.url}
+                                            onClick={handleImageClick}
+                                            sx={{
+                                                height: '250px',
+                                                width: '100%',
+                                                borderRadius: '0',
+                                                objectFit: 'cover',
+                                                // m: 1,
+                                                '&:hover': {
+                                                    cursor: 'pointer',
+                                                },
+                                            }}
+                                            alt="Image Upload by User"
+                                        />
+                                    )}
+                                </Grid>
+                            ))}
+                        </Grid>
                     )}
 
                     {/* region for: reaction, comment and share - show icon is selected*/}

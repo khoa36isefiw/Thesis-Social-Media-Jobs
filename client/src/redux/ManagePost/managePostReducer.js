@@ -37,34 +37,39 @@ export const managePostReducer = (state = initialState, action) => {
 
         case ADD_COMMENT:
             const { postID, comment } = action.payload;
+            // const { postID, comment, timeStamp: timestamp } = action.payload;
             console.log('previous comments: ', state.comments);
             return {
                 ...state,
                 comments: {
+                    // initial
                     ...state.comments,
                     [postID]: [...(state.comments[postID] || []), comment],
                 },
+                // comments: {
+                //     ...state.comments,
+                //     [postID]: [...(state.comments[postID] || []), [comment, timestamp]],
+                // },
             };
         case REPLY_COMMENTS:
-            const { postID: pstID, commentID: cmtID, replyComments: replyCmt } = action.payload;
+            const {
+                postID: pstID,
+                commentID: cmtID,
+                replyComments: replyCmt,
+                timeStamp,
+            } = action.payload;
             return {
                 ...state,
-                // repliedComments: {
-                //     // [cmtID]: [...(state.repliedComments[cmtID] || []), replyCmt],
-                //     ...state.repliedComments,
-                //     [pstID]: {
-                //         // ...state.repliedComments,
-                //         [cmtID]: [...(state.repliedComments[cmtID] || []), replyCmt],
-                //     },
-                // },
-
                 repliedComments: {
                     ...state.repliedComments,
                     [pstID]: {
                         // accesses the current replies for the specific post and get all previous data.
                         ...state.repliedComments[pstID],
                         // accesses the current replies for the specific comment.
-                        [cmtID]: [...(state.repliedComments[pstID]?.[cmtID] || []), replyCmt],
+                        [cmtID]: [
+                            ...(state.repliedComments[pstID]?.[cmtID] || []),
+                            { replyCmt, timeStamp },
+                        ],
                     },
                 },
             };

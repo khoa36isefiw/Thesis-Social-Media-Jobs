@@ -21,10 +21,13 @@ export const setReactionOnCommentInPost = (postID, commentId, reaction) => ({
     payload: { postID, commentId, reaction },
 });
 
-export const addComment = (postID, comment, commentID, repliedComment) => ({
-    type: ADD_COMMENT,
-    payload: { postID, comment, commentID, repliedComment },
-});
+export const addComment = (postID, comment, timeStamp) => {
+    timeStamp = new Date().toISOString(); // Get the current timestamp
+    return {
+        type: ADD_COMMENT,
+        payload: { postID, comment, timeStamp },
+    };
+};
 
 export const addNewPosts = (postData) => ({
     type: ADD_NEW_POSTS,
@@ -50,8 +53,15 @@ export const privacySelected = (privacySelected) => ({
     type: SAVE_PRIVACY_SELECTED,
     payload: { privacySelected },
 });
+export const replyComments = (postID, commentID, replyComments, timeStamp) => {
+    timeStamp = new Date().toISOString(); // Get the current timestamp
+    return {
+        type: REPLY_COMMENTS,
+        payload: { commentID, replyComments, postID, timeStamp },
+    };
+};
 
-export const replyComments = (postID, commentID, replyComments) => ({
-    type: REPLY_COMMENTS,
-    payload: { commentID, replyComments, postID },
-});
+// export const replyComments = (postID, commentID, replyComments) => ({
+//     type: REPLY_COMMENTS,
+//     payload: { commentID, replyComments, postID },
+// });
