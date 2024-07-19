@@ -1,22 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-    Box,
-    Typography,
-    TextField,
-    Button,
-    IconButton,
-    Avatar,
-    Divider,
-    styled,
-} from '@mui/material';
+import { Box, Typography, IconButton, Avatar, Divider, styled } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Liked from '../../assets/images/like.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import UserAvatar from '../../assets/images/avatar.jpeg';
-import { useLocation } from 'react-router-dom';
 
-import Picker from 'emoji-picker-react';
 import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
 import { blue } from '@mui/material/colors';
@@ -33,7 +22,7 @@ import { addComment } from '../../redux/ManagePost/managePostAction';
 import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 import ShowVideoUploaded from '../ShowVideoUploaded/ShowVideoUploaded';
 // Customize styles for Typography in this Component
-export const ActionsTypography = styled(Typography)(({}) => ({
+export const ActionsTypography = styled(Typography)(() => ({
     color: '#000000BF',
     fontSize: '13px',
     fontWeight: '600',
@@ -62,7 +51,7 @@ function CommentModal({
     const commentList = useSelector((state) => state.managePost.comments[postId]);
 
     const commentModalTextFieldRef = useRef(null);
-    const location = useLocation();
+
     // get the initial width and height of the image
     const [originalWidth, setOriginalWidth] = useState(null);
     const [originalHeight, setOriginalHeight] = useState(null);
@@ -123,7 +112,7 @@ function CommentModal({
         return () => {
             window.removeEventListener('keydown', handleKeydown);
         };
-    }, [imageUrl, currentImageIndex]);
+    }, [imageUrl, currentImageIndex, handleClose]);
 
     const toggleExpanded = () => {
         setExpanded(!expanded);
@@ -342,7 +331,6 @@ function CommentModal({
                                     backgroundColor: theme.palette.bgButtonHover,
                                     top: '50%',
                                     left: '1%',
-                                    transition: 'left 0.3s ease-in-out',
 
                                     transition: 'transform 0.3s ease-in-out',
                                     transform: 'translateX(0)', // initial state
@@ -374,8 +362,7 @@ function CommentModal({
                                     backgroundColor: theme.palette.bgButtonHover,
                                     top: '50%',
                                     right: '1%',
-
-                                    transition: 'transform 0.3s ease-in-out',
+                                    transition: 'transform 0.3s ease-in-out', // make it slide more smoothly
                                     transform: 'translateX(0)', // initial state
 
                                     '&:hover': {
