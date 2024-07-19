@@ -23,14 +23,13 @@ import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 import { ShowResponsesCommentList } from './ShowResponsesCommentList';
 
 export function CommentsData({ postId, imageUrl }) {
-    const authenticatedInformation = useLoggedInUser();
     const dispatch = useDispatch();
     const replyTextFieldRef = useRef(null);
     const commentList = useSelector((state) => state.managePost.comments[postId]);
+    const commentLists = useSelector((state) => state.managePost.comments);
     // get comment reply the comment in post
-    const replyCommentList = useSelector((state) => state.managePost.repliedComments);
-    console.log('replyCommentList: ', replyCommentList);
 
+    console.log('commentLists: ', commentLists);
     const reactionList = useSelector((state) => state.managePost.commentReactions[postId]);
     // const reactionList = useSelector((state) => state.managePost.commentReactions);
     const [hoverStatus, setHoverStatus] = useState({ postId: null, commentId: null });
@@ -43,12 +42,6 @@ export function CommentsData({ postId, imageUrl }) {
     const [isEmptyReplyField, setIsEmptyReplyField] = useState(true);
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
     const [imageURL, setImageURL] = useState(null);
-
-    // get reply comment on each post
-    const replyCommentListOnEachPost = useSelector(
-        (state) => state.managePost.repliedComments[postId],
-    );
-    console.log('replyCommentListOnEachPost: ', replyCommentListOnEachPost);
 
     const handleOpenImageModal = (postID, commentIndex) => {
         setOpenImageCommentModal({ postID, commentIndex });
@@ -204,7 +197,6 @@ export function CommentsData({ postId, imageUrl }) {
     };
 
     console.log('commentList: ', commentList);
-    console.log('replyCommentList: ', replyCommentList);
 
     return (
         <>
