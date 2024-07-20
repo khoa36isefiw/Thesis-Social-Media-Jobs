@@ -26,6 +26,10 @@ export const ActionsTypography = styled(Typography)(() => ({
     color: '#000000BF',
     fontSize: '13px',
     fontWeight: '600',
+    '&:hover': {
+        cursor: 'pointer',
+        textDecoration: 'underline',
+    },
     [tabletScreen]: {
         fontSize: '12px',
     },
@@ -45,6 +49,7 @@ function CommentModal({
     handleClose,
     onReactionClick,
 }) {
+    const date = new Date();
     const dispatch = useDispatch();
     // check if the content of post is an array
     const contentArray = Array.isArray(postContent) ? postContent : [postContent];
@@ -174,10 +179,11 @@ function CommentModal({
     // send comment for comment modal
     const handleCommentSubmit = () => {
         const commentText = commentModalTextFieldRef.current.value.trim();
+        let timeStamp = date.toISOString();
         // const commentText = commentModalTextFieldRef.current.value;
         let commentSent = null;
         if (imageURL !== null) {
-            commentSent = [commentText, imageURL.url];
+            commentSent = [commentText, imageURL.url, timeStamp];
 
             dispatch(addComment(postId, commentSent));
             commentModalTextFieldRef.current.value = '';
@@ -185,8 +191,9 @@ function CommentModal({
             setImageURL(null);
         } else {
             if (commentText !== '') {
+                commentSent = [commentText, timeStamp];
                 // dispatch(addComment(postId, commentText));
-                dispatch(addComment(postId, commentText));
+                dispatch(addComment(postId, commentSent));
                 // clear input after submitting
                 commentModalTextFieldRef.current.value = '';
                 setIsEmptyCommentModalField(true);
@@ -449,7 +456,7 @@ function CommentModal({
                                     )}
                                 </Box>
                                 <Box>
-                                    {follower && (
+                                    {follower !== 0 ? (
                                         <Typography
                                             sx={{
                                                 fontSize: '12.5px',
@@ -458,6 +465,16 @@ function CommentModal({
                                             }}
                                         >
                                             {follower} followers
+                                        </Typography>
+                                    ) : (
+                                        <Typography
+                                            sx={{
+                                                fontSize: '12.5px',
+                                                color: 'text.secondary',
+                                                fontWeight: '500',
+                                            }}
+                                        >
+                                            0 followers
                                         </Typography>
                                     )}
                                 </Box>

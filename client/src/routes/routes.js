@@ -26,6 +26,7 @@ import MyHashtags from '../components/MyHashtags/MyHashtags';
 import Messaging from '../components/Messaging/Messaging';
 import MessageLayout from '../layouts/MessageLayout/MessageLayout';
 import SignUpAccount from '../components/SignUpAccount/SignUpAccount';
+import Jobs from '../components/Jobs/Jobs';
 
 // not sign into this website
 const publicRoutes = [
@@ -77,6 +78,7 @@ const privateRoutes = [
     },
 
     { path: '/messages', component: Messaging, layout: MessageLayout },
+    { path: '/jobs', component: Jobs, layout: MessageLayout },
 
     { path: '/user/recent-activity/all', component: ShowUserActivity, layout: UserActivityLayout },
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import Post from './Post';
 import { Typography } from '@mui/material';
 import Mountain from '../../assets/images/MountainClouds.jpeg';
@@ -106,6 +106,7 @@ function Feed() {
     // redux
     const getListDataArticlesPosted = useSelector((state) => state.managePost.listPostsData);
     console.log('List Data: ', getListDataArticlesPosted);
+
     return (
         <div>
             {posts.map((post) => (
@@ -136,8 +137,9 @@ function Feed() {
 
             {getListDataArticlesPosted.map((post) => (
                 <Post
-                    key={post.id}
-                    postID={'8'}
+                    key={post.postID}
+                    // postID={'8'}
+                    postID={post.postID}
                     avatarSrc={post.userPhoto}
                     displayName={post.userName}
                     followers={post.numberOfFollowers}

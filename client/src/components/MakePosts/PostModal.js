@@ -8,6 +8,7 @@ import { CommentTextField } from './CommentTextField';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewPosts } from '../../redux/ManagePost/managePostAction';
 import PrivacyPostSettings from './PrivacyPostSettings/PrivacyPostSettings';
+import { generatePostID } from '../GenerateUID/GenerateUID';
 
 function PostModal({ closeModal }) {
     const dispatch = useDispatch();
@@ -96,6 +97,8 @@ function PostModal({ closeModal }) {
     };
 
     const handlePostAnArticle = () => {
+        let postID = generatePostID();
+
         const articleText = startAPostTextFieldRef.current.value.trim(); // get the current text of textfield
         const viewPostPermission = getPrivacySelected === 'Anyone' ? true : false;
         const userName = userLoggedInInformation.lastName
@@ -107,6 +110,7 @@ function PostModal({ closeModal }) {
         let articleTextSent = null;
         if (imageURL) {
             articleTextSent = {
+                postID,
                 userName: userName,
                 userPhoto: userAvatar,
                 articleText: articleText,
@@ -124,6 +128,7 @@ function PostModal({ closeModal }) {
                 // dispatch(addComment(postID, articleText));
                 dispatch(
                     addNewPosts({
+                        postID,
                         userName: userName,
                         userPhoto: userAvatar,
                         articleTextSent: articleText,
