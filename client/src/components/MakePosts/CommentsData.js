@@ -196,8 +196,8 @@ export function CommentsData({ postId, imageUrl }) {
         // console.log('comment reply the comment: ', replyCommentText);
     };
 
-    console.log('commentList in each post: ', commentList && commentList);
-    console.log('Length of commentList: ', commentList && commentList.length);
+    // console.log('commentList in each post: ', commentList && commentList);
+    // console.log('Length of commentList: ', commentList && commentList.length);
 
     return (
         <>
