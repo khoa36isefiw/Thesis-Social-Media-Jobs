@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
-import { ViewingRights } from '../EditUserProfilePhotoModal/EditUserProfilePhotoModal';
+import { ViewingRights } from '../EditUserProfilePhotoModal/ViewingRights';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     setLoggedInUser,
@@ -24,21 +24,29 @@ const filterList = [
     { filterName: 'Sepia', filterStyle: 'sepia(60%)' },
     { filterName: 'Saturate', filterStyle: 'saturate(200%)' },
 ];
-function EditPhoto({ imageUrl, handleCloseChange, rotate }) {
-    console.log('rotate: ', rotate);
+function EditPhoto({ imageUrl, handleCloseChange, rotate, imageUploadedStyle }) {
     const dispatch = useDispatch();
     const indexFilterImage = useSelector((state) => state.manageAccounts.selectedFilterIndex);
     const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
     // console.log('rotationAngleImage: ', rotationAngleImage);
+    console.log(
+        'userLoggedInInformation.userPhoto.imageStyle: ',
+        userLoggedInInformation.userPhoto.imageStyle,
+    );
 
     const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
     const [showNotifications, setShowNotifications] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState(indexFilterImage);
-    // const [rotationAngle, setRotationAngle] = useState(0);
-    const [notificationMessage, setNotificationMessage] = useState('');
-    // show the current rotation of user image in edit modal
+    // const [selectedFilter, setSelectedFilter] = useState(indexFilterImage); // initial filter // này oke nha
+    console.log('userLoggedInInformation: ', userLoggedInInformation);
+    const [selectedFilter, setSelectedFilter] = useState(
+        imageUploadedStyle !== undefined
+            ? imageUploadedStyle
+            : userLoggedInInformation.userPhoto.imageStyle,
+    ); // initial filter // này oke nha
 
+    console.log('selectedFilter before selecting: ', selectedFilter && selectedFilter.filterStyle);
+    // show the current rotation of user image in edit modal
     // if rotate is undefine uses userLoggedInInformation.userPhoto.imageRotationAngle
     // else (new image uploaded) --> set rotationangle = 0
     const [rotationAngle, setRotationAngle] = useState(
@@ -53,13 +61,13 @@ function EditPhoto({ imageUrl, handleCloseChange, rotate }) {
                 ...userLoggedInInformation,
                 userPhoto: {
                     imgUrl: imageUrl,
-                    imageStyle: filterList[selectedFilter].filterStyle,
+                    imageStyle: selectedFilter,
                     imageRotationAngle: rotationAngle,
                 },
             }),
         );
         setAnimationClass('animate__zoomOut');
-        dispatch(setSelectedFilterIndex(selectedFilter)); // save index of image selected filter
+        dispatch(setSelectedFilterIndex({ filter: selectedFilter, userId })); // save index of image selected filter
         dispatch(setSelectedImageRotationAngle({ angle: rotationAngle, userId }));
         // setShowNotifications(true);
         // setNotificationMessage('Change your photo successfully');
@@ -74,7 +82,9 @@ function EditPhoto({ imageUrl, handleCloseChange, rotate }) {
     };
 
     const handleSelectedFilters = (index) => {
-        setSelectedFilter(index);
+        setSelectedFilter(filterList[index].filterStyle);
+        // setSelectedFilter(index); // initial
+        console.log('selectedFilter after selecting: ', selectedFilter && selectedFilter);
     };
 
     const handleRotateLeft = () => {
@@ -85,13 +95,6 @@ function EditPhoto({ imageUrl, handleCloseChange, rotate }) {
         setRotationAngle((prevAngle) => prevAngle + 90);
     };
 
-    // const handleCloseEditPhotoModal = () => {
-    //     setRotationAngle(userLoggedInInformation.userPhoto.imageRotationAngle);
-    //     handleCloseChange();
-    // };
-
-    // console.log('rotationAngle: ', rotationAngle);
-    // console.log('rotationAngleImage: ', rotationAngleImage);
     return (
         <Box
             sx={{
@@ -173,7 +176,8 @@ function EditPhoto({ imageUrl, handleCloseChange, rotate }) {
                             width: '200px',
                         },
                         // show filter image is selected
-                        filter: filterList[selectedFilter].filterStyle,
+                        // filter: selectedFilter && selectedFilter.filterStyle,
+                        filter: selectedFilter && selectedFilter,
                     }}
                 />
             </Box>
@@ -181,7 +185,7 @@ function EditPhoto({ imageUrl, handleCloseChange, rotate }) {
                 Show your styles to Anyone
             </CustomizeTypography>
 
-            {/* List images are filtered */}
+            {/* Define List images are filtered */}
             <Box
                 sx={{
                     display: 'flex',
@@ -210,7 +214,7 @@ function EditPhoto({ imageUrl, handleCloseChange, rotate }) {
                                     height: '56px',
                                     width: '56px',
                                     border:
-                                        selectedFilter === index
+                                        selectedFilter === filterList[index].filterStyle
                                             ? '1px solid #333'
                                             : '1px solid transparent',
                                     // Smooth transition for border and box-shadow
@@ -219,7 +223,7 @@ function EditPhoto({ imageUrl, handleCloseChange, rotate }) {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     boxShadow:
-                                        selectedFilter === index
+                                        selectedFilter === filterList[index].filterStyle
                                             ? '0 0 0 3px #fff'
                                             : '0 0 0 0 transparent',
                                 }}
@@ -232,7 +236,7 @@ function EditPhoto({ imageUrl, handleCloseChange, rotate }) {
                                         width: '55px',
 
                                         boxShadow:
-                                            selectedFilter === index
+                                            selectedFilter === filterList[index].filterStyle
                                                 ? '0 0 0 3px #fff'
                                                 : '0 0 0 0 transparent',
                                         transition: 'box-shadow 0.3s',
@@ -294,30 +298,6 @@ function EditPhoto({ imageUrl, handleCloseChange, rotate }) {
                     Save
                 </Button>
             </Box>
-
-            {showNotifications && (
-                <SnackbarShowNotifications
-                    // mainText="Create account successfully!"
-                    // isOpen={showNotifications}
-                    // onClose={handleCloseSnackbar}
-                    // // warning
-                    // // icon={<WarningIcon sx={{ fontSize: '24px', color: 'orange' }} />}
-                    mainText={notificationMessage}
-                    isOpen={showNotifications}
-                    onClose={handleCloseSnackbar}
-                    warning={notificationMessage !== 'Create account successfully!'}
-                    icon={
-                        notificationMessage !== 'Create account successfully!' && (
-                            <WarningIcon
-                                sx={{
-                                    fontSize: '24px',
-                                    color: 'orange',
-                                }}
-                            />
-                        )
-                    }
-                />
-            )}
         </Box>
     );
 }
