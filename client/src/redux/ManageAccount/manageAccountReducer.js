@@ -146,9 +146,33 @@ export const manageAccountReducer = (state = initialState, action) => {
                 setViewingRights: viewing,
             };
         case SET_SELECTED_FILTER_INDEX:
+            const { filter, userId: usrId } = action.payload;
+
             return {
                 ...state,
-                selectedFilterIndex: action.payload,
+                // update angle for user
+                accountsList: state.accountsList.map((account) =>
+                    account.userId === usrId
+                        ? {
+                              ...account,
+                              userPhoto: {
+                                  ...account.userPhoto,
+                                  imageStyle: filter,
+                              },
+                          }
+                        : account,
+                ),
+                // update angle for authenticated user
+                loggedInUser:
+                    state.loggedInUser.userId === usrId
+                        ? {
+                              ...state.loggedInUser,
+                              userPhoto: {
+                                  ...state.loggedInUser.userPhoto,
+                                  imageStyle: filter,
+                              },
+                          }
+                        : state.loggedInUser,
             };
         case SET_SELECTED_IMAGE_ROTATION_ANGLE:
             // return {

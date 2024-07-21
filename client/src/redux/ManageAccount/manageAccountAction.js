@@ -44,9 +44,14 @@ export const getYear = (year) => ({
 });
 
 // for user photo
-export const setSelectedFilterIndex = (index) => ({
+// export const setSelectedFilterIndex = (index) => ({ // initial
+//     type: SET_SELECTED_FILTER_INDEX,
+//     payload: index,
+// });
+
+export const setSelectedFilterIndex = ({ filter, userId }) => ({
     type: SET_SELECTED_FILTER_INDEX,
-    payload: index,
+    payload: { filter, userId },
 });
 
 // export const setSelectedImageRotationAngle = (angle) => ({

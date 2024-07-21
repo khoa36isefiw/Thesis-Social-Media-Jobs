@@ -573,6 +573,7 @@ export function UserProfile() {
                     }
                     handleClose={handleCloseModal}
                     imageRotationAngle={userLoggedInInformation.userPhoto.imageRotationAngle}
+                    imageFilterStyles={userLoggedInInformation.userPhoto.imageStyle}
                 />
             </Modal>
         </Box>

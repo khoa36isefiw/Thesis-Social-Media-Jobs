@@ -24,6 +24,10 @@ function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
     // get the rotate of image, if user uploads image then set the rotate angle to zero
     // new image is uploaded into edit photo
     const [rotate, setRotate] = useState(authenticatedInformation.userPhoto.imageRotationAngle); // get the current image rotate angle
+    const [uploadImageStyle, setUploadImageStyle] = useState(
+        authenticatedInformation.userPhoto.imageStyle,
+    ); // get the current image rotate angle
+    console.log('Image style of image is: ', uploadImageStyle);
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0]; // Get the list of selected file
@@ -36,6 +40,7 @@ function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
             setImageURL({ name: imageName, url: imageDataURL }); // initial state
 
             setRotate(0); // rotate = 0 when new image is uploaded
+            setUploadImageStyle(null);
             setOpenEditPhotoModal(true);
         };
 
@@ -231,6 +236,7 @@ function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
                     // imageUrl={imageURL && imageURL}
                     handleCloseChange={handleCloseEditPhotoModal}
                     rotate={rotate}
+                    imageUploadedStyle={uploadImageStyle}
                 />
             </Modal>
         </Box>
