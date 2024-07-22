@@ -24,6 +24,12 @@ import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme
 import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import {
+    saveAccountRegistered,
+    setLoggedInUser,
+    updateAccountInformation,
+} from '../../redux/ManageAccount/manageAccountAction';
+import { useSelector } from 'react-redux';
 
 const TextFieldConstant = ({
     label,
@@ -65,9 +71,13 @@ const TextFieldConstant = ({
 
 function EditUserProfile({ handleClose }) {
     const dispatch = useDispatch();
+    const authenticatedUser = useLoggedInUser();
     const [school, setSchool] = useState('');
     const [confirmOpen, setConfirmOpen] = useState(false);
-    const authenticatedUser = useLoggedInUser();
+    const listAccount = useSelector((state) => state.manageAccounts.accountsList);
+
+    console.log('Before changing authenticated information: ', authenticatedUser);
+    console.log('listAccount: ', listAccount);
     const firstNameRef = useRef(null);
     const lastNameRef = useRef(null);
 
@@ -87,10 +97,40 @@ function EditUserProfile({ handleClose }) {
     const handleSaveAuthenticatedInformation = () => {
         const authFirstName = firstNameRef.current.value.trim();
         const authLastName = lastNameRef.current.value.trim();
-        dispatch();
+        // if (authenticatedUser.userId) {
+        //     dispatch(
+        //         setLoggedInUser({
+        //             ...authenticatedUser,
+        //             firstName: authFirstName,
+        //             lastName: authLastName,
+        //         }),
+        //     );
 
-        setConfirmOpen(true);
+        //     dispatch(
+        //         updateAccountInformation(authenticatedUser.userId, {
+        //             ...authenticatedUser,
+        //             firstName: authFirstName,
+        //             lastName: authLastName,
+        //         }),
+        //     );
+        // }
+
+        dispatch(
+            //Update account information in the accounts list
+
+            updateAccountInformation(authenticatedUser.userId, {
+                ...authenticatedUser,
+                firstName: authFirstName,
+                lastName: authLastName,
+            }),
+        );
+
+        setConfirmOpen(false);
+        handleClose();
     };
+
+    console.log('After changing authenticated information: ', authenticatedUser);
+    console.log('listAccount: ', listAccount);
 
     return (
         <Box
@@ -332,7 +372,7 @@ function EditUserProfile({ handleClose }) {
                             mr: '8px',
                             mb: 2,
                         }}
-                        onClick={handleConfirmClose}
+                        onClick={handleSaveAuthenticatedInformation}
                     >
                         Save
                     </Button>
