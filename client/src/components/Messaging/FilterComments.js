@@ -1,21 +1,11 @@
-import React, { useEffect } from 'react';
-import {
-    Box,
-    Button,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    Modal,
-    Typography,
-} from '@mui/material';
-import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
+import React from 'react';
+import { Box, Button, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material';
+import { theme } from '../Theme/Theme';
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import ChatIcon from '@mui/icons-material/Chat';
-import CommentModal from '../MakePosts/CommentModal';
 
 const filterCommentLists = [
     {
@@ -30,14 +20,12 @@ const filterCommentLists = [
     },
 ];
 
-function FilterComments({}) {
+function FilterComments() {
     const [getFilterComment, setGetFilterComment] = React.useState(null);
     // Default to the first item
     const [selectedOptionFilter, setSelectedOptionFilter] = React.useState(
         filterCommentLists[0]?.commentText,
     );
-    const [isMobile, setIsMobile] = React.useState(false);
-    const [isCommentModalOpen, setIsCommentModalOpen] = React.useState(false);
 
     const openSortMenu = Boolean(getFilterComment);
 
@@ -52,28 +40,7 @@ function FilterComments({}) {
     const handleGetFilterComment = (item) => {
         setSelectedOptionFilter(item);
         setGetFilterComment(null);
-        if (item === 'All comments') {
-            setIsCommentModalOpen(true);
-        }
     };
-
-    const handleModalClose = () => {
-        setIsCommentModalOpen(false);
-    };
-
-    //choose the screen size
-    const handleResize = () => {
-        if (window.innerWidth <= 599) {
-            setIsMobile(true);
-        } else {
-            setIsMobile(false);
-        }
-    };
-
-    // create an event listener
-    useEffect(() => {
-        window.addEventListener('resize', handleResize);
-    });
 
     return (
         <Box

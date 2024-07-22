@@ -39,7 +39,7 @@ const CustomizeTypography = styled(Typography)(({ fontSize, isBold = false }) =>
     fontSize: fontSize || '16px',
     fontWeight: isBold ? 'bold' : 'normal',
 }));
-const CustomizeButton = styled(Button)(({}) => ({
+const CustomizeButton = styled(Button)(() => ({
     py: 1,
     px: 3,
     borderRadius: '25px',
@@ -55,20 +55,15 @@ const moreActionLists = [
     { icon: <SaveAltIcon sx={{ fontSize: '20px' }} />, actionText: 'Save to PDF' },
 ];
 
-// generate a random ID
-const generateRandomID = () => {
-    return Math.random().toString(36).concat(2, 9); // Generate a random string
-};
-
 // User information section
 export function UserProfile() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [activeModal, setActiveModal] = useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
-    const listUserInfor = useSelector((state) => state.startAMessage.listUserInformation);
-    const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
+    // const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
+    // const listUserInfor = useSelector((state) => state.startAMessage.listUserInformation);
+    // const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
     const rotationAngleBackground = useSelector(
         (state) => state.manageAccounts.selectedBackgroundAngle,
     );
@@ -94,13 +89,13 @@ export function UserProfile() {
         setActiveModal(null);
     };
 
-    const handleOpenUserProfile = () => {
-        setIsUserProfileOpen(true);
-    };
+    // const handleOpenUserProfile = () => {
+    //     setIsUserProfileOpen(true);
+    // };
 
-    const handleCloseUserProfile = () => {
-        setIsUserProfileOpen(false);
-    };
+    // const handleCloseUserProfile = () => {
+    //     setIsUserProfileOpen(false);
+    // };
 
     // set to store generated IDs
     let generatedIds = new Set();

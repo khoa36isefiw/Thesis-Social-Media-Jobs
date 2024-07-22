@@ -17,7 +17,7 @@ function UserInformation() {
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
     const rotationAngleImage = useSelector((state) => state.manageAccounts.selectedImageAngle);
 
-    console.log('User Information: ', userLoggedInInformation);
+    // console.log('User Information: ', userLoggedInInformation);
     // const getUserInformation = getListUsers.find()
     return (
         <Box

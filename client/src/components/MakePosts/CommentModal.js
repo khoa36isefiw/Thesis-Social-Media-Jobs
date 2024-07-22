@@ -96,7 +96,8 @@ function CommentModal({
             let newHeight = img.naturalHeight;
             let newWidth = img.naturalWidth;
 
-            if (newHeight >= 550) { // 650
+            if (newHeight >= 550) {
+                // 650
                 newHeight = 550; // 650 for inital value
             }
             if (newWidth >= 700) {

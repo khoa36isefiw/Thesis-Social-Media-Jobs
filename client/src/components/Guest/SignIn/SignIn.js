@@ -30,7 +30,7 @@ function SignIn() {
     const [checkLogin, setCheckLogin] = useState(true);
 
     const listAccount = useSelector((state) => state.manageAccounts.accountsList);
-    console.log('current list: ', listAccount);
+    // console.log('current list: ', listAccount);
 
     const handleShowPassword = () => {
         setIsShow(!isShow);
