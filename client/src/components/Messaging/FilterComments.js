@@ -1,31 +1,22 @@
 import React, { useEffect } from 'react';
-import { CustomizeBox } from '../CustomizeBox/CustomizeBox';
 import {
-    Avatar,
     Box,
     Button,
-    Divider,
-    IconButton,
-    InputAdornment,
     ListItemIcon,
     ListItemText,
     Menu,
     MenuItem,
-    TextField,
+    Modal,
     Typography,
 } from '@mui/material';
 import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
-import WestIcon from '@mui/icons-material/West';
-import SearchIcon from '@mui/icons-material/Search';
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { blue } from '@mui/material/colors';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import ChatIcon from '@mui/icons-material/Chat';
-const sortLists = ['Recently comments', 'All comments'];
+import CommentModal from '../MakePosts/CommentModal';
+
 const filterCommentLists = [
     {
         commentText: 'Recently comments',
@@ -39,13 +30,14 @@ const filterCommentLists = [
     },
 ];
 
-function FilterComments() {
+function FilterComments({}) {
     const [getFilterComment, setGetFilterComment] = React.useState(null);
     // Default to the first item
     const [selectedOptionFilter, setSelectedOptionFilter] = React.useState(
         filterCommentLists[0]?.commentText,
     );
     const [isMobile, setIsMobile] = React.useState(false);
+    const [isCommentModalOpen, setIsCommentModalOpen] = React.useState(false);
 
     const openSortMenu = Boolean(getFilterComment);
 
@@ -60,6 +52,13 @@ function FilterComments() {
     const handleGetFilterComment = (item) => {
         setSelectedOptionFilter(item);
         setGetFilterComment(null);
+        if (item === 'All comments') {
+            setIsCommentModalOpen(true);
+        }
+    };
+
+    const handleModalClose = () => {
+        setIsCommentModalOpen(false);
     };
 
     //choose the screen size
@@ -107,6 +106,7 @@ function FilterComments() {
                     }}
                 >
                     {selectedOptionFilter}
+                    {/* {filterCommentLists[0]?.commentText} */}
                 </Typography>
             </Button>
             <Menu
