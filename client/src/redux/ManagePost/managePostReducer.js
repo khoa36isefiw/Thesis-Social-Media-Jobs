@@ -54,9 +54,12 @@ export const managePostReducer = (state = initialState, action) => {
         case REPLY_COMMENTS:
             const {
                 postID: pstID,
+                userID,
                 commentID: cmtID,
                 replyComments: replyCmt,
                 timeStamp,
+                userName,
+                userPhoto,
             } = action.payload;
             return {
                 ...state,
@@ -68,7 +71,7 @@ export const managePostReducer = (state = initialState, action) => {
                         // accesses the current replies for the specific comment.
                         [cmtID]: [
                             ...(state.repliedComments[pstID]?.[cmtID] || []),
-                            { replyCmt, timeStamp },
+                            { replyCmt, timeStamp, userID, userName, userPhoto },
                         ],
                     },
                 },

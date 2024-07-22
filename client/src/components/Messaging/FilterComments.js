@@ -1,31 +1,12 @@
-import React, { useEffect } from 'react';
-import { CustomizeBox } from '../CustomizeBox/CustomizeBox';
-import {
-    Avatar,
-    Box,
-    Button,
-    Divider,
-    IconButton,
-    InputAdornment,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    TextField,
-    Typography,
-} from '@mui/material';
-import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
-import WestIcon from '@mui/icons-material/West';
-import SearchIcon from '@mui/icons-material/Search';
+import React from 'react';
+import { Box, Button, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material';
+import { theme } from '../Theme/Theme';
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { blue } from '@mui/material/colors';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import ChatIcon from '@mui/icons-material/Chat';
-const sortLists = ['Recently comments', 'All comments'];
+
 const filterCommentLists = [
     {
         commentText: 'Recently comments',
@@ -45,7 +26,6 @@ function FilterComments() {
     const [selectedOptionFilter, setSelectedOptionFilter] = React.useState(
         filterCommentLists[0]?.commentText,
     );
-    const [isMobile, setIsMobile] = React.useState(false);
 
     const openSortMenu = Boolean(getFilterComment);
 
@@ -61,20 +41,6 @@ function FilterComments() {
         setSelectedOptionFilter(item);
         setGetFilterComment(null);
     };
-
-    //choose the screen size
-    const handleResize = () => {
-        if (window.innerWidth <= 599) {
-            setIsMobile(true);
-        } else {
-            setIsMobile(false);
-        }
-    };
-
-    // create an event listener
-    useEffect(() => {
-        window.addEventListener('resize', handleResize);
-    });
 
     return (
         <Box
@@ -107,6 +73,7 @@ function FilterComments() {
                     }}
                 >
                     {selectedOptionFilter}
+                    {/* {filterCommentLists[0]?.commentText} */}
                 </Typography>
             </Button>
             <Menu

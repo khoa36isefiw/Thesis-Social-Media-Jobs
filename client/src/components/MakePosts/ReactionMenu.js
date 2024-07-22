@@ -59,7 +59,9 @@ export const ReactionMenu = ({ postID, commentID, handleChoose }) => {
                 [mobileScreen]: {
                     ml: 1,
                 },
+                animationDuration: '0.5s',
             }}
+            className="animate__animated animate__zoomIn"
         >
             {reactionsButtonList.map((buttonReaction, index) => (
                 <Box key={index} sx={{ '&:hover': { transform: 'scale(1.05)' } }}>

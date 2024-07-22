@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, Typography, Avatar, Divider, Modal, Button, IconButton, Grid } from '@mui/material';
-import { mobileScreen, tabletScreen, theme } from '../Theme/Theme';
+import { mobileScreen } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { addComment, setReactionOnPost } from '../../redux/ManagePost/managePostAction';
@@ -13,15 +13,13 @@ import Laugh from '../../assets/images/laughing.png';
 import CommentModal from './CommentModal';
 import PostMenuSettings from './PostMenuSettings';
 import HideThePost from './HideThePost';
-import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
+
 import UserAvatar from '../../assets/images/avatar.jpeg';
-import FilterComments from '../Messaging/FilterComments';
-
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { CommentsData } from './CommentsData';
-
 import { postMenuSettings } from './Data/PostMenuSettingDatas';
 import { CommentTextField } from './CommentTextField';
-import ImageOriginialSize from '../ImageOriginialSize/ImageOriginialSize';
+
 import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 
 import PublicIcon from '@mui/icons-material/Public';
@@ -64,7 +62,7 @@ function Post({
     const dispatch = useDispatch();
     const date = new Date();
     const commentTextFieldRef = useRef(null);
-    const [editorText, setEditorText] = useState(''); // add text
+
     const [menuStatus, setMenuStatus] = useState(null);
     const contentArray = Array.isArray(content) ? content : [content];
     const [expanded, setExpanded] = useState(false);
@@ -78,13 +76,10 @@ function Post({
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
     // update the current time for each posts
-    const [currentTimestamp, setCurrentTimestamp] = useState(new Date());
+    // const [currentTimestamp, setCurrentTimestamp] = useState(new Date());
     // get the number of comments
     const commentList = useSelector((state) => state.managePost.comments[postID]);
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
-
-    // get User Name
-    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
     // console.log('getCommentListLength: ', getCommentListLength);
 
@@ -183,7 +178,7 @@ function Post({
     // upload image
     const handleImageUpload = (event) => {
         const file = event.target.files[0]; // Get the list of selected file
-        const uploadedImages = []; // get the existing array of images
+
         const reader = new FileReader();
         reader.onload = () => {
             const imageDataURL = reader.result;
@@ -233,13 +228,13 @@ function Post({
         }, 0);
     };
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            setCurrentTimestamp(new Date());
-        }, 60000); // 60 seconds
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {
+    //         setCurrentTimestamp(new Date());
+    //     }, 60000); // 60 seconds
 
-        return () => clearInterval(intervalId);
-    }, []);
+    //     return () => clearInterval(intervalId);
+    // }, []);
 
     // console.log('check list image posted: ', imageUrl);
 
@@ -778,7 +773,39 @@ function Post({
                                     </Box>
                                 </Box>
 
-                                <FilterComments />
+                                {/*  filter comment with 2 options: see all, recent comments */}
+                                <Button
+                                    sx={{
+                                        padding: 0,
+                                        py: 1,
+                                        my: 1,
+                                        textTransform: 'capitalize',
+                                        fontSize: '14px',
+                                        color: '#65676b',
+                                        fontWeight: 'bold',
+                                        '&:hover': {
+                                            bgcolor: 'transparent',
+                                        },
+                                    }}
+                                    endIcon={<ExpandMoreIcon />}
+                                    onClick={handleImageClick}
+                                >
+                                    View more comments
+                                </Button>
+                                {/* <FilterComments
+                                    postID={postID}
+                                    imageUrl={imageUrl}
+                                    handleCloseModal={handleCloseModal}
+                                    handleChooseReaction={handleChooseReaction}
+                                    avatarSrc={avatarSrc}
+                                    displayName={displayName}
+                                    followers={followers}
+                                    time={time}
+                                    hashtag={hashtag}
+                                    content={content}
+                                    numberOfReaction={numberOfReaction}
+                                    numberOfComment={numberOfComment}
+                                /> */}
                                 <CommentsData postId={postID} imageUrl={imageUrl} />
                             </Box>
                         )}

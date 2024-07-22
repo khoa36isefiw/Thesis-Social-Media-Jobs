@@ -43,6 +43,8 @@ export function CommentsData({ postId, imageUrl }) {
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
     const [imageURL, setImageURL] = useState(null);
 
+    const authenticatedUser = useLoggedInUser();
+
     const handleOpenImageModal = (postID, commentIndex) => {
         setOpenImageCommentModal({ postID, commentIndex });
     };
@@ -168,6 +170,11 @@ export function CommentsData({ postId, imageUrl }) {
     };
 
     const handleSubmitReplyComment = (postId, commentId) => {
+        const userID = authenticatedUser.userId;
+        const userName = authenticatedUser.firstName + ' ' + authenticatedUser.lastName;
+        const userPhoto = authenticatedUser.userPhoto.imgUrl;
+
+        // console.log('userID: ', userID);
         // get the current string in input
         const replyCommentText = replyTextFieldRef.current.value.trim();
 
@@ -188,7 +195,10 @@ export function CommentsData({ postId, imageUrl }) {
 
         // repliedCommentsSent is not an empty string before dispatching
         if (repliedCommentsSent && repliedCommentsSent.length > 0) {
-            dispatch(replyComments(postId, commentId, repliedCommentsSent));
+            dispatch(
+                replyComments(postId, commentId, repliedCommentsSent, userID, userName, userPhoto),
+            );
+            // dispatch(replyComments({ postId, commentId, userID, repliedCommentsSent }));
             replyTextFieldRef.current.value = ''; // remove the input after submitting
         }
 
