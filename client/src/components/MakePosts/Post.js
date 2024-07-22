@@ -15,6 +15,7 @@ import PostMenuSettings from './PostMenuSettings';
 import HideThePost from './HideThePost';
 import SnackbarShowNotifications from '../SnackbarShowNotifications/SnackbarShowNotifications';
 import UserAvatar from '../../assets/images/avatar.jpeg';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FilterComments from '../Messaging/FilterComments';
 
 import { CommentsData } from './CommentsData';
@@ -778,7 +779,39 @@ function Post({
                                     </Box>
                                 </Box>
 
-                                <FilterComments />
+                                {/*  filter comment with 2 options: see all, recent comments */}
+                                <Button
+                                    sx={{
+                                        padding: 0,
+                                        py: 1,
+                                        my: 1,
+                                        textTransform: 'capitalize',
+                                        fontSize: '14px',
+                                        color: '#65676b',
+                                        fontWeight: 'bold',
+                                        '&:hover': {
+                                            bgcolor: 'transparent',
+                                        },
+                                    }}
+                                    endIcon={<ExpandMoreIcon />}
+                                    onClick={handleImageClick}
+                                >
+                                    View more comments
+                                </Button>
+                                {/* <FilterComments
+                                    postID={postID}
+                                    imageUrl={imageUrl}
+                                    handleCloseModal={handleCloseModal}
+                                    handleChooseReaction={handleChooseReaction}
+                                    avatarSrc={avatarSrc}
+                                    displayName={displayName}
+                                    followers={followers}
+                                    time={time}
+                                    hashtag={hashtag}
+                                    content={content}
+                                    numberOfReaction={numberOfReaction}
+                                    numberOfComment={numberOfComment}
+                                /> */}
                                 <CommentsData postId={postID} imageUrl={imageUrl} />
                             </Box>
                         )}
