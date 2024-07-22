@@ -96,8 +96,8 @@ function CommentModal({
             let newHeight = img.naturalHeight;
             let newWidth = img.naturalWidth;
 
-            if (newHeight >= 650) {
-                newHeight = 650;
+            if (newHeight >= 550) { // 650
+                newHeight = 550; // 650 for inital value
             }
             if (newWidth >= 700) {
                 newWidth = 680;
@@ -262,6 +262,7 @@ function CommentModal({
                     borderRadius: 0,
                 },
             }}
+            className={`animate__animated animate__fadeIn`}
         >
             <Box
                 sx={{
