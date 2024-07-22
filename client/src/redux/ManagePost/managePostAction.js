@@ -53,11 +53,11 @@ export const privacySelected = (privacySelected) => ({
     type: SAVE_PRIVACY_SELECTED,
     payload: { privacySelected },
 });
-export const replyComments = (postID, commentID, replyComments, timeStamp) => {
-    timeStamp = new Date().toISOString(); // Get the current timestamp
+export const replyComments = (postID, commentID, replyComments, userID, userName, userPhoto) => {
+    const timeStamp = new Date().toISOString(); // Get the current timestamp
     return {
         type: REPLY_COMMENTS,
-        payload: { commentID, replyComments, postID, timeStamp },
+        payload: { postID, commentID, replyComments, timeStamp, userID, userName, userPhoto },
     };
 };
 
