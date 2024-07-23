@@ -263,19 +263,31 @@ export function CommentsData({ postId, imageUrl }) {
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                         {/* time comment */}
                                         {Array.isArray(comment) && comment.length === 3 && (
-                                            <Typography>
+                                            <Typography
+                                                sx={{
+                                                    fontSize: '12px',
+                                                }}
+                                            >
                                                 {calculateTimeComment(comment[2])}
                                             </Typography>
                                         )}
 
                                         {Array.isArray(comment) && comment.length === 2 && (
-                                            <Typography>
+                                            <Typography
+                                                sx={{
+                                                    fontSize: '12px',
+                                                }}
+                                            >
                                                 {calculateTimeComment(comment[1])}
                                             </Typography>
                                         )}
                                         {/* More action with this comment */}
-                                        <IconButton onClick={handleOpenCommentMenuSettings}>
-                                            <MoreHoriz />
+
+                                        <IconButton
+                                            onClick={handleOpenCommentMenuSettings}
+                                            sx={{ py: 0, px: '4px' }}
+                                        >
+                                            <MoreHoriz sx={{ fontSize: '18px' }} />
                                         </IconButton>
                                     </Box>
                                 </Box>
