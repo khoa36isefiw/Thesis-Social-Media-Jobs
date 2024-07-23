@@ -10,12 +10,18 @@ import {
     HIDE_MODAL,
     SET_SELECTED_FILTER_INDEX_BG,
     SET_SELECTED_BG_ROTATION_ANGLE,
+    UPDATE_ACCOUNT_INFORMATION,
 } from '../actionConstant';
 
 // SAVE LIST ACCOUNTS
 export const saveAccountRegistered = (account) => ({
     type: SAVE_ACCOUNT_SIGNUP,
     payload: { account },
+});
+
+export const updateAccountInformation = (userId, updatedInfor) => ({
+    type: UPDATE_ACCOUNT_INFORMATION,
+    payload: { userId, updatedInfor },
 });
 
 export const setLoggedInUser = (user) => ({

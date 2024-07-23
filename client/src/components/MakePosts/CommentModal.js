@@ -22,8 +22,8 @@ import { addComment } from '../../redux/ManagePost/managePostAction';
 import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 import ShowVideoUploaded from '../ShowVideoUploaded/ShowVideoUploaded';
 // Customize styles for Typography in this Component
-export const ActionsTypography = styled(Typography)(() => ({
-    color: '#000000BF',
+export const ActionsTypography = styled(Typography)(({ colorAction }) => ({
+    color: colorAction !== null ? colorAction : '#000000BF',
     fontSize: '13px',
     fontWeight: '600',
     '&:hover': {

@@ -21,8 +21,26 @@ import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography'
 import CloseIcon from '@mui/icons-material/Close';
 import { blue } from '@mui/material/colors';
 import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme';
+import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
+import { useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import {
+    saveAccountRegistered,
+    setLoggedInUser,
+    updateAccountInformation,
+} from '../../redux/ManageAccount/manageAccountAction';
+import { useSelector } from 'react-redux';
 
-const TextFieldConstant = ({ label, isRequired = false, content, maxHeight, mRows = false }) => {
+const TextFieldConstant = ({
+    label,
+    isRequired = false,
+
+    maxHeight,
+    mRows = false,
+    defaultUserValue,
+    userInputRef,
+    onChangeInput,
+}) => {
     return (
         <Box sx={{ mb: 2 }}>
             <Typography sx={{ fontSize: '14px', mb: '2px', color: '#404040' }}>
@@ -30,6 +48,8 @@ const TextFieldConstant = ({ label, isRequired = false, content, maxHeight, mRow
             </Typography>
             <TextField
                 fullWidth
+                inputRef={userInputRef}
+                onChange={onChangeInput}
                 sx={{
                     '.MuiInputBase-root': {
                         height: maxHeight || '35px',
@@ -40,7 +60,7 @@ const TextFieldConstant = ({ label, isRequired = false, content, maxHeight, mRow
                     },
                 }}
                 // size="small"
-                defaultValue={content}
+                defaultValue={defaultUserValue}
                 // multiline based on the value of mRows
                 multiline={mRows ? true : false}
                 maxRows={mRows}
@@ -50,8 +70,17 @@ const TextFieldConstant = ({ label, isRequired = false, content, maxHeight, mRow
 };
 
 function EditUserProfile({ handleClose }) {
+    const dispatch = useDispatch();
+    const authenticatedUser = useLoggedInUser();
     const [school, setSchool] = useState('');
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const listAccount = useSelector((state) => state.manageAccounts.accountsList);
+
+    console.log('Before changing authenticated information: ', authenticatedUser);
+    console.log('listAccount: ', listAccount);
+    const firstNameRef = useRef(null);
+    const lastNameRef = useRef(null);
+    const additionalNameRef = useRef(null);
 
     const handleSelectSchool = (event) => {
         setSchool(event.target.value);
@@ -65,6 +94,46 @@ function EditUserProfile({ handleClose }) {
     const handleModalClose = () => {
         setConfirmOpen(true);
     };
+
+    const handleSaveAuthenticatedInformation = () => {
+        const authFirstName = firstNameRef.current.value.trim();
+        const authLastName = lastNameRef.current.value.trim();
+        const authAditionalName = additionalNameRef.current.value.trim();
+        // if (authenticatedUser.userId) {
+        //     dispatch(
+        //         setLoggedInUser({
+        //             ...authenticatedUser,
+        //             firstName: authFirstName,
+        //             lastName: authLastName,
+        //         }),
+        //     );
+
+        //     dispatch(
+        //         updateAccountInformation(authenticatedUser.userId, {
+        //             ...authenticatedUser,
+        //             firstName: authFirstName,
+        //             lastName: authLastName,
+        //         }),
+        //     );
+        // }
+
+        dispatch(
+            //Update account information in the accounts list
+
+            updateAccountInformation(authenticatedUser.userId, {
+                ...authenticatedUser,
+                firstName: authFirstName,
+                lastName: authLastName,
+                aditionalName: authAditionalName,
+            }),
+        );
+
+        setConfirmOpen(false);
+        handleClose();
+    };
+
+    console.log('After changing authenticated information: ', authenticatedUser);
+    console.log('listAccount: ', listAccount);
 
     return (
         <Box
@@ -170,10 +239,24 @@ function EditUserProfile({ handleClose }) {
                         />
                     </Box> */}
                     <Box sx={{ mt: 2 }}>
-                        <TextFieldConstant label={'First name'} isRequired={true} />
+                        <TextFieldConstant
+                            label={'First name'}
+                            isRequired={true}
+                            userInputRef={firstNameRef}
+                            defaultUserValue={authenticatedUser.firstName}
+                        />
                         {/* Last Name */}
-                        <TextFieldConstant label={'Last name'} isRequired={true} />
-                        <TextFieldConstant label={'Aditional name'} />
+                        <TextFieldConstant
+                            label={'Last name'}
+                            isRequired={true}
+                            userInputRef={lastNameRef}
+                            defaultUserValue={authenticatedUser.lastName}
+                        />
+                        <TextFieldConstant
+                            label={'Aditional name'}
+                            userInputRef={additionalNameRef}
+                            defaultUserValue={authenticatedUser.additionalName}
+                        />
 
                         {/* Headline study at? */}
                         <TextFieldConstant
@@ -181,7 +264,7 @@ function EditUserProfile({ handleClose }) {
                             maxHeight={'50px'}
                             label={'Headline'}
                             isRequired={true}
-                            content={'Student at HCMUTE'}
+                            defaultUserValue={'Student at HCMUTE'}
                         />
                     </Box>
                     {/* Education */}
@@ -244,9 +327,12 @@ function EditUserProfile({ handleClose }) {
                         <TextFieldConstant
                             label={'Country/Region'}
                             isRequired={true}
-                            content={'Viet Nam'}
+                            defaultUserValue={'Viet Nam'}
                         />
-                        <TextFieldConstant label={'City'} content={'Thủ Đức, Ho Chi Minh City'} />
+                        <TextFieldConstant
+                            label={'City'}
+                            defaultUserValue={'Thủ Đức, Ho Chi Minh City'}
+                        />
                     </Box>
 
                     {/* Contact information  */}
@@ -293,7 +379,7 @@ function EditUserProfile({ handleClose }) {
                             mr: '8px',
                             mb: 2,
                         }}
-                        onClick={handleConfirmClose}
+                        onClick={handleSaveAuthenticatedInformation}
                     >
                         Save
                     </Button>
@@ -389,3 +475,88 @@ function EditUserProfile({ handleClose }) {
 }
 
 export default EditUserProfile;
+
+// for select university data
+const universities = [
+    {
+        universityName: 'Vietnam National University, Hanoi',
+        universityImage: 'https://example.com/vnu_hanoi.jpg',
+    },
+    {
+        universityName: 'Ho Chi Minh City University of Technology',
+        universityImage: 'https://example.com/hcmut.jpg',
+    },
+    {
+        universityName: 'Hanoi University of Science and Technology',
+        universityImage: 'https://example.com/hust.jpg',
+    },
+    {
+        universityName: 'University of Economics and Business - Vietnam National University, Hanoi',
+        universityImage: 'https://example.com/ueb_vnu_hanoi.jpg',
+    },
+    {
+        universityName: 'Ho Chi Minh City University of Science',
+        universityImage: 'https://example.com/hcmus.jpg',
+    },
+    {
+        universityName: 'Vietnam National University of Agriculture',
+        universityImage: 'https://example.com/vnua.jpg',
+    },
+    {
+        universityName: 'Hanoi University',
+        universityImage: 'https://example.com/hanoi_university.jpg',
+    },
+    {
+        universityName: 'Ho Chi Minh City University of Social Sciences and Humanities',
+        universityImage: 'https://example.com/hcmussh.jpg',
+    },
+    {
+        universityName: 'Can Tho University',
+        universityImage: 'https://example.com/can_tho_university.jpg',
+    },
+    {
+        universityName: 'Da Nang University of Technology',
+        universityImage: 'https://example.com/dut.jpg',
+    },
+    {
+        universityName: 'Vietnam National University, Ho Chi Minh City',
+        universityImage: 'https://example.com/vnu_hcm.jpg',
+    },
+    {
+        universityName: 'Hanoi Medical University',
+        universityImage: 'https://example.com/hanoi_medical_university.jpg',
+    },
+    {
+        universityName: 'Foreign Trade University',
+        universityImage: 'https://example.com/ftu.jpg',
+    },
+    {
+        universityName: 'Ho Chi Minh City University of Agriculture and Forestry',
+        universityImage: 'https://example.com/hcmuaf.jpg',
+    },
+    {
+        universityName: 'Hue University',
+        universityImage: 'https://example.com/hue_university.jpg',
+    },
+    {
+        universityName: 'Vietnam National University of Fine Arts',
+        universityImage: 'https://example.com/vnufa.jpg',
+    },
+    {
+        universityName: 'Ton Duc Thang University',
+        universityImage: 'https://example.com/tdt_university.jpg',
+    },
+    {
+        universityName: 'University of Medicine and Pharmacy, Ho Chi Minh City',
+        universityImage: 'https://example.com/ump_hcm.jpg',
+    },
+    {
+        universityName: 'Vietnam National University of Forestry',
+        universityImage: 'https://example.com/vnuf.jpg',
+    },
+    {
+        universityName: 'University of Science and Technology, Hanoi',
+        universityImage: 'https://example.com/usth.jpg',
+    },
+    // Add more universities here...
+];

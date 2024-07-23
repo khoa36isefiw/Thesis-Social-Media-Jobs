@@ -10,6 +10,7 @@ import {
     USER_LOGGED_IN_INFORMATION,
     SET_SELECTED_FILTER_INDEX_BG,
     SET_SELECTED_BG_ROTATION_ANGLE,
+    UPDATE_ACCOUNT_INFORMATION,
 } from '../actionConstant';
 import DefaultBackgroundImage from '../../assets/images/DefaultBackgroundImage.jpeg';
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
             userId: 'ro',
             firstName: 'Tido',
             lastName: 'Kang',
+            additionalName: '',
             birthDate: '12-6-2000',
             userName: 'tido',
             password: 'tido',
@@ -42,6 +44,7 @@ const initialState = {
             userId: 'r11',
             firstName: 'Mahiru',
             lastName: 'Shiina',
+            additionalName: '',
             birthDate: '12-6-2003',
             userName: 'shiina',
             password: 'shiina',
@@ -67,6 +70,7 @@ const initialState = {
         userId: 'ro',
         firstName: 'Tido',
         lastName: 'Kang',
+        additionalName: '',
         birthDate: '12-6-2000',
         userName: 'tido',
         password: 'tido',
@@ -106,6 +110,34 @@ export const manageAccountReducer = (state = initialState, action) => {
                 ...state,
                 accountsList: [...state.accountsList, account],
             };
+
+        case UPDATE_ACCOUNT_INFORMATION:
+            // get payload
+            const { userId: updateUserId, updatedInfor } = action.payload;
+
+            return {
+                // check in account list which userId (user) is selected to change their information
+                accountsList: state.accountsList.map(
+                    (account) =>
+                        account.userId === updateUserId
+                            ? {
+                                  ...account,
+                                  ...updatedInfor,
+                              }
+                            : account, //stable
+                ),
+
+                // update directly for authenticated user
+                // based on userId
+                loggedInUser:
+                    state.loggedInUser.userId === updateUserId
+                        ? {
+                              ...state.loggedInUser,
+                              ...updatedInfor,
+                          }
+                        : state.loggedInUser,
+            };
+
         case USER_LOGGED_IN_INFORMATION:
             const { user } = action.payload;
             return {

@@ -4,6 +4,7 @@ import {
     COMMENT_PRIVACY,
     GET_REACTION_IN_COMMENT_ON_POST,
     GET_REACTION_ON_POST,
+    GET_REACTION_RESPONSE_COMMENTS,
     POST_SETTINGS_PRIVACY,
     REPLY_COMMENTS,
     SAVE_PRIVACY_SELECTED,
@@ -15,6 +16,7 @@ const initialState = {
     repliedComments: {}, // initial state
     // repliedComments: [],
     commentReactions: {},
+    listReactionsInResponseToComment: [],
     listPostsData: [],
     commentControlSelection: 'Anyone', // include 2 cases: Anyone, connections only, no one || connections only, no one
     commentControlPrivateSelection: 'Connections only',
@@ -85,6 +87,28 @@ export const managePostReducer = (state = initialState, action) => {
                     [pID]: {
                         ...state.commentReactions[pID],
                         [commentId]: cReaction,
+                    },
+                },
+            };
+
+        case GET_REACTION_RESPONSE_COMMENTS:
+            const {
+                postID: pstId,
+                commentId: cmtId,
+                replyCommentId,
+                reaction: react,
+            } = action.payload;
+
+            return {
+                ...state,
+                listReactionsInResponseToComment: {
+                    ...state.listReactionsInResponseToComment,
+                    [pstId]: {
+                        ...state.listReactionsInResponseToComment[pstId],
+                        [cmtId]: {
+                            ...state.listReactionsInResponseToComment[pstId]?.[cmtId],
+                            [replyCommentId]: react,
+                        },
                     },
                 },
             };

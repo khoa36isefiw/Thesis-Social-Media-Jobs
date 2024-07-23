@@ -85,8 +85,10 @@ function GuestSignUp() {
                     userId,
                     firstName,
                     lastName,
+                    additionalName: '',
                     birthDate: getBirthDate,
                     userName: email,
+
                     password: password,
                     // default image
                     userPhoto: {
