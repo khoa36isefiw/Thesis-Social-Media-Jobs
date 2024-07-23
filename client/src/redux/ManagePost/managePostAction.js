@@ -4,6 +4,7 @@ import {
     COMMENT_PRIVACY,
     GET_REACTION_IN_COMMENT_ON_POST,
     GET_REACTION_ON_POST,
+    GET_REACTION_RESPONSE_COMMENTS,
     POST_SETTINGS_PRIVACY,
     REPLY_COMMENTS,
     SAVE_PRIVACY_SELECTED,
@@ -19,6 +20,11 @@ export const setReactionOnPost = (postId, reaction) => ({
 export const setReactionOnCommentInPost = (postID, commentId, reaction) => ({
     type: GET_REACTION_IN_COMMENT_ON_POST,
     payload: { postID, commentId, reaction },
+});
+
+export const setReactionOnResponseCommentInPost = (postID, commentId, replyCommentId, reaction) => ({
+    type: GET_REACTION_RESPONSE_COMMENTS,
+    payload: { postID, commentId, replyCommentId, reaction },
 });
 
 export const addComment = (postID, comment, timeStamp) => {

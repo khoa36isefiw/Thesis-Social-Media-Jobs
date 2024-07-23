@@ -70,7 +70,7 @@ export function CommentsData({ postId, imageUrl }) {
     const renderReactionIcon = (commentId) => {
         const reaction = reactionList?.[commentId]; // get data from object
         const reactionCount = reaction ? 1 : 0;
-        console.log('what reaction is selected: ', reaction);
+        // console.log('what reaction is selected: ', reaction);
         // console.log('reaction: ', reaction);
         return reaction ? (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -467,6 +467,7 @@ export function CommentsData({ postId, imageUrl }) {
                                                             )
                                                         }
                                                         commentID={index}
+                                                        replyID={null}
                                                     />
                                                 )}
                                         </Box>
