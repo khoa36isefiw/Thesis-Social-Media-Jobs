@@ -80,6 +80,7 @@ function EditUserProfile({ handleClose }) {
     console.log('listAccount: ', listAccount);
     const firstNameRef = useRef(null);
     const lastNameRef = useRef(null);
+    const additionalNameRef = useRef(null);
 
     const handleSelectSchool = (event) => {
         setSchool(event.target.value);
@@ -97,6 +98,7 @@ function EditUserProfile({ handleClose }) {
     const handleSaveAuthenticatedInformation = () => {
         const authFirstName = firstNameRef.current.value.trim();
         const authLastName = lastNameRef.current.value.trim();
+        const authAditionalName = additionalNameRef.current.value.trim();
         // if (authenticatedUser.userId) {
         //     dispatch(
         //         setLoggedInUser({
@@ -122,6 +124,7 @@ function EditUserProfile({ handleClose }) {
                 ...authenticatedUser,
                 firstName: authFirstName,
                 lastName: authLastName,
+                aditionalName: authAditionalName,
             }),
         );
 
@@ -249,7 +252,11 @@ function EditUserProfile({ handleClose }) {
                             userInputRef={lastNameRef}
                             defaultUserValue={authenticatedUser.lastName}
                         />
-                        <TextFieldConstant label={'Aditional name'} />
+                        <TextFieldConstant
+                            label={'Aditional name'}
+                            userInputRef={additionalNameRef}
+                            defaultUserValue={authenticatedUser.additionalName}
+                        />
 
                         {/* Headline study at? */}
                         <TextFieldConstant
