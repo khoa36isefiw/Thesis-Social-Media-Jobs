@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import {
     setReactionOnCommentInPost,
     setReactionOnPost,
+    setReactionOnResponseCommentInPost,
 } from '../../redux/ManagePost/managePostAction';
 
 import { mobileScreen } from '../Theme/Theme';
@@ -27,19 +28,34 @@ const reactionsButtonList = [
     },
 ];
 
-export const ReactionMenu = ({ postID, commentID, handleChoose }) => {
+export const ReactionMenu = ({ postID, commentID, replyID, handleChoose }) => {
     const dispatch = useDispatch();
     const handleChooseReaction = (reaction) => {
         handleChoose(reaction);
         // dispatch(setReactionOnPost(postID, reaction));
-        if (commentID !== null) {
+        // initial
+        // if (commentID !== null) {
+        //     // if commentID exists
+        //     console.log('chạy về đây nè!');
+        //     console.log('postID: ', postID);
+        //     dispatch(setReactionOnCommentInPost(postID, commentID, reaction));
+        // } else if (commentID !== null && replyID !== null) {
+        //     dispatch(setReactionOnResponseCommentInPost(postID, commentID, replyID, reaction));
+        // } else {
+        //     console.log('có cái nịt :)');
+        //     console.log('postID2 22: ', postID);
+        //     dispatch(setReactionOnPost(postID, reaction));
+        // }
+
+        if (replyID !== null && commentID !== null) {
             // if commentID exists
             console.log('chạy về đây nè!');
-            console.log('postID: ', postID);
+            dispatch(setReactionOnResponseCommentInPost(postID, commentID, replyID, reaction));
+        } else if (commentID !== null) {
+            console.log('i love you chụt chụt');
             dispatch(setReactionOnCommentInPost(postID, commentID, reaction));
         } else {
             console.log('có cái nịt :)');
-            console.log('postID2 22: ', postID);
             dispatch(setReactionOnPost(postID, reaction));
         }
     };
