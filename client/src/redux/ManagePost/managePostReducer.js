@@ -38,7 +38,7 @@ export const managePostReducer = (state = initialState, action) => {
             };
 
         case ADD_COMMENT:
-            const { postID, comment } = action.payload;
+            const { postID, comment, userInfor } = action.payload;
             // const { postID, comment, timeStamp: timestamp } = action.payload;
             console.log('previous comments: ', state.comments);
             return {
@@ -46,12 +46,9 @@ export const managePostReducer = (state = initialState, action) => {
                 comments: {
                     // initial
                     ...state.comments,
-                    [postID]: [...(state.comments[postID] || []), comment],
+                    // [postID]: [...(state.comments[postID] || []), comment, userInfor], // initial
+                    [postID]: [...(state.comments[postID] || []), [comment, userInfor]],
                 },
-                // comments: {
-                //     ...state.comments,
-                //     [postID]: [...(state.comments[postID] || []), [comment, timestamp]],
-                // },
             };
         case REPLY_COMMENTS:
             const {

@@ -1,3 +1,5 @@
+// backup for comments data
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, IconButton, Avatar, Modal } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,8 +25,11 @@ import SampleCommentsData from './Data/SampleCommentsData';
 export function CommentsData({ postId, imageUrl }) {
     const dispatch = useDispatch();
     const replyTextFieldRef = useRef(null);
+    // get comment from each post, just comment not include inoformation of user
     const commentList = useSelector((state) => state.managePost.comments[postId]);
     const commentLists = useSelector((state) => state.managePost.comments);
+    console.log('all the comments: ', commentLists);
+    console.log('Comment List on postID: ', commentList);
     // get comment reply the comment in post
 
     const reactionList = useSelector((state) => state.managePost.commentReactions[postId]);
@@ -212,404 +217,417 @@ export function CommentsData({ postId, imageUrl }) {
             <SampleCommentsData />
             {/* Load comment  */}
             {commentList &&
-                commentList.map((comment, index) => (
-                    <Box key={index}>
-                        <Box sx={{ display: 'flex', mt: 2 }}>
-                            <Avatar
-                                // src={'https://cdn.mos.cms.futurecdn.net/xaycNDmeyxpHDrPqU6LmaD.jpg'}
-                                src={
-                                    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png'
-                                }
-                                alt="User Image"
-                                sx={{
-                                    height: '40px',
-                                    width: '40px',
-                                    objectFit: 'cover',
-                                    border: '1px solid #d0d0d0',
-                                }}
-                            />
+                commentList.map((comment, index) => {
+                    return (
+                        <Box key={index}>
+                            <Box sx={{ display: 'flex', mt: 2 }}>
+                                <Avatar
+                                    // src={'https://cdn.mos.cms.futurecdn.net/xaycNDmeyxpHDrPqU6LmaD.jpg'}
+                                    src={comment[1].userPhoto && comment[1].userPhoto.imgUrl}
+                                    alt="User Image"
+                                    sx={{
+                                        height: '40px',
+                                        width: '40px',
+                                        objectFit: 'cover',
+                                        border: '1px solid #d0d0d0',
+                                    }}
+                                />
 
+                                <Box
+                                    sx={{
+                                        border: '1px solid #f2f2f2',
+                                        minHeight: '10px',
+                                        width: '100%',
+                                        px: 1,
+                                        py: '4px',
+                                        borderRadius: '12px',
+                                        backgroundColor: '#f2f2f2',
+                                        ml: 1,
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                        }}
+                                    >
+                                        <Typography
+                                            sx={{
+                                                fontSize: '16px',
+                                                fontWeight: 'bold',
+                                                [tabletScreen]: {
+                                                    fontSize: '14px',
+                                                },
+                                            }}
+                                        >
+                                            {/* Luna Kei */}
+                                            {comment[1].userName}
+                                        </Typography>
+
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            {/* time comment */}
+                                            {Array.isArray(comment[0]) &&
+                                                comment[0].length === 3 && (
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: '12px',
+                                                        }}
+                                                    >
+                                                        {calculateTimeComment(comment[0][2])}
+                                                    </Typography>
+                                                )}
+                                            {Array.isArray(comment[0]) &&
+                                                comment[0].length === 2 && (
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: '12px',
+                                                        }}
+                                                    >
+                                                        {calculateTimeComment(comment[0][1])}
+                                                    </Typography>
+                                                )}
+
+                                            {/* More action with this comment */}
+                                            <IconButton
+                                                onClick={handleOpenCommentMenuSettings}
+                                                sx={{ py: 0, px: '4px' }}
+                                            >
+                                                <MoreHoriz sx={{ fontSize: '18px' }} />
+                                            </IconButton>
+                                        </Box>
+                                    </Box>
+
+                                    {/* check if comment is array */}
+                                    <Box sx={{ width: '100%' }}>
+                                        {Array.isArray(comment[0]) && (
+                                            <Box
+                                                sx={{
+                                                    overflow: 'scroll',
+                                                    maxHeight: '250px',
+                                                }}
+                                            >
+                                                {/* If the comment[0] array contains both text and an image */}
+                                                {comment[0].length > 2 && (
+                                                    <Box sx={{ width: '100%' }}>
+                                                        <Typography
+                                                            sx={{
+                                                                fontSize: {
+                                                                    xs: '13.5px',
+                                                                    md: '14px',
+                                                                },
+                                                                wordBreak: 'break-word',
+                                                                whiteSpace: 'pre-wrap',
+                                                            }}
+                                                        >
+                                                            {comment[0][0]}
+                                                            {/* {comment[0][2]} */}
+                                                        </Typography>
+
+                                                        <Box
+                                                            sx={{
+                                                                bgcolor: blue[100],
+                                                                maxWidth: '210px',
+                                                                maxHeight: '210px',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                            }}
+                                                        >
+                                                            <ImageOriginialSize
+                                                                imageURL={comment[0][1]}
+                                                                maxImageHeight={200}
+                                                                maxImageWidth={200}
+                                                                customHeight={150}
+                                                                customWidth={200}
+                                                                handleFunction={() =>
+                                                                    handleOpenImageModal(
+                                                                        postId,
+                                                                        index,
+                                                                    )
+                                                                }
+                                                            />
+                                                        </Box>
+
+                                                        <Modal
+                                                            open={
+                                                                openImageCommentModal?.postID ===
+                                                                    postId &&
+                                                                openImageCommentModal?.commentIndex ===
+                                                                    index
+                                                            }
+                                                            onClose={handleCloseImageModal}
+                                                        >
+                                                            <ImageDetailInMessage
+                                                                imgUrl={comment[0][1]}
+                                                                handleClose={handleCloseImageModal}
+                                                            />
+                                                        </Modal>
+                                                    </Box>
+                                                )}
+
+                                                {comment[0].length === 2 && (
+                                                    <Box sx={{ width: '100%' }}>
+                                                        <Typography
+                                                            sx={{
+                                                                fontSize: {
+                                                                    xs: '13.5px',
+                                                                    md: '14px',
+                                                                },
+                                                                wordBreak: 'break-word',
+                                                                whiteSpace: 'pre-wrap',
+                                                            }}
+                                                        >
+                                                            {comment[0][0]}
+                                                            {/* {comment[2]} */}
+                                                        </Typography>
+                                                    </Box>
+                                                )}
+                                            </Box>
+                                        )}
+                                    </Box>
+                                </Box>
+                            </Box>
+
+                            {/* status of comment */}
                             <Box
                                 sx={{
-                                    border: '1px solid #f2f2f2',
-                                    minHeight: '10px',
-                                    width: '100%',
-                                    px: 1,
-                                    py: '4px',
-                                    borderRadius: '12px',
-                                    backgroundColor: '#f2f2f2',
-                                    ml: 1,
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    width: '220px',
+                                    mt: '4px',
+                                    ml: 5,
+                                    [tabletScreen]: {
+                                        mx: 4,
+                                    },
                                 }}
                             >
                                 <Box
                                     sx={{
                                         display: 'flex',
-                                        alignItems: 'center',
                                         justifyContent: 'space-between',
+                                        alignItems: 'center',
                                     }}
                                 >
-                                    <Typography
-                                        sx={{
-                                            fontSize: '16px',
-                                            fontWeight: 'bold',
-                                            [tabletScreen]: {
-                                                fontSize: '14px',
-                                            },
-                                        }}
-                                    >
-                                        Luna Kei
-                                    </Typography>
-
-                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                        {/* time comment */}
-                                        {Array.isArray(comment) && comment.length === 3 && (
-                                            <Typography
-                                                sx={{
-                                                    fontSize: '12px',
-                                                }}
-                                            >
-                                                {calculateTimeComment(comment[2])}
-                                            </Typography>
-                                        )}
-
-                                        {Array.isArray(comment) && comment.length === 2 && (
-                                            <Typography
-                                                sx={{
-                                                    fontSize: '12px',
-                                                }}
-                                            >
-                                                {calculateTimeComment(comment[1])}
-                                            </Typography>
-                                        )}
-                                        {/* More action with this comment */}
-
-                                        <IconButton
-                                            onClick={handleOpenCommentMenuSettings}
-                                            sx={{ py: 0, px: '4px' }}
-                                        >
-                                            <MoreHoriz sx={{ fontSize: '18px' }} />
-                                        </IconButton>
-                                    </Box>
-                                </Box>
-
-                                {/* check if comment is array */}
-                                <Box sx={{ width: '100%' }}>
-                                    {Array.isArray(comment) && (
-                                        <Box
+                                    <Box>
+                                        <ActionsTypography
                                             sx={{
-                                                overflow: 'scroll',
-                                                maxHeight: '250px',
+                                                ml: 1,
+                                                position: 'relative',
+                                                '::before': {
+                                                    position: 'absolute',
+                                                    content: '""',
+                                                    width: '20px',
+                                                    // bgcolor: 'yelloReplyw',
+                                                    height: '40px',
+                                                    top: '-10px',
+                                                    left: '0%',
+                                                },
+                                                [tabletScreen]: {
+                                                    ml: 2,
+                                                },
                                             }}
+                                            onMouseEnter={() => handleLikeHover(index)}
+                                            onMouseLeave={handleLikeLeave}
+                                            colorAction={
+                                                reactionList &&
+                                                reactionList?.[index] &&
+                                                reactionList?.[index].btnText
+                                                    ? reactionList?.[index].btnText.includes(
+                                                          'Loved',
+                                                      )
+                                                        ? '#e91e63'
+                                                        : reactionList?.[index].btnText.includes(
+                                                              'Laughed',
+                                                          )
+                                                        ? '#ffc400'
+                                                        : blue[900]
+                                                    : '#000000BF'
+                                            }
+                                            // textColor={'#e91e63'}
+                                            // textColor={'#ffc400'}
+                                            // textColor={blue[900]}
                                         >
-                                            {/* If the comment array contains both text and an image */}
-                                            {comment.length > 2 && (
-                                                <Box sx={{ width: '100%' }}>
-                                                    <Typography
-                                                        sx={{
-                                                            fontSize: {
-                                                                xs: '13.5px',
-                                                                md: '14px',
-                                                            },
-                                                            wordBreak: 'break-word',
-                                                            whiteSpace: 'pre-wrap',
-                                                        }}
-                                                    >
-                                                        {comment[0]}
-                                                        {/* {comment[2]} */}
-                                                    </Typography>
+                                            {/* const reaction = reactionList?.[commentId]; // get data from object */}
 
-                                                    <Box
-                                                        sx={{
-                                                            bgcolor: blue[100],
-                                                            maxWidth: '210px',
-                                                            maxHeight: '210px',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                        }}
-                                                    >
-                                                        <ImageOriginialSize
-                                                            imageURL={comment[1]}
-                                                            maxImageHeight={200}
-                                                            maxImageWidth={200}
-                                                            customHeight={150}
-                                                            customWidth={200}
-                                                            handleFunction={() =>
-                                                                handleOpenImageModal(postId, index)
-                                                            }
-                                                        />
-                                                    </Box>
-
-                                                    <Modal
-                                                        open={
-                                                            openImageCommentModal?.postID ===
-                                                                postId &&
-                                                            openImageCommentModal?.commentIndex ===
-                                                                index
-                                                        }
-                                                        onClose={handleCloseImageModal}
-                                                    >
-                                                        <ImageDetailInMessage
-                                                            imgUrl={comment[1]}
-                                                            handleClose={handleCloseImageModal}
-                                                        />
-                                                    </Modal>
-                                                </Box>
-                                            )}
-
-                                            {comment.length === 2 && (
-                                                <Box sx={{ width: '100%' }}>
-                                                    <Typography
-                                                        sx={{
-                                                            fontSize: {
-                                                                xs: '13.5px',
-                                                                md: '14px',
-                                                            },
-                                                            wordBreak: 'break-word',
-                                                            whiteSpace: 'pre-wrap',
-                                                        }}
-                                                    >
-                                                        {comment[0]}
-                                                        {/* {comment[2]} */}
-                                                    </Typography>
-                                                </Box>
-                                            )}
-                                        </Box>
-                                    )}
-                                </Box>
-                            </Box>
-                        </Box>
-                        {/* status of comment */}
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                width: '220px',
-                                mt: '4px',
-                                ml: 5,
-                                [tabletScreen]: {
-                                    mx: 4,
-                                },
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <Box>
-                                    <ActionsTypography
-                                        sx={{
-                                            ml: 1,
-                                            position: 'relative',
-                                            '::before': {
-                                                position: 'absolute',
-                                                content: '""',
-                                                width: '20px',
-                                                // bgcolor: 'yelloReplyw',
-                                                height: '40px',
-                                                top: '-10px',
-                                                left: '0%',
-                                            },
-                                            [tabletScreen]: {
-                                                ml: 2,
-                                            },
-                                        }}
-                                        onMouseEnter={() => handleLikeHover(index)}
-                                        onMouseLeave={handleLikeLeave}
-                                        colorAction={
-                                            reactionList &&
+                                            {reactionList &&
                                             reactionList?.[index] &&
                                             reactionList?.[index].btnText
                                                 ? reactionList?.[index].btnText.includes('Loved')
-                                                    ? '#e91e63'
+                                                    ? 'Love'
                                                     : reactionList?.[index].btnText.includes(
                                                           'Laughed',
                                                       )
-                                                    ? '#ffc400'
-                                                    : blue[900]
-                                                : '#000000BF'
-                                        }
-                                        // textColor={'#e91e63'}
-                                        // textColor={'#ffc400'}
-                                        // textColor={blue[900]}
-                                    >
-                                        {/* const reaction = reactionList?.[commentId]; // get data from object */}
+                                                    ? 'Laugh'
+                                                    : 'Like'
+                                                : 'Like'}
+                                            {/* Like */}
+                                            <Box
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-20%',
+                                                    zIndex: 10,
+                                                }}
+                                            >
+                                                {hoverStatus.postId === postId &&
+                                                    hoverStatus.commentId === index && (
+                                                        <ReactionMenu
+                                                            postID={postId}
+                                                            handleChoose={() =>
+                                                                handleChooseReactionOnComment(
+                                                                    postId,
+                                                                    index,
+                                                                )
+                                                            }
+                                                            commentID={index}
+                                                            replyID={null}
+                                                        />
+                                                    )}
+                                            </Box>
+                                        </ActionsTypography>
+                                    </Box>
 
-                                        {reactionList &&
-                                        reactionList?.[index] &&
-                                        reactionList?.[index].btnText
-                                            ? reactionList?.[index].btnText.includes('Loved')
-                                                ? 'Love'
-                                                : reactionList?.[index].btnText.includes('Laughed')
-                                                ? 'Laugh'
-                                                : 'Like'
-                                            : 'Like'}
-                                        {/* Like */}
-                                        <Box
-                                            sx={{
-                                                position: 'absolute',
-                                                top: '-50%',
-                                                left: '-20%',
-                                                zIndex: 10,
-                                            }}
-                                        >
-                                            {hoverStatus.postId === postId &&
-                                                hoverStatus.commentId === index && (
-                                                    <ReactionMenu
-                                                        postID={postId}
-                                                        handleChoose={() =>
-                                                            handleChooseReactionOnComment(
-                                                                postId,
-                                                                index,
-                                                            )
-                                                        }
-                                                        commentID={index}
-                                                        replyID={null}
-                                                    />
-                                                )}
-                                        </Box>
-                                    </ActionsTypography>
+                                    {/* need have field: numberOfReaction to plus with reaction */}
+                                    {renderReactionIcon(index)}
                                 </Box>
-
-                                {/* need have field: numberOfReaction to plus with reaction */}
-                                {renderReactionIcon(index)}
-                            </Box>
-                            <Box
-                                sx={{
-                                    width: '1px',
-                                    bgcolor: 'gray',
-                                }}
-                            />
-                            <ActionsTypography onClick={() => handleShowReplyField(index)}>
-                                Reply
-                            </ActionsTypography>
-                            {/* The number of responses */}
-                            <ActionsTypography>-</ActionsTypography>
-
-                            <ActionsTypography sx={{ fontWeight: 'normal' }}>
-                                1 Reply
-                            </ActionsTypography>
-                        </Box>
-                        {/* {showResponsesCommentList(postId, index)} */}
-                        <ShowResponsesCommentList postId={postId} commentIdx={index} />
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    mt: 1,
-                                    ml: 6,
-                                }}
-                            >
-                                <Avatar
-                                    src={
-                                        'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
-                                    }
-                                    alt="User Image"
-                                    sx={{
-                                        height: '32px',
-                                        width: '32px',
-                                        objectFit: 'cover',
-                                    }}
-                                />
-                                <Box
-                                    sx={{
-                                        border: '1px solid #f2f2f2',
-                                        maxHeight: '150px',
-                                        width: '100%',
-                                        p: 1,
-                                        borderRadius: '10px',
-                                        backgroundColor: '#f2f2f2',
-                                        ml: 1,
-                                    }}
-                                >
-                                    <ActionsOnComment userName={'October'} timePostComment={'1m'} />
-                                    <Typography
-                                        sx={{
-                                            fontSize: '14px',
-                                            [tabletScreen]: {
-                                                fontSize: '13.5px',
-                                            },
-                                        }}
-                                    >
-                                        Depends on the trip you take
-                                    </Typography>
-                                </Box>
-                            </Box>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    ml: 11,
-                                    mt: '4px',
-                                    alignItems: 'center',
-                                    width: '220px',
-                                    // justifyContent: 'space-between',
-                                }}
-                            >
-                                <ActionsTypography sx={{ ml: 1 }}>Like</ActionsTypography>
                                 <Box
                                     sx={{
                                         width: '1px',
-                                        height: '21px',
                                         bgcolor: 'gray',
-                                        ml: 2,
                                     }}
                                 />
-                                <ActionsTypography sx={{ ml: 2 }}>Reply</ActionsTypography>
-                            </Box>
+                                <ActionsTypography onClick={() => handleShowReplyField(index)}>
+                                    Reply
+                                </ActionsTypography>
+                                {/* The number of responses */}
+                                <ActionsTypography>-</ActionsTypography>
 
-                            {/* show textfield to reply the comment */}
-                            {showReplyCommentField &&
-                                replyStatus.postId === postId &&
-                                replyStatus.commentId === index && (
-                                    <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
-                                        <Avatar
-                                            src={UserAvatar}
-                                            alt="User Image"
-                                            sx={{
-                                                height: '32px',
-                                                width: '32px',
-                                                objectFit: 'cover',
-                                            }}
+                                <ActionsTypography sx={{ fontWeight: 'normal' }}>
+                                    1 Reply
+                                </ActionsTypography>
+                            </Box>
+                            {/* {showResponsesCommentList(postId, index)} */}
+                            <ShowResponsesCommentList postId={postId} commentIdx={index} />
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        mt: 1,
+                                        ml: 6,
+                                    }}
+                                >
+                                    <Avatar
+                                        src={
+                                            'https://i.scdn.co/image/ab67616d0000b27339f24c41b07bad078b64b146'
+                                        }
+                                        alt="User Image"
+                                        sx={{
+                                            height: '32px',
+                                            width: '32px',
+                                            objectFit: 'cover',
+                                        }}
+                                    />
+                                    <Box
+                                        sx={{
+                                            border: '1px solid #f2f2f2',
+                                            maxHeight: '150px',
+                                            width: '100%',
+                                            p: 1,
+                                            borderRadius: '10px',
+                                            backgroundColor: '#f2f2f2',
+                                            ml: 1,
+                                        }}
+                                    >
+                                        <ActionsOnComment
+                                            userName={'October'}
+                                            timePostComment={'1m'}
                                         />
-                                        <Box
+                                        <Typography
                                             sx={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                flexGrow: 1,
-                                                border: '1px solid #d0d0d0',
-                                                ml: 1,
-                                                borderRadius: '12px',
+                                                fontSize: '14px',
+                                                [tabletScreen]: {
+                                                    fontSize: '13.5px',
+                                                },
                                             }}
                                         >
-                                            <CommentTextField
-                                                inputRef={replyTextFieldRef}
-                                                onChange={handleCommentTextFieldChange}
-                                                isShowPlaceholder={true}
-                                                imageURLUploaded={imageURL}
-                                                defaultValue={'Luna Kei'}
-                                                removeImageUploaded={handleRemoveImageUploaded}
-                                            />
-                                            <CommentTextField
-                                                disabled={true}
-                                                isEmptyCommentField={isEmptyReplyField}
-                                                showIconUploadImage={showIconUploadImage}
-                                                uploadedImage={handleImageUpload}
-                                                setShowPicker={setShowPicker}
-                                                showPicker={showPicker}
-                                                handleEmojiClick={handleEmojiClick}
-                                                submitFunction={() =>
-                                                    handleSubmitReplyComment(postId, index)
-                                                }
-                                            />
-                                        </Box>
+                                            Depends on the trip you take
+                                        </Typography>
                                     </Box>
-                                )}
+                                </Box>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        ml: 11,
+                                        mt: '4px',
+                                        alignItems: 'center',
+                                        width: '220px',
+                                        // justifyContent: 'space-between',
+                                    }}
+                                >
+                                    <ActionsTypography sx={{ ml: 1 }}>Like</ActionsTypography>
+                                    <Box
+                                        sx={{
+                                            width: '1px',
+                                            height: '21px',
+                                            bgcolor: 'gray',
+                                            ml: 2,
+                                        }}
+                                    />
+                                    <ActionsTypography sx={{ ml: 2 }}>Reply</ActionsTypography>
+                                </Box>
+
+                                {/* show textfield to reply the comment */}
+                                {showReplyCommentField &&
+                                    replyStatus.postId === postId &&
+                                    replyStatus.commentId === index && (
+                                        <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
+                                            <Avatar
+                                                src={UserAvatar}
+                                                alt="User Image"
+                                                sx={{
+                                                    height: '32px',
+                                                    width: '32px',
+                                                    objectFit: 'cover',
+                                                }}
+                                            />
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    flexGrow: 1,
+                                                    border: '1px solid #d0d0d0',
+                                                    ml: 1,
+                                                    borderRadius: '12px',
+                                                }}
+                                            >
+                                                <CommentTextField
+                                                    inputRef={replyTextFieldRef}
+                                                    onChange={handleCommentTextFieldChange}
+                                                    isShowPlaceholder={true}
+                                                    imageURLUploaded={imageURL}
+                                                    defaultValue={'Luna Kei'}
+                                                    removeImageUploaded={handleRemoveImageUploaded}
+                                                />
+                                                <CommentTextField
+                                                    disabled={true}
+                                                    isEmptyCommentField={isEmptyReplyField}
+                                                    showIconUploadImage={showIconUploadImage}
+                                                    uploadedImage={handleImageUpload}
+                                                    setShowPicker={setShowPicker}
+                                                    showPicker={showPicker}
+                                                    handleEmojiClick={handleEmojiClick}
+                                                    submitFunction={() =>
+                                                        handleSubmitReplyComment(postId, index)
+                                                    }
+                                                />
+                                            </Box>
+                                        </Box>
+                                    )}
+                            </Box>
                         </Box>
-                    </Box>
-                ))}
+                    );
+                })}
             <PostMenuSettings
                 openMenuStatus={menuStatus}
                 handleClosePostMenuSettings={handleCloseCommentMenuSettings}
