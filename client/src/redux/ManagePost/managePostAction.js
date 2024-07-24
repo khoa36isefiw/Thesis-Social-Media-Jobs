@@ -22,16 +22,21 @@ export const setReactionOnCommentInPost = (postID, commentId, reaction) => ({
     payload: { postID, commentId, reaction },
 });
 
-export const setReactionOnResponseCommentInPost = (postID, commentId, replyCommentId, reaction) => ({
+export const setReactionOnResponseCommentInPost = (
+    postID,
+    commentId,
+    replyCommentId,
+    reaction,
+) => ({
     type: GET_REACTION_RESPONSE_COMMENTS,
     payload: { postID, commentId, replyCommentId, reaction },
 });
 
-export const addComment = (postID, comment, timeStamp) => {
-    timeStamp = new Date().toISOString(); // Get the current timestamp
+export const addComment = (postID, comment, userInfor) => {
+    const timeStamp = new Date().toISOString(); // Get the current timestamp
     return {
         type: ADD_COMMENT,
-        payload: { postID, comment, timeStamp },
+        payload: { postID, comment, timeStamp, userInfor },
     };
 };
 
