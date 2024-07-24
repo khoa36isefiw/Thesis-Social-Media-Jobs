@@ -25,6 +25,7 @@ import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 import PublicIcon from '@mui/icons-material/Public';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import ShowVideoUploaded from '../ShowVideoUploaded/ShowVideoUploaded';
+import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 
 // definde typograph for this component
 export const CustomTypography = ({ children }) => (
@@ -80,6 +81,7 @@ function Post({
     // get the number of comments
     const commentList = useSelector((state) => state.managePost.comments[postID]);
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
+    const authenticatedInformation = useLoggedInUser();
 
     // console.log('getCommentListLength: ', getCommentListLength);
 
@@ -144,13 +146,21 @@ function Post({
     // for text field
     const handleCommentSubmit = () => {
         let timeStamp = date.toISOString();
+        const userName = authenticatedInformation.lastName
+            ? authenticatedInformation.lastName + ' ' + authenticatedInformation.firstName
+            : authenticatedInformation;
+        const userAvatar = authenticatedInformation.userPhoto;
 
         const commentText = commentTextFieldRef.current.value.trim();
+        const userInfor = {
+            userName,
+            userPhoto: userAvatar,
+        };
         // const commentText = commentTextFieldRef.current.value;
         let commentSent = null;
         if (imageURL !== null) {
             commentSent = [commentText, imageURL.url, timeStamp];
-            dispatch(addComment(postID, commentSent));
+            dispatch(addComment(postID, commentSent, userInfor));
             commentTextFieldRef.current.value = '';
             setIsEmptyCommentField(true);
             setImageURL(null);
@@ -159,7 +169,7 @@ function Post({
                 commentSent = [commentText, timeStamp];
 
                 // dispatch(addComment(postID, commentText));
-                dispatch(addComment(postID, commentSent));
+                dispatch(addComment(postID, commentSent, userInfor));
                 // clear input after submitting
                 commentTextFieldRef.current.value = '';
                 setIsEmptyCommentField(true);
