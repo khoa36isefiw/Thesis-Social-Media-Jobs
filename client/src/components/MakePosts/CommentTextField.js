@@ -61,7 +61,9 @@ export const CommentTextField = ({
     };
 
     // console.log('imageURLUploaded: ', imageURLUploaded);
+
     const finalDefaultValue = defaultValue ? `${defaultValue} ` : defaultValue;
+
     // console.log('imageURLUploaded: ', imageURLUploaded);
 
     return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Avatar } from '@mui/material';
+import { Box, Avatar } from '@mui/material';
 import Liked from '../../assets/images/like.png';
 import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
