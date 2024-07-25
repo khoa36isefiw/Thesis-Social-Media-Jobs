@@ -1,10 +1,10 @@
 // backup for comments data
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Box, Typography, IconButton, Avatar, Modal } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
-import Liked from '../../assets/images/like.png';
+
 import { tabletScreen, theme } from '../Theme/Theme';
 import { ReactionMenu } from './ReactionMenu';
 import ImageDetailInMessage from '../Messaging/ImageDetailInMessage';
@@ -44,7 +44,7 @@ export function CommentsData({ postId, imageUrl }) {
     const [isEmptyReplyField, setIsEmptyReplyField] = useState(true);
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
     const [imageURL, setImageURL] = useState(null);
-
+    const [checkRepliedPerson, setCheckRepliedPerson] = useState('');
     const authenticatedUser = useLoggedInUser();
 
     const handleOpenImageModal = (postID, commentIndex) => {
@@ -120,7 +120,7 @@ export function CommentsData({ postId, imageUrl }) {
     // upload image
     const handleImageUpload = (event) => {
         const file = event.target.files[0]; // Get the list of selected file
-        const uploadedImages = []; // get the existing array of images
+
         const reader = new FileReader();
         reader.onload = () => {
             const imageDataURL = reader.result;
@@ -172,10 +172,12 @@ export function CommentsData({ postId, imageUrl }) {
         setIsEmptyReplyField(commentTextValue.trim() === '');
     };
 
-    const handleSubmitReplyComment = (postId, commentId) => {
+    const handleSubmitReplyComment = (replyPerson, postId, commentId) => {
         const userID = authenticatedUser.userId;
         const userName = authenticatedUser.firstName + ' ' + authenticatedUser.lastName;
         const userPhoto = authenticatedUser.userPhoto.imgUrl;
+        console.log('replyPerson:', replyPerson);
+        setCheckRepliedPerson(replyPerson);
 
         // console.log('userID: ', userID);
         // get the current string in input
@@ -190,7 +192,7 @@ export function CommentsData({ postId, imageUrl }) {
         if (imageURL) {
             // if it has image
             repliedCommentsSent = [replyCommentText, imageURL.url];
-            setImageURL(null); // Clear the image URL after use
+            setImageURL(null); // Clear the image URL after using
         } else {
             // doesn't have image
             repliedCommentsSent = [replyCommentText];
@@ -508,7 +510,11 @@ export function CommentsData({ postId, imageUrl }) {
                                 </ActionsTypography>
                             </Box>
                             {/* {showResponsesCommentList(postId, index)} */}
-                            <ShowResponsesCommentList postId={postId} commentIdx={index} />
+                            <ShowResponsesCommentList
+                                repliedWho={checkRepliedPerson}
+                                postId={postId}
+                                commentIdx={index}
+                            />
                             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                 <Box
                                     sx={{
@@ -606,7 +612,8 @@ export function CommentsData({ postId, imageUrl }) {
                                                     onChange={handleCommentTextFieldChange}
                                                     isShowPlaceholder={true}
                                                     imageURLUploaded={imageURL}
-                                                    defaultValue={'Luna Kei'}
+                                                    // defaultValue={'Luna Kei'}
+                                                    defaultValue={comment[1].userName}
                                                     removeImageUploaded={handleRemoveImageUploaded}
                                                 />
                                                 <CommentTextField
@@ -618,7 +625,11 @@ export function CommentsData({ postId, imageUrl }) {
                                                     showPicker={showPicker}
                                                     handleEmojiClick={handleEmojiClick}
                                                     submitFunction={() =>
-                                                        handleSubmitReplyComment(postId, index)
+                                                        handleSubmitReplyComment(
+                                                            comment[1].userName,
+                                                            postId,
+                                                            index,
+                                                        )
                                                     }
                                                 />
                                             </Box>

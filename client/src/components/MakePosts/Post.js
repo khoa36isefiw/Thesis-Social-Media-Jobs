@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Box, Typography, Avatar, Divider, Modal, Button, IconButton, Grid } from '@mui/material';
 import { mobileScreen } from '../Theme/Theme';
 import { PostActionButton } from './PostActionButton';
@@ -76,6 +76,7 @@ function Post({
     const [imageURL, setImageURL] = useState(null);
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
+    console.log('selectedReaction: ', selectedReaction);
     // update the current time for each posts
     // const [currentTimestamp, setCurrentTimestamp] = useState(new Date());
     // get the number of comments
@@ -680,6 +681,45 @@ function Post({
                             >
                                 {numberOfReaction || selectedReaction ? (
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                        {/* {selectedReaction && // render each reaction
+                                        selectedReaction.btnText &&
+                                        selectedReaction.btnText.includes('Liked') ? (
+                                            <Avatar
+                                                src={Liked}
+                                                sx={{
+                                                    height: '24px',
+                                                    width: '24px',
+                                                    borderRadius: '0',
+                                                    zIndex: 2,
+                                                }}
+                                                alt="Liked a Post"
+                                            />
+                                        ) : selectedReaction &&
+                                          selectedReaction.btnText &&
+                                          selectedReaction.btnText.includes('Loved') ? (
+                                            <Avatar
+                                                src={Love}
+                                                sx={{
+                                                    height: '24px',
+                                                    width: '24px',
+                                                    borderRadius: '0',
+                                                    // ml: '-8px',
+                                                    zIndex: 1,
+                                                }}
+                                                alt="Loved a Post"
+                                            />
+                                        ) : (
+                                            <Avatar
+                                                src={Laugh}
+                                                sx={{
+                                                    height: '24px',
+                                                    width: '24px',
+                                                    borderRadius: '0',
+                                                    // ml: '-8px',
+                                                }}
+                                                alt="Laugh a Post"
+                                            />
+                                        )} */}
                                         <Avatar
                                             src={Liked}
                                             sx={{
@@ -690,6 +730,7 @@ function Post({
                                             }}
                                             alt="Liked a Post"
                                         />
+
                                         <Avatar
                                             src={Love}
                                             sx={{
@@ -701,6 +742,7 @@ function Post({
                                             }}
                                             alt="Loved a Post"
                                         />
+
                                         <Avatar
                                             src={Laugh}
                                             sx={{
@@ -711,6 +753,7 @@ function Post({
                                             }}
                                             alt="Laugh a Post"
                                         />
+
                                         {/* update the number of reations */}
                                         <CustomTypography>
                                             {numberOfReaction + (selectedReaction ? 1 : 0)}

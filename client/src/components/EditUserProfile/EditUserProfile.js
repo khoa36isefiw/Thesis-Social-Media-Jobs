@@ -24,11 +24,7 @@ import { ipadProScreen, mobileScreen, tabletScreen, theme } from '../Theme/Theme
 import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-    saveAccountRegistered,
-    setLoggedInUser,
-    updateAccountInformation,
-} from '../../redux/ManageAccount/manageAccountAction';
+import { updateAccountInformation } from '../../redux/ManageAccount/manageAccountAction';
 import { useSelector } from 'react-redux';
 
 const TextFieldConstant = ({
@@ -477,86 +473,86 @@ function EditUserProfile({ handleClose }) {
 export default EditUserProfile;
 
 // for select university data
-const universities = [
-    {
-        universityName: 'Vietnam National University, Hanoi',
-        universityImage: 'https://example.com/vnu_hanoi.jpg',
-    },
-    {
-        universityName: 'Ho Chi Minh City University of Technology',
-        universityImage: 'https://example.com/hcmut.jpg',
-    },
-    {
-        universityName: 'Hanoi University of Science and Technology',
-        universityImage: 'https://example.com/hust.jpg',
-    },
-    {
-        universityName: 'University of Economics and Business - Vietnam National University, Hanoi',
-        universityImage: 'https://example.com/ueb_vnu_hanoi.jpg',
-    },
-    {
-        universityName: 'Ho Chi Minh City University of Science',
-        universityImage: 'https://example.com/hcmus.jpg',
-    },
-    {
-        universityName: 'Vietnam National University of Agriculture',
-        universityImage: 'https://example.com/vnua.jpg',
-    },
-    {
-        universityName: 'Hanoi University',
-        universityImage: 'https://example.com/hanoi_university.jpg',
-    },
-    {
-        universityName: 'Ho Chi Minh City University of Social Sciences and Humanities',
-        universityImage: 'https://example.com/hcmussh.jpg',
-    },
-    {
-        universityName: 'Can Tho University',
-        universityImage: 'https://example.com/can_tho_university.jpg',
-    },
-    {
-        universityName: 'Da Nang University of Technology',
-        universityImage: 'https://example.com/dut.jpg',
-    },
-    {
-        universityName: 'Vietnam National University, Ho Chi Minh City',
-        universityImage: 'https://example.com/vnu_hcm.jpg',
-    },
-    {
-        universityName: 'Hanoi Medical University',
-        universityImage: 'https://example.com/hanoi_medical_university.jpg',
-    },
-    {
-        universityName: 'Foreign Trade University',
-        universityImage: 'https://example.com/ftu.jpg',
-    },
-    {
-        universityName: 'Ho Chi Minh City University of Agriculture and Forestry',
-        universityImage: 'https://example.com/hcmuaf.jpg',
-    },
-    {
-        universityName: 'Hue University',
-        universityImage: 'https://example.com/hue_university.jpg',
-    },
-    {
-        universityName: 'Vietnam National University of Fine Arts',
-        universityImage: 'https://example.com/vnufa.jpg',
-    },
-    {
-        universityName: 'Ton Duc Thang University',
-        universityImage: 'https://example.com/tdt_university.jpg',
-    },
-    {
-        universityName: 'University of Medicine and Pharmacy, Ho Chi Minh City',
-        universityImage: 'https://example.com/ump_hcm.jpg',
-    },
-    {
-        universityName: 'Vietnam National University of Forestry',
-        universityImage: 'https://example.com/vnuf.jpg',
-    },
-    {
-        universityName: 'University of Science and Technology, Hanoi',
-        universityImage: 'https://example.com/usth.jpg',
-    },
-    // Add more universities here...
-];
+// const universities = [
+//     {
+//         universityName: 'Vietnam National University, Hanoi',
+//         universityImage: 'https://example.com/vnu_hanoi.jpg',
+//     },
+//     {
+//         universityName: 'Ho Chi Minh City University of Technology',
+//         universityImage: 'https://example.com/hcmut.jpg',
+//     },
+//     {
+//         universityName: 'Hanoi University of Science and Technology',
+//         universityImage: 'https://example.com/hust.jpg',
+//     },
+//     {
+//         universityName: 'University of Economics and Business - Vietnam National University, Hanoi',
+//         universityImage: 'https://example.com/ueb_vnu_hanoi.jpg',
+//     },
+//     {
+//         universityName: 'Ho Chi Minh City University of Science',
+//         universityImage: 'https://example.com/hcmus.jpg',
+//     },
+//     {
+//         universityName: 'Vietnam National University of Agriculture',
+//         universityImage: 'https://example.com/vnua.jpg',
+//     },
+//     {
+//         universityName: 'Hanoi University',
+//         universityImage: 'https://example.com/hanoi_university.jpg',
+//     },
+//     {
+//         universityName: 'Ho Chi Minh City University of Social Sciences and Humanities',
+//         universityImage: 'https://example.com/hcmussh.jpg',
+//     },
+//     {
+//         universityName: 'Can Tho University',
+//         universityImage: 'https://example.com/can_tho_university.jpg',
+//     },
+//     {
+//         universityName: 'Da Nang University of Technology',
+//         universityImage: 'https://example.com/dut.jpg',
+//     },
+//     {
+//         universityName: 'Vietnam National University, Ho Chi Minh City',
+//         universityImage: 'https://example.com/vnu_hcm.jpg',
+//     },
+//     {
+//         universityName: 'Hanoi Medical University',
+//         universityImage: 'https://example.com/hanoi_medical_university.jpg',
+//     },
+//     {
+//         universityName: 'Foreign Trade University',
+//         universityImage: 'https://example.com/ftu.jpg',
+//     },
+//     {
+//         universityName: 'Ho Chi Minh City University of Agriculture and Forestry',
+//         universityImage: 'https://example.com/hcmuaf.jpg',
+//     },
+//     {
+//         universityName: 'Hue University',
+//         universityImage: 'https://example.com/hue_university.jpg',
+//     },
+//     {
+//         universityName: 'Vietnam National University of Fine Arts',
+//         universityImage: 'https://example.com/vnufa.jpg',
+//     },
+//     {
+//         universityName: 'Ton Duc Thang University',
+//         universityImage: 'https://example.com/tdt_university.jpg',
+//     },
+//     {
+//         universityName: 'University of Medicine and Pharmacy, Ho Chi Minh City',
+//         universityImage: 'https://example.com/ump_hcm.jpg',
+//     },
+//     {
+//         universityName: 'Vietnam National University of Forestry',
+//         universityImage: 'https://example.com/vnuf.jpg',
+//     },
+//     {
+//         universityName: 'University of Science and Technology, Hanoi',
+//         universityImage: 'https://example.com/usth.jpg',
+//     },
+//
+// ];

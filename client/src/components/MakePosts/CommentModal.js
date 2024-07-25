@@ -308,11 +308,13 @@ function CommentModal({
                                 mt: '6px',
                                 [ipadProScreen]: {
                                     width: '100%',
-                                    height: 'auto',
+                                    // height: 'auto',
+                                    height: originalHeight,
                                 },
                                 [tabletScreen]: {
                                     width: '100%',
-                                    height: 'auto',
+                                    // height: 'auto',
+                                    height: originalHeight,
                                 },
                             }}
                         />
