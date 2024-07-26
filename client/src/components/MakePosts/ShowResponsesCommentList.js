@@ -140,91 +140,6 @@ export const ShowResponsesCommentList = ({ repliedWho, postId, commentIdx }) => 
                                                     )} // Format the timestamp
                                                 />
                                                 <Box>
-                                                    {/* {Array.isArray(replyCmt) &&
-                                                        (replyCmt.length === 2 ? (
-                                                            <React.Fragment>
-                                                                {replyCmt[0].includes(
-                                                                    repliedWho,
-                                                                ) ? (
-                                                                    <Typography
-                                                                        component="span"
-                                                                        sx={{
-                                                                            display: 'block',
-                                                                            wordBreak: 'break-word',
-                                                                            whiteSpace: 'pre-wrap',
-                                                                            fontSize: '14px',
-                                                                            fontWeight: 'bold',
-                                                                            [tabletScreen]: {
-                                                                                fontSize: '13.5px',
-                                                                            },
-                                                                        }}
-                                                                    >
-                                                                        {replyCmt[0]}
-                                                                    </Typography>
-                                                                ) : null}
-                                                                <Box
-                                                                    sx={{
-                                                                        bgcolor: blue[100],
-                                                                        maxWidth: '210px',
-                                                                        maxHeight: '210px',
-                                                                        display: 'flex',
-                                                                        alignItems: 'center',
-                                                                        justifyContent: 'center',
-                                                                    }}
-                                                                >
-                                                                    <ImageOriginialSize
-                                                                        imageURL={replyCmt[1]}
-                                                                        maxImageHeight={200}
-                                                                        maxImageWidth={200}
-                                                                        customHeight={150}
-                                                                        customWidth={200}
-                                                                        handleFunction={() =>
-                                                                            handleOpenImageInReplyCommentModal(
-                                                                                postId,
-                                                                                commentIdx,
-                                                                                replyCommentIdx,
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                </Box>
-                                                                <Modal
-                                                                    open={
-                                                                        openImageCommentModal?.postID ===
-                                                                            postId &&
-                                                                        openImageCommentModal?.commentIndex ===
-                                                                            commentIdx &&
-                                                                        openImageCommentModal?.cmtReplyIndex ===
-                                                                            replyCommentIdx
-                                                                    }
-                                                                    onClose={
-                                                                        handleCloseImageInReplyCommentModal
-                                                                    }
-                                                                >
-                                                                    <ImageDetailInMessage
-                                                                        imgUrl={replyCmt[1]}
-                                                                        handleClose={
-                                                                            handleCloseImageInReplyCommentModal
-                                                                        }
-                                                                    />
-                                                                </Modal>
-                                                            </React.Fragment>
-                                                        ) : (
-                                                            <Typography
-                                                                component="span"
-                                                                sx={{
-                                                                    display: 'block',
-                                                                    wordBreak: 'break-word',
-                                                                    whiteSpace: 'pre-wrap',
-                                                                    // fontWeight: 'bold',
-                                                                    fontSize: '14px',
-                                                                    [tabletScreen]: {
-                                                                        fontSize: '13.5px',
-                                                                    },
-                                                                }}
-                                                            >
-                                                                {éincludes}
-                                                            </Typography>
-                                                        ))} */}
                                                     {Array.isArray(replyCmt) &&
                                                         (replyCmt.length === 2 ? (
                                                             <React.Fragment>
@@ -329,6 +244,43 @@ export const ShowResponsesCommentList = ({ repliedWho, postId, commentIdx }) => 
                                                                     />
                                                                 </Modal>
                                                             </React.Fragment>
+                                                        ) : replyCmt[0].includes(repliedWho) ? (
+                                                            <Typography
+                                                                component="span"
+                                                                sx={{
+                                                                    display: 'block',
+                                                                    wordBreak: 'break-word',
+                                                                    whiteSpace: 'pre-wrap',
+                                                                    fontSize: '14px',
+                                                                    [tabletScreen]: {
+                                                                        fontSize: '13.5px',
+                                                                    },
+                                                                }}
+                                                            >
+                                                                {replyCmt[0]
+                                                                    .split(
+                                                                        new RegExp(
+                                                                            `(${repliedWho})`,
+                                                                            'gi',
+                                                                        ),
+                                                                    )
+                                                                    .map((part, index) =>
+                                                                        part.toLowerCase() ===
+                                                                        repliedWho.toLowerCase() ? (
+                                                                            <span
+                                                                                key={index}
+                                                                                style={{
+                                                                                    fontWeight:
+                                                                                        'bold',
+                                                                                }}
+                                                                            >
+                                                                                {part}
+                                                                            </span>
+                                                                        ) : (
+                                                                            part
+                                                                        ),
+                                                                    )}
+                                                            </Typography>
                                                         ) : (
                                                             <Typography
                                                                 component="span"
