@@ -21,6 +21,7 @@ import { CustomTypography } from './Post';
 import { addComment } from '../../redux/ManagePost/managePostAction';
 import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 import ShowVideoUploaded from '../ShowVideoUploaded/ShowVideoUploaded';
+import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 // Customize styles for Typography in this Component
 export const ActionsTypography = styled(Typography)(({ colorAction }) => ({
     color: colorAction !== null ? colorAction : '#000000BF',
@@ -49,13 +50,14 @@ function CommentModal({
     handleClose,
     onReactionClick,
 }) {
-    const date = new Date();
     const dispatch = useDispatch();
+    const date = new Date();
+    const commentModalTextFieldRef = useRef(null);
+    const authenticatedInformation = useLoggedInUser();
+
     // check if the content of post is an array
     const contentArray = Array.isArray(postContent) ? postContent : [postContent];
     const commentList = useSelector((state) => state.managePost.comments[postId]);
-
-    const commentModalTextFieldRef = useRef(null);
 
     // get the initial width and height of the image
     const [originalWidth, setOriginalWidth] = useState(null);
@@ -181,12 +183,23 @@ function CommentModal({
     const handleCommentSubmit = () => {
         const commentText = commentModalTextFieldRef.current.value.trim();
         let timeStamp = date.toISOString();
+
+        const userName = authenticatedInformation.lastName
+            ? authenticatedInformation.lastName + ' ' + authenticatedInformation.firstName
+            : authenticatedInformation;
+        const userAvatar = authenticatedInformation.userPhoto;
+
+        const userInfor = {
+            userName,
+            userPhoto: userAvatar,
+        };
+
         // const commentText = commentModalTextFieldRef.current.value;
         let commentSent = null;
         if (imageURL !== null) {
             commentSent = [commentText, imageURL.url, timeStamp];
 
-            dispatch(addComment(postId, commentSent));
+            dispatch(addComment(postId, commentSent, userInfor));
             commentModalTextFieldRef.current.value = '';
             setIsEmptyCommentModalField(true);
             setImageURL(null);
@@ -194,7 +207,7 @@ function CommentModal({
             if (commentText !== '') {
                 commentSent = [commentText, timeStamp];
                 // dispatch(addComment(postId, commentText));
-                dispatch(addComment(postId, commentSent));
+                dispatch(addComment(postId, commentSent, userInfor));
                 // clear input after submitting
                 commentModalTextFieldRef.current.value = '';
                 setIsEmptyCommentModalField(true);
