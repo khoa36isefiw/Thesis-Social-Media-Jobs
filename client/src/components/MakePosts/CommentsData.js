@@ -177,6 +177,7 @@ export function CommentsData({ postId, imageUrl }) {
         const userName = authenticatedUser.firstName + ' ' + authenticatedUser.lastName;
         const userPhoto = authenticatedUser.userPhoto.imgUrl;
         console.log('replyPerson:', replyPerson);
+
         setCheckRepliedPerson(replyPerson);
 
         // console.log('userID: ', userID);
