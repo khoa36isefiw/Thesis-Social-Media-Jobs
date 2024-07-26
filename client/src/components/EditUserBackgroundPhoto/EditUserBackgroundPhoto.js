@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
-import { ViewingRights } from '../EditUserProfilePhotoModal/EditUserProfilePhotoModal';
+
 import { useDispatch, useSelector } from 'react-redux';
 import {
     setLoggedInUser,
@@ -12,7 +12,6 @@ import {
     setSelectedBackgroundRotationAngle,
 } from '../../redux/ManageAccount/manageAccountAction';
 
-import WarningIcon from '@mui/icons-material/Warning';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import { RotateButton } from '../RotateButton/RotateButton';
@@ -35,12 +34,11 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
         (state) => state.manageAccounts.selectedBackgroundAngle,
     );
     const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
-    const [showNotifications, setShowNotifications] = useState(false);
+
     const [selectedFilter, setSelectedFilter] = useState(indexFilterBackground);
     // const [rotationAngle, setRotationAngle] = useState(0);
     const [rotationAngle, setRotationAngle] = useState(rotationAngleBackground);
 
-    const [notificationMessage, setNotificationMessage] = useState('');
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
     const handleSaveBgPhotoEdited = () => {
@@ -60,16 +58,10 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
         setAnimationClass('animate__zoomOut');
         dispatch(setSelectedBackgroundFilterIndex(selectedFilter)); // save index of image selected filter
         dispatch(setSelectedBackgroundRotationAngle(rotationAngle));
-        // setShowNotifications(true);
-        // setNotificationMessage('Change your photo successfully');
 
         setTimeout(() => {
             handleCloseChange();
         }, 500);
-    };
-
-    const handleCloseSnackbar = () => {
-        setShowNotifications(false);
     };
 
     const handleSelectedFilters = (index) => {
@@ -233,7 +225,7 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
                                     // border: '1px solid #d0d0d0',
                                     border:
                                         selectedFilter === index
-                                            ? '3px solid #333'
+                                            ? '4px solid green'
                                             : '1px solid transparent',
                                     // Smooth transition for border and box-shadow
                                     transition: 'border 0.3s',
@@ -254,7 +246,15 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
                                     }}
                                 />
                             </Box>
-                            <Typography sx={{ fontSize: '14px', mt: '4px' }}>
+                            <Typography
+                                sx={{
+                                    fontSize: '14px',
+                                    mt: '4px',
+                                    fontWeight: selectedFilter === index ? 'bold' : 'normal',
+                                    textDecoration:
+                                        selectedFilter === index ? 'underline' : 'normal',
+                                }}
+                            >
                                 {filter.filterName}
                             </Typography>
                         </Box>
@@ -290,7 +290,6 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
                     mb: 2,
                 }}
             >
-                {/* <ViewingRights changeColor={true} /> */}
                 <Box>
                     <input
                         type="file"
