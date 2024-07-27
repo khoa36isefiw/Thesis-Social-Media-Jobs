@@ -233,6 +233,12 @@ export function CommentsData({ postId, imageUrl }) {
                                         width: '40px',
                                         objectFit: 'cover',
                                         border: '1px solid #d0d0d0',
+                                        filter:
+                                            comment[1].userPhoto && comment[1].userPhoto.imageStyle,
+                                        transform: `rotate(${
+                                            comment[1].userPhoto &&
+                                            comment[1].userPhoto.imageRotationAngle
+                                        }deg)`,
                                     }}
                                 />
 
