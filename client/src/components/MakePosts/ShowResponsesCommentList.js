@@ -98,6 +98,7 @@ export const ShowResponsesCommentList = ({ repliedWho, postId, commentIdx }) => 
                     value.map((replyObj, replyCommentIdx) => {
                         const { replyCmt, timeStamp, userName, userPhoto } = replyObj; // Destructure replyCmt, timeStamp, userId, userName, and userPhoto
                         const keyAsNumber = Number(key);
+                        console.log('userPhoto in show comment: ', userPhoto);
                         console.log('replyCmt[0].includes()', replyCmt[0].includes(repliedWho));
 
                         return (
@@ -109,7 +110,7 @@ export const ShowResponsesCommentList = ({ repliedWho, postId, commentIdx }) => 
                                     <React.Fragment>
                                         <Box sx={{ display: 'flex', mt: 1, ml: 6 }}>
                                             <Avatar
-                                                src={userPhoto || 'default-avatar.png'} // Replace 'default-avatar.png' with actual default
+                                                src={userPhoto.imgUrl || 'default-avatar.png'} // Replace 'default-avatar.png' with actual default
                                                 alt="User Avatar"
                                                 sx={{
                                                     height: '36px',
