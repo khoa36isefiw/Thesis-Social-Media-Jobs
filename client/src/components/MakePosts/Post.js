@@ -84,7 +84,7 @@ function Post({
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
     const authenticatedInformation = useLoggedInUser();
 
-    // console.log('getCommentListLength: ', getCommentListLength);
+    console.log('authenticatedInformation: ', authenticatedInformation);
 
     const toggleExpanded = () => {
         // console.log('Before clicking: ', expanded);
@@ -569,23 +569,7 @@ function Post({
                                     )}
                                 </Grid>
                             ) : (
-                                <Grid
-                                    item
-                                    xs={12}
-                                    md={12}
-                                    lg={12}
-                                    sx={
-                                        {
-                                            // position: 'relative',
-                                            // // bgcolor: blue[100],
-                                            // // center for image
-                                            // display: 'flex',
-                                            // alignItems: 'center',
-                                            // justifyContent: 'center',
-                                            // overflow: 'hidden',
-                                        }
-                                    }
-                                >
+                                <Grid item xs={12} md={12} lg={12}>
                                     <Avatar
                                         src={imageUrl}
                                         onClick={handleImageClick}
@@ -787,9 +771,18 @@ function Post({
                             <Box>
                                 <Box sx={{ display: 'flex', mt: 1 }}>
                                     <Avatar
-                                        src={UserAvatar}
+                                        // src={UserAvatar}
+                                        src={authenticatedInformation.userPhoto.imgUrl}
                                         alt="User Image"
-                                        sx={{ height: '40px', width: '40px', objectFit: 'cover' }}
+                                        sx={{
+                                            height: '40px',
+                                            width: '40px',
+                                            objectFit: 'cover',
+                                            filter:
+                                                authenticatedInformation.userPhoto &&
+                                                authenticatedInformation.userPhoto.imageStyle,
+                                            transform: `rotate(${authenticatedInformation.userPhoto.imageRotationAngle}deg)`,
+                                        }}
                                     />
                                     <Box
                                         sx={{
