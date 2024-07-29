@@ -425,7 +425,7 @@ function Post({
                         </Box>
                     </Box>
 
-                    {/* Doesn't have image */}
+                    {/* if image exists --> show it on */}
                     {imageUrl && (
                         <Box>
                             {Array.isArray(imageUrl) ? (
@@ -472,7 +472,7 @@ function Post({
                                                             src={image.url}
                                                             onClick={handleImageClick}
                                                             sx={{
-                                                                height: '320px',
+                                                                height: '200px',
                                                                 width: '100%',
                                                                 borderRadius: '0',
                                                                 objectFit: 'cover',
