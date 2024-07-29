@@ -518,9 +518,22 @@ function Post({
                                                     {imageUrl.slice(0, 3).map((image, index) => (
                                                         <Grid
                                                             item
-                                                            xs={12}
-                                                            sm={6}
-                                                            md={6}
+                                                            xs={
+                                                                imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
+                                                                    ? 12
+                                                                    : 6
+                                                            }
+                                                            sm={
+                                                                imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
+                                                                    ? 12
+                                                                    : 6
+                                                            }
+                                                            // md={6}
+                                                            md={
+                                                                imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
+                                                                    ? 12
+                                                                    : 6
+                                                            }
                                                             lg={
                                                                 imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
                                                                     ? 12
