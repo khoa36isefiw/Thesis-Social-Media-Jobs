@@ -17,6 +17,7 @@ import { validateEmail, validatePassword } from '../../CheckValidation/CheckVali
 import { CustomizeTypography } from '../../CustomizeTypography/CustomizeTypography';
 import { mobileScreen } from '../../Theme/Theme';
 import { setLoggedInUser } from '../../../redux/ManageAccount/manageAccountAction';
+import { useEffect } from 'react';
 
 function SignIn() {
     const navigate = useNavigate();
@@ -64,6 +65,19 @@ function SignIn() {
             }
         }
     };
+
+    const handleEnterToSignIn = (event) => {
+        if (event.key === 'Enter') {
+            handleSignIn();
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleEnterToSignIn);
+        return () => {
+            window.removeEventListener('keydown', handleEnterToSignIn);
+        };
+    });
 
     const handleEmailBlur = () => {
         const email = emailRef.current.value.trim();
