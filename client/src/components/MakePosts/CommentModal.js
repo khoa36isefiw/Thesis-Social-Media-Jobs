@@ -284,7 +284,8 @@ function CommentModal({
                     [mobileScreen]: {
                         flexDirection: 'column',
                         maxHeight: '650px',
-                        overflow: 'hidden',
+                        // overflow: 'hidden',
+                        overflowY: 'scroll',
                     },
                 }}
             >
@@ -434,6 +435,9 @@ function CommentModal({
                             zIndex: 12,
                             p: 1,
                             borderBottom: '1px solid #d0d0d0',
+                            [mobileScreen]: {
+                                borderTopRightRadius: 0,
+                            },
                         }}
                     >
                         <Box
