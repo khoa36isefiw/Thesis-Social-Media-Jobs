@@ -303,7 +303,7 @@ function CommentModal({
                         borderBottomLeftRadius: '8px',
                         [mobileScreen]: {
                             width: '100%',
-                            height: '350px',
+                            // maxHeight: '350px',
                             borderRadius: 0,
                         },
                     }}
@@ -326,6 +326,11 @@ function CommentModal({
                                     height: originalHeight,
                                 },
                                 [tabletScreen]: {
+                                    width: '100%',
+                                    // height: 'auto',
+                                    height: originalHeight,
+                                },
+                                [mobileScreen]: {
                                     width: '100%',
                                     // height: 'auto',
                                     height: originalHeight,
@@ -437,6 +442,11 @@ function CommentModal({
                             borderBottom: '1px solid #d0d0d0',
                             [mobileScreen]: {
                                 borderTopRightRadius: 0,
+                                position: 'sticky',
+                                top: 0,
+                                right: 0,
+                                left: 0,
+                                bottom: '0',
                             },
                         }}
                     >
