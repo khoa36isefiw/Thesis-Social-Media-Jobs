@@ -10,9 +10,9 @@ import {
     SAVE_PRIVACY_SELECTED,
 } from '../actionConstant';
 
-export const setReactionOnPost = (postId, reaction) => ({
+export const setReactionOnPost = (postId, reaction, userInfor) => ({
     type: GET_REACTION_ON_POST,
-    payload: { postId, reaction },
+    payload: { postId, reaction, userInfor },
 });
 
 // expor
