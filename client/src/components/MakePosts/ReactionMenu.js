@@ -28,7 +28,7 @@ const reactionsButtonList = [
     },
 ];
 
-export const ReactionMenu = ({ postID, commentID, replyID, handleChoose }) => {
+export const ReactionMenu = ({ postID, commentID, replyID, handleChoose, userInfor }) => {
     const dispatch = useDispatch();
     const handleChooseReaction = (reaction) => {
         handleChoose(reaction);
@@ -56,7 +56,7 @@ export const ReactionMenu = ({ postID, commentID, replyID, handleChoose }) => {
             dispatch(setReactionOnCommentInPost(postID, commentID, reaction));
         } else {
             console.log('có cái nịt :)');
-            dispatch(setReactionOnPost(postID, reaction));
+            dispatch(setReactionOnPost(postID, reaction, userInfor));
         }
     };
     return (

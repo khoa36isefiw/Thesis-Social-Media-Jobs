@@ -26,16 +26,47 @@ const initialState = {
 
 export const managePostReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_REACTION_ON_POST:
-            const { postId, reaction } = action.payload;
+        // case GET_REACTION_ON_POST:
+        //     const { postId, reaction, userInfor: usrInfor } = action.payload;
+
+        //     return {
+        //         ...state,
+        //         reactions: {
+        //             ...state.reactions,
+        //             // [postId]: reaction, // initial state
+        //             [postId]: [...(state.reactions[postId] || []), { reaction, usrInfor }],
+        //         },
+        //     };
+        case GET_REACTION_ON_POST: {
+            const { postId, reaction, userInfor: usrInfor } = action.payload;
+
+            const existingReactions = state.reactions[postId] || [];
+            const userReactionIndex = existingReactions.findIndex(
+                (r) => r.usrInfor.userID === usrInfor.userID,
+            );
+
+            let updatedReactions;
+            if (userReactionIndex !== -1) {
+                // User has already reacted, replace the reaction
+                updatedReactions = [
+                    ...existingReactions.slice(0, userReactionIndex),
+                    { reaction, usrInfor },
+                    ...existingReactions.slice(userReactionIndex + 1),
+                ];
+            } else {
+                // User has not reacted, add new reaction
+                updatedReactions = [...existingReactions, { reaction, usrInfor }];
+            }
 
             return {
                 ...state,
                 reactions: {
                     ...state.reactions,
-                    [postId]: reaction,
+                    // [postId]: reaction, // initial state
+                    [postId]: updatedReactions,
                 },
             };
+        }
 
         case ADD_COMMENT:
             const { postID, comment, userInfor } = action.payload;

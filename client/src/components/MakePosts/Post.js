@@ -14,7 +14,6 @@ import CommentModal from './CommentModal';
 import PostMenuSettings from './PostMenuSettings';
 import HideThePost from './HideThePost';
 
-import UserAvatar from '../../assets/images/avatar.jpeg';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { CommentsData } from './CommentsData';
 import { postMenuSettings } from './Data/PostMenuSettingDatas';
@@ -76,6 +75,7 @@ function Post({
     const [imageURL, setImageURL] = useState(null);
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
+
     console.log('selectedReaction: ', selectedReaction);
     // update the current time for each posts
     // const [currentTimestamp, setCurrentTimestamp] = useState(new Date());
@@ -84,7 +84,7 @@ function Post({
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
     const authenticatedInformation = useLoggedInUser();
 
-    console.log('authenticatedInformation: ', authenticatedInformation);
+    // console.log('authenticatedInformation: ', authenticatedInformation);
 
     const toggleExpanded = () => {
         // console.log('Before clicking: ', expanded);
@@ -425,7 +425,7 @@ function Post({
                         </Box>
                     </Box>
 
-                    {/* Doesn't have image */}
+                    {/* if image exists --> show it on */}
                     {imageUrl && (
                         <Box>
                             {Array.isArray(imageUrl) ? (
@@ -472,7 +472,7 @@ function Post({
                                                             src={image.url}
                                                             onClick={handleImageClick}
                                                             sx={{
-                                                                height: '320px',
+                                                                height: '200px',
                                                                 width: '100%',
                                                                 borderRadius: '0',
                                                                 objectFit: 'cover',
@@ -518,9 +518,22 @@ function Post({
                                                     {imageUrl.slice(0, 3).map((image, index) => (
                                                         <Grid
                                                             item
-                                                            xs={12}
-                                                            sm={6}
-                                                            md={6}
+                                                            xs={
+                                                                imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
+                                                                    ? 12
+                                                                    : 6
+                                                            }
+                                                            sm={
+                                                                imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
+                                                                    ? 12
+                                                                    : 6
+                                                            }
+                                                            // md={6}
+                                                            md={
+                                                                imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
+                                                                    ? 12
+                                                                    : 6
+                                                            }
                                                             lg={
                                                                 imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
                                                                     ? 12
@@ -663,80 +676,64 @@ function Post({
                                     flexGrow: 1,
                                 }}
                             >
-                                {numberOfReaction || selectedReaction ? (
+                                {numberOfReaction ? (
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                        {/* {selectedReaction && // render each reaction
-                                        selectedReaction.btnText &&
-                                        selectedReaction.btnText.includes('Liked') ? (
-                                            <Avatar
-                                                src={Liked}
-                                                sx={{
-                                                    height: '24px',
-                                                    width: '24px',
-                                                    borderRadius: '0',
-                                                    zIndex: 2,
-                                                }}
-                                                alt="Liked a Post"
-                                            />
-                                        ) : selectedReaction &&
-                                          selectedReaction.btnText &&
-                                          selectedReaction.btnText.includes('Loved') ? (
-                                            <Avatar
-                                                src={Love}
-                                                sx={{
-                                                    height: '24px',
-                                                    width: '24px',
-                                                    borderRadius: '0',
-                                                    // ml: '-8px',
-                                                    zIndex: 1,
-                                                }}
-                                                alt="Loved a Post"
-                                            />
-                                        ) : (
-                                            <Avatar
-                                                src={Laugh}
-                                                sx={{
-                                                    height: '24px',
-                                                    width: '24px',
-                                                    borderRadius: '0',
-                                                    // ml: '-8px',
-                                                }}
-                                                alt="Laugh a Post"
-                                            />
-                                        )} */}
-                                        <Avatar
-                                            src={Liked}
-                                            sx={{
-                                                height: '24px',
-                                                width: '24px',
-                                                borderRadius: '0',
-                                                zIndex: 2,
-                                            }}
-                                            alt="Liked a Post"
-                                        />
-
-                                        <Avatar
-                                            src={Love}
-                                            sx={{
-                                                height: '24px',
-                                                width: '24px',
-                                                borderRadius: '0',
-                                                ml: '-8px',
-                                                zIndex: 1,
-                                            }}
-                                            alt="Loved a Post"
-                                        />
-
-                                        <Avatar
-                                            src={Laugh}
-                                            sx={{
-                                                height: '24px',
-                                                width: '24px',
-                                                borderRadius: '0',
-                                                ml: '-8px',
-                                            }}
-                                            alt="Laugh a Post"
-                                        />
+                                        {selectedReaction &&
+                                            Object.entries(selectedReaction).map(
+                                                ([key, value], index) => {
+                                                    const { reaction, usrInfor } = value;
+                                                    console.log('reaction: ', reaction);
+                                                    console.log('usrInfor: ', usrInfor);
+                                                    return (
+                                                        <React.Fragment>
+                                                            {reaction &&
+                                                            reaction.btnText &&
+                                                            reaction.btnText.includes('Liked') ? (
+                                                                <Avatar
+                                                                    src={Liked}
+                                                                    sx={{
+                                                                        height: '24px',
+                                                                        width: '24px',
+                                                                        borderRadius: '0',
+                                                                        zIndex: 2,
+                                                                    }}
+                                                                    alt="Liked a Post"
+                                                                />
+                                                            ) : reaction &&
+                                                              reaction.btnText &&
+                                                              reaction.btnText.includes('Loved') ? (
+                                                                <>
+                                                                    {console.log(
+                                                                        'Displaying Love reaction',
+                                                                    )}
+                                                                    <Avatar
+                                                                        src={Love}
+                                                                        sx={{
+                                                                            height: '24px',
+                                                                            width: '24px',
+                                                                            borderRadius: '0',
+                                                                            // ml: '-8px',
+                                                                            zIndex: 1,
+                                                                        }}
+                                                                        alt="Loved a Post"
+                                                                    />
+                                                                </>
+                                                            ) : (
+                                                                <Avatar
+                                                                    src={Laugh}
+                                                                    sx={{
+                                                                        height: '24px',
+                                                                        width: '24px',
+                                                                        borderRadius: '0',
+                                                                        // ml: '-8px',
+                                                                    }}
+                                                                    alt="Laugh a Post"
+                                                                />
+                                                            )}
+                                                        </React.Fragment>
+                                                    );
+                                                },
+                                            )}
 
                                         {/* update the number of reations */}
                                         <CustomTypography>
@@ -765,7 +762,8 @@ function Post({
                         <PostActionButton
                             openCommentRegion={handleOpenCommentRegion}
                             postID={postID}
-                            onReactionClick={handleChooseReaction}
+                            // onReactionClick={handleChooseReaction}
+                            userInfor={authenticatedInformation}
                         />
                         {isOpenCommentRegion && (
                             <Box>
