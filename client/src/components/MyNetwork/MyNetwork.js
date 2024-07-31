@@ -24,55 +24,56 @@ export const suggestedLists = [
     },
     {
         userImage:
-            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-        userName: 'Trộm Choá',
+            'https://png.pngtree.com/background/20230408/original/pngtree-mountain-view-in-the-morning-picture-image_2336856.jpg',
+        userName: 'Westifle',
         userPosition: 'Blockchain',
     },
     {
         userImage:
-            'https://cdn.abphotos.link/photos/resized/x/2023/06/20/1687225666_l2UnGjJK5TBftN8v_1687226997-phpmmmrgc.png',
-        userName: 'Chiến Thắng',
+            'https://png.pngtree.com/background/20230408/original/pngtree-mountain-view-in-the-morning-picture-image_2336856.jpg',
+        userName: 'Westifle',
         userPosition: 'Blockchain',
     },
     {
         userImage:
-            'https://images2.thanhnien.vn/528068263637045248/2023/10/29/edit-honda-winner-x-1-1698557766334886782328.jpeg',
-        userName: 'Đường Đua',
-        userPosition: 'Blockchain',
-    },
-    {
-        userImage: 'https://hondadoanhthu.com.vn/wp-content/uploads/2024/02/Db-Do-Den.png',
-        userName: 'Thua',
+            'https://png.pngtree.com/background/20230408/original/pngtree-mountain-view-in-the-morning-picture-image_2336856.jpg',
+        userName: 'Westifle',
         userPosition: 'Blockchain',
     },
     {
         userImage:
-            'https://hondathanhbinhan.com/wp-content/uploads/2024/01/winner-x-2024-dac-biet-den.png',
-        userName: 'Đường Tình',
+            'https://png.pngtree.com/background/20230408/original/pngtree-mountain-view-in-the-morning-picture-image_2336856.jpg',
+        userName: 'Westifle',
         userPosition: 'Blockchain',
     },
     {
         userImage:
-            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-        userName: 'Trộm Choá',
+            'https://png.pngtree.com/background/20230408/original/pngtree-mountain-view-in-the-morning-picture-image_2336856.jpg',
+        userName: 'Westifle',
         userPosition: 'Blockchain',
     },
     {
         userImage:
-            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-        userName: 'Trộm Choá',
+            'https://png.pngtree.com/background/20230408/original/pngtree-mountain-view-in-the-morning-picture-image_2336856.jpg',
+        userName: 'Westifle',
         userPosition: 'Blockchain',
     },
     {
         userImage:
-            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-        userName: 'Trộm Choá',
+            'https://png.pngtree.com/background/20230408/original/pngtree-mountain-view-in-the-morning-picture-image_2336856.jpg',
+        userName: 'Westifle',
         userPosition: 'Blockchain',
     },
     {
         userImage:
-            'https://autopro8.mediacdn.vn/134505113543774208/2023/9/15/dscf3481-16947494675821102225207-1694753034969-16947530353701491416563.jpg',
-        userName: 'Trộm Choá',
+            'https://png.pngtree.com/background/20230408/original/pngtree-mountain-view-in-the-morning-picture-image_2336856.jpg',
+        userName: 'Westifle',
+        userPosition: 'Blockchain',
+    },
+    {
+        userImage:
+            'https://png.pngtree.com/background/20230408/original/pngtree-mountain-view-in-the-morning-picture-image_2336856.jpg',
+        userName: 'Westifle',
         userPosition: 'Blockchain',
     },
 ];
