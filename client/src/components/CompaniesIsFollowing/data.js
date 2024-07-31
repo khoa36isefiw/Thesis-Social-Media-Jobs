@@ -1,21 +1,21 @@
 export const companiesData = [
     {
-        avatar: 'https://media.licdn.com/dms/image/C560BAQGEwS8YjHJ-Fg/company-logo_200_200/0/1631347731327?e=1720656000&v=beta&t=Ra5yfG1sSXDrC4ODVr4LAg7fkaAU6bapcWlOqoBSffg',
+        avatar: 'https://gimasys.com/wp-content/uploads/2022/02/Untitled-design.png',
         name: 'Gimasys Co., Ltd',
         numberOfFollowers: '1,740',
     },
     {
-        avatar: 'https://media.licdn.com/dms/image/C560BAQG1D468Lw-C0Q/company-logo_200_200/0/1638156211709/fpt_information_system_logo?e=1720656000&v=beta&t=oVMl17YBbHx-vuJsoh_oxDxNlossD4KNoQIiBwo71K8',
+        avatar: 'https://static.ybox.vn/2020/5/1/1590389439946-FIS.png',
         name: 'FPT Information System',
         numberOfFollowers: '12,622',
     },
     {
-        avatar: 'https://media.licdn.com/dms/image/C4D0BAQF_Sk_uSPkkyQ/company-logo_200_200/0/1680178586116?e=1720656000&v=beta&t=PEbeMO45vu0NHe2pKQ0CsUfPKBa88viofZMNjUskKeI',
+        avatar: 'https://cdn.prod.website-files.com/65d35b01a4034b72499019e8/6643cd38bdf0adb0fe80ab83_logo%201.png',
         name: 'Q Blockchain',
         numberOfFollowers: '1,086',
     },
     {
-        avatar: 'https://media.licdn.com/dms/image/C4D0BAQGV_B0uVb2MOQ/company-logo_200_200/0/1656982864099?e=1720656000&v=beta&t=_1RaALRF8yaGokkO25h1n75yEeoyyIvdwG2Lsf1USZM',
+        avatar: 'https://cdn1-production-images-kly.akamaized.net/h5ZOa_AhI_fLirCXoA6RDj6E2Ds=/1200x675/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/4016825/original/007050500_1652069006-20220412222055.jpg',
         name: 'Rekrutmen Bersama BUMN',
         numberOfFollowers: '1,029,098',
     },
@@ -23,22 +23,22 @@ export const companiesData = [
 
 export const schoolData = [
     {
-        avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Logo_Hust.png/1200px-Logo_Hust.png',
+        avatar: 'https://upload.wikimedia.org/wikipedia/en/8/8e/%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_H%C3%A0_N%E1%BB%99i_%28logo%29.png',
         name: 'Hanoi University of Science and Technology',
         numberOfFollowers: '35,822',
     },
     {
-        avatar: 'https://media.licdn.com/dms/image/C560BAQHGnx_4t6NIjw/company-logo_200_200/0/1631376203871?e=1720656000&v=beta&t=iKMWshTXLpWfQlT9cL3amkwcjoCWD13aXe7OpuQ_nCY',
+        avatar: 'https://upload.wikimedia.org/wikipedia/commons/0/00/Logo_UIT_updated.svg',
         name: 'University of Information and Technology',
         numberOfFollowers: '20,678',
     },
     {
-        avatar: 'https://media.licdn.com/dms/image/C4D0BAQHAUZMBSNi7uw/company-logo_200_200/0/1631353339911?e=1720656000&v=beta&t=17WKzpv0RvdhGe9R3mf631Doea08JJmFwuhXGzyV01s',
+        avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/HCMCUT.svg/1200px-HCMCUT.svg.png',
         name: 'Bach Khoa University',
         numberOfFollowers: '13,622',
     },
     {
-        avatar: 'https://media.licdn.com/dms/image/C510BAQEaVrl7oCuRsg/company-logo_200_200/0/1630584236544/hcmutespkt_logo?e=1720656000&v=beta&t=e87G05MoI4uAX3l1j0xXUvUnZUOOR0bQppWDwPkoz5A',
+        avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR78K-DJtFI21AZicGyg11m0Odn2Ktkzr9sBQ&s',
         name: 'HCMC University of Technology and Education ',
         numberOfFollowers: '15,086',
     },
