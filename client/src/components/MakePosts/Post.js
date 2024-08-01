@@ -705,9 +705,6 @@ function Post({
                                                               reaction.btnText &&
                                                               reaction.btnText.includes('Loved') ? (
                                                                 <>
-                                                                    {console.log(
-                                                                        'Displaying Love reaction',
-                                                                    )}
                                                                     <Avatar
                                                                         src={Love}
                                                                         sx={{
@@ -739,7 +736,10 @@ function Post({
 
                                         {/* update the number of reations */}
                                         <CustomTypography>
-                                            {numberOfReaction + (selectedReaction ? 1 : 0)}
+                                            {numberOfReaction +
+                                                (selectedReaction && selectedReaction !== null
+                                                    ? selectedReaction.length
+                                                    : 0)}
                                         </CustomTypography>
                                     </Box>
                                 ) : (
@@ -877,8 +877,6 @@ const HashtagText = ({ text }) => {
     // if text has hashtag --> slit it into hash and the others text, push it into array parts
     const parts = text.split(/(#[^\s]+)/g); // Split text by hashtags
 
-    console.log('part: ', parts);
-
     return (
         <Typography
             variant="body1"
@@ -892,15 +890,19 @@ const HashtagText = ({ text }) => {
         >
             {parts.map((part, index) =>
                 part.startsWith('#') ? (
-                    <span
+                    <Typography
                         key={index}
-                        style={{
+                        sx={{
+                            fontSize: '14px',
                             color: blue[700],
-                            fontWeight: 'bold',
+                            '&:hover': {
+                                textDecoration: 'underline',
+                                cursor: 'pointer',
+                            },
                         }}
                     >
                         {part}
-                    </span>
+                    </Typography>
                 ) : (
                     part
                 ),
