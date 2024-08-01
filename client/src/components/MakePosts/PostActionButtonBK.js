@@ -43,6 +43,8 @@ export function PostActionButton({
     const getReactionText = dataOfSelectedReaction ? dataOfSelectedReaction.btnText : null;
     const authenticatedUser = useLoggedInUser();
 
+    console.log('getReactionText: ', getReactionText);
+
     const handleMouseOver = () => {
         // set true after 1.5s when it is hovered
         const timeout = setTimeout(() => {
@@ -89,6 +91,7 @@ export function PostActionButton({
         setHoverTimeout(null);
     };
 
+    console.log('who clicked: ', userInfor);
     return (
         <Box
             sx={{
@@ -147,11 +150,7 @@ export function PostActionButton({
                 onMouseOut={handleMouseOut}
             >
                 <IconButton sx={{ padding: 0 }}>
-                    {dataOfSelectedReaction &&
-                    Object.values(dataOfSelectedReaction).some(
-                        // check authenticated user's reaction exist
-                        ({ usrInfor }) => usrInfor.userId === authenticatedUser.userId,
-                    ) ? (
+                    {dataOfSelectedReaction ? (
                         Object.entries(dataOfSelectedReaction).map(([key, value], index) => {
                             const { reaction, usrInfor } = value;
 
@@ -204,13 +203,20 @@ export function PostActionButton({
                                         )}
                                     </React.Fragment>
                                 );
+                            } else {
+                                return (
+                                    <ReactionButtons
+                                        key={index}
+                                        handleAction={handleLikeOnPostClick}
+                                        icon={<ThumbUpOffAltIcon sx={{ fontSize: '24px' }} />}
+                                        textAction={'Like'}
+                                        textColor={'black'}
+                                        fw={false}
+                                    />
+                                );
                             }
-                            // skip other users' reactions
-                            return null;
                         })
                     ) : (
-                        // show the default like button if authenticated user's reaction does not exist
-                        // authenticated user hasn't reacted
                         <ReactionButtons
                             handleAction={handleLikeOnPostClick}
                             icon={<ThumbUpOffAltIcon sx={{ fontSize: '24px' }} />}

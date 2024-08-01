@@ -41,8 +41,9 @@ export const managePostReducer = (state = initialState, action) => {
             const { postId, reaction, userInfor: usrInfor } = action.payload;
 
             const existingReactions = state.reactions[postId] || [];
+
             const userReactionIndex = existingReactions.findIndex(
-                (r) => r.usrInfor.userID === usrInfor.userID,
+                (r) => r.usrInfor.userId === usrInfor.userId,
             );
 
             let updatedReactions;

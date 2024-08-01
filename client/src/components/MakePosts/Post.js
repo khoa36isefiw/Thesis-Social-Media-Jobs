@@ -365,6 +365,7 @@ function Post({
                                                         }}
                                                     >
                                                         {paragraph}
+                                                        {/* <HashtagText text={paragraph} /> */}
                                                     </Typography>
                                                 </Box>
                                             ))}
@@ -399,7 +400,8 @@ function Post({
                                                     whiteSpace: 'pre-wrap',
                                                 }}
                                             >
-                                                {MAX_CONTENT_LENGTH}
+                                                {/* {MAX_CONTENT_LENGTH} */}
+                                                <HashtagText text={MAX_CONTENT_LENGTH} />
                                                 {MAX_CONTENT_LENGTH.length === 200 && (
                                                     <Typography
                                                         component="span"
@@ -703,9 +705,6 @@ function Post({
                                                               reaction.btnText &&
                                                               reaction.btnText.includes('Loved') ? (
                                                                 <>
-                                                                    {console.log(
-                                                                        'Displaying Love reaction',
-                                                                    )}
                                                                     <Avatar
                                                                         src={Love}
                                                                         sx={{
@@ -737,7 +736,10 @@ function Post({
 
                                         {/* update the number of reations */}
                                         <CustomTypography>
-                                            {numberOfReaction + (selectedReaction ? 1 : 0)}
+                                            {numberOfReaction +
+                                                (selectedReaction && selectedReaction !== null
+                                                    ? selectedReaction.length
+                                                    : 0)}
                                         </CustomTypography>
                                     </Box>
                                 ) : (
@@ -836,20 +838,7 @@ function Post({
                                 >
                                     View more comments
                                 </Button>
-                                {/* <FilterComments
-                                    postID={postID}
-                                    imageUrl={imageUrl}
-                                    handleCloseModal={handleCloseModal}
-                                    handleChooseReaction={handleChooseReaction}
-                                    avatarSrc={avatarSrc}
-                                    displayName={displayName}
-                                    followers={followers}
-                                    time={time}
-                                    hashtag={hashtag}
-                                    content={content}
-                                    numberOfReaction={numberOfReaction}
-                                    numberOfComment={numberOfComment}
-                                /> */}
+
                                 <CommentsData postId={postID} imageUrl={imageUrl} />
                             </Box>
                         )}
@@ -883,3 +872,41 @@ function Post({
 }
 
 export default Post;
+
+const HashtagText = ({ text }) => {
+    // if text has hashtag --> slit it into hash and the others text, push it into array parts
+    const parts = text.split(/(#[^\s]+)/g); // Split text by hashtags
+
+    return (
+        <Typography
+            variant="body1"
+            component="div"
+            sx={{
+                fontSize: '14px',
+                mt: 1,
+                textAlign: 'justify',
+                whiteSpace: 'pre-wrap',
+            }}
+        >
+            {parts.map((part, index) =>
+                part.startsWith('#') ? (
+                    <Typography
+                        key={index}
+                        sx={{
+                            fontSize: '14px',
+                            color: blue[700],
+                            '&:hover': {
+                                textDecoration: 'underline',
+                                cursor: 'pointer',
+                            },
+                        }}
+                    >
+                        {part}
+                    </Typography>
+                ) : (
+                    part
+                ),
+            )}
+        </Typography>
+    );
+};

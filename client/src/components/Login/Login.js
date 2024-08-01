@@ -15,15 +15,23 @@ import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography'
 import { Link, useNavigate } from 'react-router-dom';
 import ImageLogin from '../../assets/images/imgLogin.png';
 import { mobileScreen, tabletScreen } from '../Theme/Theme';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRef } from 'react';
+import { validateEmail, validatePassword } from '../CheckValidation/CheckValidation';
+import { setLoggedInUser } from '../../redux/ManageAccount/manageAccountAction';
+import { useEffect } from 'react';
 
 function Login() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const listAccount = useSelector((state) => state.manageAccounts.accountsList);
+    const [showNotifications, setShowNotifications] = useState(false);
     const [isShow, setIsShow] = useState(true);
+    const [emailValidation, setEmailValidation] = useState('');
+    const [passwordValidation, setPasswordValidation] = useState('');
+    const [checkLogin, setCheckLogin] = useState(true);
 
     const handleShowPassword = () => {
         setIsShow(!isShow);
@@ -33,18 +41,44 @@ function Login() {
         // userName or email is the same
         const email = emailRef.current.value.trim();
         const password = passwordRef.current.value.trim();
-        const user = listAccount.find(
-            (account) => account.userName === email && account.password === password,
-        );
 
-        if (user) {
-            // login successfully
-            console.log('login successfully ');
-            navigate('/signed-in');
+        const emailError = validateEmail(email);
+        const passwordError = validatePassword(password);
+
+        if (emailError) {
+            setEmailValidation(emailError);
+        } else if (passwordError) {
+            setPasswordValidation(passwordError);
         } else {
-            console.log('Make show message snackbar');
+            const user = listAccount.find(
+                (account) => account.userName === email && account.password === password,
+            );
+
+            if (user) {
+                setShowNotifications(false);
+                // get user information and save it who logged into website
+                dispatch(setLoggedInUser(user));
+                console.log('login successfully');
+                navigate('/signed-in');
+            } else {
+                setCheckLogin(false);
+                setShowNotifications(true);
+            }
         }
     };
+
+    const handleEnterToSignIn = (event) => {
+        if (event.key === 'Enter') {
+            handleSignIn();
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleEnterToSignIn);
+        return () => {
+            window.removeEventListener('keydown', handleEnterToSignIn);
+        };
+    });
     return (
         <Container
             sx={{
