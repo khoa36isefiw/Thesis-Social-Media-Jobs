@@ -12,6 +12,7 @@ import { ActionButton } from './ActionButton';
 import { blue, red } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { setReactionOnPost } from '../../redux/ManagePost/managePostAction';
+import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 
 // define animation
 const fadeIn = keyframes`
@@ -40,8 +41,7 @@ export function PostActionButton({
     // get icon is selected
     const dataOfSelectedReaction = useSelector((state) => state.managePost.reactions[postID]);
     const getReactionText = dataOfSelectedReaction ? dataOfSelectedReaction.btnText : null;
-
-    console.log('getReactionText: ', getReactionText);
+    const authenticatedUser = useLoggedInUser();
 
     const handleMouseOver = () => {
         // set true after 1.5s when it is hovered
@@ -147,62 +147,70 @@ export function PostActionButton({
                 onMouseOut={handleMouseOut}
             >
                 <IconButton sx={{ padding: 0 }}>
-                    {dataOfSelectedReaction ? (
+                    {dataOfSelectedReaction &&
+                    Object.values(dataOfSelectedReaction).some(
+                        // check authenticated user's reaction exist
+                        ({ usrInfor }) => usrInfor.userId === authenticatedUser.userId,
+                    ) ? (
                         Object.entries(dataOfSelectedReaction).map(([key, value], index) => {
                             const { reaction, usrInfor } = value;
-                            return (
-                                <React.Fragment key={index}>
-                                    {reaction &&
-                                    reaction.btnText &&
-                                    reaction.btnText.includes('Loved') ? (
-                                        <ReactionButtons
-                                            handleAction={handleRemoveReactionOnPost}
-                                            icon={
-                                                <FavoriteIcon
-                                                    sx={{ fontSize: '24px', color: red[900] }}
-                                                />
-                                            }
-                                            textAction={'Love'}
-                                            textColor={'#e91e63'}
-                                        />
-                                    ) : reaction &&
-                                      reaction.btnText &&
-                                      reaction.btnText.includes('Laughed') ? (
-                                        <ReactionButtons
-                                            handleAction={handleRemoveReactionOnPost}
-                                            icon={
-                                                <Avatar
-                                                    src={reaction.srcImage}
-                                                    alt={reaction.btnText}
-                                                    sx={{
-                                                        height: '24px',
-                                                        width: '24px',
-                                                    }}
-                                                />
-                                            }
-                                            textAction={'Laugh'}
-                                            textColor={'#ffc400'}
-                                        />
-                                    ) : (
-                                        <ReactionButtons
-                                            handleAction={handleRemoveReactionOnPost}
-                                            icon={
-                                                <ThumbUpAltIcon
-                                                    sx={{
-                                                        fontSize: '24px',
-                                                        color: blue[900],
-                                                        padding: 0,
-                                                    }}
-                                                />
-                                            }
-                                            textAction={'Like'}
-                                            textColor={blue[900]}
-                                        />
-                                    )}
-                                </React.Fragment>
-                            );
+
+                            if (authenticatedUser.userId === usrInfor.userId) {
+                                return (
+                                    <React.Fragment key={index}>
+                                        {reaction &&
+                                        reaction.btnText &&
+                                        reaction.btnText.includes('Loved') ? (
+                                            <ReactionButtons
+                                                handleAction={handleRemoveReactionOnPost}
+                                                icon={
+                                                    <FavoriteIcon
+                                                        sx={{ fontSize: '24px', color: red[900] }}
+                                                    />
+                                                }
+                                                textAction={'Love'}
+                                                textColor={'#e91e63'}
+                                            />
+                                        ) : reaction &&
+                                          reaction.btnText &&
+                                          reaction.btnText.includes('Laughed') ? (
+                                            <ReactionButtons
+                                                handleAction={handleRemoveReactionOnPost}
+                                                icon={
+                                                    <Avatar
+                                                        src={reaction.srcImage}
+                                                        alt={reaction.btnText}
+                                                        sx={{ height: '24px', width: '24px' }}
+                                                    />
+                                                }
+                                                textAction={'Laugh'}
+                                                textColor={'#ffc400'}
+                                            />
+                                        ) : (
+                                            <ReactionButtons
+                                                handleAction={handleRemoveReactionOnPost}
+                                                icon={
+                                                    <ThumbUpAltIcon
+                                                        sx={{
+                                                            fontSize: '24px',
+                                                            color: blue[900],
+                                                            padding: 0,
+                                                        }}
+                                                    />
+                                                }
+                                                textAction={'Like'}
+                                                textColor={blue[900]}
+                                            />
+                                        )}
+                                    </React.Fragment>
+                                );
+                            }
+                            // skip other users' reactions
+                            return null;
                         })
                     ) : (
+                        // show the default like button if authenticated user's reaction does not exist
+                        // authenticated user hasn't reacted
                         <ReactionButtons
                             handleAction={handleLikeOnPostClick}
                             icon={<ThumbUpOffAltIcon sx={{ fontSize: '24px' }} />}
