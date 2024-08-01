@@ -365,6 +365,7 @@ function Post({
                                                         }}
                                                     >
                                                         {paragraph}
+                                                        {/* <HashtagText text={paragraph} /> */}
                                                     </Typography>
                                                 </Box>
                                             ))}
@@ -399,7 +400,8 @@ function Post({
                                                     whiteSpace: 'pre-wrap',
                                                 }}
                                             >
-                                                {MAX_CONTENT_LENGTH}
+                                                {/* {MAX_CONTENT_LENGTH} */}
+                                                <HashtagText text={MAX_CONTENT_LENGTH} />
                                                 {MAX_CONTENT_LENGTH.length === 200 && (
                                                     <Typography
                                                         component="span"
@@ -836,20 +838,7 @@ function Post({
                                 >
                                     View more comments
                                 </Button>
-                                {/* <FilterComments
-                                    postID={postID}
-                                    imageUrl={imageUrl}
-                                    handleCloseModal={handleCloseModal}
-                                    handleChooseReaction={handleChooseReaction}
-                                    avatarSrc={avatarSrc}
-                                    displayName={displayName}
-                                    followers={followers}
-                                    time={time}
-                                    hashtag={hashtag}
-                                    content={content}
-                                    numberOfReaction={numberOfReaction}
-                                    numberOfComment={numberOfComment}
-                                /> */}
+
                                 <CommentsData postId={postID} imageUrl={imageUrl} />
                             </Box>
                         )}
@@ -883,3 +872,39 @@ function Post({
 }
 
 export default Post;
+
+const HashtagText = ({ text }) => {
+    // if text has hashtag --> slit it into hash and the others text, push it into array parts
+    const parts = text.split(/(#[^\s]+)/g); // Split text by hashtags
+
+    console.log('part: ', parts);
+
+    return (
+        <Typography
+            variant="body1"
+            component="div"
+            sx={{
+                fontSize: '14px',
+                mt: 1,
+                textAlign: 'justify',
+                whiteSpace: 'pre-wrap',
+            }}
+        >
+            {parts.map((part, index) =>
+                part.startsWith('#') ? (
+                    <span
+                        key={index}
+                        style={{
+                            color: blue[700],
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        {part}
+                    </span>
+                ) : (
+                    part
+                ),
+            )}
+        </Typography>
+    );
+};
