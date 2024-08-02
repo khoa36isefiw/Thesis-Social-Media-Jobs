@@ -25,6 +25,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import ShowVideoUploaded from '../ShowVideoUploaded/ShowVideoUploaded';
 import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
+import ReactionsDetailList from './ReactionsDetailList';
 
 // definde typograph for this component
 export const CustomTypography = ({ children }) => (
@@ -67,6 +68,7 @@ function Post({
     const contentArray = Array.isArray(content) ? content : [content];
     const [expanded, setExpanded] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const [modalType, setModalType] = useState('');
     const [hideThePostSelected, setHideThePostSelected] = useState(false);
     const [isOpenCommentRegion, setIsOpenCommentRegion] = useState(false);
     const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
@@ -98,6 +100,7 @@ function Post({
 
     const handleCloseModal = () => {
         setOpenModal(false);
+        setModalType(null);
     };
 
     const handleChooseReaction = () => {
@@ -669,7 +672,10 @@ function Post({
 
                     {/* region for: reaction, comment and share - show icon is selected*/}
                     <Box sx={{ p: 1 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', my: '8px' }}>
+                        <Box
+                            sx={{ display: 'flex', alignItems: 'center', my: '8px' }}
+                            onClick={() => setModalType('reactionsList')}
+                        >
                             <Box
                                 sx={{
                                     mb: '2px',
@@ -859,6 +865,10 @@ function Post({
                             numberReactions={numberOfReaction}
                             numberComments={numberOfComment}
                         />
+                    </Modal>
+
+                    <Modal open={modalType === 'reactionsList'} onClose={handleCloseModal}>
+                        <ReactionsDetailList onCloseReactionsListModal={handleCloseModal} />
                     </Modal>
                     <PostMenuSettings
                         openMenuStatus={menuStatus}
