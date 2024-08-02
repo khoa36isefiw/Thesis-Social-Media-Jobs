@@ -15,8 +15,6 @@ export const setReactionOnPost = (postId, reaction, userInfor) => ({
     payload: { postId, reaction, userInfor },
 });
 
-// expor
-
 export const setReactionOnCommentInPost = (postID, commentId, reaction) => ({
     type: GET_REACTION_IN_COMMENT_ON_POST,
     payload: { postID, commentId, reaction },
