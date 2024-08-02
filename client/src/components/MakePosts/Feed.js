@@ -146,7 +146,7 @@ function Feed() {
                     time={post.timestamp}
                     hashtag={null}
                     content={post.articleText}
-                    numberOfReaction={null}
+                    numberOfReaction={0}
                     numberOfComment={null}
                     imageUrl={post.listImage}
                     viewPostPermission={post.viewPostPermission}
