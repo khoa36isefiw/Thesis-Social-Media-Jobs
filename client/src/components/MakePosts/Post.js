@@ -76,7 +76,7 @@ function Post({
     const [showIconUploadImage, setShowIconUploadImage] = useState(true);
     const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
 
-    console.log('selectedReaction: ', selectedReaction);
+    console.log('selectedReaction in Post: ', selectedReaction);
     // update the current time for each posts
     // const [currentTimestamp, setCurrentTimestamp] = useState(new Date());
     // get the number of comments
@@ -678,7 +678,7 @@ function Post({
                                     flexGrow: 1,
                                 }}
                             >
-                                {numberOfReaction ? (
+                                {numberOfReaction !== null ? (
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                         {selectedReaction &&
                                             Object.entries(selectedReaction).map(
