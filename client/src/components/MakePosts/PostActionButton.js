@@ -43,6 +43,9 @@ export function PostActionButton({
     const getReactionText = dataOfSelectedReaction ? dataOfSelectedReaction.btnText : null;
     const authenticatedUser = useLoggedInUser();
 
+    const listUsersReaction = useSelector((state) => state.managePost.listUsersReaction);
+    console.log('show list users reacted on post: ', listUsersReaction);
+
     const handleMouseOver = () => {
         // set true after 1.5s when it is hovered
         const timeout = setTimeout(() => {
@@ -65,6 +68,7 @@ export function PostActionButton({
         // dispatch(
         //     setReactionOnPost(postID, { srcImage: Liked, btnText: 'Liked a Post' }),
         // );
+        console.log('chạy vào đây nè!');
         dispatch(
             setReactionOnPost(postID, { srcImage: Liked, btnText: 'Liked a Post' }, userInfor),
         );
@@ -81,8 +85,6 @@ export function PostActionButton({
 
     // choose reaction and close the menu
     const handleChooseReaction = () => {
-        // onReactionClick();
-        // handleMouseOut();
         clearTimeout(horverTimeout);
         setMenuVisible(false);
         setIsHovering(false);
