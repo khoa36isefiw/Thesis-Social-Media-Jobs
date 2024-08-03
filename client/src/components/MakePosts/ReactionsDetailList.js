@@ -9,6 +9,7 @@ import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import UserImage from '../../assets/images/avatar.jpeg';
 import { TabPanel } from '../TabPanel/TabPanel';
+import { useSelector } from 'react-redux';
 
 const reactionsList = [
     { reactionImage: Liked, reactionText: 'Liked', numberOfReaction: '123' },
@@ -46,15 +47,18 @@ const listAllUsersReaction = [
     },
 ];
 
-function ReactionsDetailList({ onCloseReactionsListModal }) {
+function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
     const [value, setValue] = useState(0);
+    const listUsersReaction = useSelector((state) => state.managePost.listUsersReaction[postId]);
+    console.log(`show list users reacted on post has ID: ${postId}: `, listUsersReaction);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     const filterUsersByReaction = (reactionText) => {
-        return listAllUsersReaction.filter((user) => user.userReactionIcon === reactionText);
+        // return listAllUsersReaction.filter((user) => user.userReactionIcon === reactionText);
+        return listUsersReaction.filter((user) => user.userReactionIcon === reactionText);
     };
     return (
         <Box
@@ -203,7 +207,7 @@ const ListUsersReactionDetail = ({ users }) => {
                             }}
                         >
                             <Avatar
-                                src={user.userReactedImage}
+                                src={user.userReactedImage.imgUrl}
                                 alt={'UserImage'}
                                 sx={{
                                     width: '100%',

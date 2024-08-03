@@ -32,30 +32,18 @@ export const ReactionMenu = ({ postID, commentID, replyID, handleChoose, userInf
     const dispatch = useDispatch();
     const handleChooseReaction = (reaction) => {
         handleChoose(reaction);
-        // dispatch(setReactionOnPost(postID, reaction));
-        // initial
-        // if (commentID !== null) {
-        //     // if commentID exists
-        //     console.log('chạy về đây nè!');
-        //     console.log('postID: ', postID);
-        //     dispatch(setReactionOnCommentInPost(postID, commentID, reaction));
-        // } else if (commentID !== null && replyID !== null) {
-        //     dispatch(setReactionOnResponseCommentInPost(postID, commentID, replyID, reaction));
-        // } else {
-        //     console.log('có cái nịt :)');
-        //     console.log('postID2 22: ', postID);
-        //     dispatch(setReactionOnPost(postID, reaction));
-        // }
-
         if (replyID !== null && commentID !== null) {
+            // for response a comment in post
             // if commentID exists
-            console.log('chạy về đây nè!');
+            console.log(' for response a comment in post');
             dispatch(setReactionOnResponseCommentInPost(postID, commentID, replyID, reaction));
         } else if (commentID !== null) {
-            console.log('i love you chụt chụt');
+            // for comment in post
+            console.log('for comment in post');
             dispatch(setReactionOnCommentInPost(postID, commentID, reaction));
         } else {
-            console.log('có cái nịt :)');
+            // for reaction on post
+            console.log('for reaction on post');
             dispatch(setReactionOnPost(postID, reaction, userInfor));
         }
     };
