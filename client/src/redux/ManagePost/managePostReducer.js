@@ -12,6 +12,7 @@ import {
 
 const initialState = {
     reactions: {},
+
     comments: {},
     repliedComments: {}, // initial state
     // repliedComments: [],
@@ -22,6 +23,7 @@ const initialState = {
     commentControlPrivateSelection: 'Connections only',
     postSettingsPrivacySelection: 'Anyone', // include: Anyone, Connections only
     savePrivacySelected: 'Anyone', // only 2 case: Anyone or Connections only
+    listUsersReaction: {},
 };
 
 export const managePostReducer = (state = initialState, action) => {
@@ -39,6 +41,7 @@ export const managePostReducer = (state = initialState, action) => {
         //     };
         case GET_REACTION_ON_POST: {
             const { postId, reaction, userInfor: usrInfor } = action.payload;
+            const userName = usrInfor && usrInfor.firstName + ' ' + usrInfor.lastName;
 
             const existingReactions = state.reactions[postId] || [];
 
@@ -59,12 +62,40 @@ export const managePostReducer = (state = initialState, action) => {
                 updatedReactions = [...existingReactions, { reaction, usrInfor }];
             }
 
+            //-------- list who reacted
+            let updatedListUsersReaction;
+            const existingUserReactions = state.listUsersReaction[postId] || [];
+            const userReactionIndexInList = existingUserReactions.findIndex(
+                (r) => r.usrInfor && r.usrInfor.userId === usrInfor.userId,
+            );
+            //  exist
+            if (userReactionIndexInList !== -1) {
+                updatedListUsersReaction = [
+                    ...existingUserReactions.slice(0, userReactionIndexInList),
+                ];
+            } else {
+                // does not exist
+                updatedListUsersReaction = [
+                    ...existingUserReactions,
+                    {
+                        userReactionIcon: reaction.srcImage,
+                        userNameReacted: userName,
+                        userReactedImage: usrInfor.userPhoto,
+                        userReactedPosition: 'Front-End Developer',
+                    },
+                ];
+            }
+
             return {
                 ...state,
                 reactions: {
                     ...state.reactions,
                     // [postId]: reaction, // initial state
                     [postId]: updatedReactions,
+                },
+                listUsersReaction: {
+                    ...state.listUsersReaction,
+                    [postId]: updatedListUsersReaction,
                 },
             };
         }
