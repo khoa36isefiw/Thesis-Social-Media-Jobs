@@ -689,74 +689,7 @@ function Post({
                                     numberOfReaction={numberOfReaction}
                                     selectedReaction={selectedReaction}
                                 />
-                                {numberOfReaction !== null ? (
-                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                        {selectedReaction &&
-                                            Object.entries(selectedReaction).map(
-                                                ([key, value], index) => {
-                                                    const { reaction, usrInfor } = value;
-                                                    console.log('reaction: ', reaction);
-                                                    console.log('usrInfor: ', usrInfor);
-                                                    return (
-                                                        <React.Fragment>
-                                                            {reaction &&
-                                                            reaction.btnText &&
-                                                            reaction.btnText.includes('Liked') ? (
-                                                                <Avatar
-                                                                    src={Liked}
-                                                                    sx={{
-                                                                        height: '24px',
-                                                                        width: '24px',
-                                                                        borderRadius: '0',
-                                                                        zIndex: 2,
-                                                                    }}
-                                                                    alt="Liked a Post"
-                                                                />
-                                                            ) : reaction &&
-                                                              reaction.btnText &&
-                                                              reaction.btnText.includes('Loved') ? (
-                                                                <>
-                                                                    <Avatar
-                                                                        src={Love}
-                                                                        sx={{
-                                                                            height: '24px',
-                                                                            width: '24px',
-                                                                            borderRadius: '0',
-                                                                            // ml: '-8px',
-                                                                            zIndex: 1,
-                                                                        }}
-                                                                        alt="Loved a Post"
-                                                                    />
-                                                                </>
-                                                            ) : (
-                                                                <Avatar
-                                                                    src={Laugh}
-                                                                    sx={{
-                                                                        height: '24px',
-                                                                        width: '24px',
-                                                                        borderRadius: '0',
-                                                                        // ml: '-8px',
-                                                                    }}
-                                                                    alt="Laugh a Post"
-                                                                />
-                                                            )}
-                                                        </React.Fragment>
-                                                    );
-                                                },
-                                            )}
-
-                                        {/* update the number of reations */}
-
-                                        <CustomTypography>
-                                            {numberOfReaction +
-                                                (selectedReaction && selectedReaction !== null
-                                                    ? selectedReaction.length
-                                                    : 0)}
-                                        </CustomTypography>
-                                    </Box>
-                                ) : (
-                                    <></>
-                                )}
+                                {/* // number of reaction here! */}
                             </Box>
                             {/* show the number of comments */}
                             <Box onClick={handleClicksTheNumberOfComments}>
@@ -978,3 +911,68 @@ const ReactionComponent = ({ numberOfReaction, selectedReaction }) => {
         </Box>
     );
 };
+
+// {
+//     numberOfReaction !== null ? (
+//         <Box sx={{ display: 'flex', alignItems: 'center' }}>
+//             {selectedReaction &&
+//                 Object.entries(selectedReaction).map(([key, value], index) => {
+//                     const { reaction, usrInfor } = value;
+//                     console.log('reaction: ', reaction);
+//                     console.log('usrInfor: ', usrInfor);
+//                     return (
+//                         <React.Fragment>
+//                             {reaction && reaction.btnText && reaction.btnText.includes('Liked') ? (
+//                                 <Avatar
+//                                     src={Liked}
+//                                     sx={{
+//                                         height: '24px',
+//                                         width: '24px',
+//                                         borderRadius: '0',
+//                                         zIndex: 2,
+//                                     }}
+//                                     alt="Liked a Post"
+//                                 />
+//                             ) : reaction &&
+//                               reaction.btnText &&
+//                               reaction.btnText.includes('Loved') ? (
+//                                 <>
+//                                     <Avatar
+//                                         src={Love}
+//                                         sx={{
+//                                             height: '24px',
+//                                             width: '24px',
+//                                             borderRadius: '0',
+//                                             // ml: '-8px',
+//                                             zIndex: 1,
+//                                         }}
+//                                         alt="Loved a Post"
+//                                     />
+//                                 </>
+//                             ) : (
+//                                 <Avatar
+//                                     src={Laugh}
+//                                     sx={{
+//                                         height: '24px',
+//                                         width: '24px',
+//                                         borderRadius: '0',
+//                                         // ml: '-8px',
+//                                     }}
+//                                     alt="Laugh a Post"
+//                                 />
+//                             )}
+//                         </React.Fragment>
+//                     );
+//                 })}
+
+//             {/* update the number of reations */}
+
+//             <CustomTypography>
+//                 {numberOfReaction +
+//                     (selectedReaction && selectedReaction !== null ? selectedReaction.length : 0)}
+//             </CustomTypography>
+//         </Box>
+//     ) : (
+//         <></>
+//     );
+// }
