@@ -44,7 +44,7 @@ export function PostActionButton({
     const authenticatedUser = useLoggedInUser();
 
     const listUsersReaction = useSelector((state) => state.managePost.listUsersReaction);
-    console.log('show list users reacted on post: ', listUsersReaction);
+    // console.log('show list users reacted on post: ', listUsersReaction);
 
     const handleMouseOver = () => {
         // set true after 1.5s when it is hovered

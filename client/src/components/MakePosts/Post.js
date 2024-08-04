@@ -676,6 +676,7 @@ function Post({
                             sx={{ display: 'flex', alignItems: 'center', my: '8px' }}
                             onClick={() => setModalType('reactionsList')}
                         >
+                            {/* show reaction icon is selected */}
                             <Box
                                 sx={{
                                     mb: '2px',
@@ -684,6 +685,10 @@ function Post({
                                     flexGrow: 1,
                                 }}
                             >
+                                <ReactionComponent
+                                    numberOfReaction={numberOfReaction}
+                                    selectedReaction={selectedReaction}
+                                />
                                 {numberOfReaction !== null ? (
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                         {selectedReaction &&
@@ -741,6 +746,7 @@ function Post({
                                             )}
 
                                         {/* update the number of reations */}
+
                                         <CustomTypography>
                                             {numberOfReaction +
                                                 (selectedReaction && selectedReaction !== null
@@ -921,5 +927,54 @@ const HashtagText = ({ text }) => {
                 ),
             )}
         </Typography>
+    );
+};
+
+const ReactionComponent = ({ numberOfReaction, selectedReaction }) => {
+    if (numberOfReaction === null) return null;
+
+    // Count the frequency of each reaction
+    const reactionCount = {};
+    if (selectedReaction) {
+        Object.values(selectedReaction).forEach(({ reaction }) => {
+            if (reaction && reaction.btnText) {
+                reactionCount[reaction.btnText] = (reactionCount[reaction.btnText] || 0) + 1;
+            }
+        });
+    }
+
+    // Sort reactions based on frequency in descending order
+    const sortedReactions = Object.entries(reactionCount).sort((a, b) => b[1] - a[1]);
+
+    // Determine the image source based on reaction text
+    const getImageSrc = (btnText) => {
+        if (btnText.includes('Liked')) return Liked;
+        if (btnText.includes('Loved')) return Love;
+        if (btnText.includes('Laugh')) return Laugh;
+        return null;
+    };
+
+    return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {sortedReactions.map(([btnText], index) => (
+                <Avatar
+                    key={btnText}
+                    src={getImageSrc(btnText)}
+                    sx={{
+                        height: '24px',
+                        width: '24px',
+                        borderRadius: '0',
+                        zIndex: sortedReactions.length - index,
+                        ml: index > 0 ? '-8px' : '0',
+                    }}
+                    alt={`${btnText} a Post`}
+                />
+            ))}
+
+            <CustomTypography>
+                {numberOfReaction +
+                    (selectedReaction && selectedReaction !== null ? selectedReaction.length : 0)}
+            </CustomTypography>
+        </Box>
     );
 };
