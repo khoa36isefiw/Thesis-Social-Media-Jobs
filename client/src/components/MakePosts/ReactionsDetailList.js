@@ -9,18 +9,56 @@ import Love from '../../assets/images/love.png';
 import Laugh from '../../assets/images/laughing.png';
 import UserImage from '../../assets/images/avatar.jpeg';
 import { TabPanel } from '../TabPanel/TabPanel';
-import ShowUserInterestCompaniesAndSchools from '../ShowUserInterestCompaniesAndSchools/ShowUserInterestCompaniesAndSchools';
-import { companiesData, schoolData } from '../CompaniesIsFollowing/data';
-function ReactionsDetailList({ onCloseReactionsListModal }) {
-    const reactionsList = [
-        { reactionImage: Liked, reactionText: 'Liked', numberOfReaction: '123' },
-        { reactionImage: Love, reactionText: 'Loved', numberOfReaction: '345' },
-        { reactionImage: Laugh, reactionText: 'Laughed', numberOfReaction: '101' },
-    ];
+import { useSelector } from 'react-redux';
+
+const reactionsList = [
+    { reactionImage: Liked, reactionText: 'Liked', numberOfReaction: '123' },
+    { reactionImage: Love, reactionText: 'Loved', numberOfReaction: '345' },
+    { reactionImage: Laugh, reactionText: 'Laughed', numberOfReaction: '101' },
+];
+
+const listAllUsersReaction = [
+    {
+        userReactionIcon: Liked,
+        userNameReacted: 'Luna Kei',
+        userReactedImage: UserImage,
+        userReactedPosition: 'Front-End Developer',
+    },
+    {
+        userReactionIcon: Laugh,
+        userNameReacted: 'Harris',
+        userReactedImage:
+            'https://builtin.com/sites/www.builtin.com/files/styles/og/public/2024-03/Blockchain%20Technology.jpg',
+        userReactedPosition: 'Blockchain Developer',
+    },
+    {
+        userReactionIcon: Love,
+        userNameReacted: 'Luan Phan',
+        userReactedImage:
+            'https://verpex.com/assets/uploads/images/blog/How-to-become-a-Backend-Developer.jpg?v=1665484477',
+        userReactedPosition: 'Back-End Developer',
+    },
+    {
+        userReactionIcon: Laugh,
+        userNameReacted: 'Thoai Huynh',
+        userReactedImage:
+            'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190626123927/untitlsssssed.png',
+        userReactedPosition: 'Fullstack Developer',
+    },
+];
+
+function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
     const [value, setValue] = useState(0);
+    const listUsersReaction = useSelector((state) => state.managePost.listUsersReaction[postId]);
+    console.log(`show list users reacted on post has ID: ${postId}: `, listUsersReaction);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+    };
+
+    const filterUsersByReaction = (reactionText) => {
+        // return listAllUsersReaction.filter((user) => user.userReactionIcon === reactionText);
+        return listUsersReaction.filter((user) => user.userReactionIcon === reactionText);
     };
     return (
         <Box
@@ -48,6 +86,7 @@ function ReactionsDetailList({ onCloseReactionsListModal }) {
                 },
             }}
         >
+            {/* show list tabs of reaction */}
             <Box sx={{}}>
                 <Box
                     sx={{
@@ -92,7 +131,7 @@ function ReactionsDetailList({ onCloseReactionsListModal }) {
                         }}
                         label={
                             <Typography sx={{ fontSize: '14px', textTransform: 'capitalize' }}>
-                                All <span>123</span>
+                                All <span>{listUsersReaction && listUsersReaction.length}</span>
                             </Typography>
                         }
                     />
@@ -131,21 +170,21 @@ function ReactionsDetailList({ onCloseReactionsListModal }) {
                     ))}
                 </Tabs>
             </Box>
+
             {/* list user for each reaction */}
             <Box sx={{ overflow: 'scroll', px: 4, height: '480px' }}>
                 <TabPanel value={value} index={0}>
                     {/* Tab 1 Content */}
-                    <ListUsersReactionDetail />
+                    <ListUsersReactionDetail users={listUsersReaction} />
                 </TabPanel>
-                <TabPanel value={value} index={1}>
-                    <ShowUserInterestCompaniesAndSchools listData={companiesData} />
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                    <ShowUserInterestCompaniesAndSchools listData={schoolData} />
-                </TabPanel>
-                <TabPanel value={value} index={3}>
-                    <ListUsersReactionDetail />
-                </TabPanel>
+                {/* get  reactionImage or reaction image type for reaction detail */}
+                {reactionsList.map((reaction, index) => (
+                    <TabPanel value={value} index={index + 1} key={index}>
+                        <ListUsersReactionDetail
+                            users={filterUsersByReaction(reaction.reactionImage)}
+                        />
+                    </TabPanel>
+                ))}
             </Box>
         </Box>
     );
@@ -153,39 +192,10 @@ function ReactionsDetailList({ onCloseReactionsListModal }) {
 
 export default ReactionsDetailList;
 
-const ListUsersReactionDetail = () => {
-    const listAllUsersReaction = [
-        {
-            userReactionIcon: Liked,
-            userNameReacted: 'Luna Kei',
-            userReactedImage: UserImage,
-            userReactedPosition: 'Front-End Developer',
-        },
-        {
-            userReactionIcon: Laugh,
-            userNameReacted: 'Harris',
-            userReactedImage:
-                'https://builtin.com/sites/www.builtin.com/files/styles/og/public/2024-03/Blockchain%20Technology.jpg',
-            userReactedPosition: 'Blockchain Developer',
-        },
-        {
-            userReactionIcon: Love,
-            userNameReacted: 'Luan Phan',
-            userReactedImage:
-                'https://verpex.com/assets/uploads/images/blog/How-to-become-a-Backend-Developer.jpg?v=1665484477',
-            userReactedPosition: 'Back-End Developer',
-        },
-        {
-            userReactionIcon: Laugh,
-            userNameReacted: 'Thoai Huynh',
-            userReactedImage:
-                'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190626123927/untitlsssssed.png',
-            userReactedPosition: 'Fullstack Developer',
-        },
-    ];
+const ListUsersReactionDetail = ({ users }) => {
     return (
         <React.Fragment>
-            {listAllUsersReaction.map((user, index) => (
+            {users.map((user, index) => (
                 <>
                     <Box sx={{ display: 'flex', alignItems: 'center', py: 1, cursor: 'pointer' }}>
                         {/* <Avatar src={UserImage} sx={{ height: '64px', width: '64px' }} /> */}
@@ -194,23 +204,10 @@ const ListUsersReactionDetail = () => {
                                 height: '56px',
                                 width: '56px',
                                 position: 'relative',
-
-                                // [mobileScreen]: {
-                                //     height: '50px',
-                                //     width: '50px',
-                                // },
-                                // [tabletScreen]: {
-                                //     height: '60px',
-                                //     width: '60px',
-                                // },
-                                // [ipadProScreen]: {
-                                //     height: '70px',
-                                //     width: '70px',
-                                // },
                             }}
                         >
                             <Avatar
-                                src={user.userReactedImage}
+                                src={user.userReactedImage.imgUrl}
                                 alt={'UserImage'}
                                 sx={{
                                     width: '100%',
@@ -248,7 +245,7 @@ const ListUsersReactionDetail = () => {
                         </Box>
                     </Box>
                     {/* don't show divider for the last user */}
-                    {index !== listAllUsersReaction.length - 1 && <Divider />}
+                    {index !== users.length - 1 && <Divider />}
                 </>
             ))}
         </React.Fragment>

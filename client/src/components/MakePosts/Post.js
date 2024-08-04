@@ -868,7 +868,10 @@ function Post({
                     </Modal>
 
                     <Modal open={modalType === 'reactionsList'} onClose={handleCloseModal}>
-                        <ReactionsDetailList onCloseReactionsListModal={handleCloseModal} />
+                        <ReactionsDetailList
+                            postId={postID}
+                            onCloseReactionsListModal={handleCloseModal}
+                        />
                     </Modal>
                     <PostMenuSettings
                         openMenuStatus={menuStatus}

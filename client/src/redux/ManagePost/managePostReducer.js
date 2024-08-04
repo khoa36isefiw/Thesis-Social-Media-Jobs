@@ -12,6 +12,7 @@ import {
 
 const initialState = {
     reactions: {},
+
     comments: {},
     repliedComments: {}, // initial state
     // repliedComments: [],
@@ -22,21 +23,11 @@ const initialState = {
     commentControlPrivateSelection: 'Connections only',
     postSettingsPrivacySelection: 'Anyone', // include: Anyone, Connections only
     savePrivacySelected: 'Anyone', // only 2 case: Anyone or Connections only
+    listUsersReaction: {},
 };
 
 export const managePostReducer = (state = initialState, action) => {
     switch (action.type) {
-        // case GET_REACTION_ON_POST:
-        //     const { postId, reaction, userInfor: usrInfor } = action.payload;
-
-        //     return {
-        //         ...state,
-        //         reactions: {
-        //             ...state.reactions,
-        //             // [postId]: reaction, // initial state
-        //             [postId]: [...(state.reactions[postId] || []), { reaction, usrInfor }],
-        //         },
-        //     };
         case GET_REACTION_ON_POST: {
             const { postId, reaction, userInfor: usrInfor } = action.payload;
 
@@ -51,20 +42,59 @@ export const managePostReducer = (state = initialState, action) => {
                 // User has already reacted, replace the reaction
                 updatedReactions = [
                     ...existingReactions.slice(0, userReactionIndex),
-                    { reaction, usrInfor },
-                    ...existingReactions.slice(userReactionIndex + 1),
+                    // { reaction, usrInfor },
+                    // ...existingReactions.slice(userReactionIndex + 1),
                 ];
             } else {
                 // User has not reacted, add new reaction
-                updatedReactions = [...existingReactions, { reaction, usrInfor }];
+                updatedReactions = [...existingReactions];
             }
+
+            updatedReactions = [...updatedReactions, { reaction, usrInfor }];
+
+            //-------- list who reacted
+            let updatedListUsersReaction;
+            const existingUserReactions = state.listUsersReaction[postId] || [];
+            const userReactionIndexInList = existingUserReactions.findIndex(
+                (r) => r.userReactedId === usrInfor.userId,
+            );
+
+            if (userReactionIndexInList !== -1) {
+                // exist
+                // user has already reacted, remove old reaction from list
+                updatedListUsersReaction = [
+                    ...existingUserReactions.slice(0, userReactionIndexInList),
+                    ...existingUserReactions.slice(userReactionIndexInList + 1), // add new reaction, replace the current reactions to new
+                ];
+            } else {
+                // does not exist
+                updatedListUsersReaction = [...existingUserReactions];
+            }
+            console.log('before: ', updatedListUsersReaction);
+
+            // add the new reaction
+            updatedListUsersReaction = [
+                ...updatedListUsersReaction,
+                {
+                    userReactedId: usrInfor.userId,
+                    userReactionIcon: reaction.srcImage,
+                    userNameReacted: usrInfor.firstName + ' ' + usrInfor.lastName,
+                    userReactedImage: usrInfor.userPhoto,
+                    userReactedPosition: 'Front-End Developer',
+                },
+            ];
+
+            console.log('after: ', updatedListUsersReaction);
 
             return {
                 ...state,
                 reactions: {
                     ...state.reactions,
-                    // [postId]: reaction, // initial state
                     [postId]: updatedReactions,
+                },
+                listUsersReaction: {
+                    ...state.listUsersReaction,
+                    [postId]: updatedListUsersReaction,
                 },
             };
         }
