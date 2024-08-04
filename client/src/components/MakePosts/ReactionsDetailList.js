@@ -60,6 +60,15 @@ function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
         // return listAllUsersReaction.filter((user) => user.userReactionIcon === reactionText);
         return listUsersReaction.filter((user) => user.userReactionIcon === reactionText);
     };
+
+    // determine which reactions are present in the listUsersReaction
+    const availableReactions = reactionsList.filter((reaction) =>
+        // check if userReactionIcon has in list return it (which icon is selected)
+        listUsersReaction.some((user) => user.userReactionIcon === reaction.reactionImage),
+    );
+
+    console.log('availableReactions: ', availableReactions);
+
     return (
         <Box
             sx={{
@@ -135,7 +144,7 @@ function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
                             </Typography>
                         }
                     />
-                    {reactionsList.map((reaction, index) => (
+                    {availableReactions.map((reaction, index) => (
                         <Tab
                             key={index}
                             sx={{
@@ -178,7 +187,7 @@ function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
                     <ListUsersReactionDetail users={listUsersReaction} />
                 </TabPanel>
                 {/* get  reactionImage or reaction image type for reaction detail */}
-                {reactionsList.map((reaction, index) => (
+                {availableReactions.map((reaction, index) => (
                     <TabPanel value={value} index={index + 1} key={index}>
                         <ListUsersReactionDetail
                             users={filterUsersByReaction(reaction.reactionImage)}
