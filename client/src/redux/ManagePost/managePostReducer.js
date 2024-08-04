@@ -70,6 +70,7 @@ export const managePostReducer = (state = initialState, action) => {
                 // does not exist
                 updatedListUsersReaction = [...existingUserReactions];
             }
+            console.log('before: ', updatedListUsersReaction);
 
             // add the new reaction
             updatedListUsersReaction = [
@@ -83,7 +84,7 @@ export const managePostReducer = (state = initialState, action) => {
                 },
             ];
 
-            console.log('updatedListUsersReaction: ', updatedListUsersReaction);
+            console.log('after: ', updatedListUsersReaction);
 
             return {
                 ...state,

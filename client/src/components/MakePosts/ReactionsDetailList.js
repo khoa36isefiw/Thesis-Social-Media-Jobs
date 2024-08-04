@@ -131,7 +131,7 @@ function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
                         }}
                         label={
                             <Typography sx={{ fontSize: '14px', textTransform: 'capitalize' }}>
-                                All <span>{listAllUsersReaction.length}</span>
+                                All <span>{listUsersReaction && listUsersReaction.length}</span>
                             </Typography>
                         }
                     />
@@ -175,7 +175,7 @@ function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
             <Box sx={{ overflow: 'scroll', px: 4, height: '480px' }}>
                 <TabPanel value={value} index={0}>
                     {/* Tab 1 Content */}
-                    <ListUsersReactionDetail users={listAllUsersReaction} />
+                    <ListUsersReactionDetail users={listUsersReaction} />
                 </TabPanel>
                 {/* get  reactionImage or reaction image type for reaction detail */}
                 {reactionsList.map((reaction, index) => (
