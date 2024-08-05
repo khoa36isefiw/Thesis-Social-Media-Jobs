@@ -33,8 +33,13 @@ export const calculateTimeElapsed = (timestamp) => {
         return `${diffInMins} minutes ago`;
     } else if (diffInMins < 1440) {
         return `${Math.floor(diffInMins / 60)} hours ago`;
-    } else {
+    } else if (diffInMins < 43200) {
+        //30 days * 1440 minutes
         return `${Math.floor(diffInMins / 1440)} day ago`;
+    } else {
+        // 43200 ===  30 days * 1440 minutes
+        const diffInMonths = Math.floor(diffInMins / 43200);
+        return `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
     }
 };
 
