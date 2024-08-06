@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Typography, IconButton, Avatar, Divider, styled } from '@mui/material';
+import { Box, Typography, IconButton, Avatar, Divider, styled, Modal } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Liked from '../../assets/images/like.png';
 import Love from '../../assets/images/love.png';
@@ -17,11 +17,12 @@ import FilterComments from '../Messaging/FilterComments';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { CustomTypography } from './Post';
+import { CustomTypography, ReactionComponent } from './Post';
 import { addComment } from '../../redux/ManagePost/managePostAction';
 import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 import ShowVideoUploaded from '../ShowVideoUploaded/ShowVideoUploaded';
 import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
+import ReactionsDetailList from './ReactionsDetailList';
 // Customize styles for Typography in this Component
 export const ActionsTypography = styled(Typography)(({ colorAction }) => ({
     color: colorAction !== null ? colorAction : '#000000BF',
@@ -76,6 +77,9 @@ function CommentModal({
     const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
     // get the first image uploaded from imageUrl list
     const currentImage = Array.isArray(imageUrl) ? imageUrl[currentImageIndex] : imageUrl;
+
+    // open modal reaction detail list
+    const [modalType, setModalType] = useState('');
 
     useEffect(() => {
         const handleResize = () => {
@@ -677,70 +681,14 @@ function CommentModal({
                                         my: '12px',
                                     },
                                 }}
+                                onClick={() => setModalType('reactionsList')}
                             >
-                                <Box
-                                    sx={{
-                                        mb: '2px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        flexGrow: 1,
-                                    }}
-                                >
-                                    {numberReactions || selectedReaction ? (
-                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <Avatar
-                                                src={Liked}
-                                                sx={{
-                                                    height: '24px',
-                                                    width: '24px',
-                                                    borderRadius: '0',
-                                                    zIndex: 2,
-                                                }}
-                                                alt="Liked a Post"
-                                            />
-                                            <Avatar
-                                                src={Love}
-                                                sx={{
-                                                    height: '24px',
-                                                    width: '24px',
-                                                    borderRadius: '0',
-                                                    ml: '-8px',
-                                                    zIndex: 1,
-                                                }}
-                                                alt="Loved a Post"
-                                            />
-                                            <Avatar
-                                                src={Laugh}
-                                                sx={{
-                                                    height: '24px',
-                                                    width: '24px',
-                                                    borderRadius: '0',
-                                                    ml: '-8px',
-                                                }}
-                                                alt="Loved a Post"
-                                            />
-                                            {/* <Typography>112</Typography> */}
-                                            <Typography sx={{ fontSize: '13px', ml: '8px' }}>
-                                                {numberReactions + (selectedReaction ? 1 : 0)}
-                                            </Typography>
-                                        </Box>
-                                    ) : (
-                                        <></>
-                                    )}
-                                </Box>
-                                <Box onClick={handleOpenCommentRegion}>
-                                    {numberComments !== 0 || getCommentListLength !== 0 ? (
-                                        // show the number of comments
-                                        <CustomTypography>
-                                            {numberComments + getCommentListLength} comment
-                                            {numberComments + getCommentListLength > 1 ? 's' : ''}
-                                        </CustomTypography>
-                                    ) : (
-                                        // doesn't show
-                                        <></>
-                                    )}
-                                </Box>
+                                <ReactionComponent
+                                    numberOfReaction={numberReactions}
+                                    selectedReaction={selectedReaction}
+                                />
                             </Box>
+
                             <Divider />
                             <Box sx={{ mb: 2, mt: '-4px' }}>
                                 <PostActionButton
@@ -749,6 +697,7 @@ function CommentModal({
                                     onReactionClick={onReactionClick}
                                     xAxisMargin={false}
                                     leftAbout={'-15%'}
+                                    userInfor={authenticatedInformation}
                                 />
                             </Box>
                             <FilterComments />
@@ -799,6 +748,12 @@ function CommentModal({
                     </Box>
                 </Box>
             </Box>
+            <Modal open={modalType === 'reactionsList'} onClose={() => setModalType(null)}>
+                <ReactionsDetailList
+                    postId={postId}
+                    onCloseReactionsListModal={() => setModalType(null)}
+                />
+            </Modal>
         </Box>
     );
 }
