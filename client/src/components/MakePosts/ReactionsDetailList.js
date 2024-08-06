@@ -12,39 +12,9 @@ import { TabPanel } from '../TabPanel/TabPanel';
 import { useSelector } from 'react-redux';
 
 const reactionsList = [
-    { reactionImage: Liked, reactionText: 'Liked', numberOfReaction: '123' },
-    { reactionImage: Love, reactionText: 'Loved', numberOfReaction: '345' },
-    { reactionImage: Laugh, reactionText: 'Laughed', numberOfReaction: '101' },
-];
-
-const listAllUsersReaction = [
-    {
-        userReactionIcon: Liked,
-        userNameReacted: 'Luna Kei',
-        userReactedImage: UserImage,
-        userReactedPosition: 'Front-End Developer',
-    },
-    {
-        userReactionIcon: Laugh,
-        userNameReacted: 'Harris',
-        userReactedImage:
-            'https://builtin.com/sites/www.builtin.com/files/styles/og/public/2024-03/Blockchain%20Technology.jpg',
-        userReactedPosition: 'Blockchain Developer',
-    },
-    {
-        userReactionIcon: Love,
-        userNameReacted: 'Luan Phan',
-        userReactedImage:
-            'https://verpex.com/assets/uploads/images/blog/How-to-become-a-Backend-Developer.jpg?v=1665484477',
-        userReactedPosition: 'Back-End Developer',
-    },
-    {
-        userReactionIcon: Laugh,
-        userNameReacted: 'Thoai Huynh',
-        userReactedImage:
-            'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190626123927/untitlsssssed.png',
-        userReactedPosition: 'Fullstack Developer',
-    },
+    { reactionImage: Liked, reactionText: 'Liked', numberOfReaction: 0 },
+    { reactionImage: Love, reactionText: 'Loved', numberOfReaction: 0 },
+    { reactionImage: Laugh, reactionText: 'Laughed', numberOfReaction: 0 },
 ];
 
 function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
@@ -56,18 +26,30 @@ function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
         setValue(newValue);
     };
 
-    const filterUsersByReaction = (reactionText) => {
-        // return listAllUsersReaction.filter((user) => user.userReactionIcon === reactionText);
-        return listUsersReaction.filter((user) => user.userReactionIcon === reactionText);
+    const filterUsersByReaction = (reactionImage) => {
+        return listUsersReaction.filter((user) => user.userReactionIcon === reactionImage); // get list reaction by each reaction
     };
 
     // determine which reactions are present in the listUsersReaction
-    const availableReactions = reactionsList.filter((reaction) =>
-        // check if userReactionIcon has in list return it (which icon is selected)
-        listUsersReaction.some((user) => user.userReactionIcon === reaction.reactionImage),
+    // show which reaction is selected
+    const availableReactions = reactionsList.filter(
+        (
+            reaction, // get reaction type
+        ) =>
+            // check if userReactionIcon has in list return it (which icon is selected)
+            listUsersReaction.some((user) => user.userReactionIcon === reaction.reactionImage),
     );
 
     console.log('availableReactions: ', availableReactions);
+    // Calculate the number of reactions for each type
+    const reactionCounts = availableReactions.map((reaction) => {
+        return {
+            ...reaction,
+            numberOfReaction: filterUsersByReaction(reaction.reactionImage).length,
+        };
+    });
+
+    console.log('reactionCounts: ', reactionCounts);
 
     return (
         <Box
@@ -132,6 +114,7 @@ function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
                         },
                     }}
                 >
+                    {/* get the title for the tab */}
                     <Tab
                         sx={{
                             '&:hover': {
@@ -144,7 +127,7 @@ function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
                             </Typography>
                         }
                     />
-                    {availableReactions.map((reaction, index) => (
+                    {reactionCounts.map((reaction, index) => (
                         <Tab
                             key={index}
                             sx={{
@@ -187,7 +170,7 @@ function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
                     <ListUsersReactionDetail users={listUsersReaction} />
                 </TabPanel>
                 {/* get  reactionImage or reaction image type for reaction detail */}
-                {availableReactions.map((reaction, index) => (
+                {reactionCounts.map((reaction, index) => (
                     <TabPanel value={value} index={index + 1} key={index}>
                         <ListUsersReactionDetail
                             users={filterUsersByReaction(reaction.reactionImage)}
@@ -202,6 +185,7 @@ function ReactionsDetailList({ postId, onCloseReactionsListModal }) {
 export default ReactionsDetailList;
 
 const ListUsersReactionDetail = ({ users }) => {
+    console.log('users information: ', users);
     return (
         <React.Fragment>
             {users.map((user, index) => (
@@ -226,6 +210,9 @@ const ListUsersReactionDetail = ({ users }) => {
                                         cursor: 'pointer',
                                     },
                                     objectFit: 'cover',
+                                    filter:
+                                        user.userReactedImage && user.userReactedImage.imageStyle,
+                                    transform: `rotate(${user.userReactedImage.imageRotationAngle}deg)`,
                                 }}
                             />
                             <Box

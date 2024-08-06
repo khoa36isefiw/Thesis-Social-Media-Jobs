@@ -672,10 +672,7 @@ function Post({
 
                     {/* region for: reaction, comment and share - show icon is selected*/}
                     <Box sx={{ p: 1 }}>
-                        <Box
-                            sx={{ display: 'flex', alignItems: 'center', my: '8px' }}
-                            onClick={() => setModalType('reactionsList')}
-                        >
+                        <Box sx={{ display: 'flex', alignItems: 'center', my: '8px' }}>
                             {/* show reaction icon is selected */}
                             <Box
                                 sx={{
@@ -684,6 +681,7 @@ function Post({
                                     alignItems: 'center',
                                     flexGrow: 1,
                                 }}
+                                onClick={() => setModalType('reactionsList')}
                             >
                                 <ReactionComponent
                                     numberOfReaction={numberOfReaction}
@@ -863,21 +861,24 @@ const HashtagText = ({ text }) => {
     );
 };
 
-const ReactionComponent = ({ numberOfReaction, selectedReaction }) => {
+export const ReactionComponent = ({ numberOfReaction, selectedReaction }) => {
     if (numberOfReaction === null) return null;
 
     // Count the frequency of each reaction
     const reactionCount = {};
     if (selectedReaction) {
         Object.values(selectedReaction).forEach(({ reaction }) => {
+            // object list reaction in selectedReaction
             if (reaction && reaction.btnText) {
                 reactionCount[reaction.btnText] = (reactionCount[reaction.btnText] || 0) + 1;
             }
         });
     }
 
+    console.log('reactionCount: ', reactionCount);
+
     // Sort reactions based on frequency in descending order
-    const sortedReactions = Object.entries(reactionCount).sort((a, b) => b[1] - a[1]);
+    const sortedReactions = Object.entries(reactionCount).sort((a, b) => b[1] - a[1]); // sort and show reaction
 
     // Determine the image source based on reaction text
     const getImageSrc = (btnText) => {
@@ -889,6 +890,7 @@ const ReactionComponent = ({ numberOfReaction, selectedReaction }) => {
 
     return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* which reaction with the higher number will be on the top */}
             {sortedReactions.map(([btnText], index) => (
                 <Avatar
                     key={btnText}
