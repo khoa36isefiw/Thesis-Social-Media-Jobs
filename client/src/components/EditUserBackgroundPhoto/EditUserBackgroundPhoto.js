@@ -23,7 +23,7 @@ const filterList = [
     { filterName: 'Sepia', filterStyle: 'sepia(60%)' },
     { filterName: 'Saturate', filterStyle: 'saturate(200%)' },
 ];
-function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
+function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange, bgRotate, bgImageUploadedStyle }) {
     const dispatch = useDispatch();
     const fileInputRef = useRef(null);
     const [imageURL, setImageURL] = useState(null);
@@ -35,9 +35,15 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
     );
     const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
 
-    const [selectedFilter, setSelectedFilter] = useState(indexFilterBackground);
-    // const [rotationAngle, setRotationAngle] = useState(0);
-    const [rotationAngle, setRotationAngle] = useState(rotationAngleBackground);
+    // initial state
+    // const [selectedFilter, setSelectedFilter] = useState(indexFilterBackground);
+    // const [rotationAngle, setRotationAngle] = useState(rotationAngleBackground);
+    const [selectedFilter, setSelectedFilter] = useState(
+        bgImageUploadedStyle !== undefined ? bgImageUploadedStyle : indexFilterBackground,
+    );
+    const [rotationAngle, setRotationAngle] = useState(
+        bgRotate !== undefined ? bgRotate : rotationAngleBackground,
+    );
 
     const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
 
@@ -186,7 +192,7 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
                             width: '200px',
                         },
                         // show filter image is selected
-                        filter: filterList[selectedFilter].filterStyle,
+                        filter: selectedFilter && filterList[selectedFilter].filterStyle,
                     }}
                 />
             </Box>
@@ -313,7 +319,7 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
                         }}
                         onClick={handleUploadClick}
                     >
-                        Change photo
+                        Change background
                     </Button>
                 </Box>
 
