@@ -8,10 +8,19 @@ import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import Modal from '@mui/material/Modal';
 
 import ChangeUserBackgroundPhoto from '../EditUserBackgroundPhoto/EditUserBackgroundPhoto';
+import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 
 function UploadUserBackgroundImage({ bgImageURL, bgStyle, bgRotateAngle, handleClose }) {
     const fileInputRef = useRef(null);
     const [imageURL, setImageURL] = useState(null);
+    const authenticatedInformation = useLoggedInUser();
+    const [rotate, setRotate] = useState(
+        authenticatedInformation.userBackgroundPhoto.bgRotationAngle,
+    ); // get the current image rotate angle
+    const [uploadBackgroundImageStyle, setUploadBackgroundImageStyle] = useState(
+        authenticatedInformation.userBackgroundPhoto.bgStyle,
+    ); // get the current image rotate angle
+    console.log('Image style of image is: ', uploadBackgroundImageStyle);
 
     const [openChangeBackgroundImage, setOpenChangeBackgroundImage] = useState(false);
     const handleOpenModal = () => {
@@ -31,6 +40,8 @@ function UploadUserBackgroundImage({ bgImageURL, bgStyle, bgRotateAngle, handleC
             const imageName = file.name;
             // store both the name and URL
             setImageURL({ name: imageName, url: imageDataURL });
+            setRotate(0); // rotate = 0 when new image is uploaded
+            setUploadBackgroundImageStyle(null);
             setOpenChangeBackgroundImage(true);
         };
 
@@ -39,7 +50,7 @@ function UploadUserBackgroundImage({ bgImageURL, bgStyle, bgRotateAngle, handleC
         }
     };
 
-    const handleUploadClick = () => {
+    const handleUploadBackgroundImage = () => {
         fileInputRef.current.click();
     };
 
@@ -169,7 +180,7 @@ function UploadUserBackgroundImage({ bgImageURL, bgStyle, bgRotateAngle, handleC
                         mx: 2,
                         // mr: '20px',
                     }}
-                    onClick={handleUploadClick}
+                    onClick={handleUploadBackgroundImage}
                 >
                     Upload Background
                 </Button>
@@ -179,6 +190,8 @@ function UploadUserBackgroundImage({ bgImageURL, bgStyle, bgRotateAngle, handleC
                 <ChangeUserBackgroundPhoto
                     bgImgUrl={imageURL !== null ? imageURL.url : bgImageURL}
                     handleCloseChange={handleCloseModal}
+                    bgRotate={rotate}
+                    bgImageUploadedStyle={uploadBackgroundImageStyle}
                 />
             </Modal>
         </Box>
