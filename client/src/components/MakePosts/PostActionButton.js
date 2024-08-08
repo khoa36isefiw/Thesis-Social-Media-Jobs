@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Avatar, IconButton, keyframes, Grow, Slide } from '@mui/material';
+import { Box, Typography, Avatar, IconButton, keyframes } from '@mui/material';
 import Comment from '../../assets/images/comment.png';
 import Send from '../../assets/images/send.png';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
@@ -40,10 +40,7 @@ export function PostActionButton({
     const [horverTimeout, setHoverTimeout] = useState(null);
     // get icon is selected
     const dataOfSelectedReaction = useSelector((state) => state.managePost.reactions[postID]);
-    const getReactionText = dataOfSelectedReaction ? dataOfSelectedReaction.btnText : null;
     const authenticatedUser = useLoggedInUser();
-
-    const listUsersReaction = useSelector((state) => state.managePost.listUsersReaction);
     // console.log('show list users reacted on post: ', listUsersReaction);
 
     const handleMouseOver = () => {

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useId, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Box, IconButton, Divider, Button, Avatar, Modal } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DefaultBackgroundImage from '../../assets/images/pn.jpeg';
