@@ -102,18 +102,21 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange, bgRotate, bgImag
             const imageName = file.name;
             // store both the name and URL
             setImageURL({ name: imageName, bgUrl: imageDataURL });
+            // Reset the filter and rotation for the new image
+            setSelectedFilter(null);
+            setRotationAngle(0);
         };
 
-        dispatch(
-            setLoggedInUser({
-                ...userLoggedInInformation,
-                userBackgroundPhoto: {
-                    bgUrl: imageURL ? imageURL.bgUrl : bgImgUrl,
-                    bgStyle: null,
-                    bgRotationAngle: 0,
-                },
-            }),
-        );
+        // dispatch(
+        //     setLoggedInUser({
+        //         ...userLoggedInInformation,
+        //         userBackgroundPhoto: {
+        //             bgUrl: imageURL ? imageURL.bgUrl : bgImgUrl,
+        //             bgStyle: null,
+        //             bgRotationAngle: 0,
+        //         },
+        //     }),
+        // );
 
         if (file) {
             reader.readAsDataURL(file);
