@@ -1,687 +1,1367 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import {
-    InputAdornment,
-    TextField,
-    Box,
-    Divider,
-    Grid,
-    IconButton,
-    Typography,
-    Modal,
-} from '@mui/material';
+import React, { useRef, useState } from 'react';
+import { Box, Typography, Avatar, Divider, Modal, Button, IconButton, Grid } from '@mui/material';
+import { mobileScreen } from '../Theme/Theme';
+import { PostActionButton } from './PostActionButton';
 import { useDispatch, useSelector } from 'react-redux';
-
-import ChatWithUser from './ChatWithUser';
-import MessageDetails from './MessageDetails';
-import EmojiPicker from 'emoji-picker-react';
-import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
-import { mobileScreen, tabletScreen, theme } from '../Theme/Theme';
+import { addComment, setReactionOnPost } from '../../redux/ManagePost/managePostAction';
+import { blue } from '@mui/material/colors';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import SearchIcon from '@mui/icons-material/Search';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import StarIcon from '@mui/icons-material/Star';
-import ImageIcon from '@mui/icons-material/Image';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import CloseIcon from '@mui/icons-material/Close';
+import Liked from '../../assets/images/like.png';
+import Love from '../../assets/images/love.png';
+import Laugh from '../../assets/images/laughing.png';
+import CommentModal from './CommentModal';
+import PostMenuSettings from './PostMenuSettings';
+import HideThePost from './HideThePost';
 
-import LinearProgress from '@mui/material/LinearProgress';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { CommentsData } from './CommentsData';
+import { postMenuSettings } from './Data/PostMenuSettingDatas';
+import { CommentTextField } from './CommentTextField';
 
-import SendMessageActions from './SendMessageActions';
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import { calculateTimeElapsed } from '../HandleTime/HandleTime';
 
-import DeleteMessageAfterTime from './DeleteMessageAfterTime';
+import PublicIcon from '@mui/icons-material/Public';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
+import ShowVideoUploaded from '../ShowVideoUploaded/ShowVideoUploaded';
+import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 
-import {
-    highlightPersonAction,
-    removeStar,
-} from '../../redux/ImportantPerson/highlightPersonAction';
-import { mutePersonAction } from '../../redux/MutePerson/mutePersonAction';
-import { addMessage } from '../../redux/ShowMesssage/showMesssageAction';
-import {
-    disableReplyMessage,
-    isMessageReplySent,
-} from '../../redux/ReplyMessage/replyMessageAction';
-import DeleteConversation from './DeleteConversation';
-import ChatMenuSettings from './ChatMenuSettings';
-import ChatWithUserV2 from './ChatWithUserV2';
+// definde typograph for this component
+export const CustomTypography = ({ children }) => (
+    <Typography
+        sx={{
+            ml: '8px',
+            fontSize: '13px',
+            '&:hover': {
+                cursor: 'pointer',
+                color: '#0b66c2',
+                textDecoration: 'underline',
+                fontWeight: 'bold',
+            },
+        }}
+    >
+        {/* 88 comments */}
+        {children}
+    </Typography>
+);
 
-function Messaging() {
+function Post({
+    postID,
+    avatarSrc,
+    displayName,
+    followers,
+    time,
+    hashtag,
+    content,
+    numberOfReaction,
+    numberOfComment,
+    imageUrl,
+    viewPostPermission,
+}) {
+    // Check content is always an array?
     const dispatch = useDispatch();
-    const textFieldRef = useRef(null);
-    const texareaRef = useRef(null);
-    const [isTextFieldFocused, setIsTextFieldFocused] = useState(false);
-    // const [isFocused, setIsFocused] = useState(false);
-    const [isEmpty, setIsEmpty] = useState(true);
-    const [lineActive, setLineActive] = useState(false);
-    const [showChatList, setShowChatList] = useState(true);
-    const [showChatDetails, setShowChatDetails] = useState(false);
-    // check if user is activating --> show icon
-    const [userIsActive, setUserIsActive] = useState(true);
-    const [isMobileScreen, setIsMobileScreen] = useState(false);
-    // action buttons
-    const [editorText, setEditorText] = useState(''); // add text
+    const date = new Date();
+    const commentTextFieldRef = useRef(null);
+
+    const [menuStatus, setMenuStatus] = useState(null);
+    const contentArray = Array.isArray(content) ? content : [content];
+    const [expanded, setExpanded] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
+    const [hideThePostSelected, setHideThePostSelected] = useState(false);
+    const [isOpenCommentRegion, setIsOpenCommentRegion] = useState(false);
+    const [isEmptyCommentField, setIsEmptyCommentField] = useState(true);
     const [showPicker, setShowPicker] = useState(false); // add and show emoji picker
-    // upload file
-    const [showProgress, setShowProgress] = useState(false); // sate control status of progress bar
-    const [imageURL, setImageURL] = useState([]); // add images
-    const [listFilesUploaded, setListFilesUploaded] = useState([]); // add files
-    // click button to send message
-    const [isClickSend, setIsClickSend] = useState(false);
-    // save message just sent
-    const [messageSaved, setMessageSaved] = useState([]);
-    // open menu setting when chatting with one user
-    // menu setting
-    const [anchorEl, setAnchorEl] = useState(null);
+    // upload image from comment
+    const [imageURL, setImageURL] = useState(null);
+    const [showIconUploadImage, setShowIconUploadImage] = useState(true);
+    const selectedReaction = useSelector((state) => state.managePost.reactions[postID]);
 
-    const [deleteConfirm, setDeleteConfirm] = useState(false);
+    console.log('selectedReaction: ', selectedReaction);
+    // update the current time for each posts
+    // const [currentTimestamp, setCurrentTimestamp] = useState(new Date());
+    // get the number of comments
+    const commentList = useSelector((state) => state.managePost.comments[postID]);
+    const getCommentListLength = commentList && commentList !== null ? commentList.length : 0;
+    const authenticatedInformation = useLoggedInUser();
 
-    // redux
-    const isEnterKeyEnabled = useSelector((state) => state.buttonSendMessage.isEnterKeyEnabled);
-    // star for person
-    const isStarred = useSelector((state) => state.importantPerson.isHighlight);
-    const isMutePerson = useSelector((state) => state.mutePerson.isMutePerson);
+    // console.log('authenticatedInformation: ', authenticatedInformation);
 
-    // status of message when is selected to reply
-    const isMessageReplied = useSelector((state) => state.replyMessage.isMessageReplied);
-
-    const chatWithUserSettingsList = [
-        `${isStarred ? 'Remove star' : 'Star'}`,
-        `${isMutePerson ? 'Unmute' : 'Mute'}`,
-        'Delete conversation',
-    ];
-    // test list data just uploaded
-
-    useEffect(() => {
-        const handleResize = () => {
-            // Set threshold width for mobile screen
-            setIsMobileScreen(window.innerWidth < 739);
-        };
-
-        // check initial screen size
-        handleResize();
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    const handleChatClick = () => {
-        setShowChatList(false);
-        setShowChatDetails(true);
+    const toggleExpanded = () => {
+        // console.log('Before clicking: ', expanded);
+        setExpanded(!expanded);
+        // console.log('After clicking: ', expanded);
     };
-    const handleSearchIconClick = () => {
-        if (textFieldRef.current) {
-            textFieldRef.current.focus();
+
+    const handleImageClick = () => {
+        setOpenModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
+
+    const handleChooseReaction = () => {
+        // dispatch(setReactionOnPost(postID, reaction));
+        dispatch(setReactionOnPost(postID));
+
+        // console.log('Post has ID reaction on is: ', postID);
+    };
+
+    // open menu setting for post
+    const handleOpenPostMenuSettings = (event) => {
+        setMenuStatus(event.currentTarget);
+        // setMenuStatus({ anchorEl: event.currentTarget, postId: postID });
+    };
+
+    const handleClosePostMenuSettings = () => {
+        setMenuStatus(null);
+        // setMenuStatus({ anchorEl: null, postId: null });
+    };
+
+    const handleHideThePostSelected = () => {
+        setHideThePostSelected(true);
+    };
+
+    const handleShowThePostJustHidden = () => {
+        setHideThePostSelected(false);
+    };
+
+    const handleOpenCommentRegion = () => {
+        setIsOpenCommentRegion(true);
+        // condition to check when button comment is clicked --> It will auto focus on textfield comment
+        setTimeout(() => {
+            // use this because this setIsOpenCommentRegion occures before commentTextFieldRef running
+            if (commentTextFieldRef.current) {
+                commentTextFieldRef.current.focus();
+            }
+        }, 0);
+    };
+
+    // for textfield
+    const handleCommentTextFieldChange = () => {
+        const commentTextValue = commentTextFieldRef.current.value;
+
+        setIsEmptyCommentField(commentTextValue.trim() === '');
+    };
+
+    // for text field
+    const handleCommentSubmit = () => {
+        let timeStamp = date.toISOString();
+        const userName = authenticatedInformation.lastName
+            ? authenticatedInformation.lastName + ' ' + authenticatedInformation.firstName
+            : authenticatedInformation;
+        const userAvatar = authenticatedInformation.userPhoto;
+
+        const commentText = commentTextFieldRef.current.value.trim();
+        const userInfor = {
+            userName,
+            userPhoto: userAvatar,
+        };
+        // const commentText = commentTextFieldRef.current.value;
+        let commentSent = null;
+        if (imageURL !== null) {
+            commentSent = [commentText, imageURL.url, timeStamp];
+            dispatch(addComment(postID, commentSent, userInfor));
+            commentTextFieldRef.current.value = '';
+            setIsEmptyCommentField(true);
+            setImageURL(null);
+        } else {
+            if (commentText !== '') {
+                commentSent = [commentText, timeStamp];
+
+                // dispatch(addComment(postID, commentText));
+                dispatch(addComment(postID, commentSent, userInfor));
+                // clear input after submitting
+                commentTextFieldRef.current.value = '';
+                setIsEmptyCommentField(true);
+            }
+        }
+        setShowIconUploadImage(true);
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault(); // Prevent newline insertion
+            handleCommentSubmit();
         }
     };
-    // click on search icon
-    const handleTextFieldFocus = () => {
-        setIsTextFieldFocused(true);
-    };
 
-    const handleTextFieldBlur = () => {
-        setIsTextFieldFocused(false);
-    };
-
-    // focus on box type message
-    const handleFocus = () => {
-        setLineActive(!lineActive);
-    };
-
-    // unFocus on box type message frame
-    const handleBlur = () => {
-        // setIsFocused(false);
-        setLineActive(false);
-    };
-
-    const handleTextFieldChange = useCallback((event) => {
-        const value = event.target.value;
-        setEditorText(value);
-        setIsEmpty(value.trim() === '');
-
-        // setEditorText(event.target.value);
-        // setIsEmpty(event.target.value.trim() === '');
-    }, []);
-
-    // multiple images // initial
+    // upload image
     const handleImageUpload = (event) => {
-        //update status for progress bar
-        setShowProgress(true);
-        const files = event.target.files; // Get the list of selected files
-        const uploadedImages = []; // get the existing array of images
+        const file = event.target.files[0]; // Get the list of selected file
 
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
+        const reader = new FileReader();
+        reader.onload = () => {
+            const imageDataURL = reader.result;
+            // get the name of the uploaded image
+            const imageName = file.name;
+            // store both the name and URL
+            setImageURL({ name: imageName, url: imageDataURL });
+            setShowIconUploadImage(false);
+        };
 
-            reader.onload = () => {
-                const imageDataURL = reader.result;
-                // get the name of the uploaded image
-                const imageName = file.name;
-
-                // store both the name and URL
-                uploadedImages.push({ name: imageName, url: imageDataURL });
-
-                // If all files have been processed, update the state
-                if (uploadedImages.length === files.length) {
-                    setImageURL((prevImage) => [...prevImage, ...uploadedImages]);
-                    setIsEmpty(false);
-                    // hide the progress bar after all images have been uploaded
-                    setShowProgress(false);
-                }
-            };
-
-            if (file) {
-                reader.readAsDataURL(file);
-            }
+        if (file) {
+            reader.readAsDataURL(file);
         }
-        console.log('Image array: ', uploadedImages);
+        setIsEmptyCommentField(false);
     };
 
-    // upload file
-    const handleFileUpload = (event) => {
-        setShowProgress(true);
-        // Lấy danh sách các tệp đã chọn
-        const files = event.target.files;
-        const uploadedFiles = [];
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const fileExtension = file.name.split('.').pop();
-
-            if (fileExtension === 'pdf' || fileExtension === 'docx' || fileExtension === 'doc') {
-                const reader = new FileReader();
-
-                reader.onload = () => {
-                    const fileDataURL = reader.result;
-                    const fileName = file.name;
-
-                    uploadedFiles.push({ name: fileName, url: fileDataURL });
-
-                    // xử lý tất cả các tệp, cập nhật trạng thái
-                    if (uploadedFiles.length === files.length) {
-                        setListFilesUploaded((prevFiles) => [...prevFiles, ...uploadedFiles]);
-                        setIsEmpty(false);
-                        setShowProgress(false);
-                    }
-                };
-
-                if (file) {
-                    reader.readAsDataURL(file);
-                }
-            } else {
-                console.log('Tệp không hợp lệ:', file.name);
-            }
-        }
+    const handleRemoveImageUploaded = () => {
+        setImageURL(null);
+        setShowIconUploadImage(true);
+        setIsEmptyCommentField(true);
     };
 
+    // add emoji
     const handleEmojiClick = (event) => {
-        setEditorText(editorText + event.emoji); //
-        setIsEmpty(false);
+        // const commentText = commentTextFieldRef.current.value + event.emoji;
+        if (commentTextFieldRef.current) {
+            const currentValue = commentTextFieldRef.current.value;
+            const newValue = currentValue + event.emoji;
+            commentTextFieldRef.current.value = newValue;
+        }
+        setIsEmptyCommentField(false);
         setShowPicker(false);
     };
 
-    // re-solve press enter to send the message and prevent re-render
+    const concatenateString = contentArray.length >= 2 ? contentArray[1] : '';
+    // console.log('concatenateString: ', concatenateString);
+    const MAX_CONTENT_LENGTH = contentArray[0].concat(concatenateString).substring(0, 200);
 
-    const handleSendButtonClick2 = useCallback(() => {
-        const timestamp = new Date();
-        let textToSend = null; // Initialize text to null by default
-        let imageToSend = []; // Initialize images array to empty by default
-
-        // Check if there's text input - initial for text
-        // if (editorText.trim() !== '') {
-        //     // textToSend = editorText.trim(); // remove any space
-        //     textToSend = editorText; // remove any space
-        // }
-
-        textToSend = editorText;
-        // Check if there are uploaded images
-        if (imageURL.length > 0) {
-            imageToSend = imageURL;
-        }
-
-        // Save the message
-        const newMessageSaved = [
-            ...messageSaved,
-            [textToSend, imageToSend, listFilesUploaded, timestamp],
-        ];
-
-        setMessageSaved(newMessageSaved);
-
-        // dispatch an action
-        // dispatch(addMessage(newMessageSaved));
-        // Loop through each message and dispatch action
-        newMessageSaved.forEach((message) => {
-            dispatch(addMessage(message)); // Dispatch action with each message
-        });
-
-        // Check if the message is a replied message and dispatch an action if necessary
-        if (isMessageReplied) {
-            dispatch(isMessageReplySent());
-            dispatch(disableReplyMessage());
-        }
-
-        // dispatch(disableReplyMessage());
-
-        // hide reply message
-        // dispatch(disableReplyMessage());
-
-        // Reset editor after sending message
-        setEditorText('');
-        console.log('Message just sent include: ', newMessageSaved);
-        setImageURL([]);
-        setListFilesUploaded([]);
-        setIsEmpty(true);
-    }, [editorText, imageURL, listFilesUploaded, messageSaved, dispatch]);
-
-    const handleKeyDown = useCallback(
-        (e) => {
-            if (e.key === 'Enter' && isEnterKeyEnabled && !isEmpty) {
-                e.preventDefault();
-                handleSendButtonClick2();
+    const handleClicksTheNumberOfComments = () => {
+        setIsOpenCommentRegion(true);
+        // condition to check when button comment is clicked --> It will auto focus on textfield comment
+        setTimeout(() => {
+            // use this because this setIsOpenCommentRegion occures before commentTextFieldRef running
+            if (commentTextFieldRef.current) {
+                commentTextFieldRef.current.focus();
             }
-            setIsEmpty(true);
-        },
-        [isEnterKeyEnabled, handleSendButtonClick2, isEmpty],
-    );
-
-    useEffect(() => {
-        const textareaElement = texareaRef.current;
-        if (textareaElement) {
-            textareaElement.addEventListener('keydown', handleKeyDown);
-        }
-
-        //unmount
-        // clear
-        return () => {
-            if (textareaElement) {
-                textareaElement.removeEventListener('keydown', handleKeyDown);
-            }
-        };
-    }, [handleKeyDown]);
-
-    // make important person
-    const handleToggleStar = () => {
-        dispatch(highlightPersonAction());
+        }, 0);
     };
 
-    // open menu with user menu settings
-    const handleOpenChatWithUserMenuSettings = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {
+    //         setCurrentTimestamp(new Date());
+    //     }, 60000); // 60 seconds
 
-    const handleCloseChatWithUserMenuSettings = () => {
-        setAnchorEl(null);
-    };
+    //     return () => clearInterval(intervalId);
+    // }, []);
+
+    // console.log('check list image posted: ', imageUrl);
 
     return (
-        <Box
-            sx={{
-                backgroundColor: '#fff',
-                border: '1px solid #d9d9d9',
-                borderRadius: '12px',
-                // padding: '16px',
-
-                height: 'calc(100vh - 122px)', // initial height
-                // minHeight: 'calc(100vh - 122px)', // initial height
-
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                [mobileScreen]: {
-                    borderRadius: 0,
-                    // height: 'calc(100vh - 150px)', // initial height for mobile screen
-                    height: 'calc(100vh)',
-                },
-            }}
-        >
-            {/* Search Bar */}
-            <Grid container>
-                <Grid
-                    xs={12}
+        <Box>
+            {hideThePostSelected ? (
+                <HideThePost handleShowPostAgain={handleShowThePostJustHidden} />
+            ) : (
+                <Box
                     sx={{
+                        border: '1px solid #d3d3d3',
+                        backgroundColor: '#fff',
+                        borderRadius: '12px',
+                        minHeight: '10vh',
+                        mb: 2,
                         [mobileScreen]: {
-                            display: showChatList ? 'block' : 'none',
-                            // display: showChatDetails ? 'block' : 'none',
-                            position: 'relative',
+                            borderRadius: 0,
+                            mb: 1,
                         },
                     }}
                 >
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            padding: 2,
-                        }}
-                    >
-                        <CustomizeTypography fw={true}>Messaging</CustomizeTypography>
-                        {/* search box */}
-                        <TextField
-                            id="outlined-basic"
-                            className="search__field"
-                            variant="outlined"
-                            inputRef={textFieldRef}
-                            onFocus={handleTextFieldFocus}
-                            onBlur={handleTextFieldBlur}
-                            sx={{
-                                ml: 1,
-                                color: 'black',
-                                flexGrow: 1,
-                                '.MuiInputBase-root': {
-                                    fontSize: '14px',
-                                    height: '30px',
-                                    transition: 'width 0.3s',
-                                    width: '200px',
-                                },
-                            }}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon onClick={handleSearchIconClick} />
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                    </Box>
-                </Grid>
-
-                <Grid xs={12}>
-                    <Divider />
-                </Grid>
-
-                {/* Box in the left: Show who is messaging with us */}
-                <Grid container>
-                    <Grid
-                        xs={12}
-                        sm={5}
-                        md={5}
-                        lg={4}
-                        sx={{
-                            borderRight: `1px solid ${theme.palette.bgButtonHover}`,
-                            height: 'calc(100vh - 187px)', // initial
-                            // minHeight: 'calc(100vh - 187px)',
-                            [mobileScreen]: {
-                                display: showChatList ? 'block' : 'none',
-                                // display: showChatDetails ? 'block' : 'none',
-                            },
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                width: '100%',
-                            }}
-                        >
-                            <ChatWithUser onClick={handleChatClick} />
-                            {/* <ChatWithUserV2 onClick={handleChatClick} /> */}
-                        </Box>
-                    </Grid>
-
-                    {/* Box in the left: Show the message details of us with the person */}
-                    <Grid
-                        xs={12}
-                        sm={7}
-                        md={7}
-                        lg={8}
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-
-                            justifyContent: 'space-between',
-                            [mobileScreen]: {
-                                display: showChatList ? 'none' : 'block',
-                            },
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                width: '100%',
-                                height: '50px',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                p: 2,
-                                borderBottom: `1px solid ${theme.palette.bgButtonHover}`,
-                                [mobileScreen]: { p: '4px' },
-                            }}
-                        >
-                            <Box
+                    <Box sx={{ p: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                            <Avatar
+                                src={avatarSrc && avatarSrc.imgUrl}
                                 sx={{
-                                    display: 'flex',
+                                    height: '48px',
+                                    width: '48px',
+                                    filter: avatarSrc && avatarSrc.imageStyle,
+                                    transform: `rotate(${
+                                        avatarSrc && avatarSrc.imageRotationAngle
+                                    }deg)`,
                                 }}
-                            >
-                                {isMobileScreen && showChatDetails && (
-                                    <IconButton onClick={() => setShowChatList(true)}>
-                                        {/* <ArrowBackIosIcon sx={{ fontSize: '24px' }} /> */}
-                                        <KeyboardBackspaceIcon sx={{ fontSize: '24px' }} />
-                                    </IconButton>
-                                )}
-                                <Box>
-                                    <CustomizeTypography
+                                alt="User Avatar"
+                            />
+                            <Box sx={{ ml: 2, flexGrow: 1 }}>
+                                <Typography
+                                    sx={{
+                                        fontSize: '14px',
+                                        fontWeight: 'bold',
+                                        textTransform: 'capitalize',
+                                    }}
+                                >
+                                    {displayName}
+                                </Typography>
+
+                                <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
+                                    {followers} followers
+                                </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Typography sx={{ fontSize: '13px', color: 'text.secondary' }}>
+                                        {/* update and show the current of posts */}
+                                        {calculateTimeElapsed(time)}
+                                    </Typography>
+                                    <Box
                                         sx={{
-                                            fontWeight: 'bold',
-                                            fontSize: '16px',
-                                            [mobileScreen]: {
-                                                fontSize: '14px',
-                                            },
+                                            width: '5px',
+                                            height: '5px',
+                                            backgroundColor: 'gray',
+                                            borderRadius: '50%',
+                                            mx: '4px',
                                         }}
+                                    />
+                                    <IconButton sx={{ padding: 0 }}>
+                                        {viewPostPermission ? <PublicIcon /> : <Diversity3Icon />}
+                                    </IconButton>
+                                </Box>
+                            </Box>
+                            <IconButton onClick={handleOpenPostMenuSettings}>
+                                <MoreHorizIcon sx={{ fontSize: '24px' }} />
+                            </IconButton>
+
+                            <IconButton onClick={handleHideThePostSelected}>
+                                <CloseIcon sx={{ fontSize: '24px' }} />
+                            </IconButton>
+                        </Box>
+
+                        {/* show post content */}
+                        <Box>
+                            {/* hash tag */}
+                            {hashtag && (
+                                <Box>
+                                    <Typography
+                                        variant="body1"
+                                        component="div" // Set component to "div" for line breaks
+                                        sx={{ fontSize: '14px', color: blue[700] }}
                                     >
-                                        Melody Fall Topic
-                                    </CustomizeTypography>
-                                    {/* if a user is activating show they are activating and hiding their position career */}
-                                    {userIsActive ? (
-                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <Box
+                                        {hashtag}
+                                    </Typography>
+                                </Box>
+                            )}
+
+                            {/* content of post */}
+                            <Box sx={{ mb: 2 }}>
+                                <Typography
+                                    variant="body1"
+                                    component="div" // Set component to "div" for line breaks
+                                    sx={{
+                                        width: '100%',
+                                        fontSize: '14px',
+                                        mt: 1,
+                                        textAlign: 'justify',
+                                    }}
+                                >
+                                    {expanded ? (
+                                        <Box>
+                                            {contentArray.map((paragraph, index) => (
+                                                <Box key={index} sx={{ mb: 2 }}>
+                                                    <Typography
+                                                        variant="body1"
+                                                        component="div"
+                                                        sx={{
+                                                            fontSize: '14px',
+                                                            mt: 1,
+                                                            textAlign: 'justify',
+                                                            whiteSpace: 'pre-wrap', // maintain the space when we copy some text
+                                                        }}
+                                                    >
+                                                        {paragraph}
+                                                    </Typography>
+                                                </Box>
+                                            ))}
+                                            <Typography
+                                                component="span"
+                                                onClick={toggleExpanded}
                                                 sx={{
-                                                    height: '8px',
-                                                    width: '8px',
-                                                    bgcolor: 'green',
-                                                    borderRadius: '50%',
-                                                    mr: 1,
+                                                    fontSize: '12.5px',
+                                                    '&:hover': {
+                                                        cursor: 'pointer',
+                                                        textDecoration: 'underline',
+                                                        fontWeight: 'bold',
+                                                        color: 'blue',
+                                                    },
+                                                    display: 'flex',
+                                                    alignItems: 'end',
+                                                    justifyContent: 'flex-end',
                                                 }}
-                                            />
-                                            <Typography sx={{ color: theme.palette.primaryText }}>
-                                                Active now
+                                            >
+                                                See Less
                                             </Typography>
                                         </Box>
                                     ) : (
-                                        <CustomizeTypography
-                                            sx={{
-                                                color: theme.palette.primaryText,
-                                                fontSize: '14px',
-                                                [mobileScreen]: {
-                                                    fontSize: '13px',
-                                                },
-                                            }}
-                                        >
-                                            Producer
-                                        </CustomizeTypography>
+                                        <Box>
+                                            <Typography
+                                                variant="body1"
+                                                component="div" // Set component to "div" for line breaks
+                                                sx={{
+                                                    fontSize: '14px',
+                                                    mt: 1,
+                                                    textAlign: 'justify',
+                                                    whiteSpace: 'pre-wrap',
+                                                }}
+                                            >
+                                                {MAX_CONTENT_LENGTH}
+                                                {MAX_CONTENT_LENGTH.length === 200 && (
+                                                    <Typography
+                                                        component="span"
+                                                        onClick={toggleExpanded}
+                                                        sx={{
+                                                            fontSize: '12.5px',
+                                                            '&:hover': {
+                                                                cursor: 'pointer',
+                                                                textDecoration: 'underline',
+                                                                fontWeight: 'bold',
+                                                                color: 'blue',
+                                                            },
+                                                        }}
+                                                    >
+                                                        ...See More
+                                                    </Typography>
+                                                )}
+                                            </Typography>
+                                        </Box>
                                     )}
-                                </Box>
-                                {/* upload image */}
-                            </Box>
-                            <Box>
-                                <IconButton>
-                                    <MoreHorizIcon
-                                        sx={{ fontSize: '24px' }}
-                                        onClick={handleOpenChatWithUserMenuSettings}
-                                    />
-                                </IconButton>
-                                <ChatMenuSettings
-                                    anchorEl={anchorEl}
-                                    handleCloseMenuChatSettings={
-                                        handleCloseChatWithUserMenuSettings
-                                    }
-                                    menuChatSettings={chatWithUserSettingsList}
-                                />
-                                <IconButton>
-                                    <VideocamIcon sx={{ fontSize: '24px' }} />
-                                </IconButton>
-                                <IconButton onClick={handleToggleStar}>
-                                    {isStarred ? (
-                                        <StarIcon sx={{ fontSize: '28px', color: '#c37d17' }} />
-                                    ) : (
-                                        <StarOutlineIcon sx={{ fontSize: '28px' }} />
-                                    )}
-                                </IconButton>
+                                </Typography>
                             </Box>
                         </Box>
+                    </Box>
 
-                        {/* Show chat details */}
-                        <DeleteMessageAfterTime
-                            dataMessage={messageSaved}
-                            setDataMessage={setMessageSaved}
-                            imageUploaded={imageURL}
-                            setImageUploaded={setImageURL}
-                            fileUploaded={listFilesUploaded}
-                            setFileUploaded={setListFilesUploaded}
-                        />
+                    {/* if image exists --> show it on */}
+                    {imageUrl && (
                         <Box>
-                            <Box
-                                sx={{
-                                    height: '2px',
-                                    width: '100%',
-                                    bgcolor: lineActive ? 'green' : '#e0e0e0',
-                                }}
-                            />
-                            {/* Box to write message */}
-                            <Box
-                                sx={{
-                                    p: 1,
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        height: '100px',
-                                        width: '100%',
-                                        backgroundColor: '#f4f2ee',
-                                        borderRadius: '12px',
-                                        p: 1,
-
-                                        position: 'relative',
-                                        zIndex: 2,
-                                        [mobileScreen]: {
-                                            height: '80px',
-                                        },
-                                        [tabletScreen]: {
-                                            // flexGrow: 1,
-                                        },
-                                    }}
-                                >
-                                    <textarea
-                                        inputRef={texareaRef}
-                                        value={editorText}
-                                        onFocus={handleFocus} // active line
-                                        onBlur={handleBlur} // unactive line
-                                        onChange={handleTextFieldChange}
-                                        onKeyDown={handleKeyDown}
-                                        placeholder={isEmpty ? 'Write a message...' : ''}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            border: 'none',
-                                            outline: 'none',
-                                            borderRadius: '12px',
-                                            padding: '8px',
-                                            resize: 'none',
-                                            fontSize: '14px',
-                                            backgroundColor: 'transparent',
-                                            letterSpacing: '1px',
-                                            fontFamily:
-                                                '"Roboto", "Helvetica", "Arial", sans-serif',
-                                        }}
-                                    />
-                                </Box>
-                            </Box>
-                            <Divider />
-
-                            {/* Actions button to upload */}
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    p: 1,
-                                    [mobileScreen]: {
-                                        height: '50px',
-                                    },
-                                }}
-                            >
-                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <label>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            style={{ display: 'none' }}
-                                            onChange={handleImageUpload}
-                                            multiple
-                                        />
-                                        <IconButton component="span">
-                                            <ImageIcon sx={{ fontSize: '24px' }} />
-                                        </IconButton>
-                                    </label>
-                                    {/* <IconButton>
-                                        <AttachFileIcon
-                                            sx={{
-                                                fontSize: '24px',
-                                                transform: 'rotate(45deg)',
-                                            }}
-                                        />
-                                    </IconButton> */}
-                                    <IconButton component="label">
-                                        <AttachFileIcon
-                                            sx={{
-                                                fontSize: '24px',
-                                                transform: 'rotate(45deg)',
-                                            }}
-                                        />
-                                        {/* Input ẩn để chọn tệp */}
-                                        <input
-                                            type="file"
-                                            accept=".pdf,.doc,.docx" // Có thể chỉ định các loại tệp bạn muốn cho phép
-                                            style={{ display: 'none' }}
-                                            onChange={handleFileUpload} // Gọi hàm xử lý khi có sự thay đổi trên input
-                                            multiple // Cho phép chọn nhiều tệp
-                                        />
-                                    </IconButton>
-
-                                    {/* get Emoij */}
-                                    <Box sx={{ position: 'relative' }}>
-                                        <IconButton onClick={() => setShowPicker((val) => !val)}>
-                                            <InsertEmoticonIcon sx={{ fontSize: '24px' }} />
-                                            {showPicker && (
-                                                // <Box sx={{ position: 'absolute', top: '10px', left: '5%' }}>
-                                                <Box
+                            {Array.isArray(imageUrl) ? (
+                                <Grid container>
+                                    {imageUrl.length >= 4 ? (
+                                        <React.Fragment>
+                                            {/* just show 4 image from list image in post */}
+                                            {imageUrl.slice(0, 4).map((image, index) => (
+                                                <Grid
+                                                    item
+                                                    xs={6}
+                                                    sm={6}
+                                                    md={6}
+                                                    lg={imageUrl.length >= 4 ? 6 : 12}
+                                                    key={index}
                                                     sx={{
-                                                        position: 'absolute',
-                                                        top: '-45rem',
-                                                        left: '-10rem',
-                                                        zIndex: 22,
+                                                        borderRight:
+                                                            (imageUrl.length >= 4 && index === 0) ||
+                                                            index === 2
+                                                                ? '2px solid white'
+                                                                : null,
+                                                        borderBottom:
+                                                            (imageUrl.length >= 4 && index === 0) ||
+                                                            index === 1
+                                                                ? '2px solid white'
+                                                                : null,
+                                                        position: 'relative',
+                                                        // bgcolor: blue[100],
+                                                        // center for image
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        overflow: 'hidden',
                                                     }}
                                                 >
-                                                    <EmojiPicker
-                                                        pickerStyle={{ width: '100%' }}
-                                                        onEmojiClick={handleEmojiClick}
-                                                    />
-                                                </Box>
+                                                    {image.url.includes('video') ? (
+                                                        <ShowVideoUploaded
+                                                            width={400}
+                                                            height={300}
+                                                            srcVideo={image.url}
+                                                        />
+                                                    ) : (
+                                                        <Avatar
+                                                            src={image.url}
+                                                            onClick={handleImageClick}
+                                                            sx={{
+                                                                height: '200px',
+                                                                width: '100%',
+                                                                borderRadius: '0',
+                                                                objectFit: 'cover',
+                                                                // m: 1,
+                                                                '&:hover': {
+                                                                    cursor: 'pointer',
+                                                                },
+                                                            }}
+                                                            alt="Image Upload by User"
+                                                        />
+                                                    )}
+
+                                                    {/* the last image (4th) and image uploaded has more than 4 images */}
+                                                    {/* show the number of images after images 4th */}
+                                                    {index === 3 && imageUrl.length > 4 && (
+                                                        <Box
+                                                            sx={{
+                                                                position: 'absolute',
+                                                                top: 0,
+                                                                left: 0,
+                                                                width: '100%',
+                                                                height: '100%',
+                                                                bgcolor: 'rgba(0, 0, 0, 0.5)',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                color: 'white',
+                                                                fontSize: '24px',
+                                                                fontWeight: 'bold',
+                                                            }}
+                                                        >
+                                                            +{imageUrl.length - 4}
+                                                        </Box>
+                                                    )}
+                                                </Grid>
+                                            ))}
+                                        </React.Fragment>
+                                    ) : (
+                                        <React.Fragment>
+                                            {imageUrl.length === 3 ? (
+                                                <React.Fragment>
+                                                    {/* get 3 image */}
+                                                    {imageUrl.slice(0, 3).map((image, index) => (
+                                                        <Grid
+                                                            item
+                                                            xs={
+                                                                imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
+                                                                    ? 12
+                                                                    : 6
+                                                            }
+                                                            sm={
+                                                                imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
+                                                                    ? 12
+                                                                    : 6
+                                                            }
+                                                            // md={6}
+                                                            md={
+                                                                imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
+                                                                    ? 12
+                                                                    : 6
+                                                            }
+                                                            lg={
+                                                                imageUrl.length === 3 && index === 2 // at index === 2 (image 3) ==> will have  lg={12}
+                                                                    ? 12
+                                                                    : 6
+                                                            }
+                                                            key={index}
+                                                            sx={{
+                                                                position: 'relative',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                overflow: 'hidden',
+                                                                borderRight:
+                                                                    index === 0 || index === 2
+                                                                        ? '2px solid white'
+                                                                        : null,
+                                                                borderBottom:
+                                                                    index === 0 || index === 1
+                                                                        ? '2px solid white'
+                                                                        : null,
+                                                            }}
+                                                        >
+                                                            <Avatar
+                                                                src={image.url}
+                                                                onClick={() =>
+                                                                    handleImageClick(index)
+                                                                }
+                                                                sx={{
+                                                                    height: '320px',
+                                                                    width: '100%',
+                                                                    borderRadius: '0',
+                                                                    objectFit: 'cover',
+                                                                    '&:hover': {
+                                                                        cursor: 'pointer',
+                                                                    },
+                                                                }}
+                                                                alt={`Uploaded image ${index + 1}`}
+                                                            />
+                                                        </Grid>
+                                                    ))}
+                                                </React.Fragment>
+                                            ) : (
+                                                <React.Fragment></React.Fragment>
                                             )}
-                                        </IconButton>
-                                    </Box>
-                                </Box>
-                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <SendMessageActions
-                                        handleSendButtonClick={handleSendButtonClick2}
-                                        isEmpty={isEmpty}
+                                        </React.Fragment>
+                                    )}
+                                </Grid>
+                            ) : (
+                                <Grid item xs={12} md={12} lg={12}>
+                                    <Avatar
+                                        src={imageUrl}
+                                        onClick={handleImageClick}
+                                        sx={{
+                                            height: '320px',
+                                            width: '100%',
+                                            borderRadius: '0',
+                                            // m: 1,
+                                            objectFit: 'cover',
+                                            '&:hover': {
+                                                cursor: 'pointer',
+                                            },
+                                        }}
+                                        alt="Image Upload by User"
                                     />
-                                </Box>
+                                </Grid>
+                            )}
+                        </Box>
+                    )}
+                    {imageUrl && imageUrl.length === 1 && (
+                        <React.Fragment>
+                            {imageUrl.map((image, index) => (
+                                <Grid container item sm={12} xs={12} md={12} lg={12} key={index}>
+                                    {image.url.includes('video') ? (
+                                        <ShowVideoUploaded
+                                            width={400}
+                                            height={300}
+                                            srcVideo={image.url}
+                                        />
+                                    ) : (
+                                        <Avatar
+                                            src={image.url}
+                                            onClick={handleImageClick}
+                                            sx={{
+                                                height: '250px',
+                                                width: '100%',
+                                                borderRadius: '0',
+                                                objectFit: 'cover',
+                                                // m: 1,
+                                                '&:hover': {
+                                                    cursor: 'pointer',
+                                                },
+                                            }}
+                                            alt="Image Upload by User"
+                                        />
+                                    )}
+                                </Grid>
+                            ))}
+                        </React.Fragment>
+                    )}
+                    {imageUrl && imageUrl.length === 2 && (
+                        <Grid container item>
+                            {imageUrl.map((image, index) => (
+                                <Grid sm={12} xs={12} md={6} lg={6} key={index}>
+                                    {image.url.includes('video') ? (
+                                        <ShowVideoUploaded
+                                            width={400}
+                                            height={300}
+                                            srcVideo={image.url}
+                                        />
+                                    ) : (
+                                        <Avatar
+                                            src={image.url}
+                                            onClick={handleImageClick}
+                                            sx={{
+                                                height: '250px',
+                                                width: '100%',
+                                                borderRadius: '0',
+                                                objectFit: 'cover',
+                                                // m: 1,
+                                                '&:hover': {
+                                                    cursor: 'pointer',
+                                                },
+                                            }}
+                                            alt="Image Upload by User"
+                                        />
+                                    )}
+                                </Grid>
+                            ))}
+                        </Grid>
+                    )}
+
+                    {/* region for: reaction, comment and share - show icon is selected*/}
+                    <Box sx={{ p: 1 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', my: '8px' }}>
+                            <Box
+                                sx={{
+                                    mb: '2px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    flexGrow: 1,
+                                }}
+                            >
+                                {numberOfReaction || selectedReaction ? (
+                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                        {selectedReaction && // render each reaction
+                                        selectedReaction.btnText &&
+                                        selectedReaction.btnText.includes('Liked') ? (
+                                            <Avatar
+                                                src={Liked}
+                                                sx={{
+                                                    height: '24px',
+                                                    width: '24px',
+                                                    borderRadius: '0',
+                                                    zIndex: 2,
+                                                }}
+                                                alt="Liked a Post"
+                                            />
+                                        ) : selectedReaction &&
+                                          selectedReaction.btnText &&
+                                          selectedReaction.btnText.includes('Loved') ? (
+                                            <Avatar
+                                                src={Love}
+                                                sx={{
+                                                    height: '24px',
+                                                    width: '24px',
+                                                    borderRadius: '0',
+                                                    // ml: '-8px',
+                                                    zIndex: 1,
+                                                }}
+                                                alt="Loved a Post"
+                                            />
+                                        ) : (
+                                            <Avatar
+                                                src={Laugh}
+                                                sx={{
+                                                    height: '24px',
+                                                    width: '24px',
+                                                    borderRadius: '0',
+                                                    // ml: '-8px',
+                                                }}
+                                                alt="Laugh a Post"
+                                            />
+                                        )}
+                                        {/* <Avatar
+                                            src={Liked}
+                                            sx={{
+                                                height: '24px',
+                                                width: '24px',
+                                                borderRadius: '0',
+                                                zIndex: 2,
+                                            }}
+                                            alt="Liked a Post"
+                                        />
+
+                                        <Avatar
+                                            src={Love}
+                                            sx={{
+                                                height: '24px',
+                                                width: '24px',
+                                                borderRadius: '0',
+                                                ml: '-8px',
+                                                zIndex: 1,
+                                            }}
+                                            alt="Loved a Post"
+                                        />
+
+                                        <Avatar
+                                            src={Laugh}
+                                            sx={{
+                                                height: '24px',
+                                                width: '24px',
+                                                borderRadius: '0',
+                                                ml: '-8px',
+                                            }}
+                                            alt="Laugh a Post"
+                                        /> */}
+
+                                        {/* update the number of reations */}
+                                        <CustomTypography>
+                                            {numberOfReaction + (selectedReaction ? 1 : 0)}
+                                        </CustomTypography>
+                                    </Box>
+                                ) : (
+                                    <></>
+                                )}
+                            </Box>
+                            {/* show the number of comments */}
+                            <Box onClick={handleClicksTheNumberOfComments}>
+                                {numberOfComment !== 0 || getCommentListLength !== 0 ? (
+                                    // show the number of comments
+                                    <CustomTypography>
+                                        {numberOfComment + getCommentListLength} comment
+                                        {numberOfComment + getCommentListLength > 1 ? 's' : ''}
+                                    </CustomTypography>
+                                ) : (
+                                    // doesn't show
+                                    <></>
+                                )}
                             </Box>
                         </Box>
-                    </Grid>
-                </Grid>
-            </Grid>
+                        <Divider />
+                        <PostActionButton
+                            openCommentRegion={handleOpenCommentRegion}
+                            postID={postID}
+                            // onReactionClick={handleChooseReaction}
+                            userInfor={authenticatedInformation}
+                        />
+                        {isOpenCommentRegion && (
+                            <Box>
+                                <Box sx={{ display: 'flex', mt: 1 }}>
+                                    <Avatar
+                                        // src={UserAvatar}
+                                        src={authenticatedInformation.userPhoto.imgUrl}
+                                        alt="User Image"
+                                        sx={{
+                                            height: '40px',
+                                            width: '40px',
+                                            objectFit: 'cover',
+                                            filter:
+                                                authenticatedInformation.userPhoto &&
+                                                authenticatedInformation.userPhoto.imageStyle,
+                                            transform: `rotate(${authenticatedInformation.userPhoto.imageRotationAngle}deg)`,
+                                        }}
+                                    />
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            flexGrow: 1,
+                                            border: '1px solid #d0d0d0',
+                                            ml: 1,
+                                            borderRadius: '12px',
+                                            backdropFilter: '',
+                                        }}
+                                    >
+                                        <CommentTextField
+                                            inputRef={commentTextFieldRef}
+                                            onChange={handleCommentTextFieldChange}
+                                            disabled={false}
+                                            isShowPlaceholder={true}
+                                            handleKeyDown={handleKeyDown}
+                                            imageURLUploaded={imageURL}
+                                            removeImageUploaded={handleRemoveImageUploaded}
+                                        />
+
+                                        <CommentTextField
+                                            disabled={true}
+                                            isEmptyCommentField={isEmptyCommentField}
+                                            submitFunction={handleCommentSubmit}
+                                            uploadedImage={handleImageUpload}
+                                            showIconUploadImage={showIconUploadImage}
+                                            removeImageUploaded={handleRemoveImageUploaded}
+                                            setShowPicker={setShowPicker}
+                                            showPicker={showPicker}
+                                            handleEmojiClick={handleEmojiClick}
+                                        />
+                                    </Box>
+                                </Box>
+
+                                {/*  filter comment with 2 options: see all, recent comments */}
+                                <Button
+                                    sx={{
+                                        padding: 0,
+                                        py: 1,
+                                        my: 1,
+                                        textTransform: 'capitalize',
+                                        fontSize: '14px',
+                                        color: '#65676b',
+                                        fontWeight: 'bold',
+                                        '&:hover': {
+                                            bgcolor: 'transparent',
+                                        },
+                                    }}
+                                    endIcon={<ExpandMoreIcon />}
+                                    onClick={handleImageClick}
+                                >
+                                    View more comments
+                                </Button>
+                                {/* <FilterComments
+                                    postID={postID}
+                                    imageUrl={imageUrl}
+                                    handleCloseModal={handleCloseModal}
+                                    handleChooseReaction={handleChooseReaction}
+                                    avatarSrc={avatarSrc}
+                                    displayName={displayName}
+                                    followers={followers}
+                                    time={time}
+                                    hashtag={hashtag}
+                                    content={content}
+                                    numberOfReaction={numberOfReaction}
+                                    numberOfComment={numberOfComment}
+                                /> */}
+                                <CommentsData postId={postID} imageUrl={imageUrl} />
+                            </Box>
+                        )}
+                    </Box>
+                    {/* Comment Modal */}
+                    <Modal open={openModal} onClose={handleCloseModal}>
+                        <CommentModal
+                            postId={postID}
+                            imageUrl={imageUrl}
+                            handleClose={handleCloseModal}
+                            onReactionClick={handleChooseReaction}
+                            userAvatar={avatarSrc}
+                            userName={displayName}
+                            follower={followers}
+                            time={time}
+                            postHashtag={hashtag}
+                            postContent={content}
+                            numberReactions={numberOfReaction}
+                            numberComments={numberOfComment}
+                        />
+                    </Modal>
+                    <PostMenuSettings
+                        openMenuStatus={menuStatus}
+                        handleClosePostMenuSettings={handleClosePostMenuSettings}
+                        postMenuSettingsList={postMenuSettings}
+                    />
+                </Box>
+            )}
         </Box>
     );
 }
 
-export default Messaging;
+export default Post;
+
+
+
+
+
+
+// open detail list of reactions in each post
+import React, { useState } from 'react';
+import { Box, IconButton, Tabs, Tab, Typography, Avatar, Divider } from '@mui/material';
+import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
+import CloseIcon from '@mui/icons-material/Close';
+import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography';
+import Liked from '../../assets/images/like.png';
+import Love from '../../assets/images/love.png';
+import Laugh from '../../assets/images/laughing.png';
+import UserImage from '../../assets/images/avatar.jpeg';
+import { TabPanel } from '../TabPanel/TabPanel';
+import ShowUserInterestCompaniesAndSchools from '../ShowUserInterestCompaniesAndSchools/ShowUserInterestCompaniesAndSchools';
+import { companiesData, schoolData } from '../CompaniesIsFollowing/data';
+
+const reactionsList = [
+    { reactionImage: Liked, reactionText: 'Liked', numberOfReaction: '123' },
+    { reactionImage: Love, reactionText: 'Loved', numberOfReaction: '345' },
+    { reactionImage: Laugh, reactionText: 'Laughed', numberOfReaction: '101' },
+];
+
+const listAllUsersReaction = [
+    {
+        userReactionIcon: Liked,
+        userNameReacted: 'Luna Kei',
+        userReactedImage: UserImage,
+        userReactedPosition: 'Front-End Developer',
+    },
+    {
+        userReactionIcon: Laugh,
+        userNameReacted: 'Harris',
+        userReactedImage:
+            'https://builtin.com/sites/www.builtin.com/files/styles/og/public/2024-03/Blockchain%20Technology.jpg',
+        userReactedPosition: 'Blockchain Developer',
+    },
+    {
+        userReactionIcon: Love,
+        userNameReacted: 'Luan Phan',
+        userReactedImage:
+            'https://verpex.com/assets/uploads/images/blog/How-to-become-a-Backend-Developer.jpg?v=1665484477',
+        userReactedPosition: 'Back-End Developer',
+    },
+    {
+        userReactionIcon: Laugh,
+        userNameReacted: 'Thoai Huynh',
+        userReactedImage:
+            'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190626123927/untitlsssssed.png',
+        userReactedPosition: 'Fullstack Developer',
+    },
+];
+
+function ReactionsDetailList({ onCloseReactionsListModal }) {
+    const [value, setValue] = useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    const filterUsersByReaction = (reactionText) => {
+        return listAllUsersReaction.filter((user) => user.userReactedImage === reactionText);
+    };
+    return (
+        <Box
+            sx={{
+                position: 'relative',
+                backgroundColor: 'white',
+                maxWidth: '600px',
+                height: '600px',
+                margin: 'auto',
+                mt: '64px',
+                borderRadius: '12px',
+                boxShadow: '0 4px 4px #333',
+                //  close icon doesn't overflow
+                // overflow: 'hidden',
+                [ipadProScreen]: {
+                    width: '70%',
+                },
+                [tabletScreen]: {
+                    width: '90%',
+                },
+                [mobileScreen]: {
+                    borderRadius: 0,
+                    width: '100%',
+                    height: 'auto',
+                },
+            }}
+        >
+            {/* show list tabs of reaction */}
+            <Box sx={{}}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        p: 1,
+                    }}
+                >
+                    <CustomizeTypography fs={'20px'} fw={true} sx={{ mx: 2, flexGrow: 2 }}>
+                        Reactions
+                    </CustomizeTypography>
+                    <IconButton
+                        disableFocusRipple
+                        sx={{
+                            mx: '2px',
+                            '&:hover': {
+                                backgroundColor: '#d9d9d9',
+                            },
+                        }}
+                        onClick={onCloseReactionsListModal}
+                    >
+                        <CloseIcon sx={{ fontSize: '28px' }} />
+                    </IconButton>
+                </Box>
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    sx={{
+                        borderBottom: '1px solid #333',
+                        p: 0,
+                        '.MuiTabs-indicator': {
+                            height: '4px',
+                        },
+                    }}
+                >
+                    <Tab
+                        sx={{
+                            '&:hover': {
+                                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                            },
+                        }}
+                        label={
+                            <Typography sx={{ fontSize: '14px', textTransform: 'capitalize' }}>
+                                All <span>{listAllUsersReaction.length}</span>
+                            </Typography>
+                        }
+                    />
+                    {reactionsList.map((reaction, index) => (
+                        <Tab
+                            key={index}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                '&:hover': {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                                },
+                            }}
+                            label={
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Box
+                                        component="img"
+                                        src={reaction.reactionImage}
+                                        alt={reaction.reactionText}
+                                        sx={{ height: '24px', width: '24px' }}
+                                    />
+                                    <Typography
+                                        sx={{
+                                            fontSize: '14px',
+                                            textTransform: 'capitalize',
+                                            ml: '4px',
+                                        }}
+                                    >
+                                        {/*number of reactions in each action*/}
+                                        {reaction.numberOfReaction}
+                                    </Typography>
+                                </Box>
+                            }
+                        />
+                    ))}
+                </Tabs>
+            </Box>
+
+            {/* list user for each reaction */}
+            <Box sx={{ overflow: 'scroll', px: 4, height: '480px' }}>
+                <TabPanel value={value} index={0}>
+                    {/* Tab 1 Content */}
+                    <ListUsersReactionDetail users={listAllUsersReaction} />
+                </TabPanel>
+                {/* get  reactionImage or reaction image type for reaction detail */}
+                {reactionsList.map((reaction, index) => (
+                    <TabPanel value={value} index={index + 1} key={index}>
+                        <ListUsersReactionDetail
+                            users={filterUsersByReaction(reaction.reactionImage)}
+                        />
+                    </TabPanel>
+                ))}
+            </Box>
+        </Box>
+    );
+}
+
+export default ReactionsDetailList;
+
+const ListUsersReactionDetail = ({ users }) => {
+    return (
+        <React.Fragment>
+            {users.map((user, index) => (
+                <>
+                    <Box sx={{ display: 'flex', alignItems: 'center', py: 1, cursor: 'pointer' }}>
+                        {/* <Avatar src={UserImage} sx={{ height: '64px', width: '64px' }} /> */}
+                        <Box
+                            sx={{
+                                height: '56px',
+                                width: '56px',
+                                position: 'relative',
+                            }}
+                        >
+                            <Avatar
+                                src={user.userReactedImage}
+                                alt={'UserImage'}
+                                sx={{
+                                    width: '100%',
+                                    height: '100%',
+                                    zIndex: 2,
+                                    '&:hover': {
+                                        cursor: 'pointer',
+                                    },
+                                    objectFit: 'cover',
+                                }}
+                            />
+                            <Box
+                                component={'img'}
+                                src={user.userReactionIcon}
+                                sx={{
+                                    position: 'absolute',
+                                    height: '20px',
+                                    width: '20px',
+                                    backgroundColor: 'green',
+                                    right: 0,
+                                    bottom: 0,
+                                    borderRadius: '50%',
+                                    border: '2px solid white',
+                                    zIndex: 3,
+                                }}
+                            />
+                        </Box>
+                        <Box sx={{ ml: 1 }}>
+                            <CustomizeTypography fw={true}>
+                                {user.userNameReacted}
+                            </CustomizeTypography>
+                            <CustomizeTypography fs="13px">
+                                {user.userReactedPosition}
+                            </CustomizeTypography>
+                        </Box>
+                    </Box>
+                    {/* don't show divider for the last user */}
+                    {index !== users.length - 1 && <Divider />}
+                </>
+            ))}
+        </React.Fragment>
+    );
+};
+
+// const reactionsList = [
+//     { reactionImage: Liked, reactionText: 'Liked', numberOfReaction: 123 },
+//     { reactionImage: Love, reactionText: 'Loved', numberOfReaction: 345 },
+//     { reactionImage: Laugh, reactionText: 'Laughed', numberOfReaction: 101 },
+// ];
+
+// const listAllUsersReaction = [
+//     {
+//         userReactionIcon: Liked,
+//         userNameReacted: 'Luna Kei',
+//         userReactedImage: UserImage,
+//         userReactedPosition: 'Front-End Developer',
+//     },
+//     {
+//         userReactionIcon: Laugh,
+//         userNameReacted: 'Harris',
+//         userReactedImage:
+//             'https://builtin.com/sites/www.builtin.com/files/styles/og/public/2024-03/Blockchain%20Technology.jpg',
+//         userReactedPosition: 'Blockchain Developer',
+//     },
+//     {
+//         userReactionIcon: Love,
+//         userNameReacted: 'Luan Phan',
+//         userReactedImage:
+//             'https://verpex.com/assets/uploads/images/blog/How-to-become-a-Backend-Developer.jpg?v=1665484477',
+//         userReactedPosition: 'Back-End Developer',
+//     },
+//     {
+//         userReactionIcon: Laugh,
+//         userNameReacted: 'Thoai Huynh',
+//         userReactedImage:
+//             'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190626123927/untitlsssssed.png',
+//         userReactedPosition: 'Fullstack Developer',
+//     },
+// ];
+
+// const ListUsersReactionDetail = ({ users }) => {
+//     return (
+//         <React.Fragment>
+//             {users.map((user, index) => (
+//                 <React.Fragment key={index}>
+//                     <Box sx={{ display: 'flex', alignItems: 'center', py: 1, cursor: 'pointer' }}>
+//                         <Box sx={{ height: '56px', width: '56px', position: 'relative' }}>
+//                             <Avatar
+//                                 src={user.userReactedImage}
+//                                 alt={'UserImage'}
+//                                 sx={{
+//                                     width: '100%',
+//                                     height: '100%',
+//                                     zIndex: 2,
+//                                     '&:hover': {
+//                                         cursor: 'pointer',
+//                                     },
+//                                     objectFit: 'cover',
+//                                 }}
+//                             />
+//                             <Box
+//                                 component={'img'}
+//                                 src={user.userReactionIcon}
+//                                 sx={{
+//                                     position: 'absolute',
+//                                     height: '20px',
+//                                     width: '20px',
+//                                     backgroundColor: 'green',
+//                                     right: 0,
+//                                     bottom: 0,
+//                                     borderRadius: '50%',
+//                                     border: '2px solid white',
+//                                     zIndex: 3,
+//                                 }}
+//                             />
+//                         </Box>
+//                         <Box sx={{ ml: 1 }}>
+//                             <Typography fontWeight="bold">{user.userNameReacted}</Typography>
+//                             <Typography fontSize="13px">{user.userReactedPosition}</Typography>
+//                         </Box>
+//                     </Box>
+//                     {index !== users.length - 1 && <Divider />}
+//                 </React.Fragment>
+//             ))}
+//         </React.Fragment>
+//     );
+// };
+
+// function ReactionsDetailList({ onCloseReactionsListModal }) {
+//     const [value, setValue] = useState(0);
+
+//     const handleChange = (event, newValue) => {
+//         setValue(newValue);
+//     };
+
+//     const filterUsersByReaction = (reactionText) => {
+//         return listAllUsersReaction.filter((user) => user.userReactionIcon === reactionText);
+//     };
+
+//     return (
+//         <Box
+//             sx={{
+//                 position: 'relative',
+//                 backgroundColor: 'white',
+//                 maxWidth: '600px',
+//                 height: '600px',
+//                 margin: 'auto',
+//                 mt: '64px',
+//                 borderRadius: '12px',
+//                 boxShadow: '0 4px 4px #333',
+//                 overflow: 'hidden',
+//             }}
+//         >
+//             <Box sx={{}}>
+//                 <Box
+//                     sx={{
+//                         display: 'flex',
+//                         justifyContent: 'space-between',
+//                         alignItems: 'center',
+//                         p: 1,
+//                     }}
+//                 >
+//                     <Typography fontSize="20px" fontWeight="bold" sx={{ mx: 2, flexGrow: 2 }}>
+//                         Reactions
+//                     </Typography>
+//                     <IconButton
+//                         disableFocusRipple
+//                         sx={{
+//                             mx: '2px',
+//                             '&:hover': {
+//                                 backgroundColor: '#d9d9d9',
+//                             },
+//                         }}
+//                         onClick={onCloseReactionsListModal}
+//                     >
+//                         <CloseIcon sx={{ fontSize: '28px' }} />
+//                     </IconButton>
+//                 </Box>
+//                 <Tabs
+//                     value={value}
+//                     onChange={handleChange}
+//                     sx={{
+//                         borderBottom: '1px solid #333',
+//                         p: 0,
+//                         '.MuiTabs-indicator': {
+//                             height: '4px',
+//                         },
+//                     }}
+//                 >
+//                     <Tab
+//                         sx={{
+//                             '&:hover': {
+//                                 backgroundColor: 'rgba(0, 0, 0, 0.1)',
+//                             },
+//                         }}
+//                         label={
+//                             <Typography sx={{ fontSize: '14px', textTransform: 'capitalize' }}>
+//                                 All <span>{listAllUsersReaction.length}</span>
+//                             </Typography>
+//                         }
+//                     />
+//                     {reactionsList.map((reaction, index) => (
+//                         <Tab
+//                             key={index}
+//                             sx={{
+//                                 display: 'flex',
+//                                 alignItems: 'center',
+//                                 justifyContent: 'space-between',
+//                                 '&:hover': {
+//                                     backgroundColor: 'rgba(0, 0, 0, 0.1)',
+//                                 },
+//                             }}
+//                             label={
+//                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
+//                                     <Box
+//                                         component="img"
+//                                         src={reaction.reactionImage}
+//                                         alt={reaction.reactionText}
+//                                         sx={{ height: '24px', width: '24px' }}
+//                                     />
+//                                     <Typography
+//                                         sx={{
+//                                             fontSize: '14px',
+//                                             textTransform: 'capitalize',
+//                                             ml: '4px',
+//                                         }}
+//                                     >
+//                                         {reaction.numberOfReaction}
+//                                     </Typography>
+//                                 </Box>
+//                             }
+//                         />
+//                     ))}
+//                 </Tabs>
+//             </Box>
+//             <Box sx={{ overflowY: 'scroll', px: 4, height: '480px' }}>
+//                 <TabPanel value={value} index={0}>
+//                     <ListUsersReactionDetail users={listAllUsersReaction} />
+//                 </TabPanel>
+//                 {reactionsList.map((reaction, index) => (
+//                     <TabPanel value={value} index={index + 1} key={index}>
+//                         <ListUsersReactionDetail
+//                             users={filterUsersByReaction(reaction.reactionImage)}
+//                         />
+//                     </TabPanel>
+//                 ))}
+//             </Box>
+//         </Box>
+//     );
+// }
+
+// export default ReactionsDetailList;

@@ -1,4 +1,4 @@
-import React, { useId } from 'react';
+import React from 'react';
 import Post from './Post';
 import { Typography } from '@mui/material';
 import Mountain from '../../assets/images/MountainClouds.jpeg';
@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 export const posts = [
     {
         id: 1,
-        avatarSrc: Mountain,
+        // avatarSrc: Mountain,
         avatarSrc: {
             imgUrl: Mountain,
             imageStyle: null,
@@ -146,7 +146,7 @@ function Feed() {
                     time={post.timestamp}
                     hashtag={null}
                     content={post.articleText}
-                    numberOfReaction={0}
+                    numberOfReaction={post.numberOfReaction}
                     numberOfComment={null}
                     imageUrl={post.listImage}
                     viewPostPermission={post.viewPostPermission}
