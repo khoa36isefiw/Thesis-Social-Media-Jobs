@@ -72,9 +72,13 @@ export const setSelectedImageRotationAngle = ({ angle, userId }) => ({
 });
 
 // for user background image photo
-export const setSelectedBackgroundFilterIndex = (bgIndex) => ({
+// export const setSelectedBackgroundFilterIndex = (bgIndex) => ({ // initial
+//     type: SET_SELECTED_FILTER_INDEX_BG,
+//     payload: bgIndex,
+// });
+export const setSelectedBackgroundFilterIndex = ({ bgFilter, userId }) => ({
     type: SET_SELECTED_FILTER_INDEX_BG,
-    payload: bgIndex,
+    payload: { bgFilter, userId },
 });
 
 export const setSelectedBackgroundRotationAngle = (bgAngle) => ({

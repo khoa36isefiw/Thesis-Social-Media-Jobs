@@ -6,16 +6,9 @@ import { CustomizeTypography } from '../CustomizeTypography/CustomizeTypography'
 import { ipadProScreen, mobileScreen, tabletScreen } from '../Theme/Theme';
 import { modalAnimation } from '../AnimationEffects/AnimationEffects';
 import EditPhoto from '../EditPhoto/EditPhoto';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-    setLoggedInUser,
-    setSelectedFilterIndex,
-    setSelectedImageRotationAngle,
-} from '../../redux/ManageAccount/manageAccountAction';
+import { useSelector } from 'react-redux';
 
 function ChangePhoto({ imgUrl, handleCloseChange, imageRotationAngle }) {
-    const dispatch = useDispatch();
-
     const fileInputRef = useRef(null);
     const [imageURL, setImageURL] = useState(null);
 

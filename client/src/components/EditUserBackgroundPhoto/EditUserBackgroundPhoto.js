@@ -15,6 +15,7 @@ import {
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import { RotateButton } from '../RotateButton/RotateButton';
+import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 
 const filterList = [
     { filterName: 'Original', filterStyle: null },
@@ -23,23 +24,34 @@ const filterList = [
     { filterName: 'Sepia', filterStyle: 'sepia(60%)' },
     { filterName: 'Saturate', filterStyle: 'saturate(200%)' },
 ];
-function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
+function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange, bgRotate, bgImageUploadedStyle }) {
     const dispatch = useDispatch();
     const fileInputRef = useRef(null);
     const [imageURL, setImageURL] = useState(null);
+
     const indexFilterBackground = useSelector(
         (state) => state.manageAccounts.selectedBackgroundFilterIndex,
     );
+
+    const userLoggedInInformation = useLoggedInUser();
+
+    console.log('indexFilterBackground: ', indexFilterBackground);
     const rotationAngleBackground = useSelector(
         (state) => state.manageAccounts.selectedBackgroundAngle,
     );
     const [animationClass, setAnimationClass] = useState('animate__zoomIn'); // default to start an animation
 
-    const [selectedFilter, setSelectedFilter] = useState(indexFilterBackground);
-    // const [rotationAngle, setRotationAngle] = useState(0);
-    const [rotationAngle, setRotationAngle] = useState(rotationAngleBackground);
-
-    const userLoggedInInformation = useSelector((state) => state.manageAccounts.loggedInUser);
+    // initial state
+    // const [selectedFilter, setSelectedFilter] = useState(indexFilterBackground);
+    // const [rotationAngle, setRotationAngle] = useState(rotationAngleBackground);
+    const [selectedFilter, setSelectedFilter] = useState(
+        bgImageUploadedStyle !== undefined
+            ? bgImageUploadedStyle
+            : userLoggedInInformation.userBackgroundPhoto.bgStyle,
+    );
+    const [rotationAngle, setRotationAngle] = useState(
+        bgRotate !== undefined ? bgRotate : rotationAngleBackground,
+    );
 
     const handleSaveBgPhotoEdited = () => {
         // update for userPhoto field
@@ -50,13 +62,18 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
                 ...userLoggedInInformation,
                 userBackgroundPhoto: {
                     bgUrl: imageURL ? imageURL.bgUrl : bgImgUrl,
-                    bgStyle: filterList[selectedFilter].filterStyle,
+                    bgStyle: selectedFilter,
                     bgRotationAngle: rotationAngle,
                 },
             }),
         );
         setAnimationClass('animate__zoomOut');
-        dispatch(setSelectedBackgroundFilterIndex(selectedFilter)); // save index of image selected filter
+        dispatch(
+            setSelectedBackgroundFilterIndex({
+                bgFilter: selectedFilter,
+                userId: userLoggedInInformation.userId,
+            }),
+        ); // save index of image selected filter
         dispatch(setSelectedBackgroundRotationAngle(rotationAngle));
 
         setTimeout(() => {
@@ -65,7 +82,7 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
     };
 
     const handleSelectedFilters = (index) => {
-        setSelectedFilter(index);
+        setSelectedFilter(filterList[index].filterStyle);
     };
 
     const handleRotateLeft = () => {
@@ -85,18 +102,10 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
             const imageName = file.name;
             // store both the name and URL
             setImageURL({ name: imageName, bgUrl: imageDataURL });
+            // Reset the filter and rotation for the new image
+            setSelectedFilter(null);
+            setRotationAngle(0);
         };
-
-        dispatch(
-            setLoggedInUser({
-                ...userLoggedInInformation,
-                userBackgroundPhoto: {
-                    bgUrl: imageURL ? imageURL.bgUrl : bgImgUrl,
-                    bgStyle: null,
-                    bgRotationAngle: 0,
-                },
-            }),
-        );
 
         if (file) {
             reader.readAsDataURL(file);
@@ -186,7 +195,7 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
                             width: '200px',
                         },
                         // show filter image is selected
-                        filter: filterList[selectedFilter].filterStyle,
+                        filter: selectedFilter && selectedFilter,
                     }}
                 />
             </Box>
@@ -224,7 +233,7 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
                                     width: '56px',
                                     // border: '1px solid #d0d0d0',
                                     border:
-                                        selectedFilter === index
+                                        selectedFilter === filterList[index].filterStyle
                                             ? '4px solid green'
                                             : '1px solid transparent',
                                     // Smooth transition for border and box-shadow
@@ -235,7 +244,7 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
                                 }}
                             >
                                 <Avatar
-                                    src={bgImgUrl}
+                                    src={imageURL ? imageURL.bgUrl : bgImgUrl}
                                     alt="Default User Image"
                                     sx={{
                                         height: '55px',
@@ -250,9 +259,14 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
                                 sx={{
                                     fontSize: '14px',
                                     mt: '4px',
-                                    fontWeight: selectedFilter === index ? 'bold' : 'normal',
+                                    fontWeight:
+                                        selectedFilter === filterList[index].filterStyle
+                                            ? 'bold'
+                                            : 'normal',
                                     textDecoration:
-                                        selectedFilter === index ? 'underline' : 'normal',
+                                        selectedFilter === filterList[index].filterStyle
+                                            ? 'underline'
+                                            : 'normal',
                                 }}
                             >
                                 {filter.filterName}
@@ -313,7 +327,7 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange }) {
                         }}
                         onClick={handleUploadClick}
                     >
-                        Change photo
+                        Change background
                     </Button>
                 </Box>
 

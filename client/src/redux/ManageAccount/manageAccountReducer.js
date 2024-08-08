@@ -239,9 +239,32 @@ export const manageAccountReducer = (state = initialState, action) => {
                         : state.loggedInUser,
             };
         case SET_SELECTED_FILTER_INDEX_BG:
+            const { bgFilter, userId: uId } = action.payload;
             return {
                 ...state,
-                selectedBackgroundFilterIndex: action.payload,
+                // update angle for user
+                accountsList: state.accountsList.map((account) =>
+                    account.userId === uId
+                        ? {
+                              ...account,
+                              userBackgroundPhoto: {
+                                  ...account.userBackgroundPhoto,
+                                  bgStyle: bgFilter,
+                              },
+                          }
+                        : account,
+                ),
+                // update angle for authenticated user
+                loggedInUser:
+                    state.loggedInUser.userId === uId
+                        ? {
+                              ...state.loggedInUser,
+                              userBackgroundPhoto: {
+                                  ...state.loggedInUser.userBackgroundPhoto,
+                                  bgStyle: bgFilter,
+                              },
+                          }
+                        : state.loggedInUser,
             };
         case SET_SELECTED_BG_ROTATION_ANGLE:
             return {
