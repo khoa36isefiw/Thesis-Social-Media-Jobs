@@ -117,6 +117,7 @@ function PostModal({ closeModal }) {
                 listImage: imageURL,
                 viewPostPermission,
                 numberOfFollowers,
+                numberOfReaction: 0,
             };
 
             dispatch(addNewPosts(articleTextSent));
@@ -134,6 +135,7 @@ function PostModal({ closeModal }) {
                         articleTextSent: articleText,
                         viewPostPermission,
                         numberOfFollowers,
+                        numberOfReaction: 0,
                     }),
                 );
                 // clear input after submitting
