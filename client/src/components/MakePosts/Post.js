@@ -866,12 +866,13 @@ export const ReactionComponent = ({ selectedReaction }) => {
         return Object.values(selectedReaction).length;
     };
 
-    const numberOfReaction = selectedReaction ? calculateNumberOfReactions(selectedReaction) : null;
+    const numberOfReaction = selectedReaction ? calculateNumberOfReactions(selectedReaction) : 0;
 
     if (numberOfReaction === 0) {
         return null;
     }
-
+    
+    // Count the frequency of each reaction
     const reactionCount = {};
     if (selectedReaction) {
         Object.values(selectedReaction).forEach(({ reaction }) => {
@@ -881,8 +882,10 @@ export const ReactionComponent = ({ selectedReaction }) => {
         });
     }
 
+    // Sort reactions based on frequency in descending order
     const sortedReactions = Object.entries(reactionCount).sort((a, b) => b[1] - a[1]);
 
+    // Determine the image source based on reaction text
     const getImageSrc = (btnText) => {
         if (btnText.includes('Liked')) return Liked;
         if (btnText.includes('Loved')) return Love;
@@ -892,6 +895,7 @@ export const ReactionComponent = ({ selectedReaction }) => {
 
     return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* which reaction with the higher number will be on the top */}
             {sortedReactions.map(([btnText], index) => (
                 <Avatar
                     key={btnText}
