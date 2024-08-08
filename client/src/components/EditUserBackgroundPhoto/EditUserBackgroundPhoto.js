@@ -107,17 +107,6 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange, bgRotate, bgImag
             setRotationAngle(0);
         };
 
-        // dispatch(
-        //     setLoggedInUser({
-        //         ...userLoggedInInformation,
-        //         userBackgroundPhoto: {
-        //             bgUrl: imageURL ? imageURL.bgUrl : bgImgUrl,
-        //             bgStyle: null,
-        //             bgRotationAngle: 0,
-        //         },
-        //     }),
-        // );
-
         if (file) {
             reader.readAsDataURL(file);
         }
@@ -255,7 +244,7 @@ function EditUserBackgroundPhoto({ bgImgUrl, handleCloseChange, bgRotate, bgImag
                                 }}
                             >
                                 <Avatar
-                                    src={bgImgUrl}
+                                    src={imageURL ? imageURL.bgUrl : bgImgUrl}
                                     alt="Default User Image"
                                     sx={{
                                         height: '55px',
