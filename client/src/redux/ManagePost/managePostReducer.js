@@ -5,6 +5,7 @@ import {
     GET_REACTION_IN_COMMENT_ON_POST,
     GET_REACTION_ON_POST,
     GET_REACTION_RESPONSE_COMMENTS,
+    HIDE_COMMENT,
     POST_SETTINGS_PRIVACY,
     REPLY_COMMENTS,
     SAVE_PRIVACY_SELECTED,
@@ -24,6 +25,7 @@ const initialState = {
     postSettingsPrivacySelection: 'Anyone', // include: Anyone, Connections only
     savePrivacySelected: 'Anyone', // only 2 case: Anyone or Connections only
     listUsersReaction: {},
+    hiddenComments: {}, // {[postId]: [commentId1, commenntId2, ...]
 };
 
 export const managePostReducer = (state = initialState, action) => {
@@ -110,6 +112,18 @@ export const managePostReducer = (state = initialState, action) => {
                     ...state.comments,
                     // [postID]: [...(state.comments[postID] || []), comment, userInfor], // initial
                     [postID]: [...(state.comments[postID] || []), [comment, userInfor]],
+                },
+            };
+        case HIDE_COMMENT:
+            const { postId, commentId: commnetID } = action.payload;
+            // get list comments is hidden of this post
+            const hiddenCommentsForPost = state.hiddenComments[postId] || [];
+            return {
+                // update commentId is hidden to list
+                ...state,
+                hiddenComments: {
+                    ...state.hiddenComments,
+                    [postId]: [...hiddenCommentsForPost, commnetID],
                 },
             };
         case REPLY_COMMENTS:
