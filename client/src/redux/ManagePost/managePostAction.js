@@ -5,6 +5,7 @@ import {
     GET_REACTION_IN_COMMENT_ON_POST,
     GET_REACTION_ON_POST,
     GET_REACTION_RESPONSE_COMMENTS,
+    HIDE_COMMENT,
     POST_SETTINGS_PRIVACY,
     REPLY_COMMENTS,
     SAVE_PRIVACY_SELECTED,
@@ -74,3 +75,8 @@ export const replyComments = (postID, commentID, replyComments, userID, userName
 //     type: REPLY_COMMENTS,
 //     payload: { commentID, replyComments, postID },
 // });
+
+export const setHideComment = (postId, commentId) => ({
+    type: HIDE_COMMENT,
+    payload: { postId, commentId },
+});
