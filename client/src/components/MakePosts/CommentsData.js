@@ -21,6 +21,7 @@ import { useLoggedInUser } from '../CallDataInRedux/CallDataInRedux';
 import { ShowResponsesCommentList } from './ShowResponsesCommentList';
 import { calculateTimeComment } from '../HandleTime/HandleTime';
 import SampleCommentsData from './Data/SampleCommentsData';
+import HideThePost from './HideThePost';
 
 export function CommentsData({ postId, imageUrl }) {
     const dispatch = useDispatch();
@@ -28,6 +29,10 @@ export function CommentsData({ postId, imageUrl }) {
     // get comment from each post, just comment not include inoformation of user
     const commentList = useSelector((state) => state.managePost.comments[postId]);
     const commentLists = useSelector((state) => state.managePost.comments);
+    const hiddenComments = useSelector((state) => state.managePost.hiddenComments[postId] || []);
+
+    console.log('hiddenComments: ', hiddenComments && hiddenComments);
+
     console.log('all the comments: ', commentLists);
     console.log('Comment List on postID: ', commentList);
     // get comment reply the comment in post
@@ -215,12 +220,18 @@ export function CommentsData({ postId, imageUrl }) {
     // console.log('commentList in each post: ', commentList && commentList);
     // console.log('Length of commentList: ', commentList && commentList.length);
 
+    // Filter out hidden comments
+    // const filteredCommentList = commentList?.filter((_, index) => !hiddenComments.includes(index));
+
     return (
         <>
             <SampleCommentsData />
             {/* Load comment  */}
             {commentList &&
                 commentList.map((comment, index) => {
+                    if (hiddenComments?.includes(index)) {
+                        return <HideThePost />;
+                    }
                     return (
                         <Box key={index}>
                             <Box sx={{ display: 'flex', mt: 2 }}>
@@ -643,14 +654,16 @@ export function CommentsData({ postId, imageUrl }) {
                                         </Box>
                                     )}
                             </Box>
+                            <PostMenuSettings
+                                openMenuStatus={menuStatus}
+                                handleClosePostMenuSettings={handleCloseCommentMenuSettings}
+                                postMenuSettingsList={commentMenuSettings}
+                                commnetIndex={index}
+                                postId={postId}
+                            />
                         </Box>
                     );
                 })}
-            <PostMenuSettings
-                openMenuStatus={menuStatus}
-                handleClosePostMenuSettings={handleCloseCommentMenuSettings}
-                postMenuSettingsList={commentMenuSettings}
-            />
         </>
     );
 }
