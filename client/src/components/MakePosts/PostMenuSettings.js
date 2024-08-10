@@ -9,12 +9,14 @@ import {
     ListItemIcon,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
+import { setHideComment } from '../../redux/ManagePost/managePostAction';
 
 const PostMenuSettings = ({
     openMenuStatus,
     handleClosePostMenuSettings,
     postMenuSettingsList,
     postId,
+    commnetIndex,
 }) => {
     const dispatch = useDispatch();
     const [hideMenu, setHideMenu] = useState(false);
@@ -32,6 +34,11 @@ const PostMenuSettings = ({
         //     handleOpenDeleteConfirm();
         // }
         // setHideMenu(true);
+        if (action.textAction === "I don't want to see this") {
+            console.log('handleMenuItemClick: ', action);
+            console.log(`comment ${commnetIndex} is selected in postID ${postId}`);
+            dispatch(setHideComment(postId, commnetIndex));
+        }
     };
 
     // hide Menu

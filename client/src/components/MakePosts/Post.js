@@ -694,7 +694,12 @@ function Post({
                                 {numberOfComment !== 0 || getCommentListLength !== 0 ? (
                                     // show the number of comments
                                     <CustomTypography>
-                                        {numberOfComment + getCommentListLength} comment
+                                        {numberOfComment + getCommentListLength === 0
+                                            ? ''
+                                            : numberOfComment + getCommentListLength}{' '}
+                                        {numberOfComment + getCommentListLength === 0
+                                            ? ''
+                                            : 'comment'}
                                         {numberOfComment + getCommentListLength > 1 ? 's' : ''}
                                     </CustomTypography>
                                 ) : (
@@ -871,7 +876,7 @@ export const ReactionComponent = ({ selectedReaction }) => {
     if (numberOfReaction === 0) {
         return null;
     }
-    
+
     // Count the frequency of each reaction
     const reactionCount = {};
     if (selectedReaction) {

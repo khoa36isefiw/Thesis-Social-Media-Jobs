@@ -29,7 +29,7 @@ export const commentMenuSettings = [
         ),
     },
     {
-        textAction: "I don't to see it",
+        textAction: "I don't want to see this",
         iconActionn: <VisibilityOffIcon sx={{ fontSize: '20px', color: 'black' }} />,
     },
 ];
