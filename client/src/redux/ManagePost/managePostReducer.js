@@ -26,6 +26,7 @@ const initialState = {
     savePrivacySelected: 'Anyone', // only 2 case: Anyone or Connections only
     listUsersReaction: {},
     hiddenComments: {}, // {[postId]: [commentId1, commenntId2, ...]
+    isDeleted: false,
 };
 
 export const managePostReducer = (state = initialState, action) => {
@@ -114,18 +115,38 @@ export const managePostReducer = (state = initialState, action) => {
                     [postID]: [...(state.comments[postID] || []), [comment, userInfor]],
                 },
             };
-        case HIDE_COMMENT:
-            const { postId, commentId: commnetID } = action.payload;
-            // get list comments is hidden of this post
-            const hiddenCommentsForPost = state.hiddenComments[postId] || [];
+        // case HIDE_COMMENT:
+        //     const { postId, commentId: commnetID } = action.payload;
+        //     // get list comments is hidden of this post
+        //     const hiddenCommentsForPost = state.hiddenComments[postId] || [];
+        //     return {
+        //         // update commentId is hidden to list
+        //         ...state,
+        //         hiddenComments: {
+        //             ...state.hiddenComments,
+        //             [postId]: [...hiddenCommentsForPost, commnetID],
+        //         },
+        //     };
+
+        case HIDE_COMMENT: {
+            const { postId, commentId: commentID } = action.payload;
+            const updatedComments = state.comments[postId].map((comment, index) => {
+                if (index === commentID) {
+                    return {
+                        ...comment,
+                        isDeleted: true,
+                    };
+                }
+                return comment;
+            });
             return {
-                // update commentId is hidden to list
                 ...state,
-                hiddenComments: {
-                    ...state.hiddenComments,
-                    [postId]: [...hiddenCommentsForPost, commnetID],
+                comments: {
+                    ...state.comments,
+                    [postId]: updatedComments,
                 },
             };
+        }
         case REPLY_COMMENTS:
             const {
                 postID: pstID,
