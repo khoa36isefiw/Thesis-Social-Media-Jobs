@@ -28,12 +28,12 @@ export function CommentsData({ postId, imageUrl }) {
     const replyTextFieldRef = useRef(null);
     // get comment from each post, just comment not include inoformation of user
     const commentList = useSelector((state) => state.managePost.comments[postId]);
-    const commentLists = useSelector((state) => state.managePost.comments);
-    const hiddenComments = useSelector((state) => state.managePost.hiddenComments[postId] || []);
+    const hiddenComments = useSelector((state) => state.managePost.hiddenComments[postId]);
+
+    const isDeleted = useSelector((state) => state.managePost.isDeleted);
 
     console.log('hiddenComments: ', hiddenComments && hiddenComments);
 
-    console.log('all the comments: ', commentLists);
     console.log('Comment List on postID: ', commentList);
     // get comment reply the comment in post
 
@@ -229,8 +229,14 @@ export function CommentsData({ postId, imageUrl }) {
             {/* Load comment  */}
             {commentList &&
                 commentList.map((comment, index) => {
-                    if (hiddenComments?.includes(index)) {
-                        return <HideThePost />;
+                    // {
+                    //     hiddenComments &&
+                    //         hiddenComments.map(
+                    //             (hidden, hiddenIndex) => hidden === index && <HideThePost />,
+                    //         );
+                    // }
+                    if (comment.isDeleted) {
+                        return <HideThePost key={index} />;
                     }
                     return (
                         <Box key={index}>
