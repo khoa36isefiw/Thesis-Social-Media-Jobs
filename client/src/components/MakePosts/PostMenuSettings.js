@@ -65,7 +65,7 @@ const PostMenuSettings = ({
                     // position: 'absolute',
                     '.MuiPaper-root': {
                         // backgroundColor: 'darkorange',
-                        boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.75)',
+                        boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.15)',
                     },
                 }}
                 anchorOrigin={{
